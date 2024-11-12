@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS grade (
+    id INTEGER PRIMARY KEY,
+    value VARCHAR
+);
