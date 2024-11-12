@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS visiting (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     type VARCHAR,
     date VARCHAR
 );

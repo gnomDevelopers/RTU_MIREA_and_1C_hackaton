@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS class (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR,
     group_names VARCHAR[],
     teacher_names VARCHAR[],

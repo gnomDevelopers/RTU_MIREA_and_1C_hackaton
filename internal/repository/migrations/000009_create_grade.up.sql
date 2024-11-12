@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS grade (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     value VARCHAR
 );

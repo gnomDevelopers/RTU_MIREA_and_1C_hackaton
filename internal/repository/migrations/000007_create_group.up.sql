@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "group" (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR,
     user_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE

@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS role(
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name varchar
 );
