@@ -19,8 +19,8 @@
 </template>
 <script lang="ts">
 
-import loginInput from '@/shared/loginInput.vue';
-import submitButton from '@/shared/submitButton.vue';
+import loginInput from '../shared/loginInput.vue';
+import submitButton from '../shared/submitButton.vue';
 
 export default{
   components:{

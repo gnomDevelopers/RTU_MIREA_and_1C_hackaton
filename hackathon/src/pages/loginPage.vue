@@ -3,8 +3,8 @@
     <div class="bg-slate-50 py-5 px-7 rounded-lg flex flex-col gap-y-6 login-shadow w-96 text-gray-900">
       <div class="w-full text-center text-2xl font-semibold">Log In</div>
       <div class="flex flex-col gap-y-5">
-        <loginInput type="text" text="Login"/>
-        <loginInput type="password" text="Password"/>
+        <loginInput type="text" text="Login" @input-change="checkLogin"/>
+        <loginInput type="password" text="Password" @input-change="checkPassword"/>
         <div class=" text-sm text-sky-500 w-full text-right cursor-pointer">Forgot Password?</div>
       </div>
       <submitButton value="Log In" class="mt-6"/>
@@ -19,8 +19,9 @@
 </template>
 <script lang="ts">
 
-import loginInput from '@/shared/loginInput.vue';
-import submitButton from '@/shared/submitButton.vue';
+import loginInput from '../shared/loginInput.vue';
+import submitButton from '../shared/submitButton.vue';
+import { validUserLogin, validUserPassword, type IValidAnswer } from '../helpers/validator';
 
 export default{
   components:{
@@ -29,10 +30,18 @@ export default{
   },
   data(){
     return{
-      loginValue: '',
-      passwordValue: '',
+      loginValue: {value: '', error: ''} as IValidAnswer,
+      passwordValue: {value: '', error: ''} as IValidAnswer,
     }
   },
+  methods: {
+    checkLogin(value: string){
+      this.loginValue = validUserLogin(value);
+    },
+    checkPassword(value: string){
+      this.passwordValue = validUserPassword(value);
+    }
+  }
 }
 
 </script>
