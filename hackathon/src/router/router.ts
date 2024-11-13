@@ -19,5 +19,10 @@ export const router = createRouter({
       path: '/setPassword',
       component: () => import('../pages/LoginSetPasswordPage.vue'),
     },
+    {
+      name: 'MainPage',
+      path: '/main',
+      component: () => import('../pages/MainPage.vue'),
+    }
   ],
 });

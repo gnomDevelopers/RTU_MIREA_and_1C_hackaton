@@ -74,6 +74,14 @@
   font-display: swap;
 }
 
+:root{
+  --bg-color-ultralight: #FAFCFF;
+  --bg-color-light: #EBF5FF;
+  --bg-color-bold: #063C73;
+  --bg-color-bold-hover: #0d4c8b;
+  --bg-color-bold-active: #0958a8;
+}
+
 #app{
   width: 100svw;
   height: 100svh;
@@ -92,14 +100,17 @@
   background-color: rgba(235, 245, 255, 0.7);;
 }
 .bg-color-light{
-  background-color: #EBF5FF;
+  background-color: var(--bg-color-light);
+}
+.bg-color-ultralight{
+  background-color: var(--bg-color-ultralight);
 }
 .bg-color-bold{
-  background-color: #063C73;
+  background-color: var(--bg-color-bold);
 }
 
 .border-color{
-  border-color: #063C73;
+  border-color: var(--bg-color-bold);
 }
 
 .border-bottom{
@@ -108,12 +119,59 @@
 }
 
 .text-color-light{
-  color: #EBF5FF;
+  color: var(--bg-color-light);
 }
 
 *{
-  color: #063C73;
+  color: var(--bg-color-bold);
   font-family: 'NotoSans';
+}
+
+.scrollable{
+  --scroll-bar-width: 8px;
+  --border-radius-scroll-bar: 2px; /*calc(var(--scroll-bar-width) / 2);*/
+  --bg-color-0: var(--bg-color-bold); /*slider color*/
+  --bg-color-1: #c4d3e2; /*track color*/
+  overflow-y: scroll;
+  scrollbar-width:var(--scroll-bar-width);
+}
+.scrollable::-webkit-scrollbar{
+  width: var(--scroll-bar-width);
+}
+.scrollable::-moz-scrollbar {
+  width: var(--scroll-bar-width);
+}
+.scrollabl::-webkit-scrollbar-track{
+  background-color: var(--bg-color-1);
+  border-radius: var(--border-radius-scroll-bar);
+  transition: background-color 1s ease-in-out;
+}
+.scrollable::-moz-scrollbar-track {
+  background-color: var(--bg-color-1);
+  border-radius: var(--border-radius-scroll-bar);
+  transition: background-color 1s ease-in-out;
+}
+.scrollable::-webkit-scrollbar-thumb{
+  background-color: transparent;
+  border-radius: var(--border-radius-scroll-bar);
+  transition: background-color 1s ease-in-out;
+}
+.scrollable::-moz-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: var(--border-radius-scroll-bar);
+  transition: background-color 1s ease-in-out;
+}
+.scrollable:hover::-webkit-scrollbar-thumb{
+  background-color: var(--bg-color-0);
+}
+.scrollable:hover::-moz-scrollbar-thumb {
+  background-color: var(--bg-color-0);
+}
+.scrollable:hover::-webkit-scrollbar-track{
+  background-color: var(--bg-color-1);
+}
+.scrollable:hover::-moz-scrollbar-track {
+  background-color: var(--bg-color-1);
 }
 
 .header-shadow{
@@ -144,3 +202,24 @@
   @apply top-0 left-0 text-sm;
 }
 
+.main-table-item{
+  @apply flex flex-col gap-x-5 items-center p-5 us:flex-row us:items-stretch border-2 border-color rounded-xl bg-white;
+}
+.main-table-item-text{
+  @apply flex flex-col justify-between gap-y-2 items-center cursor-default us:items-start us:gap-y-0;
+}
+.main-table-item-title{
+  @apply text-3xl text-center us:text-left;
+}
+.main-table-item-decription{
+  @apply text-lg text-justify;
+}
+.main-table-item-btn{
+  @apply us:self-start py-2 px-4 rounded-lg text-lg cursor-pointer bg-color-bold text-color-light transition-colors;
+}
+.main-table-item-btn:hover{
+  background-color: var(--bg-color-bold-hover);
+}
+.main-table-item-btn:active{
+  background-color: var(--bg-color-bold-active);
+}

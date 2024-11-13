@@ -5,8 +5,7 @@ import { type TMaybeNumber } from "@/helpers/constants";
 export const useUserInfoStore = defineStore('userInfo', {
   state() {
     return{
-      authenticated: false,
-
+      authenticated: false, // проверка авторизованности
       first_name: '', // имя
       last_name: '', // фамилия
       father_name: '', //отчество
