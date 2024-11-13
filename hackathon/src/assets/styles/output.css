@@ -566,21 +566,12 @@ video {
   top: 4rem;
 }
 
-.z-50 {
-  z-index: 50;
-}
-
 .z-10 {
   z-index: 10;
 }
 
-.mx-16 {
-  margin-left: 4rem;
-  margin-right: 4rem;
-}
-
-.ml-16 {
-  margin-left: 4rem;
+.z-50 {
+  z-index: 50;
 }
 
 .mr-1 {
@@ -593,10 +584,6 @@ video {
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mr-16 {
-  margin-right: 4rem;
 }
 
 .flex {
@@ -615,8 +602,8 @@ video {
   height: 3rem;
 }
 
-.h-14 {
-  height: 3.5rem;
+.h-24 {
+  height: 6rem;
 }
 
 .h-7 {
@@ -625,6 +612,10 @@ video {
 
 .h-full {
   height: 100%;
+}
+
+.h-8 {
+  height: 2rem;
 }
 
 .w-10 {
@@ -643,12 +634,8 @@ video {
   width: 100%;
 }
 
-.min-w-10 {
-  min-width: 2.5rem;
-}
-
-.min-w-16 {
-  min-width: 4rem;
+.w-8 {
+  width: 2rem;
 }
 
 .flex-1 {
@@ -695,9 +682,8 @@ video {
   justify-content: center;
 }
 
-.gap-x-1 {
-  -moz-column-gap: 0.25rem;
-       column-gap: 0.25rem;
+.justify-between {
+  justify-content: space-between;
 }
 
 .gap-x-2 {
@@ -722,9 +708,8 @@ video {
   row-gap: 1.5rem;
 }
 
-.gap-x-3 {
-  -moz-column-gap: 0.75rem;
-       column-gap: 0.75rem;
+.gap-y-8 {
+  row-gap: 2rem;
 }
 
 .self-center {
@@ -747,6 +732,10 @@ video {
   border-radius: 0.75rem;
 }
 
+.border-2 {
+  border-width: 2px;
+}
+
 .border-red-600 {
   --tw-border-opacity: 1;
   border-color: rgb(220 38 38 / var(--tw-border-opacity));
@@ -760,11 +749,6 @@ video {
 .border-slate-500 {
   --tw-border-opacity: 1;
   border-color: rgb(100 116 139 / var(--tw-border-opacity));
-}
-
-.border-gray-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(107 114 128 / var(--tw-border-opacity));
 }
 
 .bg-amber-500 {
@@ -806,9 +790,19 @@ video {
   padding-right: 0.75rem;
 }
 
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
 .px-7 {
@@ -824,6 +818,11 @@ video {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 }
 
 .py-5 {
@@ -853,6 +852,21 @@ video {
   line-height: 2.25rem;
 }
 
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -863,8 +877,17 @@ video {
   line-height: 1.25rem;
 }
 
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
 .font-semibold {
   font-weight: 600;
+}
+
+.leading-normal {
+  line-height: 1.5;
 }
 
 .text-gray-400 {
@@ -892,6 +915,10 @@ video {
   color: rgb(248 250 252 / var(--tw-text-opacity));
 }
 
+.opacity-100 {
+  opacity: 1;
+}
+
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -909,6 +936,114 @@ video {
   transition-duration: 150ms;
 }
 
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-Thin.woff2') format('woff2');
+
+  font-weight: 100;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-ExtraLight.woff2') format('woff2');
+
+  font-weight: 200;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-Light.woff2') format('woff2');
+
+  font-weight: 300;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-Regular.woff2') format('woff2');
+
+  font-weight: 400;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-Medium.woff2') format('woff2');
+
+  font-weight: 500;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-SemiBold.woff2') format('woff2');
+
+  font-weight: 600;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-Bold.woff2') format('woff2');
+
+  font-weight: 700;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-ExtraBold.woff2') format('woff2');
+
+  font-weight: 800;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+
+  src: url('../fonts/NotoSans-Black.woff2') format('woff2');
+
+  font-weight: 900;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
 #app{
   width: 100svw;
   height: 100svh;
@@ -920,13 +1055,51 @@ video {
   transition: background-color .1s ease-out, color .1s ease-out, border-color .1s ease-out;
 }
 
+.transition-bg{
+  transition: background-color .1s ease-out;
+}
+
+.bg-color-light-opacity{
+  background-color: rgba(235, 245, 255, 0.7);
+}
+
+.bg-color-light{
+  background-color: #EBF5FF;
+}
+
+.bg-color-bold{
+  background-color: #063C73;
+}
+
+.border-color{
+  border-color: #063C73;
+}
+
 .border-bottom{
   border-bottom-width: 2px;
   border-bottom-style: solid;
 }
 
+.text-color-light{
+  color: #EBF5FF;
+}
+
+*{
+  color: #063C73;
+  font-family: 'NotoSans';
+}
+
 .header-shadow{
   box-shadow: 0 0 2px rgb(185, 185, 185), 0 0 5px rgb(204, 204, 204);
+}
+
+.welcome-bg{
+  background-image: 
+    radial-gradient(circle, rgba(255,2555,255, 0.7) 40%, rgba(83, 133, 182, 0.5) 60%), 
+    url('/src/assets/images/background-welcomePage.jpg');
+  background-size: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .login-shadow{
@@ -952,9 +1125,9 @@ video {
   border-color: rgb(14 165 233 / var(--tw-border-opacity));
 }
 
-.hover\:border-b-sky-500:hover {
-  --tw-border-opacity: 1;
-  border-bottom-color: rgb(14 165 233 / var(--tw-border-opacity));
+.hover\:bg-cyan-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 254 255 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-sky-600:hover {
@@ -962,8 +1135,63 @@ video {
   background-color: rgb(2 132 199 / var(--tw-bg-opacity));
 }
 
+.active\:bg-cyan-100:active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(207 250 254 / var(--tw-bg-opacity));
+}
+
 .active\:bg-sky-500:active {
   --tw-bg-opacity: 1;
   background-color: rgb(14 165 233 / var(--tw-bg-opacity));
+}
+
+@media (min-width: 576px) {
+  .mb\:h-10 {
+    height: 2.5rem;
+  }
+
+  .mb\:w-10 {
+    width: 2.5rem;
+  }
+
+  .mb\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .mb\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .mb\:py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .mb\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  .mb\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .mb\:text-6xl {
+    font-size: 3.75rem;
+    line-height: 1;
+  }
+
+  .mb\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .mb\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
 }
 

@@ -2,6 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  src: url('../fonts/NotoSans-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 #app{
   width: 100svw;
   height: 100svh;
@@ -12,14 +84,49 @@
 .transition-input{
   transition: background-color .1s ease-out, color .1s ease-out, border-color .1s ease-out;
 }
+.transition-bg{
+  transition: background-color .1s ease-out;
+}
+
+.bg-color-light-opacity{
+  background-color: rgba(235, 245, 255, 0.7);;
+}
+.bg-color-light{
+  background-color: #EBF5FF;
+}
+.bg-color-bold{
+  background-color: #063C73;
+}
+
+.border-color{
+  border-color: #063C73;
+}
 
 .border-bottom{
   border-bottom-width: 2px;
   border-bottom-style: solid;
 }
 
+.text-color-light{
+  color: #EBF5FF;
+}
+
+*{
+  color: #063C73;
+  font-family: 'NotoSans';
+}
+
 .header-shadow{
   box-shadow: 0 0 2px rgb(185, 185, 185), 0 0 5px rgb(204, 204, 204);
+}
+
+.welcome-bg{
+  background-image: 
+    radial-gradient(circle, rgba(255,2555,255, 0.7) 40%, rgba(83, 133, 182, 0.5) 60%), 
+    url('/src/assets/images/background-welcomePage.jpg');
+  background-size: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .login-shadow{
