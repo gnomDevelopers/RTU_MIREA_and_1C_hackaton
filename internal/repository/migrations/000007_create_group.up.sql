@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS "group" (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES "user"(id) ON DELETE CASCADE
-);

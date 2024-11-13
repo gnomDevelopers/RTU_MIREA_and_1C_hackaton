@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS achievement (
-    id SERIAL PRIMARY KEY ,
-    name VARCHAR
-);
