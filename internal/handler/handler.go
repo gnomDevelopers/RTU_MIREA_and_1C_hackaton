@@ -7,6 +7,7 @@ import (
 	"server/internal/config"
 	"server/internal/log"
 	"server/internal/service"
+	"server/pkg"
 )
 
 type Handler struct {
@@ -38,10 +39,12 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
 
-	//authGroup := f.Group("/auth")
-	//authGroup.Use(func(c *fiber.Ctx) {
-	//	_ = pkg.WithJWTAuth(c, h.conf.Application.SigningKey)
-	//})
+	f.Get("/schedule", h.GetSchedule)
+
+	authGroup := f.Group("/auth")
+	authGroup.Use(func(c *fiber.Ctx) error {
+		return pkg.WithJWTAuth(c, h.conf.Application.SigningKey)
+	})
 
 	return f
 }
