@@ -1,19 +1,14 @@
 <template>
-  <div class="flex flex-grow flex-col items-center justify-center bg-slate-50">
-    <div class="bg-slate-50 py-5 px-7 rounded-lg flex flex-col gap-y-6 login-shadow w-96 text-gray-900">
-      <div class="w-full text-center text-2xl font-semibold">Log In</div>
+  <div class="flex flex-grow flex-col gap-y-7 items-center justify-center bg-slate-50 login-bg">
+    <div class="w-full text-center text-3xl mb:text-4xl">Вход в систему</div>
+    <div class="flex flex-col gap-y-6 w-11/12 mb:w-96  py-5 px-7 rounded-lg login-shadow bg-slate-50 text-gray-900">
+      <div class="w-full text-center text-4xl font-semibold">VUZ+</div>
       <div class="flex flex-col gap-y-5">
-        <loginInput type="text" text="Login" @input-change="checkLogin"/>
-        <loginInput type="password" text="Password" @input-change="checkPassword"/>
-        <div class=" text-sm text-sky-500 w-full text-right cursor-pointer">Forgot Password?</div>
+        <loginInput type="text" text="Логин" @input-change="checkLogin"/>
+        <loginInput type="password" text="Пароль" @input-change="checkPassword"/>
+        <div class=" text-sm text-sky-500 w-full text-right cursor-pointer">Забыли пароль?</div>
       </div>
-      <submitButton value="Log In" class="mt-6"/>
-      <div class="w-full text-center text-gray-400 text-sm" >or Log In with:</div>
-      <div class="flex flex-row w-full justify-center gap-x-4">
-        <div><img class="w-10 h-10 cursor-pointer rounded-full" src="../assets/icons/icon-facebook.svg"/></div>
-        <div><img class="w-10 h-10 cursor-pointer rounded-full" src="../assets/icons/icon-vk.svg" /></div>
-        <div><img class="w-10 h-10 cursor-pointer rounded-full" src="../assets/icons/icon-google.svg"></div>
-      </div>
+      <submitButton value="Войти" class="my-6"/>
     </div>
   </div>
 </template>
@@ -21,7 +16,8 @@
 
 import loginInput from '../shared/loginInput.vue';
 import submitButton from '../shared/submitButton.vue';
-import { validUserLogin, validUserPassword, type IValidAnswer } from '../helpers/validator';
+import { validUserLogin, validUserPassword } from '../helpers/validator';
+import { type IValidAnswer } from '@/helpers/constants';
 
 export default{
   components:{

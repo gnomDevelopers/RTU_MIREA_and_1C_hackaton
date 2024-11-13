@@ -10,7 +10,7 @@
       :class="{ 'border-sky-500': isFocused, 'border-slate-500': !isFocused, 'border-red-600': error}"
     >
       <input
-        class="bg-transparent outline-none h-7 pl-1 text-lg flex-1"
+        class="bg-transparent outline-none h-7 pl-1 text-lg flex-1 min-w-0"
         :type="inputType"
         v-model="inputValue"
         @focusin="onFocus"
@@ -29,12 +29,12 @@
           v-if="inputType !== type"
           src="../assets/icons/icon-password-hide.svg"
           alt="Показать пароль"
-          class="w-7 h-7 cursor-pointer mr-1"
+          class="w-6 h-6 cursor-pointer mr-1"
         />
         <img
           v-else
           src="../assets/icons/icon-password-show.svg"
-          class="w-7 h-7 cursor-pointer mr-1"
+          class="w-6 h-6 cursor-pointer mr-1"
         />
       </div>
     </div>
