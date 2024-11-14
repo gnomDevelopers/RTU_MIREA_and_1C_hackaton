@@ -7,7 +7,8 @@ import (
 
 func NewRepository(db *sql.DB) *repository.Repository {
 	return &repository.Repository{
-		User: NewUserRepository(db),
+		User:       NewUserRepository(db),
+		University: NewUniversityRepository(db),
 	}
 	//TODO дополнить
 }

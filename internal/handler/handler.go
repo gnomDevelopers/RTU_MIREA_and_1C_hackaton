@@ -30,7 +30,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Use(cors.New(cors.Config{
 		//todo поменять на адрес фронта и раскомментить credentials (куки)
 		AllowOrigins: "*",
-		//AllowCredentials: true,
+		// AllowCredentials: true,
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 		AllowMethods: "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
@@ -40,6 +40,12 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/login", h.Login)
 
 	f.Get("/schedule", h.GetSchedule)
+
+	f.Get("/university/all", h.GetAllUniversities)
+	f.Get("/university/:name", h.GetByNameUniversity)
+	f.Post("/university", h.CreateUniversity)
+	f.Put("/university", h.UpdateUniversity)
+	f.Delete("/university", h.DeleteUniversity)
 
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {
