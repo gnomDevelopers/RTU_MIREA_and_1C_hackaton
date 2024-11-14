@@ -22,13 +22,14 @@ type UniversityRepository interface {
 }
 
 type CampusRepository interface {
-	Create(context.Context, string) (int, error)
+	Create(context.Context, int, string, string) (int, error)
 	GetById(context.Context, int) (*entities.Campus, error)
 	GetByAddress(context.Context, string) (*entities.Campus, error)
 	GetByName(context.Context, string) (*entities.Campus, error)
 	GetByUniversityId(context.Context, int) (*entities.Campus, error)
-	Update(context.Context, int, string) error
-	Delete(context.Context, string) error
+	GetAll(context.Context) (*[]entities.Campus, error)
+	Update(context.Context, int, int, string, string) error
+	Delete(context.Context, int) error
 }
 
 type AuditoryRepository interface {
@@ -38,8 +39,8 @@ type AuditoryRepository interface {
 	GetByCampusId(context.Context, int) (*entities.Auditory, error)
 	GetByProfile(context.Context, string) (*entities.Auditory, error)
 	GetByCapacity(context.Context, int) (*entities.Auditory, error)
-	Update(context.Context, int, string) error
-	Delete(context.Context, string) error
+	Update(context.Context, int, int, string, string) error
+	Delete(context.Context, int) error
 }
 
 type ClassRepository interface {
@@ -48,7 +49,7 @@ type ClassRepository interface {
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
 	GetByAuditoryId(context.Context, int) (*[]entities.Class, error)
 	Update(context.Context, int, string) error
-	Delete(context.Context, string) error
+	Delete(context.Context, int) error
 }
 
 type Repository struct {

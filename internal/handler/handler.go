@@ -42,10 +42,19 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/schedule", h.GetSchedule)
 
 	f.Get("/university/all", h.GetAllUniversities)
-	f.Get("/university/:name", h.GetByNameUniversity)
+	f.Get("/university/name/:name", h.GetByNameUniversity)
 	f.Post("/university", h.CreateUniversity)
 	f.Put("/university", h.UpdateUniversity)
-	f.Delete("/university", h.DeleteUniversity)
+	f.Delete("/university/:id", h.DeleteUniversity)
+
+	f.Get("/campus/all", h.GetAllCampuses)
+	f.Get("/campus/id/:id", h.GetByIdCampus)
+	f.Get("/campus/name/:name", h.GetByNameCampus)
+	f.Get("/campus/address/:address", h.GetByAddressCampus)
+	f.Get("/campus/university_id/:university_id", h.GetByUniversityIdCampus)
+	f.Post("/campus", h.CreateCampus)
+	f.Put("/campus", h.UpdateCampus)
+	f.Delete("/campus/:id", h.DeleteCampus)
 
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {
