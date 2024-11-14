@@ -174,8 +174,15 @@
   background-color: var(--bg-color-1);
 }
 
+.markers li::marker {
+	font-size: 8px;
+}
+
 .header-shadow{
   box-shadow: 0 0 2px rgb(185, 185, 185), 0 0 5px rgb(204, 204, 204);
+}
+.profile-shadow{
+  box-shadow: 0 0 5px #bbd4ee, 0 0 10px #d2e3f5;
 }
 
 .welcome-bg{
@@ -202,24 +209,19 @@
   @apply top-0 left-0 text-sm;
 }
 
-.main-table-item{
-  @apply flex flex-col gap-x-5 items-center p-5 us:flex-row us:items-stretch border-2 border-color rounded-xl bg-white;
-}
-.main-table-item-text{
-  @apply flex flex-col justify-between gap-y-2 items-center cursor-default us:items-start us:gap-y-0;
-}
-.main-table-item-title{
-  @apply text-3xl text-center us:text-left;
-}
-.main-table-item-decription{
-  @apply text-lg text-justify;
-}
-.main-table-item-btn{
-  @apply us:self-start py-2 px-4 rounded-lg text-lg cursor-pointer bg-color-bold text-color-light transition-colors;
-}
 .main-table-item-btn:hover{
   background-color: var(--bg-color-bold-hover);
 }
 .main-table-item-btn:active{
   background-color: var(--bg-color-bold-active);
+}
+
+.profile-list > li{
+  @apply text-lg mb-2;
+}
+.profile-list > li:last-child{
+  margin-bottom: 0px;
+}
+.profile-list > li > span{
+  text-decoration: underline;
 }
