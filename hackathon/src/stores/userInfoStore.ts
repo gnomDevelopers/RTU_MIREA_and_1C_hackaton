@@ -13,12 +13,14 @@ export const useUserInfoStore = defineStore('userInfo', {
       permission_id: null as TMaybeNumber, // id уровня доступа
       faculty_id: null as TMaybeNumber, // id факультета
       department_id: null as TMaybeNumber, // id 
+      //role: -1 as number,
+      role: 1 as number,
     }
   },
   actions: {
     async Authenticate(){
       const data = await API_Authenticate();
-
+      
       //...
     }
   }

@@ -80,6 +80,14 @@
   --bg-color-bold: #063C73;
   --bg-color-bold-hover: #0d4c8b;
   --bg-color-bold-active: #0958a8;
+
+  --btn-color-normal: #4287cc;
+  --btn-color-normal-hover: #5697d8;
+  --btn-color-normal-active: #5ba0e6;
+
+  --btn-color-bad: #ca4040;
+  --btn-color-bad-hover: #e64e4e;
+  --btn-color-bad-active: #ee6060;
 }
 
 #app{
@@ -89,9 +97,6 @@
   flex-direction: column;
 }
 
-.transition-input{
-  transition: background-color .1s ease-out, color .1s ease-out, border-color .1s ease-out;
-}
 .transition-bg{
   transition: background-color .1s ease-out;
 }
@@ -184,6 +189,28 @@
 .profile-shadow{
   box-shadow: 0 0 5px #bbd4ee, 0 0 10px #d2e3f5;
 }
+
+.btn{
+  @apply text-color-light flex flex-row justify-center items-center text-center;
+  background-color: var(--btn-color-normal);
+  transition: background-color 150ms ease-out;
+}
+.btn:hover{
+  background-color: var(--btn-color-normal-hover);
+}
+.btn:active{
+  background-color: var(--btn-color-normal-active);
+}
+.btn-bad{
+  background-color: var(--btn-color-bad);
+}
+.btn-bad:hover{
+  background-color: var(--btn-color-bad-hover);
+}
+.btn-bad:active{
+  background-color: var(--btn-color-bad-active);
+}
+
 
 .welcome-bg{
   background-image: 

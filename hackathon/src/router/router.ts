@@ -23,15 +23,15 @@ export const router = createRouter({
       meta: { requiresAuth: false },
     },
     {
-      name: 'MainPage',
-      path: '/main',
-      component: () => import('../pages/MainPage.vue'),
-      meta: { requiresAuth: true },
-    },
-    {
       name: 'ProfilePage',
       path: '/profile',
       component: () => import('../pages/ProfilePage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      name: 'ProrectorPage',
+      path: '/prorector',
+      component: () => import('../pages/MainPageProrector.vue'),
       meta: { requiresAuth: true },
     },
   ],

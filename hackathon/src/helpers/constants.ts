@@ -17,3 +17,31 @@ export interface IValidAnswer{
   value: string,
   error: string,
 }
+
+//userList item interface
+export interface IUsersList{
+  id: number,
+  name: string,
+  role: number,
+}
+
+//rules
+
+export const ROLES = [0, 1, 2, 3, 4, 5, 6];
+
+export enum ROLES_NAME {
+  'Администратор' = 0,
+  'Проректор' = 1,
+  'Декан' = 2,
+  'Заведующий кафедры' = 3,
+  'Преподаватель' = 4,
+  'Староста группы' = 5,
+  'Студент' = 6,
+};
+
+export const ROLES_SET_PRORECTOR = [2, 4];
+
+export const ROLES_SET_DECAN_TO_PREPOD = [3, 4];
+export const ROLES_SET_DECAN_TO_STUDENT = [5, 6];
+
+export const ROLES_SET_ZAV_CAF = [2, 4];
