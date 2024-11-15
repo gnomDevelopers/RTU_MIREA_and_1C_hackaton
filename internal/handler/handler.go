@@ -1,13 +1,16 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/rs/zerolog"
+	_ "server/docs"
 	"server/internal/config"
 	"server/internal/log"
 	"server/internal/service"
 	"server/pkg"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
+	"github.com/rs/zerolog"
 )
 
 type Handler struct {
@@ -35,6 +38,8 @@ func (h *Handler) Router() *fiber.App {
 		AllowMethods: "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
 	f.Use(log.RequestLogger(h.logger))
+
+	f.Get("/swagger/*", swagger.HandlerDefault)
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)

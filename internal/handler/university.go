@@ -8,6 +8,14 @@ import (
 	"strconv"
 )
 
+// @Tags university
+// @Summary      Create university
+// @Accept       json
+// @Produce      json
+// @Param data body entities.University true "university data"
+// @Success 200 {object} entities.CreateUniversityResponse
+// @Failure 400 {object} entities.ErrorResponse
+// @Router       /university [post]
 func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var university entities.University
@@ -34,6 +42,13 @@ func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"id": id})
 }
 
+// @Tags university
+// @Summary      Get all universities
+// @Accept       json
+// @Produce      json
+// @Success 200 {object} []entities.University
+// @Failure 400 {object} entities.ErrorResponse
+// @Router       /university/all [get]
 func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 	universities, err := h.services.UniversityService.GetAll(c.Context())
 	if err != nil {
@@ -46,6 +61,14 @@ func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(universities)
 }
 
+// @Tags university
+// @Summary      Get university by name
+// @Accept       json
+// @Produce      json
+// @Param name path string true "university name"
+// @Success 200 {object} entities.University
+// @Failure 400 {object} entities.ErrorResponse
+// @Router       /university/name/{name} [get]
 func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	name := c.Params("name")
@@ -64,6 +87,14 @@ func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(university)
 }
 
+// @Tags university
+// @Summary      Update university
+// @Accept       json
+// @Produce      json
+// @Param data body entities.University true "university data"
+// @Success 200 {object} entities.UpdateDeleteUniversityResponse
+// @Failure 400 {object} entities.ErrorResponse
+// @Router       /university [put]
 func (h *Handler) UpdateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var university entities.University
@@ -89,6 +120,14 @@ func (h *Handler) UpdateUniversity(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": fmt.Sprintf("university with id=%v updated successfully", university.Id)})
 }
 
+// @Tags university
+// @Summary      Delete university
+// @Accept       json
+// @Produce      json
+// @Param data body entities.University true "university data"
+// @Success 200 {object} entities.UpdateDeleteUniversityResponse
+// @Failure 400 {object} entities.ErrorResponse
+// @Router       /university [delete]
 func (h *Handler) DeleteUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")
