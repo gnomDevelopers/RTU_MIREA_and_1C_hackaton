@@ -6,3 +6,11 @@ type Campus struct {
 	UniversityId int    `json:"university_id"`
 	Address      string `json:"address"`
 }
+
+type CreateCampusResponse struct {
+	Id int `json:"id"`
+}
+
+type UpdateDeleteCampusResponse struct {
+	Message string `json:"message"`
+}

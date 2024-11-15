@@ -1,5 +1,21 @@
 basePath: /
 definitions:
+  entities.Campus:
+    properties:
+      address:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      university_id:
+        type: integer
+    type: object
+  entities.CreateCampusResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   entities.CreateUniversityResponse:
     properties:
       id:
@@ -17,6 +33,11 @@ definitions:
       name:
         type: string
     type: object
+  entities.UpdateDeleteCampusResponse:
+    properties:
+      message:
+        type: string
+    type: object
   entities.UpdateDeleteUniversityResponse:
     properties:
       message:
@@ -27,6 +48,195 @@ info:
   title: VUZ+ API
   version: "1.0"
 paths:
+  /campus:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Campus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete campus
+      tags:
+      - campus
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Campus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create campus
+      tags:
+      - campus
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Campus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update campus
+      tags:
+      - campus
+  /campus/address/{address}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by address
+      tags:
+      - campus
+  /campus/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Campus'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get all campuses
+      tags:
+      - campus
+  /campus/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by id
+      tags:
+      - campus
+  /campus/name/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by name
+      tags:
+      - campus
+  /campus/university_id/{university_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus university_id
+        in: path
+        name: university_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by university_id
+      tags:
+      - campus
   /university:
     delete:
       consumes:
