@@ -11,6 +11,9 @@ import (
 	"server/internal/service"
 )
 
+// @title VUZ+ API
+// @version 1.0
+// @BasePath /
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("No .env file found")

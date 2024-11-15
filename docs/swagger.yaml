@@ -1,0 +1,147 @@
+basePath: /
+definitions:
+  entities.CreateUniversityResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  entities.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  entities.University:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  entities.UpdateDeleteUniversityResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: VUZ+ API
+  version: "1.0"
+paths:
+  /university:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.University'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete university
+      tags:
+      - university
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.University'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create university
+      tags:
+      - university
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.University'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update university
+      tags:
+      - university
+  /university/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.University'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get all universities
+      tags:
+      - university
+  /university/name/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.University'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get university by name
+      tags:
+      - university
+swagger: "2.0"
