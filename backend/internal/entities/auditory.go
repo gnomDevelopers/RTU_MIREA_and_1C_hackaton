@@ -8,3 +8,11 @@ type Auditory struct {
 	Profile  string `json:"profile"`
 	Capacity int    `json:"capacity"`
 }
+
+type CreateAuditoryRequest struct {
+	Name     string `json:"name"`
+	CampusId int    `json:"campus_id"`
+	Type     string `json:"type"`
+	Profile  string `json:"profile"`
+	Capacity int    `json:"capacity"`
+}
