@@ -51,7 +51,7 @@ services:
 
   frontend:
     build:
-      context: ./hackathon
+      context: ./web
     networks:
       - dev
     depends_on:
