@@ -5,6 +5,10 @@ type University struct {
 	Name string `json:"name"`
 }
 
+type CreateUniversityRequest struct {
+	Name string `json:"name"`
+}
+
 type CreateUniversityResponse struct {
 	Id int `json:"id"`
 }

@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"server/internal/entities"
 )
 
@@ -16,41 +17,54 @@ func NewUniversityRepository(db *sql.DB) *UniversityRepository {
 	}
 }
 
-func (u *UniversityRepository) Create(ctx context.Context, name string) (int, error) {
-	var id int
-	query := `INSERT INTO university (name) VALUES ($1) RETURNING id`
+func (r *UniversityRepository) Create(ctx context.Context, name string) (int, error) {
+	if name == "" {
+		return 0, errors.New("")
+	}
 
-	err := u.db.QueryRowContext(ctx, query, name).Scan(&id)
+	query := `SELECT * FROM university WHERE name=$1`
+	row := r.db.QueryRowContext(ctx, query, name)
+	var tmp interface{}
+	err := row.Scan(&tmp)
+	if !(err == sql.ErrNoRows) {
+		return 0, errors.New("class with these fields already exists")
+	}
+
+	var id int
+	query = `INSERT INTO university (name) VALUES ($1) RETURNING id`
+
+	err = r.db.QueryRowContext(ctx, query, name).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
+
 	return id, nil
 }
 
-func (u *UniversityRepository) GetById(ctx context.Context, id int) (*entities.University, error) {
+func (r *UniversityRepository) GetById(ctx context.Context, id int) (*entities.University, error) {
 	var university entities.University
 	query := `SELECT * FROM university WHERE id = $1`
-	err := u.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name)
 	if err != nil {
 		return nil, err
 	}
 	return &university, nil
 }
 
-func (u *UniversityRepository) GetByName(ctx context.Context, name string) (*entities.University, error) {
+func (r *UniversityRepository) GetByName(ctx context.Context, name string) (*entities.University, error) {
 	var university entities.University
 	query := `SELECT * FROM university WHERE name=$1`
-	err := u.db.QueryRowContext(ctx, query, name).Scan(&university.Id, &university.Name)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&university.Id, &university.Name)
 	if err != nil {
 		return nil, err
 	}
 	return &university, nil
 }
 
-func (u *UniversityRepository) GetAll(ctx context.Context) (*[]entities.University, error) {
+func (r *UniversityRepository) GetAll(ctx context.Context) (*[]entities.University, error) {
 	var universities []entities.University
 	query := `SELECT * FROM university`
-	rows, err := u.db.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
@@ -67,18 +81,18 @@ func (u *UniversityRepository) GetAll(ctx context.Context) (*[]entities.Universi
 	return &universities, nil
 }
 
-func (u *UniversityRepository) Update(ctx context.Context, id int, name string) error {
+func (r *UniversityRepository) Update(ctx context.Context, id int, name string) error {
 	query := `UPDATE university SET name = $1 WHERE id = $2`
-	err := u.db.QueryRowContext(ctx, query, name, id).Err()
+	_, err := r.db.ExecContext(ctx, query, name, id)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u *UniversityRepository) Delete(ctx context.Context, id int) error {
+func (r *UniversityRepository) Delete(ctx context.Context, id int) error {
 	query := `DELETE FROM university WHERE id = $1`
-	err := u.db.QueryRowContext(ctx, query, id).Err()
+	_, err := r.db.ExecContext(ctx, query, id)
 	if err != nil {
 		return err
 	}
