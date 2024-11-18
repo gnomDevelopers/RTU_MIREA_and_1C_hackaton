@@ -4,7 +4,7 @@ WORKDIR /build
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY . .
+COPY .. .
 RUN go build -o /main ./cmd/main.go
 # Финальный этап, копируем собранное приложение
 FROM alpine:3

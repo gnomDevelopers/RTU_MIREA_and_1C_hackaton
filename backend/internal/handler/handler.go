@@ -1,16 +1,14 @@
 package handler
 
 import (
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
+	"github.com/rs/zerolog"
+	"server/backend/pkg"
 	_ "server/docs"
 	"server/internal/config"
 	"server/internal/log"
 	"server/internal/service"
-	"server/pkg"
-
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/swagger"
-	"github.com/rs/zerolog"
 )
 
 type Handler struct {
