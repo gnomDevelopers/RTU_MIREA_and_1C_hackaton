@@ -37,6 +37,7 @@ type Service struct {
 	UserService       *UserService
 	UniversityService *UniversityService
 	CampusService     *CampusService
+	ClassService      *ClassService
 	conf              *config.Config
 }
 
@@ -45,5 +46,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		UserService:       NewUserService(repositories.User, conf),
 		UniversityService: NewUniversityService(repositories.University),
 		CampusService:     NewCampusService(repositories.Campus),
+		ClassService:      NewClassService(repositories.Class),
 	}
 }

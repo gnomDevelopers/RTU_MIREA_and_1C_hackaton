@@ -30,11 +30,11 @@ func (h *Handler) Router() *fiber.App {
 	})
 
 	f.Use(cors.New(cors.Config{
-		//todo поменять на адрес фронта и раскомментить credentials (куки)
-		AllowOrigins: "*",
-		// AllowCredentials: true,
-		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
-		AllowMethods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+		AllowOrigins: "http://frontend:3000/",
+		//AllowOrigins:     "http://localhost:8080/",
+		AllowCredentials: true,
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		AllowMethods:     "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
 	f.Use(log.RequestLogger(h.logger))
 
@@ -55,10 +55,18 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/campus/id/:id", h.GetByIdCampus)
 	f.Get("/campus/name/:name", h.GetByNameCampus)
 	f.Get("/campus/address/:address", h.GetByAddressCampus)
-	f.Get("/campus/university_id/:university_id", h.GetByUniversityIdCampus)
+	f.Get("/campus/university_id/:id", h.GetByUniversityIdCampus)
 	f.Post("/campus", h.CreateCampus)
 	f.Put("/campus", h.UpdateCampus)
 	f.Delete("/campus/:id", h.DeleteCampus)
+
+	f.Get("/class/id/:id", h.GetByIdClass)
+	f.Get("/class/group_name/:name", h.GetByGroupNameClass)
+	f.Get("/class/teacher_name/:name", h.GetByTeacherNameClass)
+	f.Get("/class/auditory_id/:id", h.GetByAuditoryIdClass)
+	f.Post("/class", h.CreateClass)
+	f.Put("/class", h.UpdateClass)
+	f.Delete("/class/:id", h.DeleteClass)
 
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {

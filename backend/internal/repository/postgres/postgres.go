@@ -10,6 +10,6 @@ func NewRepository(db *sql.DB) *repository.Repository {
 		User:       NewUserRepository(db),
 		University: NewUniversityRepository(db),
 		Campus:     NewCampusRepository(db),
+		Class:      NewClassRepository(db),
 	}
-	//TODO дополнить
 }

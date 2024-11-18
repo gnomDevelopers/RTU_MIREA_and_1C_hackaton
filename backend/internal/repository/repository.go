@@ -44,11 +44,12 @@ type AuditoryRepository interface {
 }
 
 type ClassRepository interface {
-	Create(context.Context, string) (int, error)
-	GetById(context.Context, int) (*[]entities.Class, error)
+	Create(context.Context, *entities.Class) (int, error)
+	GetById(context.Context, int) (*entities.Class, error)
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
+	GetByTeacherName(context.Context, string) (*[]entities.Class, error)
 	GetByAuditoryId(context.Context, int) (*[]entities.Class, error)
-	Update(context.Context, int, string) error
+	Update(context.Context, *entities.Class) error
 	Delete(context.Context, int) error
 }
 
