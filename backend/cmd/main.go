@@ -15,7 +15,7 @@ import (
 // @version 1.0
 // @BasePath /
 func main() {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load("./backend/.env"); err != nil {
 		log.Fatal("No .env file found")
 	}
 	conf := config.NewConfig()

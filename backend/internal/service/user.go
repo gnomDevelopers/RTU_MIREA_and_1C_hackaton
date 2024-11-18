@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 	"errors"
-	"server/backend/pkg"
-	"server/backend/util"
 	"server/internal/config"
 	"server/internal/entities"
 	"server/internal/repository"
+	"server/pkg"
+	"server/util"
 	"strconv"
 	"time"
 )
