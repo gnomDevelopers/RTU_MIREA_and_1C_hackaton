@@ -11,5 +11,5 @@ RUN go build -o /main ./cmd/main.go
 FROM alpine:3
 WORKDIR /app
 COPY --from=builder /main /bin/main
-COPY --from=builder .env /bin/.env
+COPY --from=builder /bin/.env /bin/.env
 ENTRYPOINT ["/bin/main"]
