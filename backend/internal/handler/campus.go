@@ -8,13 +8,16 @@ import (
 	"strconv"
 )
 
+// CreateCampus
 // @Tags campus
 // @Summary      Create campus
 // @Accept       json
 // @Produce      json
-// @Param data body entities.Campus true "campus data"
+// @Param data body entities.CreateCampusRequest true "campus data"
 // @Success 200 {object} entities.CreateCampusResponse
 // @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus [post]
 func (h *Handler) CreateCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
@@ -42,12 +45,15 @@ func (h *Handler) CreateCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"id": id})
 }
 
+// GetAllCampuses
 // @Tags campus
 // @Summary      Get all campuses
 // @Accept       json
 // @Produce      json
 // @Success 200 {object} []entities.Campus
 // @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus/all [get]
 func (h *Handler) GetAllCampuses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
@@ -62,6 +68,7 @@ func (h *Handler) GetAllCampuses(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(campuses)
 }
 
+// GetByIdCampus
 // @Tags campus
 // @Summary      Get campus by id
 // @Accept       json
@@ -69,6 +76,8 @@ func (h *Handler) GetAllCampuses(c *fiber.Ctx) error {
 // @Param id path string true "campus id"
 // @Success 200 {object} entities.Campus
 // @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus/id/{id} [get]
 func (h *Handler) GetByIdCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
@@ -89,6 +98,7 @@ func (h *Handler) GetByIdCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(campus)
 }
 
+// GetByNameCampus
 // @Tags campus
 // @Summary      Get campus by name
 // @Accept       json
@@ -96,6 +106,8 @@ func (h *Handler) GetByIdCampus(c *fiber.Ctx) error {
 // @Param name path string true "campus name"
 // @Success 200 {object} entities.Campus
 // @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus/name/{name} [get]
 func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
@@ -115,6 +127,7 @@ func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(campus)
 }
 
+// GetByAddressCampus
 // @Tags campus
 // @Summary      Get campus by address
 // @Accept       json
@@ -122,6 +135,8 @@ func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 // @Param address path string true "campus address"
 // @Success 200 {object} entities.Campus
 // @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus/address/{address} [get]
 func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
@@ -141,6 +156,7 @@ func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(campus)
 }
 
+// GetByUniversityIdCampus
 // @Tags campus
 // @Summary      Get campus by university_id
 // @Accept       json
@@ -148,7 +164,9 @@ func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 // @Param university_id path string true "campus university_id"
 // @Success 200 {object} entities.Campus
 // @Failure 400 {object} entities.ErrorResponse
-// @Router       /campus/university_id/{university_id} [get]
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /campus/university_id/{id} [get]
 func (h *Handler) GetByUniversityIdCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	universityIdStr := c.Params("id")
@@ -168,6 +186,7 @@ func (h *Handler) GetByUniversityIdCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(campus)
 }
 
+// UpdateCampus
 // @Tags campus
 // @Summary      Update campus
 // @Accept       json
@@ -175,6 +194,8 @@ func (h *Handler) GetByUniversityIdCampus(c *fiber.Ctx) error {
 // @Param data body entities.Campus true "campus data"
 // @Success 200 {object} entities.UpdateDeleteCampusResponse
 // @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus [put]
 func (h *Handler) UpdateCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
@@ -201,14 +222,17 @@ func (h *Handler) UpdateCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": fmt.Sprintf("campus with id=%v updated successfully", campus.Id)})
 }
 
+// DeleteCampus
 // @Tags campus
 // @Summary      Delete campus
 // @Accept       json
 // @Produce      json
-// @Param data body entities.Campus true "campus data"
+// @Param id path string true "campus id"
 // @Success 200 {object} entities.UpdateDeleteCampusResponse
 // @Failure 400 {object} entities.ErrorResponse
-// @Router       /campus [delete]c
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /campus{id} [delete]
 func (h *Handler) DeleteCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

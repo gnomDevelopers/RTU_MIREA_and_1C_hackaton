@@ -7,6 +7,12 @@ type Campus struct {
 	Address      string `json:"address"`
 }
 
+type CreateCampusRequest struct {
+	Name         string `json:"name"`
+	UniversityId int    `json:"university_id"`
+	Address      string `json:"address"`
+}
+
 type CreateCampusResponse struct {
 	Id int `json:"id"`
 }

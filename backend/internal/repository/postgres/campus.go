@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"server/internal/entities"
 )
 
@@ -16,61 +17,73 @@ func NewCampusRepository(db *sql.DB) *CampusRepository {
 	}
 }
 
-func (c *CampusRepository) Create(ctx context.Context, universityId int, name, address string) (int, error) {
-	var id int
-	query := `INSERT INTO campus (name, university_id, address) VALUES ($1, $2, $3) RETURNING id`
+func (r *CampusRepository) Create(ctx context.Context, universityId int, name, address string) (int, error) {
+	if name == "" || address == "" {
+		return 0, errors.New("")
+	}
 
-	err := c.db.QueryRowContext(ctx, query, name, universityId, address).Scan(&id)
+	query := `SELECT * FROM campus WHERE name=$1 AND address=$2`
+	row := r.db.QueryRowContext(ctx, query, name, address)
+	var tmp interface{}
+	err := row.Scan(&tmp)
+	if !(err == sql.ErrNoRows) {
+		return 0, errors.New("class with these fields already exists")
+	}
+
+	var id int
+	query = `INSERT INTO campus (name, university_id, address) VALUES ($1, $2, $3) RETURNING id`
+
+	err = r.db.QueryRowContext(ctx, query, name, universityId, address).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
 	return id, nil
 }
 
-func (c *CampusRepository) GetById(ctx context.Context, id int) (*entities.Campus, error) {
+func (r *CampusRepository) GetById(ctx context.Context, id int) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE id = $1`
-	err := c.db.QueryRowContext(ctx, query, id).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
 	return &campus, nil
 }
 
-func (c *CampusRepository) GetByAddress(ctx context.Context, address string) (*entities.Campus, error) {
+func (r *CampusRepository) GetByAddress(ctx context.Context, address string) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE address = $1`
-	err := c.db.QueryRowContext(ctx, query, address).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, address).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
 	return &campus, nil
 }
 
-func (c *CampusRepository) GetByName(ctx context.Context, name string) (*entities.Campus, error) {
+func (r *CampusRepository) GetByName(ctx context.Context, name string) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE name = $1`
-	err := c.db.QueryRowContext(ctx, query, name).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
 	return &campus, nil
 }
 
-func (c *CampusRepository) GetByUniversityId(ctx context.Context, universityId int) (*entities.Campus, error) {
+func (r *CampusRepository) GetByUniversityId(ctx context.Context, universityId int) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE university_id = $1`
-	err := c.db.QueryRowContext(ctx, query, universityId).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, universityId).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
 	return &campus, nil
 }
 
-func (c *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, error) {
+func (r *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, error) {
 	var campuses []entities.Campus
 	query := `SELECT * FROM campus`
-	rows, err := c.db.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
@@ -87,18 +100,18 @@ func (c *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, erro
 	return &campuses, nil
 }
 
-func (c *CampusRepository) Update(ctx context.Context, id, universityId int, name, address string) error {
+func (r *CampusRepository) Update(ctx context.Context, id, universityId int, name, address string) error {
 	query := `UPDATE campus SET name = $1, university_id = $2, address = $3 WHERE id = $4`
-	err := c.db.QueryRowContext(ctx, query, name, universityId, address, id).Err()
+	err := r.db.QueryRowContext(ctx, query, name, universityId, address, id).Err()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *CampusRepository) Delete(ctx context.Context, id int) error {
+func (r *CampusRepository) Delete(ctx context.Context, id int) error {
 	query := `DELETE FROM campus WHERE id = $1`
-	err := c.db.QueryRowContext(ctx, query, id).Err()
+	err := r.db.QueryRowContext(ctx, query, id).Err()
 	if err != nil {
 		return err
 	}
