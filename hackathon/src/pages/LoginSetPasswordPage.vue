@@ -5,18 +5,21 @@
       <div class="w-full text-center text-4xl font-semibold">VUZ+</div>
       <div class="flex flex-col gap-y-5">
         <loginInput type="password" text="Пароль" @input-change="checkPassword"/>
-        <loginInput type="password" text="Повторите пароль" @input-change="checkSecondPassword"/>
+        <loginInput type="password" text="Повторите пароль" @input-change="checkSecondPassword" ref="repeatPassword"/>
       </div>
-      <submitButton value="Сохранить пароль" class="my-6"/>
+      <submitButton value="Сохранить пароль" class="my-6" @click="sendPasswords"/>
     </div>
   </div>
 </template>
 <script lang="ts">
 
+import { mapStores } from 'pinia';
+import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { ValidUserPassword } from '../helpers/validator';
+import { type IValidAnswer, StatusCodes } from '@/helpers/constants';
+
 import loginInput from '../shared/loginInput.vue';
 import submitButton from '../shared/submitButton.vue';
-import { validUserLogin, validUserPassword } from '../helpers/validator';
-import { type IValidAnswer } from '@/helpers/constants';
 
 export default{
   components:{
@@ -25,17 +28,39 @@ export default{
   },
   data(){
     return{
-      passwordValue: {value: '', error: ''} as IValidAnswer,
-      isSamePassword: false as boolean,
+      password: {value: '', error: ''} as IValidAnswer,
+      secondPassword: {value: '', error: ''} as IValidAnswer,
     }
   },
+  computed: {
+    ...mapStores(useStatusWindowStore),
+  },
   methods: {
+    sendPasswords(){
+      if(this.password.value !== '' && this.secondPassword.value !== '' && this.password.value === this.secondPassword.value){
+        //API
+        return;
+      }
+
+      if(this.password.value === ''){
+        if(this.password.error === '') this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите новый пароль!');
+        else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.password.error);
+      }
+      if(this.secondPassword.value === ''){
+        if(this.secondPassword.error === '') this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Повторите пароль!');
+        else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.password.error);
+      }
+      else{
+        if(this.password.value !== '') this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Пароли не совпадают!');
+      }
+    },
     checkPassword(value: string){
-      this.passwordValue = validUserPassword(value);
+      this.password = ValidUserPassword(value);
+      if(value === '') this.password.error = '';
     },
     checkSecondPassword(value: string){
-      if(this.passwordValue.value !== value) this.isSamePassword = false;
-      else this.isSamePassword = true;
+      this.secondPassword = ValidUserPassword(value);
+      if(value === '') this.secondPassword.error = '';
     }
   }
 }

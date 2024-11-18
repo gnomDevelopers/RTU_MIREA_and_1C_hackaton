@@ -1,15 +1,10 @@
 <template>
   <StatusWindow />
-  
   <Header />
-
   <RouterView />
 </template>
 
 <script lang="ts">
-import { mapStores } from "pinia";
-import { useStatusWindowStore, statusCodes } from "./stores/statusWindowStore";
-
 import StatusWindow from "./entities/statusWindow.vue";
 import Header from "./entities/header.vue";
 
@@ -18,16 +13,19 @@ export default {
     StatusWindow,
     Header,
   },
-  data() {
-    return {
-
-    };
-  },
-  computed: {
-    ...mapStores(useStatusWindowStore),
-  },
-  methods: {
-
-  },
 };
 </script>
+
+<style v-global>
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease-out;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+</style>

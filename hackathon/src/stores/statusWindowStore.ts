@@ -1,14 +1,5 @@
 import { defineStore } from "pinia";
-
-export enum statusCodes {
-  'error', 'info', 'loading', 'success'
-} 
-
-export interface IStatusWindow{
-  id: number,
-  status: statusCodes,
-  text: string,
-}
+import { StatusCodes, type IStatusWindow, StatusWindowTime } from "@/helpers/constants";
 
 export const useStatusWindowStore = defineStore('statusWindow', {
   state() {
@@ -18,9 +9,9 @@ export const useStatusWindowStore = defineStore('statusWindow', {
     }
   },
   actions: {
-    showStatusWindow(status: statusCodes, text: string, time: number): number{
+    showStatusWindow(status: StatusCodes, text: string, time: number = StatusWindowTime): number{
       const newStatusWindowID: number = this.statusWindowID++;
-      const newStatusWindow: IStatusWindow = {id: newStatusWindowID, status: status, text: text};
+      const newStatusWindow: IStatusWindow = {id: newStatusWindowID, status: status, text: text, time: time};
       this.statusWindowList.push(newStatusWindow);
 
       if(time > 0){

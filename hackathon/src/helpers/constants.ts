@@ -5,6 +5,12 @@
 //api
 export const API = 'https://...';
 export const DEVMODE = true;
+export const StatusWindowTime = 3000;
+
+//statusWindow codes
+export enum StatusCodes {
+  'error', 'info', 'loading', 'success'
+};
 
 //types
 
@@ -24,6 +30,19 @@ export interface IUsersList{
   name: string,
   role: number,
 }
+
+//statusWindow interface
+export interface IStatusWindow{
+  id: number,
+  status: StatusCodes,
+  text: string,
+  time: number,
+};
+
+export interface IAPI_Login_Request{
+  login: string,
+  password: string,
+};
 
 //rules
 

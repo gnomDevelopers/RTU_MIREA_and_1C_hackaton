@@ -8,16 +8,17 @@
         <loginInput type="password" text="Пароль" @input-change="checkPassword"/>
         <div class=" text-sm text-sky-500 w-full text-right cursor-pointer">Забыли пароль?</div>
       </div>
-      <submitButton value="Войти" class="my-6"/>
+      <submitButton value="Войти" class="my-6" @click="sendLogin"/>
     </div>
   </div>
 </template>
 <script lang="ts">
-
+import { mapStores } from 'pinia';
+import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import loginInput from '../shared/loginInput.vue';
 import submitButton from '../shared/submitButton.vue';
-import { validUserLogin, validUserPassword } from '../helpers/validator';
-import { type IValidAnswer } from '../helpers/constants';
+import { ValidUserLogin, ValidUserPassword } from '../helpers/validator';
+import { type IValidAnswer, StatusCodes } from '../helpers/constants';
 
 export default{
   components:{
@@ -26,17 +27,37 @@ export default{
   },
   data(){
     return{
-      loginValue: {value: '', error: ''} as IValidAnswer,
-      passwordValue: {value: '', error: ''} as IValidAnswer,
+      login: {value: '', error: ''} as IValidAnswer,
+      password: {value: '', error: ''} as IValidAnswer,
     }
   },
+  computed:{
+    ...mapStores(useStatusWindowStore),
+  },
   methods: {
+    sendLogin(){
+      if(this.login.value !== '' && this.password.value !== ''){
+        //API
+        return;
+      }
+
+      if(this.login.value === ''){
+        if(this.login.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите логин!');
+        else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.login.error);
+      }
+      if(this.password.value === ''){
+        if(this.password.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите пароль!');
+        else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.password.error);
+      }
+    },
     checkLogin(value: string){
-      this.loginValue = validUserLogin(value);
+      this.login = ValidUserLogin(value);
+      if(value === '') this.login.error = '';
     },
     checkPassword(value: string){
-      this.passwordValue = validUserPassword(value);
-    }
+      this.password = ValidUserPassword(value);
+      if(value === '') this.password.error = '';
+    },
   }
 }
 
