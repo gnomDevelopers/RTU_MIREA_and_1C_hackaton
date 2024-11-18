@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS position_or_course;
