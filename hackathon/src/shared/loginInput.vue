@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col items-start relative">
     <label
+      @click="() => {$refs.loginInput.focus()}"
       class="absolute transition-all"
       :class="{ 'login-label': !focusLabel, 'login-label-focus': focusLabel }"
       >{{ text }}</label>
@@ -15,6 +16,7 @@
         v-model="inputValue"
         @focusin="onFocus"
         @focusout="unFocus"
+        ref="loginInput"
       />
 
       <div
@@ -79,11 +81,9 @@ export default {
     },
     onFocus() {
       this.isFocused = true;
-      console.log('focused');
     },
     unFocus() {
       this.isFocused = false;
-      console.log('unfocused');
     },
   },
   watch:{

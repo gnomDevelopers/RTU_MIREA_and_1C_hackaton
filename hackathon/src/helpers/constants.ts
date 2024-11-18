@@ -3,8 +3,8 @@
 //contants
 
 //api
-export const api = 'https://...';
-export const devMode = true;
+export const API = 'https://...';
+export const DEVMODE = true;
 
 //types
 

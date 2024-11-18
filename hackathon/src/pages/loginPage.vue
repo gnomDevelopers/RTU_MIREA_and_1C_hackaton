@@ -17,7 +17,7 @@
 import loginInput from '../shared/loginInput.vue';
 import submitButton from '../shared/submitButton.vue';
 import { validUserLogin, validUserPassword } from '../helpers/validator';
-import { type IValidAnswer } from '@/helpers/constants';
+import { type IValidAnswer } from '../helpers/constants';
 
 export default{
   components:{

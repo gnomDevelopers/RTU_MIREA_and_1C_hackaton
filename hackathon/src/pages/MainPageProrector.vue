@@ -29,7 +29,19 @@
 
         <MainControl title="Управление ресурсами">
           <MainControlItem title="Управление аудиториями">
-            скрытая часть
+            
+            <label for="fileInput">
+              Choose file
+              <input 
+                type="file" 
+                multiple 
+                name="fileInput" 
+                accept="image/*, .png, .svg, .jpg, .webp" 
+                @change="showFiles" 
+              />
+            </label>
+
+
           </MainControlItem>
         </MainControl>
 
@@ -43,11 +55,13 @@
   </div>
 </template>
 <script lang="ts">
-import { ROLES_SET_PRORECTOR, ROLES_NAME } from '@/helpers/constants';
-import MainControl from '@/shared/mainControl.vue';
-import MainControlItem from '@/shared/mainControlItem.vue';
-import UserListItem from '@/shared/userListItem.vue';
-import UserList from '@/entities/userList.vue';
+import { ROLES_SET_PRORECTOR, ROLES_NAME } from '../helpers/constants';
+import MainControl from '../shared/mainControl.vue';
+import MainControlItem from '../shared/mainControlItem.vue';
+import UserListItem from '../shared/userListItem.vue';
+import UserList from '../entities/userList.vue';
+
+import { API_SendFile } from '../api/api';
 
 export default {
   components:{
@@ -77,6 +91,23 @@ export default {
   computed: {
     getListItemComponent(){
       return UserListItem;
+    }
+  },
+  methods:{
+    async showFiles(event: any){
+
+      const formData = new FormData();
+      const files = event.target.files;
+
+      for (const file of files) formData.append('files', file, file.name);
+      
+      API_SendFile(formData)
+        .then(res => {
+          console.log('success response');
+        })
+        .catch(err => {
+          console.log('error response');
+        });
     }
   }
 };
