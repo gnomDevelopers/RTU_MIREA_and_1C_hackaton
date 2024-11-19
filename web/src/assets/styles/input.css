@@ -105,7 +105,7 @@
   --bg-color-bold-hover: #0d4c8b;
   --bg-color-bold-active: #0958a8;
 
-  --btn-color-normal: #4287cc;
+  --btn-color-normal: #063C73;
   --btn-color-normal-hover: #5697d8;
   --btn-color-normal-active: #5ba0e6;
 
@@ -154,6 +154,28 @@
 *{
   color: var(--bg-color-bold);
   font-family: 'Arsenal';
+}
+
+.box-shadow{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+
+.welcome-logo{
+  @apply text-center text-5xl mb:text-6xl md:text-8xl;
+  font-family: 'BacasimeAntique';
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+
+.logo{
+  @apply w-full text-center text-4xl;
+  font-family: 'BacasimeAntique';
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+
+.header-logo{
+  @apply text-3xl mb:text-4xl md:text-5xl cursor-pointer;
+  font-family: 'BacasimeAntique';
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
 }
 
 .scrollable{

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row justify-between items-stretch h-24 shrink-0 w-full px-5 header-shadow z-10 bg-color-light">
     <div class="h-full grid content-center md:ml-16">
-      <div class="font-semibold text-3xl mb:text-4xl md:text-5xl cursor-pointer">VUZ+</div>
+      <div class="header-logo">VUZ+</div>
     </div>
     <div class="flex flex-row gap-x-2 justify-center items-center md:mr-16">
 
@@ -9,7 +9,7 @@
 
       <p v-if="checkUserLogin" class=" underline cursor-pointer text-sky-600">{{ userInfoStore.first_name }} and {{ userInfoStore.father_name }}</p>
       
-      <div v-else class="flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl text-color border-2 border-color rounded-lg cursor-pointer transition-bg hover:bg-cyan-50 active:bg-cyan-100">Войти</div>
+      <div v-else class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl text-color border-2 border-color rounded-lg cursor-pointer transition-bg hover:bg-cyan-50 active:bg-cyan-100">Войти</div>
 
     </div>
   </div>
