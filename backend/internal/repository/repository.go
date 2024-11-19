@@ -22,29 +22,29 @@ type UniversityRepository interface {
 }
 
 type CampusRepository interface {
-	Create(context.Context, int, string, string) (int, error)
+	Create(context.Context, *[]entities.Campus) ([]int, error)
 	GetById(context.Context, int) (*entities.Campus, error)
 	GetByAddress(context.Context, string) (*entities.Campus, error)
 	GetByName(context.Context, string) (*entities.Campus, error)
 	GetByUniversityId(context.Context, int) (*entities.Campus, error)
 	GetAll(context.Context) (*[]entities.Campus, error)
-	Update(context.Context, int, int, string, string) error
+	Update(context.Context, *entities.Campus) error
 	Delete(context.Context, int) error
 }
 
 type AuditoryRepository interface {
-	Create(context.Context, string) (int, error)
+	Create(context.Context, []string) ([]int, error)
 	GetById(context.Context, int) (*entities.Auditory, error)
 	GetByType(context.Context, string) (*entities.Auditory, error)
 	GetByCampusId(context.Context, int) (*entities.Auditory, error)
 	GetByProfile(context.Context, string) (*entities.Auditory, error)
 	GetByCapacity(context.Context, int) (*entities.Auditory, error)
-	Update(context.Context, int, int, string, string) error
+	Update(context.Context, *entities.Auditory) error
 	Delete(context.Context, int) error
 }
 
 type ClassRepository interface {
-	Create(context.Context, *entities.Class) (int, error)
+	Create(context.Context, *[]entities.Class) ([]int, error)
 	GetById(context.Context, int) (*entities.Class, error)
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
 	GetByTeacherName(context.Context, string) (*[]entities.Class, error)

@@ -17,27 +17,42 @@ func NewCampusRepository(db *sql.DB) *CampusRepository {
 	}
 }
 
-func (r *CampusRepository) Create(ctx context.Context, universityId int, name, address string) (int, error) {
-	if name == "" || address == "" {
-		return 0, errors.New("")
-	}
-
-	query := `SELECT * FROM campus WHERE name=$1 AND address=$2`
-	row := r.db.QueryRowContext(ctx, query, name, address)
-	var tmp interface{}
-	err := row.Scan(&tmp)
-	if !(err == sql.ErrNoRows) {
-		return 0, errors.New("class with these fields already exists")
-	}
-
-	var id int
-	query = `INSERT INTO campus (name, university_id, address) VALUES ($1, $2, $3) RETURNING id`
-
-	err = r.db.QueryRowContext(ctx, query, name, universityId, address).Scan(&id)
+func (r *CampusRepository) Create(ctx context.Context, campuses *[]entities.Campus) ([]int, error) {
+	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
-		return 0, err
+		return []int{}, errors.New("")
 	}
-	return id, nil
+
+	var ids []int
+	for _, campus := range *campuses {
+		if campus.Name == "" || campus.Address == "" {
+			return []int{}, errors.New("")
+		}
+
+		query := `SELECT * FROM campus WHERE name=$1 AND address=$2`
+		row := tx.QueryRowContext(ctx, query, campus.Name, campus.Address)
+		var tmp interface{}
+		err := row.Scan(&tmp)
+		if !(err == sql.ErrNoRows) {
+			return []int{}, errors.New("class with these fields already exists")
+		}
+
+		var id int
+		query = `INSERT INTO campus (name, university_id, address) VALUES ($1, $2, $3) RETURNING id`
+
+		err = tx.QueryRowContext(ctx, query, campus.Name, campus.UniversityId, campus.Address).Scan(&id)
+		if err != nil {
+			tx.Rollback()
+			return []int{}, err
+		}
+		ids = append(ids, id)
+	}
+	err = tx.Commit()
+	if err != nil {
+		return []int{}, errors.New("problem with transaction commit")
+	}
+
+	return ids, nil
 }
 
 func (r *CampusRepository) GetById(ctx context.Context, id int) (*entities.Campus, error) {
@@ -100,9 +115,9 @@ func (r *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, erro
 	return &campuses, nil
 }
 
-func (r *CampusRepository) Update(ctx context.Context, id, universityId int, name, address string) error {
+func (r *CampusRepository) Update(ctx context.Context, campus *entities.Campus) error {
 	query := `UPDATE campus SET name = $1, university_id = $2, address = $3 WHERE id = $4`
-	err := r.db.QueryRowContext(ctx, query, name, universityId, address, id).Err()
+	err := r.db.QueryRowContext(ctx, query, campus.Name, campus.UniversityId, campus.Address, campus.Id).Err()
 	if err != nil {
 		return err
 	}

@@ -19,12 +19,12 @@ func NewClassService(repository repository.ClassRepository) *ClassService {
 	}
 }
 
-func (s *ClassService) Create(c context.Context, class *entities.Class) (int, error) {
+func (s *ClassService) Create(c context.Context, class *[]entities.Class) ([]int, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	id, err := s.repository.Create(ctx, class)
-	return id, err
+	ids, err := s.repository.Create(ctx, class)
+	return ids, err
 }
 
 func (s *ClassService) GetById(c context.Context, id int) (*entities.Class, error) {
