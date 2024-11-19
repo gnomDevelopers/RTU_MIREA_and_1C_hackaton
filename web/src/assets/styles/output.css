@@ -1353,6 +1353,42 @@ video {
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Arsenal';
+
+  src: url('../fonts/Arsenal-Regular.woff2') format('woff2');
+
+  font-weight: 400;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arsenal';
+
+  src: url('../fonts/Arsenal-Bold.woff2') format('woff2');
+
+  font-weight: 700;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BacasimeAntique';
+
+  src: url('../fonts/BacasimeAntique-Regular.woff2') format('woff2');
+
+  font-weight: 400;
+
+  font-style: normal;
+
+  font-display: swap;
+}
+
 :root{
   --bg-color-ultralight: #FAFCFF;
   --bg-color-light: #EBF5FF;
@@ -1409,7 +1445,7 @@ video {
 
 *{
   color: var(--bg-color-bold);
-  font-family: 'NotoSans';
+  font-family: 'Arsenal';
 }
 
 .scrollable{
