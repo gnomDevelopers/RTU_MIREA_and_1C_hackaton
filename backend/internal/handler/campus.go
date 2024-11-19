@@ -8,21 +8,21 @@ import (
 	"strconv"
 )
 
-// CreateCampus
+// CreateCampuses
 // @Tags campus
-// @Summary      Create campus
+// @Summary      Create campuses
 // @Accept       json
 // @Produce      json
-// @Param data body entities.CreateCampusRequest true "campus data"
-// @Success 200 {object} entities.CreateCampusResponse
+// @Param data body []entities.CreateCampusesRequest true "campus data"
+// @Success 200 {object} []entities.CreateCampusesResponse
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /campus [post]
-func (h *Handler) CreateCampus(c *fiber.Ctx) error {
+func (h *Handler) CreateCampuses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
-	var campus entities.Campus
-	err := c.BodyParser(&campus)
+	var campuses []entities.Campus
+	err := c.BodyParser(&campuses)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
@@ -31,7 +31,7 @@ func (h *Handler) CreateCampus(c *fiber.Ctx) error {
 	}
 
 	h.logger.Debug().Msg("call h.services.CampusService.Create")
-	id, err := h.services.CampusService.Create(c.Context(), campus.UniversityId, campus.Name, campus.Address)
+	ids, err := h.services.CampusService.Create(c.Context(), &campuses)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -42,7 +42,7 @@ func (h *Handler) CreateCampus(c *fiber.Ctx) error {
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"id": id})
+	return c.Status(fiber.StatusOK).JSON(ids)
 }
 
 // GetAllCampuses
@@ -208,7 +208,7 @@ func (h *Handler) UpdateCampus(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
 	}
 
-	err = h.services.CampusService.Update(c.Context(), campus.Id, campus.UniversityId, campus.Name, campus.Address)
+	err = h.services.CampusService.Update(c.Context(), &campus)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

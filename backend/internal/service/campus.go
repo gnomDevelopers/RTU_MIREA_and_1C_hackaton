@@ -19,12 +19,12 @@ func NewCampusService(repository repository.CampusRepository) *CampusService {
 	}
 }
 
-func (s *CampusService) Create(c context.Context, universityId int, name, address string) (int, error) {
+func (s *CampusService) Create(c context.Context, campus *[]entities.Campus) ([]int, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	id, err := s.repository.Create(ctx, universityId, name, address)
-	return id, err
+	ids, err := s.repository.Create(ctx, campus)
+	return ids, err
 }
 
 func (s *CampusService) GetById(c context.Context, id int) (*entities.Campus, error) {
@@ -67,11 +67,11 @@ func (s *CampusService) GetAll(c context.Context) (*[]entities.Campus, error) {
 	return campuses, err
 }
 
-func (s *CampusService) Update(c context.Context, id, universityId int, name, address string) error {
+func (s *CampusService) Update(c context.Context, campus *entities.Campus) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	err := s.repository.Update(ctx, id, universityId, name, address)
+	err := s.repository.Update(ctx, campus)
 	return err
 }
 

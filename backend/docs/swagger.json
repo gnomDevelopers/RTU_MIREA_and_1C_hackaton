@@ -67,7 +67,7 @@
                 "tags": [
                     "campus"
                 ],
-                "summary": "Create campus",
+                "summary": "Create campuses",
                 "parameters": [
                     {
                         "description": "campus data",
@@ -75,7 +75,10 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateCampusRequest"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateCampusesRequest"
+                            }
                         }
                     }
                 ],
@@ -83,7 +86,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateCampusResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateCampusesResponse"
+                            }
                         }
                     },
                     "400": {
@@ -455,7 +461,7 @@
                 "tags": [
                     "class"
                 ],
-                "summary": "Create class",
+                "summary": "Create classes",
                 "parameters": [
                     {
                         "description": "class data",
@@ -463,7 +469,10 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateClassRequest"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateClassesRequest"
+                            }
                         }
                     }
                 ],
@@ -471,7 +480,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateClassResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateClassesResponse"
+                            }
                         }
                     },
                     "400": {
@@ -1047,7 +1059,7 @@
                 }
             }
         },
-        "entities.CreateCampusRequest": {
+        "entities.CreateCampusesRequest": {
             "type": "object",
             "properties": {
                 "address": {
@@ -1061,7 +1073,7 @@
                 }
             }
         },
-        "entities.CreateCampusResponse": {
+        "entities.CreateCampusesResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1069,7 +1081,7 @@
                 }
             }
         },
-        "entities.CreateClassRequest": {
+        "entities.CreateClassesRequest": {
             "type": "object",
             "properties": {
                 "academic_discipline_id": {
@@ -1113,7 +1125,7 @@
                 }
             }
         },
-        "entities.CreateClassResponse": {
+        "entities.CreateClassesResponse": {
             "type": "object",
             "properties": {
                 "id": {

@@ -15,7 +15,7 @@ type Class struct {
 	TimeEnd              string   `json:"time_end"`
 }
 
-type CreateClassRequest struct {
+type CreateClassesRequest struct {
 	Name                 string   `json:"name"`
 	AcademicDisciplineId int      `json:"academic_discipline_id"`
 	GroupNames           []string `json:"group_names"`
@@ -29,7 +29,7 @@ type CreateClassRequest struct {
 	TimeEnd              string   `json:"time_end"`
 }
 
-type CreateClassResponse struct {
+type CreateClassesResponse struct {
 	Id int `json:"id"`
 }
 
