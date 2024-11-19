@@ -12,6 +12,10 @@ type UserRepository interface {
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
 }
 
+type UserDataRepository interface {
+	Add(context.Context, *entities.UserData) error
+}
+
 type UniversityRepository interface {
 	Create(context.Context, string) (int, error)
 	GetById(context.Context, int) (*entities.University, error)
@@ -53,10 +57,20 @@ type ClassRepository interface {
 	Delete(context.Context, int) error
 }
 
+type FacultyRepository interface {
+	Create(context.Context, *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
+	GetById(context.Context, int) (*entities.Faculty, error)
+	GetByName(context.Context, string) (*entities.Faculty, error)
+	GetAll(context.Context) (*[]entities.Faculty, error)
+	Update(context.Context, int, string) error
+	Delete(context.Context, int) error
+}
+
 type Repository struct {
 	User       UserRepository
 	University UniversityRepository
 	Campus     CampusRepository
 	Audience   AudienceRepository
 	Class      ClassRepository
+	Faculty    FacultyRepository
 }
