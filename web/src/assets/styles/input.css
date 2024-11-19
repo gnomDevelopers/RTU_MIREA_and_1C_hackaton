@@ -74,6 +74,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Arsenal';
+  src: url('../fonts/Arsenal-Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Arsenal';
+  src: url('../fonts/Arsenal-Bold.ttf') format('ttf');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BacasimeAntique';
+  src: url('../fonts/BacasimeAntique-Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root{
   --bg-color-ultralight: #FAFCFF;
   --bg-color-light: #EBF5FF;
@@ -129,7 +153,7 @@
 
 *{
   color: var(--bg-color-bold);
-  font-family: 'NotoSans';
+  font-family: 'Arsenal';
 }
 
 .scrollable{
