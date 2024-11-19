@@ -471,7 +471,10 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateClassRequest"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateClassRequest"
+                            }
                         }
                     }
                 ],
@@ -479,7 +482,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateClassResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateClassResponse"
+                            }
                         }
                     },
                     "400": {

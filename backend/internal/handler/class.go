@@ -13,16 +13,16 @@ import (
 // @Summary      Create class
 // @Accept       json
 // @Produce      json
-// @Param data body entities.CreateClassRequest true "class data"
-// @Success 200 {object} entities.CreateClassResponse
+// @Param data body []entities.CreateClassRequest true "class data"
+// @Success 200 {object} []entities.CreateClassResponse
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /class [post]
 func (h *Handler) CreateClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
-	var class entities.Class
-	err := c.BodyParser(&class)
+	var classes []entities.Class
+	err := c.BodyParser(&classes)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
@@ -31,7 +31,7 @@ func (h *Handler) CreateClass(c *fiber.Ctx) error {
 	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.Create")
-	id, err := h.services.ClassService.Create(c.Context(), &class)
+	ids, err := h.services.ClassService.Create(c.Context(), &classes)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -42,7 +42,7 @@ func (h *Handler) CreateClass(c *fiber.Ctx) error {
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"id": id})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"id": ids})
 }
 
 // GetByIdClass

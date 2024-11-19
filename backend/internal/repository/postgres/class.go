@@ -17,28 +17,43 @@ func NewClassRepository(db *sql.DB) *ClassRepository {
 	}
 }
 
-func (r *ClassRepository) Create(ctx context.Context, class *entities.Class) (int, error) {
-	if class.Name == "" || class.AcademicDisciplineId == 0 || class.Type == "" || class.AuditoryId == 0 || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
-		return 0, errors.New("")
-	}
-
-	query := `SELECT * FROM class WHERE auditory_id=$1 AND date=$2 AND weekday=$3 AND week=$4 AND time_start=$5 AND time_end=$6`
-	row := r.db.QueryRowContext(ctx, query, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd)
-	var tmp interface{}
-	err := row.Scan(&tmp)
-	if !(err == sql.ErrNoRows) {
-		return 0, errors.New("class with these fields already exists")
-	}
-
-	var id int
-	query = `INSERT INTO class VALUES(name, academic_discipline_id, group_names, teacher_names, type, auditory_id, date, weekday, week, time_start, time_end) RETURNING id`
-
-	err = r.db.QueryRowContext(ctx, query, class.Name, class.AcademicDisciplineId, class.GroupNames, class.TeacherNames, class.Type, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
+func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class) ([]int, error) {
+	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
-		return 0, err
+		return []int{}, errors.New("")
 	}
 
-	return id, nil
+	var ids []int
+	for _, class := range *classes {
+		if class.Name == "" || class.AcademicDisciplineId == 0 || class.Type == "" || class.AuditoryId == 0 || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
+			return []int{}, errors.New("")
+		}
+
+		query := `SELECT * FROM class WHERE auditory_id=$1 AND date=$2 AND weekday=$3 AND week=$4 AND time_start=$5 AND time_end=$6`
+		row := tx.QueryRowContext(ctx, query, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd)
+		var tmp interface{}
+		err := row.Scan(&tmp)
+		if !(err == sql.ErrNoRows) {
+			return []int{}, errors.New("class with these fields already exists")
+		}
+
+		var id int
+		query = `INSERT INTO class VALUES(name, academic_discipline_id, group_names, teacher_names, type, auditory_id, date, weekday, week, time_start, time_end) RETURNING id`
+
+		err = tx.QueryRowContext(ctx, query, class.Name, class.AcademicDisciplineId, class.GroupNames, class.TeacherNames, class.Type, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
+		if err != nil {
+			tx.Rollback()
+			return []int{}, err
+		}
+		ids = append(ids, id)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return []int{}, errors.New("problem with transaction commit")
+	}
+
+	return ids, nil
 }
 
 func (r *ClassRepository) GetById(ctx context.Context, id int) (*entities.Class, error) {

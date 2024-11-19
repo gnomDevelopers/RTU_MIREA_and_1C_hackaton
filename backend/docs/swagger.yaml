@@ -395,14 +395,18 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/entities.CreateClassRequest'
+          items:
+            $ref: '#/definitions/entities.CreateClassRequest'
+          type: array
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.CreateClassResponse'
+            items:
+              $ref: '#/definitions/entities.CreateClassResponse'
+            type: array
         "400":
           description: Bad Request
           schema:

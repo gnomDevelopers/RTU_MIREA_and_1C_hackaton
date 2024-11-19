@@ -44,7 +44,7 @@ type AuditoryRepository interface {
 }
 
 type ClassRepository interface {
-	Create(context.Context, *entities.Class) (int, error)
+	Create(context.Context, *[]entities.Class) ([]int, error)
 	GetById(context.Context, int) (*entities.Class, error)
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
 	GetByTeacherName(context.Context, string) (*[]entities.Class, error)
