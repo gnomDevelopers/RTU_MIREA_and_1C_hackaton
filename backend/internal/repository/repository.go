@@ -32,14 +32,14 @@ type CampusRepository interface {
 	Delete(context.Context, int) error
 }
 
-type AuditoryRepository interface {
-	Create(context.Context, []string) ([]int, error)
-	GetById(context.Context, int) (*entities.Auditory, error)
-	GetByType(context.Context, string) (*entities.Auditory, error)
-	GetByCampusId(context.Context, int) (*entities.Auditory, error)
-	GetByProfile(context.Context, string) (*entities.Auditory, error)
-	GetByCapacity(context.Context, int) (*entities.Auditory, error)
-	Update(context.Context, *entities.Auditory) error
+type AudienceRepository interface {
+	Create(context.Context, *[]entities.Audience) ([]int, error)
+	GetById(context.Context, int) (*entities.Audience, error)
+	GetByType(context.Context, string) (*[]entities.Audience, error)
+	GetByCampusId(context.Context, int) (*[]entities.Audience, error)
+	GetByProfile(context.Context, string) (*[]entities.Audience, error)
+	GetByCapacity(context.Context, int) (*[]entities.Audience, error)
+	Update(context.Context, *entities.Audience) error
 	Delete(context.Context, int) error
 }
 
@@ -57,6 +57,6 @@ type Repository struct {
 	User       UserRepository
 	University UniversityRepository
 	Campus     CampusRepository
-	Auditory   AuditoryRepository
+	Audience   AudienceRepository
 	Class      ClassRepository
 }

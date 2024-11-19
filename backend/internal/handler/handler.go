@@ -60,6 +60,15 @@ func (h *Handler) Router() *fiber.App {
 	f.Put("/campus", h.UpdateCampus)
 	f.Delete("/campus/:id", h.DeleteCampus)
 
+	f.Get("/audience/id/:id", h.GetByIdAudience)
+	f.Get("/audience/campus_id/:id", h.GetByCampusIdAudience)
+	f.Get("/audience/type/:type", h.GetByTypeAudience)
+	f.Get("/audience/profile/:profile", h.GetByProfileAudience)
+	f.Get("/audience/capacity/:capacity", h.GetByCapacityAudience)
+	f.Post("/audience", h.CreateAudiences)
+	f.Put("/audience", h.UpdateAudience)
+	f.Delete("/audience/:id", h.DeleteAudience)
+
 	f.Get("/class/id/:id", h.GetByIdClass)
 	f.Get("/class/group_name/:name", h.GetByGroupNameClass)
 	f.Get("/class/teacher_name/:name", h.GetByTeacherNameClass)
