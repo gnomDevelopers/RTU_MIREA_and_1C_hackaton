@@ -17,72 +17,73 @@ func NewFacultyRepository(db *sql.DB) *FacultyRepository {
 	}
 }
 
-func (r *FacultyRepository) Create(ctx context.Context, faculty *entities.CreateFacultyRequest) (int, error) {
+func (r *FacultyRepository) Exists(ctx context.Context, faculty *entities.Faculty) (bool, error) {
+	var exists int
+	query := "SELECT 1 FROM faculty WHERE name = $1"
+	err := r.db.QueryRowContext(ctx, query, faculty.Name, faculty.ID).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+	return exists > 0, nil
+}
+
+func (r *FacultyRepository) Create(ctx context.Context, faculty *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error) {
 	if faculty.Name == "" {
-		return 0, errors.New("")
+		return nil, errors.New("")
 	}
-	query := `SELECT * FROM faculty WHERE name=$1`
-	row := r.db.QueryRowContext(ctx, query, faculty.Name)
-	var tmp interface{}
-	err := row.Scan(&tmp)
-	if !(err == sql.ErrNoRows) {
-		return 0, errors.New("faculty with these fields already exists")
-	}
-
 	var id int
-	query = `INSERT INTO faculty (name) VALUES ($1) RETURNING id`
+	query := `INSERT INTO faculty (name) VALUES ($1) RETURNING id`
 
-	err = r.db.QueryRowContext(ctx, query, name).Scan(&id)
-	if err != nil {
-		return 0, err
-	}
-
-	return id, nil
-}
-
-func (r *FacultyRepository) GetById(ctx context.Context, id int) (*entities.University, error) {
-	var university entities.University
-	query := `SELECT * FROM faculty WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name)
+	err := r.db.QueryRowContext(ctx, query, faculty.Name).Scan(&id)
 	if err != nil {
 		return nil, err
 	}
-	return &university, nil
+	return &entities.CreateFacultyResponse{ID: id}, nil
 }
 
-func (r *FacultyRepository) GetByName(ctx context.Context, name string) (*entities.University, error) {
-	var university entities.University
-	query := `SELECT * FROM faculty WHERE name=$1`
-	err := r.db.QueryRowContext(ctx, query, name).Scan(&university.Id, &university.Name)
+func (r *FacultyRepository) GetById(ctx context.Context, id int) (*entities.Faculty, error) {
+	faculty := &entities.Faculty{}
+	query := `SELECT id, name FROM faculty WHERE id = $1`
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&faculty.ID, &faculty.Name)
 	if err != nil {
 		return nil, err
 	}
-	return &university, nil
+	return faculty, nil
 }
 
-func (r *FacultyRepository) GetAll(ctx context.Context) (*[]entities.University, error) {
-	var universities []entities.University
-	query := `SELECT * FROM faculty`
+func (r *FacultyRepository) GetByName(ctx context.Context, name string) (*entities.Faculty, error) {
+	faculty := &entities.Faculty{}
+	query := `SELECT id, name FROM faculty WHERE name = $1`
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&faculty.ID, &faculty.Name)
+	if err != nil {
+		return nil, err
+	}
+	return faculty, nil
+}
+
+func (r *FacultyRepository) GetAll(ctx context.Context) (*[]entities.Faculty, error) {
+	var faculties []entities.Faculty
+	query := `SELECT id, name FROM faculty`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
-		var university entities.University
-		err = rows.Scan(&university.Id, &university.Name)
+		var faculty entities.Faculty
+		err = rows.Scan(&faculty.ID, &faculty.Name)
 		if err != nil {
 			return nil, err
 		}
-		universities = append(universities, university)
+		faculties = append(faculties, faculty)
 	}
 
-	return &universities, nil
+	return &faculties, nil
 }
 
-func (r *FacultyRepository) Update(ctx context.Context, id int, name string) error {
-	query := `UPDATE university SET name = $1 WHERE id = $2`
-	_, err := r.db.ExecContext(ctx, query, name, id)
+func (r *FacultyRepository) Update(ctx context.Context, faculty *entities.UpdateFacultyRequest) error {
+	query := `UPDATE faculty SET name = $1 WHERE id = $2`
+	_, err := r.db.ExecContext(ctx, query, faculty.Name, faculty.ID)
 	if err != nil {
 		return err
 	}
@@ -90,7 +91,7 @@ func (r *FacultyRepository) Update(ctx context.Context, id int, name string) err
 }
 
 func (r *FacultyRepository) Delete(ctx context.Context, id int) error {
-	query := `DELETE FROM university WHERE id = $1`
+	query := `DELETE FROM faculty WHERE id = $1`
 	_, err := r.db.ExecContext(ctx, query, id)
 	if err != nil {
 		return err

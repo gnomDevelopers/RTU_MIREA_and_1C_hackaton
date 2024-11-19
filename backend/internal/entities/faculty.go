@@ -12,3 +12,8 @@ type CreateFacultyRequest struct {
 type CreateFacultyResponse struct {
 	ID int `json:"id"`
 }
+
+type UpdateFacultyRequest struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}

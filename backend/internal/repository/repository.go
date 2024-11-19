@@ -58,11 +58,12 @@ type ClassRepository interface {
 }
 
 type FacultyRepository interface {
+	Exists(context.Context, *entities.Faculty) (bool, error)
 	Create(context.Context, *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
 	GetById(context.Context, int) (*entities.Faculty, error)
 	GetByName(context.Context, string) (*entities.Faculty, error)
 	GetAll(context.Context) (*[]entities.Faculty, error)
-	Update(context.Context, int, string) error
+	Update(context.Context, *entities.UpdateFacultyRequest) error
 	Delete(context.Context, int) error
 }
 
