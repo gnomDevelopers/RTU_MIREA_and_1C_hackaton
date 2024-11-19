@@ -18,30 +18,64 @@ services:
 
   db:
     image: postgres:16.3-alpine
+    env_file:
+      - ./.env
     ports:
       - 5432:5432
     volumes:
       - './database:/var/lib/postgresql/data'
     restart: unless-stopped
+    environment:
+      POSTGRES_DB: "${POSTGRESQL_DB}"
+      POSTGRES_USER: "${POSTGRESQL_USER}"
+      POSTGRES_PASSWORD: "${POSTGRESQL_PASSWORD}"
 
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=4GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=512MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "temp_file_limit=10GB"
+      - "-c"
+      - "log_min_duration_statement=200ms"
+      - "-c"
+      - "lock_timeout=1s"
+      - "-c"
+      - "statement_timeout=60s"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d taskmaster" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DB}" ]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
-    env_file:
-      - ./backend/.env
+
     networks:
       - dev
 
   backend:
+    command: ["tail", "-f", "/dev/null"]
     build:
       context: ./backend
     networks:
       - dev
     env_file:
-      - ./backend/.env
+      - ./.env
     depends_on:
       frontend:
         condition: service_started
@@ -51,7 +85,7 @@ services:
 
   frontend:
     build:
-      context: ./hackathon
+      context: ./web
     networks:
       - dev
     depends_on:
