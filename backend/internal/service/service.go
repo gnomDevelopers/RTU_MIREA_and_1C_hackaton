@@ -13,7 +13,7 @@ type User interface {
 }
 
 type University interface {
-	Create(context.Context, string) (int, error)
+	Create(context.Context, *entities.CreateUniversityRequest) (int, error)
 	GetById(context.Context, int) (*entities.University, error)
 	GetByName(context.Context, string) (*entities.University, error)
 	GetAll(context.Context) (*[]entities.University, error)

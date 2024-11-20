@@ -17,27 +17,27 @@ func NewUniversityRepository(db *sql.DB) *UniversityRepository {
 	}
 }
 
-func (r *UniversityRepository) Create(ctx context.Context, name string) (int, error) {
-	if name == "" {
+func (r *UniversityRepository) Exists(ctx context.Context, university string) (bool, error) {
+	var exists int
+	query := "SELECT 1 FROM university WHERE name = $1"
+	err := r.db.QueryRowContext(ctx, query, university).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+	return exists > 0, nil
+}
+
+func (r *UniversityRepository) Create(ctx context.Context, university *entities.University) (int, error) {
+	if university.Name == "" {
 		return 0, errors.New("")
 	}
-
-	query := `SELECT * FROM university WHERE name=$1`
-	row := r.db.QueryRowContext(ctx, query, name)
-	var tmp interface{}
-	err := row.Scan(&tmp)
-	if !(err == sql.ErrNoRows) {
-		return 0, errors.New("class with these fields already exists")
-	}
-
 	var id int
-	query = `INSERT INTO university (name) VALUES ($1) RETURNING id`
+	query := `INSERT INTO university (name) VALUES ($1) RETURNING id`
 
-	err = r.db.QueryRowContext(ctx, query, name).Scan(&id)
+	err := r.db.QueryRowContext(ctx, query, university.Name).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
-
 	return id, nil
 }
 

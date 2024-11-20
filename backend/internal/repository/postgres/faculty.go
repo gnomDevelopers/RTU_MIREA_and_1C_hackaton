@@ -20,7 +20,7 @@ func NewFacultyRepository(db *sql.DB) *FacultyRepository {
 func (r *FacultyRepository) Exists(ctx context.Context, faculty *entities.Faculty) (bool, error) {
 	var exists int
 	query := "SELECT 1 FROM faculty WHERE name = $1"
-	err := r.db.QueryRowContext(ctx, query, faculty.Name, faculty.ID).Scan(&exists)
+	err := r.db.QueryRowContext(ctx, query, faculty.Name).Scan(&exists)
 	if err != nil {
 		return false, err
 	}

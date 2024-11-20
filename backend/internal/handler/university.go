@@ -21,8 +21,8 @@ import (
 // @Router       /university [post]
 func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
-	var university entities.University
-	err := c.BodyParser(&university)
+	var request entities.CreateUniversityRequest
+	err := c.BodyParser(&request)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
@@ -31,7 +31,7 @@ func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 	}
 
 	h.logger.Debug().Msg("call h.services.UniversityService.Create")
-	id, err := h.services.UniversityService.Create(c.Context(), university.Name)
+	id, err := h.services.UniversityService.Create(c.Context(), &request)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

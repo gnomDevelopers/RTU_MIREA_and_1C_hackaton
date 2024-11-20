@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"server/internal/entities"
 	"server/internal/repository"
 	"time"
@@ -19,11 +20,23 @@ func NewUniversityService(repository repository.UniversityRepository) *Universit
 	}
 }
 
-func (u *UniversityService) Create(c context.Context, name string) (int, error) {
+func (u *UniversityService) Create(c context.Context, request *entities.CreateUniversityRequest) (int, error) {
 	ctx, cancel := context.WithTimeout(c, u.timeout)
 	defer cancel()
 
-	id, err := u.repository.Create(ctx, name)
+	exists, err := u.repository.Exists(ctx, request.Name)
+	if err != nil {
+		return 0, err
+	}
+	if exists {
+		return 0, errors.New("university already exists")
+	}
+
+	university := &entities.University{
+		Name: request.Name,
+	}
+
+	id, err := u.repository.Create(ctx, university)
 	return id, err
 }
 
