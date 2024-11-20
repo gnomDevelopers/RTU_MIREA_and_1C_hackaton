@@ -14,8 +14,11 @@ import (
 // @title VUZ+ API
 // @version 1.0
 // @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load("backend/.env"); err != nil {
 		log.Fatal("No .env file found")
 	}
 	conf := config.NewConfig()

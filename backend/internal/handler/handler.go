@@ -81,6 +81,10 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Use(func(c *fiber.Ctx) error {
 		return pkg.WithJWTAuth(c, h.conf.Application.SigningKey)
 	})
+	authGroup.Get("/user_schedule", h.GetUserSchedule)
+	authGroup.Post("/user_schedule", h.CreateUserSchedule)
+	authGroup.Put("/user_schedule", h.UpdateUserSchedule)
+	authGroup.Delete("/user_schedule/:id", h.DeleteUserSchedule)
 
 	return f
 }

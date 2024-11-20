@@ -133,6 +133,22 @@ definitions:
       id:
         type: integer
     type: object
+  entities.CreateUserScheduleRequest:
+    properties:
+      date:
+        type: string
+      name:
+        type: string
+      time_end:
+        type: string
+      time_start:
+        type: string
+    type: object
+  entities.CreateUserScheduleResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   entities.ErrorResponse:
     properties:
       error:
@@ -164,6 +180,39 @@ definitions:
     properties:
       message:
         type: string
+    type: object
+  entities.UpdateDeleteUserScheduleResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  entities.UpdateUserScheduleRequest:
+    properties:
+      date:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      time_end:
+        type: string
+      time_start:
+        type: string
+    type: object
+  entities.UserSchedule:
+    properties:
+      date:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      time_end:
+        type: string
+      time_start:
+        type: string
+      user_data_id:
+        type: integer
     type: object
 info:
   contact: {}
@@ -431,6 +480,130 @@ paths:
       summary: Get audience by type
       tags:
       - audience
+  /auth/user_schedule:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.UserSchedule'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get users schedule
+      tags:
+      - user schedule
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: class data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateUserScheduleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateUserScheduleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create user schedule
+      tags:
+      - user schedule
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: users schedule data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UpdateUserScheduleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUserScheduleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update users schedule
+      tags:
+      - user schedule
+  /auth/user_schedule{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: users schedule id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUserScheduleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete users schedule
+      tags:
+      - user schedule
   /campus:
     post:
       consumes:
@@ -1074,4 +1247,9 @@ paths:
       summary: Get university by name
       tags:
       - university
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
