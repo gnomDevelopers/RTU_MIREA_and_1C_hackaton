@@ -672,11 +672,6 @@ video {
   margin-bottom: 1.25rem;
 }
 
-.my-6 {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
 .ml-0 {
   margin-left: 0px;
 }
@@ -1444,7 +1439,7 @@ video {
 @font-face {
   font-family: 'Arsenal';
 
-  src: url('../fonts/Arsenal-Regular.ttf') format('ttf');
+  src: url('../fonts/Arsenal-Regular.woff2') format('woff2');
 
   font-weight: 400;
 
@@ -1456,7 +1451,7 @@ video {
 @font-face {
   font-family: 'Arsenal';
 
-  src: url('../fonts/Arsenal-Bold.ttf') format('ttf');
+  src: url('../fonts/Arsenal-Bold.woff2') format('woff2');
 
   font-weight: 700;
 
@@ -1468,7 +1463,7 @@ video {
 @font-face {
   font-family: 'BacasimeAntique';
 
-  src: url('../fonts/BacasimeAntique-Regular.ttf') format('ttf');
+  src: url('../fonts/BacasimeAntique-Regular.woff2') format('woff2');
 
   font-weight: 400;
 
@@ -1483,7 +1478,7 @@ video {
   --bg-color-bold: #063C73;
   --bg-color-bold-hover: #0d4c8b;
   --bg-color-bold-active: #0958a8;
-  --btn-color-normal: #4287cc;
+  --btn-color-normal: #063C73;
   --btn-color-normal-hover: #5697d8;
   --btn-color-normal-active: #5ba0e6;
   --btn-color-bad: #ca4040;
@@ -1534,6 +1529,69 @@ video {
 *{
   color: var(--bg-color-bold);
   font-family: 'Arsenal';
+}
+
+.box-shadow{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+
+.welcome-logo {
+  text-align: center;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+@media (min-width: 576px) {
+  .welcome-logo {
+    font-size: 3.75rem;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .welcome-logo {
+    font-size: 6rem;
+    line-height: 1;
+  }
+}
+
+.welcome-logo{
+  font-family: 'BacasimeAntique';
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+
+.logo {
+  width: 100%;
+  text-align: center;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-family: 'BacasimeAntique';
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+
+.header-logo {
+  cursor: pointer;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+@media (min-width: 576px) {
+  .header-logo {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-logo {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.header-logo{
+  font-family: 'BacasimeAntique';
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
 }
 
 .scrollable{
@@ -1893,11 +1951,6 @@ video {
     font-size: 2.25rem;
     line-height: 2.5rem;
   }
-
-  .mb\:text-6xl {
-    font-size: 3.75rem;
-    line-height: 1;
-  }
 }
 
 @media (min-width: 640px) {
@@ -1959,11 +2012,6 @@ video {
 
   .md\:text-5xl {
     font-size: 3rem;
-    line-height: 1;
-  }
-
-  .md\:text-8xl {
-    font-size: 6rem;
     line-height: 1;
   }
 }

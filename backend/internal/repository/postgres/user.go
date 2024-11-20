@@ -30,7 +30,7 @@ func (r *UserRepository) GetById(ctx context.Context, id int64) (*entities.User,
 
 func (r *UserRepository) GetByLogin(ctx context.Context, login string) (*entities.User, error) {
 	user := entities.User{}
-	query := "SELECT id, email, login, password, name, surname, third_name FROM users WHERE login = $1"
+	query := "SELECT id, email, login FROM users WHERE login = $1"
 	err := r.db.QueryRowContext(ctx, query, login).Scan(&user.ID, &user.Email, &user.Login,
 		&user.Password)
 	if err != nil {

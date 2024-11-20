@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  entities.Audience:
+    properties:
+      campus_id:
+        type: integer
+      capacity:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      profile:
+        type: string
+      type:
+        type: string
+    type: object
   entities.Campus:
     properties:
       address:
@@ -40,6 +55,24 @@ definitions:
       week:
         type: integer
       weekday:
+        type: integer
+    type: object
+  entities.CreateAudiencesRequest:
+    properties:
+      campus_id:
+        type: integer
+      capacity:
+        type: integer
+      name:
+        type: string
+      profile:
+        type: string
+      type:
+        type: string
+    type: object
+  entities.CreateAudiencesResponse:
+    properties:
+      id:
         type: integer
     type: object
   entities.CreateCampusesRequest:
@@ -112,6 +145,11 @@ definitions:
       name:
         type: string
     type: object
+  entities.UpdateDeleteAudienceResponse:
+    properties:
+      message:
+        type: string
+    type: object
   entities.UpdateDeleteCampusResponse:
     properties:
       message:
@@ -132,6 +170,267 @@ info:
   title: VUZ+ API
   version: "1.0"
 paths:
+  /audience:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience data
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.CreateAudiencesRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.CreateAudiencesResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create Audiences
+      tags:
+      - audience
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Audience'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteAudienceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update audience
+      tags:
+      - audience
+  /audience/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteAudienceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete audience
+      tags:
+      - audience
+  /audience/campus_id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Audience'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get audience by name
+      tags:
+      - audience
+  /audience/capacity/{capacity}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience capacity
+        in: path
+        name: capacity
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Audience'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get audience by capacity
+      tags:
+      - audience
+  /audience/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Audience'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get audience by id
+      tags:
+      - audience
+  /audience/profile/{profile}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience profile
+        in: path
+        name: profile
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Audience'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get audience by profile
+      tags:
+      - audience
+  /audience/type/{type}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience type
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Audience'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get audience by type
+      tags:
+      - audience
   /campus:
     post:
       consumes:

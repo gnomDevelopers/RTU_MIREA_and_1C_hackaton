@@ -13,7 +13,7 @@ type User interface {
 }
 
 type University interface {
-	Create(context.Context, string) (int, error)
+	Create(context.Context, *entities.CreateUniversityRequest) (int, error)
 	GetById(context.Context, int) (*entities.University, error)
 	GetByName(context.Context, string) (*entities.University, error)
 	GetAll(context.Context) (*[]entities.University, error)
@@ -37,6 +37,7 @@ type Service struct {
 	UserService       *UserService
 	UniversityService *UniversityService
 	CampusService     *CampusService
+	AudienceService   *AudienceService
 	ClassService      *ClassService
 	conf              *config.Config
 }
@@ -47,5 +48,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		UniversityService: NewUniversityService(repositories.University),
 		CampusService:     NewCampusService(repositories.Campus),
 		ClassService:      NewClassService(repositories.Class),
+		AudienceService:   NewAudienceService(repositories.Audience),
 	}
 }
