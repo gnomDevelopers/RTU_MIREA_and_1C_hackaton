@@ -31,8 +31,8 @@ func WithJWTAuth(c *fiber.Ctx, signingKey string) error {
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": err.Error()})
 	}
-	// Записываем uid в контекст, чтобы в дальнейшем использовать в других функциях
-	c.Set("id", strconv.Itoa(id))
+	// Записываем id в контекст, чтобы в дальнейшем использовать в других функциях
+	c.Locals("id", strconv.Itoa(id))
 	return nil
 }
 

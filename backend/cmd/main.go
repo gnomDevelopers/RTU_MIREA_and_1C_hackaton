@@ -15,6 +15,9 @@ import (
 // @title VUZ+ API
 // @version 1.0
 // @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error while loading .env file: " + err.Error() + "\nMaybe wrong path?")

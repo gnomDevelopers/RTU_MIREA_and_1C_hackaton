@@ -39,6 +39,13 @@ export interface IStatusWindow{
   time: number,
 };
 
+export interface Day{
+  year: number,
+  month: number,
+  day: number,
+  isThisMonth: boolean,
+};
+
 export interface IAPI_Login_Request{
   login: string,
   password: string,
