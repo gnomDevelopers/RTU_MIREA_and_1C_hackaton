@@ -34,20 +34,22 @@ type Campus interface {
 
 // TODO Дополнить для других сервисов
 type Service struct {
-	UserService       *UserService
-	UniversityService *UniversityService
-	CampusService     *CampusService
-	AudienceService   *AudienceService
-	ClassService      *ClassService
-	conf              *config.Config
+	UserService         *UserService
+	UniversityService   *UniversityService
+	CampusService       *CampusService
+	AudienceService     *AudienceService
+	ClassService        *ClassService
+	UserScheduleService *UserScheduleService
+	conf                *config.Config
 }
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
-		UserService:       NewUserService(repositories.User, conf),
-		UniversityService: NewUniversityService(repositories.University),
-		CampusService:     NewCampusService(repositories.Campus),
-		ClassService:      NewClassService(repositories.Class),
-		AudienceService:   NewAudienceService(repositories.Audience),
+		UserService:         NewUserService(repositories.User, conf),
+		UniversityService:   NewUniversityService(repositories.University),
+		CampusService:       NewCampusService(repositories.Campus),
+		ClassService:        NewClassService(repositories.Class),
+		AudienceService:     NewAudienceService(repositories.Audience),
+		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
 	}
 }

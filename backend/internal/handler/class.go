@@ -76,66 +76,6 @@ func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(class)
 }
 
-// GetByGroupNameClass
-// @Tags class
-// @Summary      Get class by group name
-// @Accept       json
-// @Produce      json
-// @Param id path string true "class group name"
-// @Success 200 {object} entities.Class
-// @Failure 400 {object} entities.ErrorResponse
-// @Failure 401 {object} entities.ErrorResponse
-// @Failure 500 {object} entities.ErrorResponse
-// @Router       /class/group_name/{name} [get]
-func (h *Handler) GetByGroupNameClass(c *fiber.Ctx) error {
-	// TODO: добавить проверку на роль проректора
-	groupName := c.Params("name")
-
-	h.logger.Debug().Msg("call h.services.ClassService.GetByGroupName")
-	class, err := h.services.ClassService.GetByGroupName(c.Context(), groupName)
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
-		Url: c.OriginalURL(), Status: fiber.StatusOK})
-	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(class)
-}
-
-// GetByTeacherNameClass
-// @Tags class
-// @Summary      Get class by teacher name
-// @Accept       json
-// @Produce      json
-// @Param id path string true "class teacher name"
-// @Success 200 {object} entities.Class
-// @Failure 400 {object} entities.ErrorResponse
-// @Failure 401 {object} entities.ErrorResponse
-// @Failure 500 {object} entities.ErrorResponse
-// @Router       /class/teacher_name/{name} [get]
-func (h *Handler) GetByTeacherNameClass(c *fiber.Ctx) error {
-	// TODO: добавить проверку на роль проректора
-	teacherName := c.Params("name")
-
-	h.logger.Debug().Msg("call h.services.ClassService.GetByTeacherName")
-	class, err := h.services.ClassService.GetByTeacherName(c.Context(), teacherName)
-	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
-		Url: c.OriginalURL(), Status: fiber.StatusOK})
-	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(class)
-}
-
 // GetByAuditoryIdClass
 // @Tags class
 // @Summary      Get class by auditory id
@@ -214,7 +154,7 @@ func (h *Handler) UpdateClass(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class{id} [delete]
+// @Router       /class/{id} [delete]
 func (h *Handler) DeleteClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

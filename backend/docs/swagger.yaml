@@ -577,7 +577,7 @@ paths:
       summary: Update users schedule
       tags:
       - user schedule
-  /auth/user_schedule{id}:
+  /auth/user_schedule/{id}:
     delete:
       consumes:
       - application/json
@@ -676,6 +676,38 @@ paths:
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
       summary: Update campus
+      tags:
+      - campus
+  /campus/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete campus
       tags:
       - campus
   /campus/address/{address}:
@@ -834,38 +866,6 @@ paths:
       summary: Get campus by university_id
       tags:
       - campus
-  /campus{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Delete campus
-      tags:
-      - campus
   /class:
     post:
       consumes:
@@ -935,6 +935,38 @@ paths:
       summary: Update class
       tags:
       - class
+  /class/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: class id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteClassResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete class
+      tags:
+      - class
   /class/auditory_id/{id}:
     get:
       consumes:
@@ -967,38 +999,6 @@ paths:
       summary: Get class by auditory id
       tags:
       - class
-  /class/group_name/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: class group name
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Class'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get class by group name
-      tags:
-      - class
   /class/id/{id}:
     get:
       consumes:
@@ -1029,70 +1029,6 @@ paths:
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
       summary: Get class by id
-      tags:
-      - class
-  /class/teacher_name/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: class teacher name
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Class'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get class by teacher name
-      tags:
-      - class
-  /class{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: class id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteClassResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Delete class
       tags:
       - class
   /schedule/group/{group}:

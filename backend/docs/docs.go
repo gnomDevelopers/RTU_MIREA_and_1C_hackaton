@@ -556,7 +556,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/user_schedule{id}": {
+        "/auth/user_schedule/{id}": {
             "delete": {
                 "consumes": [
                     "application/json"
@@ -950,7 +950,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/campus{id}": {
+        "/campus/{id}": {
             "delete": {
                 "consumes": [
                     "application/json"
@@ -1154,55 +1154,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/group_name/{name}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "class"
-                ],
-                "summary": "Get class by group name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "class group name",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Class"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/class/id/{id}": {
             "get": {
                 "consumes": [
@@ -1252,56 +1203,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/teacher_name/{name}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "class"
-                ],
-                "summary": "Get class by teacher name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "class teacher name",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Class"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/class{id}": {
+        "/class/{id}": {
             "delete": {
                 "consumes": [
                     "application/json"
