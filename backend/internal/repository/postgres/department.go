@@ -17,28 +17,28 @@ func NewDepartmentRepository(db *sql.DB) *DepartmentRepository {
 	}
 }
 
-func (r *DepartmentRepository) Exists(ctx context.Context, department *entities.Department) (bool, error) {
+func (r *DepartmentRepository) Exists(ctx context.Context, name string) (bool, error) {
 	var exists int
 	query := "SELECT 1 FROM department WHERE name = $1"
-	err := r.db.QueryRowContext(ctx, query, department.Name).Scan(&exists)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&exists)
 	if err != nil {
 		return false, err
 	}
 	return exists > 0, nil
 }
 
-func (r *DepartmentRepository) Create(ctx context.Context, department *entities.CreateDepartmentRequest) (*entities.CreateDepartmentResponse, error) {
+func (r *DepartmentRepository) Create(ctx context.Context, department *entities.CreateDepartmentRequest) (int, error) {
 	if department.Name == "" {
-		return nil, errors.New("")
+		return 0, errors.New("")
 	}
 	var id int
 	query := `INSERT INTO department (name) VALUES ($1) RETURNING id`
 
 	err := r.db.QueryRowContext(ctx, query, department.Name).Scan(&id)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &entities.CreateDepartmentResponse{ID: id}, nil
+	return id, nil
 }
 
 func (r *DepartmentRepository) GetById(ctx context.Context, id int) (*entities.Department, error) {

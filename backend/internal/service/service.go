@@ -12,6 +12,10 @@ type User interface {
 	Login(context.Context, *entities.LoginUserRequest) (*entities.LoginUserResponse, error)
 }
 
+type UserData interface {
+	Add(context.Context, *entities.AddUserDataRequest) error
+}
+
 type University interface {
 	Create(context.Context, *entities.CreateUniversityRequest) (int, error)
 	GetById(context.Context, int) (*entities.University, error)
@@ -34,17 +38,20 @@ type Campus interface {
 
 // TODO Дополнить для других сервисов
 type Service struct {
-	UserService       *UserService
-	UniversityService *UniversityService
-	CampusService     *CampusService
-	AudienceService   *AudienceService
-	ClassService      *ClassService
-	conf              *config.Config
+	UserService         *UserService
+	UserData            *UserDataService
+	UniversityService   *UniversityService
+	CampusService       *CampusService
+	AudienceService     *AudienceService
+	ClassService        *ClassService
+	UserScheduleService *UserScheduleService
+	conf                *config.Config
 }
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
 		UserService:       NewUserService(repositories.User, conf),
+		UserData:          NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University),
 		UniversityService: NewUniversityService(repositories.University),
 		CampusService:     NewCampusService(repositories.Campus),
 		ClassService:      NewClassService(repositories.Class),

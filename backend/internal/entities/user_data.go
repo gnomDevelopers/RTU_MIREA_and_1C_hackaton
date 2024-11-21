@@ -15,15 +15,28 @@ package entities
 //);
 
 type UserData struct {
-	ID                int    `json:"id"`
-	LastName          string `json:"last_name"`
-	FirstName         string `json:"first_name"`
-	FatherName        string `json:"father_name"`
-	University        string `json:"university"`
-	PermissionID      int    `json:"permission_id"`
-	Faculty           string `json:"faculty"`
-	Department        string `json:"department"`
-	IsDeleted         bool   `json:"is_deleted"`
-	IsPasswordChanged bool   `json:"is_password_changed"`
-	CreatedAt         string `json:"created_at"`
+	ID                   int    `json:"id"`
+	LastName             string `json:"last_name"`
+	FirstName            string `json:"first_name"`
+	FatherName           string `json:"father_name"`
+	UniversityID         int    `json:"university_id"`
+	PermissionID         int    `json:"permission_id"`
+	FacultyID            int    `json:"faculty_id"`
+	DepartmentID         int    `json:"department_id"`
+	EducationalDirection string `json:"educational_direction"`
+	IsDeleted            bool   `json:"is_deleted"`
+	IsPasswordChanged    bool   `json:"is_password_changed"`
+	CreatedAt            string `json:"created_at"`
+}
+
+type AddUserDataRequest struct {
+	ID                   int    `json:"id"`
+	LastName             string `json:"last_name"`
+	FirstName            string `json:"first_name"`
+	FatherName           string `json:"father_name"`
+	University           string `json:"university"`
+	PermissionID         int    `json:"permission_id"`
+	Faculty              string `json:"faculty"`
+	EducationalDirection string `json:"educational_direction"`
+	Department           string `json:"department"`
 }
