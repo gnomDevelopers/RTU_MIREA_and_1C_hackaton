@@ -21,8 +21,9 @@
             <img class="w-7 h-7" src="../assets/icons/icon-search.svg"/>
           </div>
         </div>
-        
+        <p>Выбранная группа: ЭФБО-01-23</p>
       </div>
+      
     </div>
   </div>
 </template>
