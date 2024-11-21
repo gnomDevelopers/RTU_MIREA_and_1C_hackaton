@@ -35,24 +35,32 @@ func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class)
 			return []int{}, errors.New("one of the fields of the class is empty")
 		}
 
-		query := `SELECT 1 FROM class WHERE auditory_id=$1 AND date=$2 AND weekday=$3 AND week=$4 AND time_start=$5 AND time_end=$6`
-		row := tx.QueryRowContext(ctx, query, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd)
-		if err := row.Scan(new(interface{})); err != nil && err != sql.ErrNoRows {
-			return []int{}, err
-		}
-		if err == nil {
-			return []int{}, errors.New("class with these fields already exists")
-		}
-
 		var id int
-		query = `INSERT INTO class (name, academic_discipline_id, group_names, teacher_names, type, auditory_id, date, weekday, week, time_start, time_end) 
-				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`
+		var exists bool
+		checkQuery := `SELECT EXISTS (
+                    SELECT 1 FROM class 
+                    WHERE date = $1 AND weekday = $2 AND week = $3 AND time_start = $4 AND time_end = $5
+                );`
 
-		err = tx.QueryRowContext(ctx, query, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
+		err = tx.QueryRowContext(ctx, checkQuery, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&exists)
 		if err != nil {
 			return []int{}, err
 		}
-		ids = append(ids, id)
+
+		// Если запись не существует, выполняем вставку
+		if !exists {
+			insertQuery := `INSERT INTO class (name, group_names, teacher_names, type, auditory, date, weekday, week, time_start, time_end) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                    RETURNING id;`
+
+			err = tx.QueryRowContext(ctx, insertQuery, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
+			if err != nil {
+				return []int{}, err
+			}
+			ids = append(ids, id)
+		} else {
+			return []int{}, errors.New("class with such fields already exists")
+		}
 	}
 	err = tx.Commit()
 	if err != nil {
@@ -130,7 +138,7 @@ func (r *ClassRepository) GetByAuditoryId(ctx context.Context, auditoryId int) (
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE auditory_id=$1`
+	query := `SELECT * FROM class WHERE auditory=$1`
 	rows, err := r.db.QueryContext(ctx, query, auditoryId)
 	if err != nil {
 		return nil, err
@@ -153,7 +161,7 @@ func (r *ClassRepository) Update(ctx context.Context, class *entities.Class) err
 		return errors.New("")
 	}
 
-	query := `UPDATE class SET name=$1, academic_discipline_id=$2, group_names=$3, teacher_names=$4, type=$5, auditory_id=$6, date=$7, weekday=$8, week=$9, time_start=$10, time_end=$11 WHERE id=$12`
+	query := `UPDATE class SET name=$1, group_names=$2, teacher_names=$3, type=$4, auditory=$5, date=$6, weekday=$7, week=$8, time_start=$9, time_end=$10 WHERE id=$11`
 
 	_, err := r.db.ExecContext(ctx, query, class.Name, class.GroupNames, class.TeacherNames, class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Id)
 	if err != nil {
