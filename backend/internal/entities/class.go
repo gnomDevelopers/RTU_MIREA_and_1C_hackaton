@@ -36,3 +36,7 @@ type CreateClassesResponse struct {
 type UpdateDeleteClassResponse struct {
 	Message string `json:"message"`
 }
+
+type ParseScheduleResponse struct {
+	Message string `json:"message"`
+}

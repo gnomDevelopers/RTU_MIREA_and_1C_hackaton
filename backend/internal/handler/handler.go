@@ -43,7 +43,10 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
 
-	f.Get("/schedule", h.GetSchedule)
+	f.Get("/schedule/group/{group}", h.GetScheduleByGroup)
+	f.Get("/schedule/teacher/{teacher}", h.GetScheduleByTeacher)
+	f.Get("/schedule/name/{name}", h.GetScheduleByName)
+	f.Post("/schedule/parse", h.ParseSchedule)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)

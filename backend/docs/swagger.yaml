@@ -154,6 +154,11 @@ definitions:
       error:
         type: string
     type: object
+  entities.ParseScheduleResponse:
+    properties:
+      message:
+        type: string
+    type: object
   entities.University:
     properties:
       id:
@@ -1090,6 +1095,142 @@ paths:
       summary: Delete class
       tags:
       - class
+  /schedule/group/{group}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: schedule group
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Class'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get schedule
+      tags:
+      - schedule
+  /schedule/name/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: schedule name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Class'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get schedule by name
+      tags:
+      - schedule
+  /schedule/parse:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Upload schedule file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.ParseScheduleResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get schedule by name
+      tags:
+      - schedule
+  /schedule/teacher/{teacher}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: schedule teacher
+        in: path
+        name: teacher
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Class'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get schedule by teacher
+      tags:
+      - schedule
   /university:
     post:
       consumes:

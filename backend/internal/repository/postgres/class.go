@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"server/internal/entities"
 )
 
@@ -26,7 +27,8 @@ func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class)
 	var ids []int
 	for _, class := range *classes {
 		if class.Name == "" || class.AcademicDisciplineId == 0 || class.Type == "" || class.AuditoryId == 0 || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
-			return []int{}, errors.New("")
+			fmt.Println(class)
+			return []int{}, errors.New("one of the fields of the pair is empty")
 		}
 
 		query := `SELECT * FROM class WHERE auditory_id=$1 AND date=$2 AND weekday=$3 AND week=$4 AND time_start=$5 AND time_end=$6`
@@ -57,7 +59,7 @@ func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class)
 
 func (r *ClassRepository) GetById(ctx context.Context, id int) (*entities.Class, error) {
 	if id == 0 {
-		return nil, errors.New("")
+		return nil, errors.New("id is empty")
 	}
 
 	var class entities.Class
@@ -71,7 +73,7 @@ func (r *ClassRepository) GetById(ctx context.Context, id int) (*entities.Class,
 
 func (r *ClassRepository) GetByGroupName(ctx context.Context, groupName string) (*[]entities.Class, error) {
 	if groupName == "" {
-		return nil, errors.New("")
+		return nil, errors.New("groupName is empty")
 	}
 
 	var classes []entities.Class
