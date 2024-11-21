@@ -50,11 +50,12 @@ type Service struct {
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
-		UserService:       NewUserService(repositories.User, conf),
-		UserData:          NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University),
-		UniversityService: NewUniversityService(repositories.University),
-		CampusService:     NewCampusService(repositories.Campus),
-		ClassService:      NewClassService(repositories.Class),
-		AudienceService:   NewAudienceService(repositories.Audience),
+		UserService:         NewUserService(repositories.User, conf),
+		UserData:            NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University),
+		UniversityService:   NewUniversityService(repositories.University),
+		CampusService:       NewCampusService(repositories.Campus),
+		ClassService:        NewClassService(repositories.Class),
+		AudienceService:     NewAudienceService(repositories.Audience),
+		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"os"
+	"server/internal/log"
 	"server/util"
 )
 
@@ -19,8 +20,21 @@ import (
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /schedule/group/{group} [get]
 func (h *Handler) GetScheduleByGroup(c *fiber.Ctx) error {
+	groupName := c.Params("name")
 
-	return c.Status(fiber.StatusOK).JSON("")
+	h.logger.Debug().Msg("call h.services.ClassService.GetByGroupName")
+	classes, err := h.services.ClassService.GetByGroupName(c.Context(), groupName)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(classes)
 }
 
 // GetScheduleByTeacher
@@ -35,8 +49,22 @@ func (h *Handler) GetScheduleByGroup(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /schedule/teacher/{teacher} [get]
 func (h *Handler) GetScheduleByTeacher(c *fiber.Ctx) error {
+	// TODO: добавить проверку на роль проректора
+	teacherName := c.Params("name")
 
-	return c.Status(fiber.StatusOK).JSON("")
+	h.logger.Debug().Msg("call h.services.ClassService.GetByTeacherName")
+	class, err := h.services.ClassService.GetByTeacherName(c.Context(), teacherName)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(class)
 }
 
 // GetScheduleByName

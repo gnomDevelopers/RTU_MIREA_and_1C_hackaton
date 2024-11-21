@@ -12,7 +12,7 @@ type UserScheduleService struct {
 	timeout    time.Duration
 }
 
-func NewMyScheduleService(repository repository.UserScheduleRepository) *UserScheduleService {
+func NewUserScheduleService(repository repository.UserScheduleRepository) *UserScheduleService {
 	return &UserScheduleService{
 		repository: repository,
 		timeout:    time.Duration(10) * time.Second,

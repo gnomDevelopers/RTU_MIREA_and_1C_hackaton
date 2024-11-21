@@ -1,16 +1,16 @@
 package entities
 
 type Campus struct {
-	Id           int    `json:"id"`
-	Name         string `json:"name"`
-	UniversityId int    `json:"university_id"`
-	Address      string `json:"address"`
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	University string `json:"university"`
+	Address    string `json:"address"`
 }
 
 type CreateCampusesRequest struct {
-	Name         string `json:"name"`
-	UniversityId int    `json:"university_id"`
-	Address      string `json:"address"`
+	Name       string `json:"name"`
+	University int    `json:"university"`
+	Address    string `json:"address"`
 }
 
 type CreateCampusesResponse struct {

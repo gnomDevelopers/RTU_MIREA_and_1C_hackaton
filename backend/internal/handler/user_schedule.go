@@ -129,7 +129,7 @@ func (h *Handler) UpdateUserSchedule(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /auth/user_schedule{id} [delete]
+// @Router       /auth/user_schedule/{id} [delete]
 func (h *Handler) DeleteUserSchedule(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := strconv.Atoi(idStr)

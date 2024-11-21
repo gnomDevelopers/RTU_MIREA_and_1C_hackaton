@@ -3,7 +3,7 @@ package entities
 type Audience struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
-	CampusId int    `json:"campus_id"`
+	Campus   string `json:"campus"`
 	Type     string `json:"type"`
 	Profile  string `json:"profile"`
 	Capacity int    `json:"capacity"`
@@ -11,7 +11,7 @@ type Audience struct {
 
 type CreateAudiencesRequest struct {
 	Name     string `json:"name"`
-	CampusId int    `json:"campus_id"`
+	Campus   int    `json:"campus"`
 	Type     string `json:"type"`
 	Profile  string `json:"profile"`
 	Capacity int    `json:"capacity"`
