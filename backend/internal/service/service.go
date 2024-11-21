@@ -32,14 +32,9 @@ type Campus interface {
 	Delete(context.Context, int) error
 }
 
-type UserDataService interface {
-	AddData(context.Context)
-}
-
 // TODO Дополнить для других сервисов
 type Service struct {
 	UserService       *UserService
-	UserData          *UserDataService
 	UniversityService *UniversityService
 	CampusService     *CampusService
 	AudienceService   *AudienceService
