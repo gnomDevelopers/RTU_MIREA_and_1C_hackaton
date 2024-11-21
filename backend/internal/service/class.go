@@ -130,10 +130,6 @@ func (s *ClassService) find(rows [][]string) error {
 			class.TimeStart = rows[i][2]
 			class.TimeEnd = rows[i][3]
 
-			// TODO: изменить на получение из бд
-			class.AuditoryId = 1
-			class.AcademicDisciplineId = 1
-
 			classes = append(classes, class)
 			last = rows[i][1]
 		}

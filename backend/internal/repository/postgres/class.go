@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
+	"github.com/lib/pq"
 	"server/internal/entities"
 )
 
@@ -21,30 +21,35 @@ func NewClassRepository(db *sql.DB) *ClassRepository {
 func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class) ([]int, error) {
 	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
-		return []int{}, errors.New("")
+		return []int{}, errors.New("failed to begin transaction")
 	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
 
 	var ids []int
 	for _, class := range *classes {
-		if class.Name == "" || class.AcademicDisciplineId == 0 || class.Type == "" || class.AuditoryId == 0 || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
-			fmt.Println(class)
-			return []int{}, errors.New("one of the fields of the pair is empty")
+		if class.Name == "" || class.Type == "" || class.Auditory == "" || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
+			return []int{}, errors.New("one of the fields of the class is empty")
 		}
 
-		query := `SELECT * FROM class WHERE auditory_id=$1 AND date=$2 AND weekday=$3 AND week=$4 AND time_start=$5 AND time_end=$6`
-		row := tx.QueryRowContext(ctx, query, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd)
-		var tmp interface{}
-		err := row.Scan(&tmp)
-		if !(err == sql.ErrNoRows) {
+		query := `SELECT 1 FROM class WHERE auditory_id=$1 AND date=$2 AND weekday=$3 AND week=$4 AND time_start=$5 AND time_end=$6`
+		row := tx.QueryRowContext(ctx, query, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd)
+		if err := row.Scan(new(interface{})); err != nil && err != sql.ErrNoRows {
+			return []int{}, err
+		}
+		if err == nil {
 			return []int{}, errors.New("class with these fields already exists")
 		}
 
 		var id int
-		query = `INSERT INTO class VALUES(name, academic_discipline_id, group_names, teacher_names, type, auditory_id, date, weekday, week, time_start, time_end) RETURNING id`
+		query = `INSERT INTO class (name, academic_discipline_id, group_names, teacher_names, type, auditory_id, date, weekday, week, time_start, time_end) 
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`
 
-		err = tx.QueryRowContext(ctx, query, class.Name, class.AcademicDisciplineId, class.GroupNames, class.TeacherNames, class.Type, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
+		err = tx.QueryRowContext(ctx, query, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
 		if err != nil {
-			tx.Rollback()
 			return []int{}, err
 		}
 		ids = append(ids, id)
@@ -64,7 +69,7 @@ func (r *ClassRepository) GetById(ctx context.Context, id int) (*entities.Class,
 
 	var class entities.Class
 	query := `SELECT * FROM class WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&class.Id, &class.Name, &class.AcademicDisciplineId, &class.GroupNames, &class.TeacherNames, &class.Type, &class.AuditoryId, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +90,7 @@ func (r *ClassRepository) GetByGroupName(ctx context.Context, groupName string) 
 
 	for rows.Next() {
 		var class entities.Class
-		err = rows.Scan(&class.Id, &class.Name, &class.AcademicDisciplineId, &class.GroupNames, &class.TeacherNames, &class.Type, &class.AuditoryId, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		err = rows.Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
 		if err != nil {
 			return nil, err
 		}
@@ -109,7 +114,7 @@ func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName stri
 
 	for rows.Next() {
 		var class entities.Class
-		err = rows.Scan(&class.Id, &class.Name, &class.AcademicDisciplineId, &class.GroupNames, &class.TeacherNames, &class.Type, &class.AuditoryId, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		err = rows.Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
 		if err != nil {
 			return nil, err
 		}
@@ -133,7 +138,7 @@ func (r *ClassRepository) GetByAuditoryId(ctx context.Context, auditoryId int) (
 
 	for rows.Next() {
 		var class entities.Class
-		err = rows.Scan(&class.Id, &class.Name, &class.AcademicDisciplineId, &class.GroupNames, &class.TeacherNames, &class.Type, &class.AuditoryId, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		err = rows.Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
 		if err != nil {
 			return nil, err
 		}
@@ -144,13 +149,13 @@ func (r *ClassRepository) GetByAuditoryId(ctx context.Context, auditoryId int) (
 }
 
 func (r *ClassRepository) Update(ctx context.Context, class *entities.Class) error {
-	if class.Name == "" || class.AcademicDisciplineId == 0 || class.Type == "" || class.AuditoryId == 0 || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
+	if class.Name == "" || class.Type == "" || class.Auditory == "" || class.Date == "" || class.Week == 0 || class.Weekday == 0 || class.TimeStart == "" || class.TimeEnd == "" {
 		return errors.New("")
 	}
 
 	query := `UPDATE class SET name=$1, academic_discipline_id=$2, group_names=$3, teacher_names=$4, type=$5, auditory_id=$6, date=$7, weekday=$8, week=$9, time_start=$10, time_end=$11 WHERE id=$12`
 
-	_, err := r.db.ExecContext(ctx, query, class.Name, class.AcademicDisciplineId, class.GroupNames, class.TeacherNames, class.Type, class.AuditoryId, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Id)
+	_, err := r.db.ExecContext(ctx, query, class.Name, class.GroupNames, class.TeacherNames, class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Id)
 	if err != nil {
 		return err
 	}
