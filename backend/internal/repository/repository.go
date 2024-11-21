@@ -65,6 +65,10 @@ type UserScheduleRepository interface {
 	Delete(context.Context, int) error
 }
 
+type UserDataRepository interface {
+	Add(context.Context, *entities.UserData) (int, error)
+}
+
 type FacultyRepository interface {
 	Exists(context.Context, *entities.Faculty) (bool, error)
 	Create(context.Context, *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
