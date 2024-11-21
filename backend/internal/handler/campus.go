@@ -232,7 +232,7 @@ func (h *Handler) UpdateCampus(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /campus{id} [delete]
+// @Router       /campus/{id} [delete]
 func (h *Handler) DeleteCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

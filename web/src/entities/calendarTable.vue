@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-row gap-x-4 w-full justify-between px-6 text-2xl">
-    <div @click="previousMonth" class="cursor-pointer select-none">&lt;</div>
+    <div @click="previousMonth" class="cursor-pointer select-none text-3xl p-1">&lt;</div>
     <div class="cursor-default">{{ getMonthName }}, {{ currentYear }}</div>
-    <div @click="nextMonth" class="cursor-pointer select-none">&gt;</div>
+    <div @click="nextMonth" class="cursor-pointer select-none text-3xl p-1">&gt;</div>
   </div>
   <div class="text-xl p-4 pt-0 rounded-xl bg-color-light">
     <table class="schedule">

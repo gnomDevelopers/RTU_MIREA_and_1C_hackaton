@@ -25,12 +25,12 @@ func (r *AudienceRepository) Create(ctx context.Context, audiences *[]entities.A
 
 	var ids []int
 	for _, audience := range *audiences {
-		if audience.Name == "" || audience.CampusId == 0 || audience.Type == "" || audience.Profile == "" || audience.Capacity == 0 {
+		if audience.Name == "" || audience.Campus == "" || audience.Type == "" || audience.Profile == "" || audience.Capacity == 0 {
 			return []int{}, errors.New("")
 		}
 
 		query := `SELECT * FROM auditory WHERE name=$1 AND campus_id=$2 AND type=$3 AND profile=$4 AND capacity=$5`
-		row := tx.QueryRowContext(ctx, query, audience.Name, audience.CampusId, audience.Type, audience.Profile, audience.Capacity)
+		row := tx.QueryRowContext(ctx, query, audience.Name, audience.Campus, audience.Type, audience.Profile, audience.Capacity)
 		var tmp interface{}
 		err := row.Scan(&tmp)
 		if !(err == sql.ErrNoRows) {
@@ -38,9 +38,9 @@ func (r *AudienceRepository) Create(ctx context.Context, audiences *[]entities.A
 		}
 
 		var id int
-		query = `INSERT INTO class VALUES(name, campus_id, type, profile, capacity) RETURNING id`
+		query = `INSERT INTO auditory VALUES(name, campus_id, type, profile, capacity) RETURNING id`
 
-		err = tx.QueryRowContext(ctx, query, audience.Name, audience.CampusId, audience.Type, audience.Profile, audience.Capacity).Scan(&id)
+		err = tx.QueryRowContext(ctx, query, audience.Name, audience.Campus, audience.Type, audience.Profile, audience.Capacity).Scan(&id)
 		if err != nil {
 			tx.Rollback()
 			return []int{}, err
@@ -62,7 +62,7 @@ func (r *AudienceRepository) GetById(ctx context.Context, id int) (*entities.Aud
 
 	var audience entities.Audience
 	query := `SELECT * FROM class WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&audience.Id, &audience.Name, &audience.CampusId, &audience.Type, &audience.Profile, &audience.Capacity)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func (r *AudienceRepository) GetByCampusId(ctx context.Context, campusId int) (*
 
 	for rows.Next() {
 		var audience entities.Audience
-		err = rows.Scan(&audience.Id, &audience.Name, &audience.CampusId, &audience.Type, &audience.Profile, &audience.Capacity)
+		err = rows.Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
 		if err != nil {
 			return nil, err
 		}
@@ -107,7 +107,7 @@ func (r *AudienceRepository) GetByType(ctx context.Context, typeStr string) (*[]
 
 	for rows.Next() {
 		var audience entities.Audience
-		err = rows.Scan(&audience.Id, &audience.Name, &audience.CampusId, &audience.Type, &audience.Profile, &audience.Capacity)
+		err = rows.Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
 		if err != nil {
 			return nil, err
 		}
@@ -131,7 +131,7 @@ func (r *AudienceRepository) GetByProfile(ctx context.Context, profile string) (
 
 	for rows.Next() {
 		var audience entities.Audience
-		err = rows.Scan(&audience.Id, &audience.Name, &audience.CampusId, &audience.Type, &audience.Profile, &audience.Capacity)
+		err = rows.Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
 		if err != nil {
 			return nil, err
 		}
@@ -155,7 +155,7 @@ func (r *AudienceRepository) GetByCapacity(ctx context.Context, capacity int) (*
 
 	for rows.Next() {
 		var audience entities.Audience
-		err = rows.Scan(&audience.Id, &audience.Name, &audience.CampusId, &audience.Type, &audience.Profile, &audience.Capacity)
+		err = rows.Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
 		if err != nil {
 			return nil, err
 		}
@@ -166,13 +166,13 @@ func (r *AudienceRepository) GetByCapacity(ctx context.Context, capacity int) (*
 }
 
 func (r *AudienceRepository) Update(ctx context.Context, audience *entities.Audience) error {
-	if audience.Name == "" || audience.CampusId == 0 || audience.Type == "" || audience.Profile == "" || audience.Capacity == 0 {
+	if audience.Name == "" || audience.Campus == "" || audience.Type == "" || audience.Profile == "" || audience.Capacity == 0 {
 		return errors.New("")
 	}
 
 	query := `UPDATE auditory SET name=$1, campus_id=$2, type=$3, profile=$4, capacity=$5 WHERE id=$6`
 
-	_, err := r.db.ExecContext(ctx, query, audience.Name, audience.CampusId, audience.Type, audience.Profile, audience.Capacity, audience.Id)
+	_, err := r.db.ExecContext(ctx, query, audience.Name, audience.Campus, audience.Type, audience.Profile, audience.Capacity, audience.Id)
 	if err != nil {
 		return err
 	}

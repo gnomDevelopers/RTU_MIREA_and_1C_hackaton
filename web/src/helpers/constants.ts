@@ -41,6 +41,7 @@ export interface IStatusWindow{
   time: number,
 };
 
+// calendar item interface
 export interface Day{
   year: number,
   month: number,
@@ -48,6 +49,7 @@ export interface Day{
   isThisMonth: boolean,
 };
 
+// schedule item interface
 export interface IScheduleItem{
   time: string,
   type: string,
@@ -56,9 +58,70 @@ export interface IScheduleItem{
   groups: string[],
 };
 
+//api interfaces
+
 export interface IAPI_Login_Request{
   login: string,
   password: string,
+};
+
+export interface IAPI_Audience_Create{
+  campus_id: number,
+  capacity: number,
+  name: string,
+  profile: string,
+  type: string
+};
+
+export interface IAPI_Audience_Update extends IAPI_Audience_Create{
+  id: number,
+};
+
+export interface IAPI_Campus_Create {
+  address: string,
+  name: string,
+  university_id: number
+};
+
+export interface IAPI_Campus_Update extends IAPI_Campus_Create {
+  id: number,
+};
+
+export interface IAPI_Class_Create{
+  academic_discipline_id: number,
+  auditory_id: number,
+  date: string,
+  group_names: string[],
+  name: string,
+  teacher_names: string[],
+  time_end: string,
+  time_start: string,
+  type: string,
+  week: number,
+  weekday: number
+};
+
+export interface IAPI_Class_Update extends IAPI_Class_Create{
+  id: number,
+};
+
+export interface IAPI_User_Schedule_Create{
+  date: string,
+  name: string,
+  time_end: string,
+  time_start: string
+};
+
+export interface IAPI_User_Schedule_Update extends IAPI_User_Schedule_Create{
+  id: number,
+};
+
+export interface IAPI_University_Create{
+  name: string,
+};
+
+export interface IAPI_University_Update extends IAPI_University_Create{
+  id: number,
 };
 
 //rules

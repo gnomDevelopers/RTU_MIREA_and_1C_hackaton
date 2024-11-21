@@ -40,7 +40,7 @@ func (r *CampusRepository) Create(ctx context.Context, campuses *[]entities.Camp
 		var id int
 		query = `INSERT INTO campus (name, university_id, address) VALUES ($1, $2, $3) RETURNING id`
 
-		err = tx.QueryRowContext(ctx, query, campus.Name, campus.UniversityId, campus.Address).Scan(&id)
+		err = tx.QueryRowContext(ctx, query, campus.Name, campus.University, campus.Address).Scan(&id)
 		if err != nil {
 			tx.Rollback()
 			return []int{}, err
@@ -58,7 +58,7 @@ func (r *CampusRepository) Create(ctx context.Context, campuses *[]entities.Camp
 func (r *CampusRepository) GetById(ctx context.Context, id int) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (r *CampusRepository) GetById(ctx context.Context, id int) (*entities.Campu
 func (r *CampusRepository) GetByAddress(ctx context.Context, address string) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE address = $1`
-	err := r.db.QueryRowContext(ctx, query, address).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, address).Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (r *CampusRepository) GetByAddress(ctx context.Context, address string) (*e
 func (r *CampusRepository) GetByName(ctx context.Context, name string) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE name = $1`
-	err := r.db.QueryRowContext(ctx, query, name).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (r *CampusRepository) GetByName(ctx context.Context, name string) (*entitie
 func (r *CampusRepository) GetByUniversityId(ctx context.Context, universityId int) (*entities.Campus, error) {
 	var campus entities.Campus
 	query := `SELECT * FROM campus WHERE university_id = $1`
-	err := r.db.QueryRowContext(ctx, query, universityId).Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+	err := r.db.QueryRowContext(ctx, query, universityId).Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (r *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, erro
 
 	for rows.Next() {
 		var campus entities.Campus
-		err = rows.Scan(&campus.Id, &campus.Name, &campus.UniversityId, &campus.Address)
+		err = rows.Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
 		if err != nil {
 			return nil, err
 		}
@@ -117,7 +117,7 @@ func (r *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, erro
 
 func (r *CampusRepository) Update(ctx context.Context, campus *entities.Campus) error {
 	query := `UPDATE campus SET name = $1, university_id = $2, address = $3 WHERE id = $4`
-	err := r.db.QueryRowContext(ctx, query, campus.Name, campus.UniversityId, campus.Address, campus.Id).Err()
+	err := r.db.QueryRowContext(ctx, query, campus.Name, campus.University, campus.Address, campus.Id).Err()
 	if err != nil {
 		return err
 	}

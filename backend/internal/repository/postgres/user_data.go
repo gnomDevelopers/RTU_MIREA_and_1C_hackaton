@@ -16,6 +16,22 @@ func NewUserDataRepository(db *sql.DB) *UserDataRepository {
 	}
 }
 
-func (r *UserDataRepository) Add(context.Context, *entities.UserData) (int, error) {
-	panic("implement me")
+func (r *UserDataRepository) Add(ctx context.Context, userData *entities.UserData) (int, error) {
+	query := `
+		INSERT INTO user_data (
+			id, last_name, first_name, father_name, university_id, 
+			permission_id, faculty_id, department_id, educational_discipline
+		) VALUES (
+			$1, $2, $3, $4, $5, 
+			$6, $7, $8, $9
+		)
+	`
+
+	_, err := r.db.ExecContext(ctx, query, userData.ID, userData.LastName, userData.FirstName, userData.FatherName, userData.UniversityID, userData.PermissionID,
+		userData.FacultyID, userData.DepartmentID, userData.EducationalDirection)
+	if err != nil {
+		return 0, err
+	}
+
+	return userData.ID, nil
 }

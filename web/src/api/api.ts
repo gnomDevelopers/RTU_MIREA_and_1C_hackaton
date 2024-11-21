@@ -1,5 +1,18 @@
 import axios from "axios";
-import { API, DEVMODE, type IAPI_Login_Request } from '../helpers/constants';
+import { 
+  API, DEVMODE, 
+  type IAPI_Login_Request, 
+  type IAPI_Audience_Create, 
+  type IAPI_Audience_Update, 
+  type IAPI_Campus_Create,
+  type IAPI_Campus_Update, 
+  type IAPI_Class_Create, 
+  type IAPI_Class_Update, 
+  type IAPI_User_Schedule_Create, 
+  type IAPI_User_Schedule_Update, 
+  type IAPI_University_Create, 
+  type IAPI_University_Update 
+} from '../helpers/constants';
 
 
 //проверка аутентификации пользователя
@@ -56,13 +69,6 @@ export function API_SendFile(data: FormData){
 /////// AUDIENCE ///////
 
 //создание аудитории
-interface IAPI_Audience_Create{
-  campus_id: number,
-  capacity: number,
-  name: string,
-  profile: string,
-  type: string
-};
 export function API_Audience_Create(data: IAPI_Audience_Create){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/audience`, data)
@@ -78,9 +84,6 @@ export function API_Audience_Create(data: IAPI_Audience_Create){
 };
 
 //изменение аудитории
-interface IAPI_Audience_Update extends IAPI_Audience_Create{
-  id: number,
-};
 export function API_Audience_Update(data: IAPI_Audience_Update){
   return new Promise((resolve, reject) => {
     axios.put(`${API}/audience`, data)
@@ -113,11 +116,6 @@ export function API_Audience_Delete(audienceID: number){
 /////// campus ///////
 
 //создание кампуса
-interface IAPI_Campus_Create {
-  address: string,
-  name: string,
-  university_id: number
-};
 export function API_Campus_Create(data: IAPI_Campus_Create){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/campus`, data)
@@ -133,9 +131,6 @@ export function API_Campus_Create(data: IAPI_Campus_Create){
 };
 
 //изменение кампуса
-interface IAPI_Campus_Update extends IAPI_Campus_Create {
-  id: number,
-};
 export function API_Campus_Update(data: IAPI_Campus_Update){
   return new Promise((resolve, reject) => {
     axios.put(`${API}/campus`, data)
@@ -182,19 +177,6 @@ export function API_Campus_Get_University(universityID: number){
 
 /////// classes ///////
 
-interface IAPI_Class_Create{
-  academic_discipline_id: number,
-  auditory_id: number,
-  date: string,
-  group_names: string[],
-  name: string,
-  teacher_names: string[],
-  time_end: string,
-  time_start: string,
-  type: string,
-  week: number,
-  weekday: number
-};
 //создание занятия
 export function API_Class_Create(data: IAPI_Class_Create[]){
   return new Promise((resolve, reject) => {
@@ -210,9 +192,6 @@ export function API_Class_Create(data: IAPI_Class_Create[]){
   });
 };
 
-interface IAPI_Class_Update extends IAPI_Class_Create{
-  id: number,
-}
 //обновление занятия
 export function API_Class_Update(data: IAPI_Class_Update){
   return new Promise((resolve, reject) => {
@@ -243,36 +222,6 @@ export function API_Class_Delete(classID: number){
   });
 };
 
-//получение занятий по названию группы
-export function API_Class_Get_GroupName(groupName: string){
-  return new Promise((resolve, reject) => {
-    axios.get(`${API}/class/group_name/${groupName}`)
-    .then(response => {
-      if(DEVMODE) console.log('Class get by groupName success: ', response);
-      resolve(response);
-    })
-    .catch(error => {
-      if(DEVMODE) console.log('Class get by groupName error: ', error);
-      reject(error);
-    })
-  });
-};
-
-//получение занятий по имени преподавателя
-export function API_Class_Get_TeacherName(teacherName: string){
-  return new Promise((resolve, reject) => {
-    axios.get(`${API}/class/teacher_name/${teacherName}`)
-    .then(response => {
-      if(DEVMODE) console.log('Class get by teacherName success: ', response);
-      resolve(response);
-    })
-    .catch(error => {
-      if(DEVMODE) console.log('Class get by teacherName error: ', error);
-      reject(error);
-    })
-  });
-};
-
 /////// schedule ///////
 
 //создание расписания из файла
@@ -291,6 +240,190 @@ export function API_Schedule_Create(data: FormData){
     })
     .catch(error => {
       if(DEVMODE) console.log('Schedule create error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение расписания по названию группы
+export function API_Schedule_Get_GroupName(groupName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/schedule/group/${groupName}`)
+    .then(response => {
+      if(DEVMODE) console.log('Schedule get by groupName success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Schedule get by groupName error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение расписания по имени преподавателя
+export function API_Schedule_Get_TeacherName(teacherName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/schedule/teacher/${teacherName}`)
+    .then(response => {
+      if(DEVMODE) console.log('Schedule get by teacherName success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Schedule get by teacherName error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение расписания по названию предмета
+export function API_Schedule_Get_ClassName(className: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/schedule/name/${className}`)
+    .then(response => {
+      if(DEVMODE) console.log('Schedule get by className success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Schedule get by className error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// user schedule ///////
+
+//создание личного расписания
+export function API_User_Schedule_Create(data: IAPI_User_Schedule_Create){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/auth/user_schedule`, data)
+    .then(response => {
+      if(DEVMODE) console.log('User schedule create success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('User schedule create error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//обновление личного расписания
+export function API_User_Schedule_Update(data: IAPI_User_Schedule_Update){
+  return new Promise((resolve, reject) => {
+    axios.put(`${API}/auth/user_schedule`, data)
+    .then(response => {
+      if(DEVMODE) console.log('User schedule update success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('User schedule update error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//удаление личного расписания
+export function API_User_Schedule_Delete(user_schedule_ID: number){
+  return new Promise((resolve, reject) => {
+    axios.delete(`${API}/auth/user_schedule/${user_schedule_ID}`)
+    .then(response => {
+      if(DEVMODE) console.log('User schedule delete success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('User schedule delete error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение личного расписания
+export function API_User_Schedule_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/user_schedule`)
+    .then(response => {
+      if(DEVMODE) console.log('User schedule get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('User schedule get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// university ///////
+
+//создание университета
+export function API_University_Create(data: IAPI_University_Create){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/university`, data)
+    .then(response => {
+      if(DEVMODE) console.log('University create success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('University create error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//обновление университета
+export function API_University_Update(data: IAPI_University_Update){
+  return new Promise((resolve, reject) => {
+    axios.put(`${API}/university`, data)
+    .then(response => {
+      if(DEVMODE) console.log('University update success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('University update error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//удаление университета
+export function API_University_Delete(universityID: number){
+  return new Promise((resolve, reject) => {
+    axios.delete(`${API}/university/${universityID}`)
+    .then(response => {
+      if(DEVMODE) console.log('University delete success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('University delete error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение всех университетов
+export function API_University_Get_All(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/university/all`)
+    .then(response => {
+      if(DEVMODE) console.log('University get all success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('University get all error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение университета по названию
+export function API_University_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/university/${universityName}`)
+    .then(response => {
+      if(DEVMODE) console.log('University get by universityName success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('University get by universityName error: ', error);
       reject(error);
     })
   });
