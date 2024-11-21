@@ -93,7 +93,7 @@ services:
       - app_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.hr.rule=Host(`hr.example.com`)"
+      - "traefik.http.routers.hr.rule=Host(`hr.gnomdeployer.com`)"
       - "traefik.http.routers.hr.entrypoints=websecure"
       - "traefik.http.routers.hr.tls.certresolver=myresolver"
       - "traefik.http.services.hr.loadbalancer.server.port=80"
@@ -112,10 +112,12 @@ services:
       - app_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`api.example.com`)"
+      - "traefik.http.routers.backend.rule=Host(`gnomdeployer.ru`) && PathPrefix(`/api`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=myresolver"
-      - "traefik.http.services.backend.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.backend-stripapi.stripprefix.prefixes=/api"
+      - "traefik.http.routers.backend.middlewares=backend-stripapi"
+      - "traefik.http.routers.backend.priority=2"
     environment:
       - DATABASE_URL=postgresql://user:password@database:5432/db
     volumes:
@@ -134,6 +136,8 @@ services:
     volumes:
       - ./database/data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "127.0.0.1:5436:${POSTGRESQL_PORT}"
     networks:
       - app_network
 
@@ -142,6 +146,8 @@ services:
     container_name: redis
     networks:
       - app_network
+    ports:
+      - "6378:${REDIS_PORT}"
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
@@ -150,7 +156,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3001:3000"
+      - "3000:3000"
     networks:
       - app_network
     volumes:
