@@ -28,4 +28,13 @@ export default {
   transform: translateY(-10px);
 }
 
+.slowRemove-enter-active,
+.slowRemove-leave-active{
+  transition: all 100ms ease-out;
+}
+
+.slowRemove-enter-from,
+.slowRemove-leave-to {
+  opacity: 0;
+}
 </style>

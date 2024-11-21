@@ -12,6 +12,8 @@ export enum StatusCodes {
   'error', 'info', 'loading', 'success'
 };
 
+export const SCHEDULE_TARGET_TEXT = ['Выберите группу для просмотра', 'Выберите проподавателя для просмотра', 'Выберите факультет для просмотра'];
+
 //types
 
 export type TMaybeNumber = number | null;
@@ -44,6 +46,14 @@ export interface Day{
   month: number,
   day: number,
   isThisMonth: boolean,
+};
+
+export interface IScheduleItem{
+  time: string,
+  type: string,
+  title: string,
+  place: string,
+  groups: string[],
 };
 
 export interface IAPI_Login_Request{

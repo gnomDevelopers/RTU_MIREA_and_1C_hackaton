@@ -37,7 +37,7 @@ export default{
   data(){
     return{
       currentMonth: [] as Day[][],
-      currentMonthIndex: 11,
+      currentMonthIndex: this.month,
       currentYear: 2024,
       monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
     }
