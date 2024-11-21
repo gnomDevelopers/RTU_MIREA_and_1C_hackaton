@@ -1,5 +1,18 @@
 import axios from "axios";
-import { API, DEVMODE, type IAPI_Login_Request } from '../helpers/constants';
+import { 
+  API, DEVMODE, 
+  type IAPI_Login_Request, 
+  type IAPI_Audience_Create, 
+  type IAPI_Audience_Update, 
+  type IAPI_Campus_Create,
+  type IAPI_Campus_Update, 
+  type IAPI_Class_Create, 
+  type IAPI_Class_Update, 
+  type IAPI_User_Schedule_Create, 
+  type IAPI_User_Schedule_Update, 
+  type IAPI_University_Create, 
+  type IAPI_University_Update 
+} from '../helpers/constants';
 
 
 //проверка аутентификации пользователя
@@ -56,13 +69,6 @@ export function API_SendFile(data: FormData){
 /////// AUDIENCE ///////
 
 //создание аудитории
-interface IAPI_Audience_Create{
-  campus_id: number,
-  capacity: number,
-  name: string,
-  profile: string,
-  type: string
-};
 export function API_Audience_Create(data: IAPI_Audience_Create){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/audience`, data)
@@ -78,9 +84,6 @@ export function API_Audience_Create(data: IAPI_Audience_Create){
 };
 
 //изменение аудитории
-interface IAPI_Audience_Update extends IAPI_Audience_Create{
-  id: number,
-};
 export function API_Audience_Update(data: IAPI_Audience_Update){
   return new Promise((resolve, reject) => {
     axios.put(`${API}/audience`, data)
@@ -113,11 +116,6 @@ export function API_Audience_Delete(audienceID: number){
 /////// campus ///////
 
 //создание кампуса
-interface IAPI_Campus_Create {
-  address: string,
-  name: string,
-  university_id: number
-};
 export function API_Campus_Create(data: IAPI_Campus_Create){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/campus`, data)
@@ -133,9 +131,6 @@ export function API_Campus_Create(data: IAPI_Campus_Create){
 };
 
 //изменение кампуса
-interface IAPI_Campus_Update extends IAPI_Campus_Create {
-  id: number,
-};
 export function API_Campus_Update(data: IAPI_Campus_Update){
   return new Promise((resolve, reject) => {
     axios.put(`${API}/campus`, data)
@@ -182,19 +177,6 @@ export function API_Campus_Get_University(universityID: number){
 
 /////// classes ///////
 
-interface IAPI_Class_Create{
-  academic_discipline_id: number,
-  auditory_id: number,
-  date: string,
-  group_names: string[],
-  name: string,
-  teacher_names: string[],
-  time_end: string,
-  time_start: string,
-  type: string,
-  week: number,
-  weekday: number
-};
 //создание занятия
 export function API_Class_Create(data: IAPI_Class_Create[]){
   return new Promise((resolve, reject) => {
@@ -210,9 +192,6 @@ export function API_Class_Create(data: IAPI_Class_Create[]){
   });
 };
 
-interface IAPI_Class_Update extends IAPI_Class_Create{
-  id: number,
-}
 //обновление занятия
 export function API_Class_Update(data: IAPI_Class_Update){
   return new Promise((resolve, reject) => {
@@ -313,12 +292,6 @@ export function API_Schedule_Get_ClassName(className: string){
 
 /////// user schedule ///////
 
-interface IAPI_User_Schedule_Create{
-  date: string,
-  name: string,
-  time_end: string,
-  time_start: string
-}
 //создание личного расписания
 export function API_User_Schedule_Create(data: IAPI_User_Schedule_Create){
   return new Promise((resolve, reject) => {
@@ -334,9 +307,6 @@ export function API_User_Schedule_Create(data: IAPI_User_Schedule_Create){
   });
 };
 
-interface IAPI_User_Schedule_Update extends IAPI_User_Schedule_Create{
-  id: number,
-}
 //обновление личного расписания
 export function API_User_Schedule_Update(data: IAPI_User_Schedule_Update){
   return new Promise((resolve, reject) => {
@@ -384,9 +354,6 @@ export function API_User_Schedule_Get(){
 
 /////// university ///////
 
-interface IAPI_University_Create{
-  name: string,
-}
 //создание университета
 export function API_University_Create(data: IAPI_University_Create){
   return new Promise((resolve, reject) => {
@@ -402,9 +369,6 @@ export function API_University_Create(data: IAPI_University_Create){
   });
 };
 
-interface IAPI_University_Update extends IAPI_University_Create{
-  id: number,
-}
 //обновление университета
 export function API_University_Update(data: IAPI_University_Update){
   return new Promise((resolve, reject) => {
