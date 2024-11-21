@@ -9,8 +9,12 @@ type UserData struct {
 	DepartmentRepository *repository.DepartmentRepository
 	UniversityRepository *repository.UniversityRepository
 	UniversityCache      map[string]int
+	DepartmentCache      map[string]int
+	FacultyCache         map[string]int
 }
 
-func NewUserData() *UserData {
-	return &UserData{}
-}
+//func NewUserData(userRepo *repository.UserRepository, userDataRepo *repository.UserD) *UserData {
+//	return &UserData{
+//
+//	}
+//}
