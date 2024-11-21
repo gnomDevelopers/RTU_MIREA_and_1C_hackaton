@@ -40,5 +40,11 @@ export const router = createRouter({
       component: () => import('@/pages/SchedulePage.vue'),
       meta: { requiresAuth: false },
     },
+    {
+      name: 'Performace',
+      path: '/performance',
+      component: () => import('@/pages/PerformancePage.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 });

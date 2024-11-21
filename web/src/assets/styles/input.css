@@ -101,13 +101,13 @@
 :root{
   --bg-color-ultralight: #FAFCFF;
   --bg-color-light: #EBF5FF;
-  --bg-color-bold: #063C73;
+  --bg-color-bold: #063C73; 
   --bg-color-bold-hover: #0d4c8b;
   --bg-color-bold-active: #0958a8;
 
   --btn-color-normal: #063C73;
-  --btn-color-normal-hover: #5697d8;
-  --btn-color-normal-active: #5ba0e6;
+  --btn-color-normal-hover: #114d8a;
+  --btn-color-normal-active: #0754a1;
 
   --btn-color-bad: #ca4040;
   --btn-color-bad-hover: #e64e4e;
