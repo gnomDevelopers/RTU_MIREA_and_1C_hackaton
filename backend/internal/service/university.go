@@ -32,7 +32,7 @@ func (u *UniversityService) Create(c context.Context, request *entities.CreateUn
 		return 0, errors.New("university already exists")
 	}
 
-	university := &entities.University{
+	university := &entities.CreateUniversityRequest{
 		Name: request.Name,
 	}
 

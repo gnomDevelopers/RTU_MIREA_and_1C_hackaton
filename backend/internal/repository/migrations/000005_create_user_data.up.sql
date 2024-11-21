@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS user_data (
     permission_id INTEGER,
     faculty_id INTEGER REFERENCES faculty(id),
     department_id INTEGER REFERENCES department(id),
-    is_deleted BOOLEAN,
-    is_password_changed BOOLEAN,
-    created_at TIMESTAMP
+    educational_direction VARCHAR,
+    is_deleted BOOLEAN DEFAULT false,
+    is_password_changed BOOLEAN DEFAULT false,
+    created_at TIMESTAMP default now()
 );

@@ -27,7 +27,7 @@ func (r *UniversityRepository) Exists(ctx context.Context, university string) (b
 	return exists > 0, nil
 }
 
-func (r *UniversityRepository) Create(ctx context.Context, university *entities.University) (int, error) {
+func (r *UniversityRepository) Create(ctx context.Context, university *entities.CreateUniversityRequest) (int, error) {
 	if university.Name == "" {
 		return 0, errors.New("")
 	}

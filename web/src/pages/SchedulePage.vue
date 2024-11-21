@@ -50,7 +50,7 @@
               :placeholder="getScheduleTargetText"
               v-model="searchFilter">
             <div 
-              class="w-10 h-10 flex flex-col justify-center items-center cursor-pointer rounded-r-lg bg-slate-200 hover:bg-slate-300 active:bg-slate-400"
+              class="w-10 h-10 flex flex-col justify-center items-center cursor-pointer rounded-r-lg btn"
               @click="filterUserList">
               <img class="w-7 h-7" src="../assets/icons/icon-search.svg"/>
             </div>
@@ -70,7 +70,7 @@
           </div>
           <div class="flex flex-col gap-y-1 w-full items-stretch">
             <ScheduleItem 
-              v-for="(item, ind) in scheduleStore.scheduleTable"
+              v-for="(item, ind) in scheduleStore.scheduleTableDay"
               :index="ind + 1" 
               :time="`${item.time} ${item.type}`" 
               :title="item.title" 

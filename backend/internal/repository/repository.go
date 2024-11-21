@@ -18,7 +18,7 @@ type UserRepository interface {
 
 type UniversityRepository interface {
 	Exists(context.Context, string) (bool, error)
-	Create(context.Context, *entities.University) (int, error)
+	Create(context.Context, *entities.CreateUniversityRequest) (int, error)
 	GetById(context.Context, int) (*entities.University, error)
 	GetByName(context.Context, string) (*entities.University, error)
 	GetAll(context.Context) (*[]entities.University, error)
@@ -70,8 +70,8 @@ type UserDataRepository interface {
 }
 
 type FacultyRepository interface {
-	Exists(context.Context, *entities.Faculty) (bool, error)
-	Create(context.Context, *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
+	Exists(context.Context, string) (bool, error)
+	Create(context.Context, *entities.CreateFacultyRequest) (int, error)
 	GetById(context.Context, int) (*entities.Faculty, error)
 	GetByName(context.Context, string) (*entities.Faculty, error)
 	GetAll(context.Context) (*[]entities.Faculty, error)
@@ -80,8 +80,8 @@ type FacultyRepository interface {
 }
 
 type DepartmentRepository interface {
-	Exists(context.Context, *entities.Department) (bool, error)
-	Create(context.Context, *entities.CreateDepartmentRequest) (*entities.CreateDepartmentResponse, error)
+	Exists(context.Context, string) (bool, error)
+	Create(context.Context, *entities.CreateDepartmentRequest) (int, error)
 	GetById(context.Context, int) (*entities.Department, error)
 	GetByName(context.Context, string) (*entities.Department, error)
 	GetAll(context.Context) (*[]entities.Department, error)
@@ -91,6 +91,7 @@ type DepartmentRepository interface {
 
 type Repository struct {
 	User         UserRepository
+	UserData     UserDataRepository
 	University   UniversityRepository
 	Campus       CampusRepository
 	Audience     AudienceRepository

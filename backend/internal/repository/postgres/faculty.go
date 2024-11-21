@@ -17,28 +17,28 @@ func NewFacultyRepository(db *sql.DB) *FacultyRepository {
 	}
 }
 
-func (r *FacultyRepository) Exists(ctx context.Context, faculty *entities.Faculty) (bool, error) {
+func (r *FacultyRepository) Exists(ctx context.Context, name string) (bool, error) {
 	var exists int
 	query := "SELECT 1 FROM faculty WHERE name = $1"
-	err := r.db.QueryRowContext(ctx, query, faculty.Name).Scan(&exists)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&exists)
 	if err != nil {
 		return false, err
 	}
 	return exists > 0, nil
 }
 
-func (r *FacultyRepository) Create(ctx context.Context, faculty *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error) {
+func (r *FacultyRepository) Create(ctx context.Context, faculty *entities.CreateFacultyRequest) (int, error) {
 	if faculty.Name == "" {
-		return nil, errors.New("")
+		return 0, errors.New("")
 	}
 	var id int
 	query := `INSERT INTO faculty (name) VALUES ($1) RETURNING id`
 
 	err := r.db.QueryRowContext(ctx, query, faculty.Name).Scan(&id)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &entities.CreateFacultyResponse{ID: id}, nil
+	return id, nil
 }
 
 func (r *FacultyRepository) GetById(ctx context.Context, id int) (*entities.Faculty, error) {
