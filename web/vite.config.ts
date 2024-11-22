@@ -22,25 +22,25 @@ export default defineConfig({
         display: 'standalone',      
         icons: [
           {
-            src: 'assets/icon-app-png.png',
-            sizes: '640x640',
+            src: 'assets/logo512.png',
+            sizes: '512x512',
             type: 'image/png',
           },
           {
-            src: 'assets/icon-app.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
+            src: 'assets/logo128.png',
+            sizes: '128x128',
+            type: 'image/png',
           },
         ],
         screenshots: [
           {
-            src: 'assets/screenshot-wide-800-452.jpg',
-            sizes: '800x452',
+            src: 'assets/loading_scr_landscape.jpg',
+            sizes: '1024x579',
             form_factor: 'wide',
           },
           {
-            src: 'assets/screenshot-narrow-505-807.jpg',
-            sizes: '505x807',
+            src: 'assets/loading_scr_portrait.jpg',
+            sizes: '445x791',
             form_factor: 'narrow',
           },
         ],
