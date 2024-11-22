@@ -54,12 +54,44 @@ func (s *ClassService) GetByTeacherName(c context.Context, teacherName string) (
 	return classes, err
 }
 
-func (s *ClassService) GetByAuditoryId(c context.Context, auditoryId int) (*[]entities.Class, error) {
+func (s *ClassService) GetByName(c context.Context, name string) (*[]entities.Class, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	classes, err := s.repository.GetByAuditoryId(ctx, auditoryId)
+	classes, err := s.repository.GetByName(ctx, name)
 	return classes, err
+}
+
+func (s *ClassService) GetByAuditory(c context.Context, auditory string) (*[]entities.Class, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	classes, err := s.repository.GetByAuditory(ctx, auditory)
+	return classes, err
+}
+
+func (s *ClassService) SearchGroups(c context.Context, university string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	groups, err := s.repository.SearchGroups(ctx, university)
+	return groups, err
+}
+
+func (s *ClassService) SearchTeachers(c context.Context, university string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	groups, err := s.repository.SearchTeachers(ctx, university)
+	return groups, err
+}
+
+func (s *ClassService) SearchNames(c context.Context, university string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	groups, err := s.repository.SearchNames(ctx, university)
+	return groups, err
 }
 
 func (s *ClassService) Update(c context.Context, class *entities.Class) error {
@@ -120,22 +152,23 @@ func (s *ClassService) find(rows [][]string) error {
 			class.Type = rows[i][j+1]
 			class.Date = rows[i][j+5]
 			class.Auditory = rows[i][j+3]
+			if last > rows[i][1] {
+				countDay++
+			}
 			class.Weekday = countDay + 1
 			if rows[i][4] == "I" {
 				class.Week = 1
 			} else {
 				class.Week = 2
 			}
-			if last > rows[i][1] {
-				countDay++
-			}
 			class.TimeStart = rows[i][2]
 			class.TimeEnd = rows[i][3]
-
+			class.UniversityStr = "МИРЭА" // TODO: изменить на получение по id пользователя
 			classes = append(classes, class)
 			last = rows[i][1]
 		}
 		last = "-1"
+		countDay = 0
 		_, err := s.repository.Create(context.Background(), &classes)
 		if err != nil {
 			return err

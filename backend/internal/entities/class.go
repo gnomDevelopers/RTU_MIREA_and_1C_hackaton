@@ -1,17 +1,18 @@
 package entities
 
 type Class struct {
-	Id           int      `json:"id"`
-	Name         string   `json:"name"`
-	GroupNames   []string `json:"group_names"`
-	TeacherNames []string `json:"teacher_names"`
-	Type         string   `json:"type"`
-	Auditory     string   `json:"auditory"`
-	Date         string   `json:"date"`
-	Weekday      int      `json:"weekday"`
-	Week         int      `json:"week"`
-	TimeStart    string   `json:"time_start"`
-	TimeEnd      string   `json:"time_end"`
+	Id            int      `json:"id"`
+	Name          string   `json:"name"`
+	GroupNames    []string `json:"group_names"`
+	TeacherNames  []string `json:"teacher_names"`
+	Type          string   `json:"type"`
+	Auditory      string   `json:"auditory"`
+	Date          string   `json:"date"`
+	Weekday       int      `json:"weekday"`
+	Week          int      `json:"week"`
+	TimeStart     string   `json:"time_start"`
+	TimeEnd       string   `json:"time_end"`
+	UniversityStr string   `json:"university"`
 }
 
 type CreateClassesRequest struct {
@@ -37,4 +38,16 @@ type UpdateDeleteClassResponse struct {
 
 type ParseScheduleResponse struct {
 	Message string `json:"message"`
+}
+
+type ScheduleGroups struct {
+	Groups []string `json:"groups"`
+}
+
+type ScheduleTeachers struct {
+	Teachers []string `json:"teachers"`
+}
+
+type ScheduleNames struct {
+	Names []string `json:"names"`
 }

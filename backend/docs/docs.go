@@ -1105,7 +1105,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/class/auditory_id/{id}": {
+        "/class/auditory/{name}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -1116,11 +1116,11 @@ const docTemplate = `{
                 "tags": [
                     "class"
                 ],
-                "summary": "Get class by auditory id",
+                "summary": "Get class by auditory",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "class auditory id",
+                        "description": "class auditory",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1385,6 +1385,126 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/entities.ParseScheduleResponse"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule/search/group": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedule"
+                ],
+                "summary": "Search groups",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ScheduleGroups"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule/search/name": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedule"
+                ],
+                "summary": "Search names",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ScheduleNames"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/schedule/search/teacher": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "schedule"
+                ],
+                "summary": "Search teachers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ScheduleTeachers"
                         }
                     },
                     "400": {
@@ -1706,8 +1826,8 @@ const docTemplate = `{
         "entities.Audience": {
             "type": "object",
             "properties": {
-                "campus_id": {
-                    "type": "integer"
+                "campus": {
+                    "type": "string"
                 },
                 "capacity": {
                     "type": "integer"
@@ -1738,19 +1858,16 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "university_id": {
-                    "type": "integer"
+                "university": {
+                    "type": "string"
                 }
             }
         },
         "entities.Class": {
             "type": "object",
             "properties": {
-                "academic_discipline_id": {
-                    "type": "integer"
-                },
-                "auditory_id": {
-                    "type": "integer"
+                "auditory": {
+                    "type": "string"
                 },
                 "date": {
                     "type": "string"
@@ -1782,6 +1899,9 @@ const docTemplate = `{
                 "type": {
                     "type": "string"
                 },
+                "university": {
+                    "type": "string"
+                },
                 "week": {
                     "type": "integer"
                 },
@@ -1793,7 +1913,7 @@ const docTemplate = `{
         "entities.CreateAudiencesRequest": {
             "type": "object",
             "properties": {
-                "campus_id": {
+                "campus": {
                     "type": "integer"
                 },
                 "capacity": {
@@ -1827,7 +1947,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "university_id": {
+                "university": {
                     "type": "integer"
                 }
             }
@@ -1843,11 +1963,8 @@ const docTemplate = `{
         "entities.CreateClassesRequest": {
             "type": "object",
             "properties": {
-                "academic_discipline_id": {
-                    "type": "integer"
-                },
-                "auditory_id": {
-                    "type": "integer"
+                "auditory": {
+                    "type": "string"
                 },
                 "date": {
                     "type": "string"
@@ -1946,6 +2063,39 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.ScheduleGroups": {
+            "type": "object",
+            "properties": {
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "entities.ScheduleNames": {
+            "type": "object",
+            "properties": {
+                "names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "entities.ScheduleTeachers": {
+            "type": "object",
+            "properties": {
+                "teachers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
