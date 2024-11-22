@@ -124,7 +124,6 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": serviceError})
 		}
 		err = os.Remove(path + "/" + randomFileName)
-		fmt.Println(err)
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success"})

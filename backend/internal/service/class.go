@@ -2,12 +2,10 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/xuri/excelize/v2"
 	"path/filepath"
 	"server/internal/entities"
 	"server/internal/repository"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -81,16 +79,16 @@ func (s *ClassService) Delete(c context.Context, id int) error {
 }
 
 func (s *ClassService) Parse(fileName string) error {
-	path := "./backend/tmp"                   //Добавление в директорию нужного института
-	filePath := filepath.Join(path, fileName) //Получение имени файла
+	path := "./backend/tmp"
+	filePath := filepath.Join(path, fileName)
 
-	xlFile, err := excelize.OpenFile(filePath) //Открытие файла
+	xlFile, err := excelize.OpenFile(filePath)
 	if err != nil {
 		return err
 	}
 
-	rows, _ := xlFile.GetRows("Расписание") //Получение листа Excel
-	err = s.find(rows)                      //Получение нового ID и добавление одного файла в БД
+	rows, _ := xlFile.GetRows("Расписание")
+	err = s.find(rows)
 	if err != nil {
 		return err
 	}
@@ -100,7 +98,6 @@ func (s *ClassService) Parse(fileName string) error {
 
 func (s *ClassService) find(rows [][]string) error {
 	countDay, last := 0, "-1"
-	c := 0
 	for j := 5; j < len(rows[1]); j += 6 {
 		group := rows[0][j]
 		var classes []entities.Class
@@ -122,8 +119,13 @@ func (s *ClassService) find(rows [][]string) error {
 			class.TeacherNames = append(class.TeacherNames, rows[i][j+2])
 			class.Type = rows[i][j+1]
 			class.Date = rows[i][j+5]
+			class.Auditory = rows[i][j+3]
 			class.Weekday = countDay + 1
-			class.Week, _ = strconv.Atoi(rows[i][1])
+			if rows[i][4] == "I" {
+				class.Week = 1
+			} else {
+				class.Week = 2
+			}
 			if last > rows[i][1] {
 				countDay++
 			}
@@ -133,19 +135,11 @@ func (s *ClassService) find(rows [][]string) error {
 			classes = append(classes, class)
 			last = rows[i][1]
 		}
-		c++
 		last = "-1"
-		fmt.Println(classes)
-		if c == 2 {
-			fmt.Println()
-		}
-
-		fmt.Println("-------------------------------------------")
 		_, err := s.repository.Create(context.Background(), &classes)
 		if err != nil {
 			return err
 		}
-		fmt.Println("Ok")
 	}
 
 	return nil

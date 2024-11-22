@@ -41,6 +41,7 @@ export interface IStatusWindow{
   time: number,
 };
 
+// calendar item interface
 export interface Day{
   year: number,
   month: number,
@@ -48,6 +49,7 @@ export interface Day{
   isThisMonth: boolean,
 };
 
+// schedule item interface
 export interface IScheduleItem{
   time: string,
   type: string,
@@ -55,6 +57,8 @@ export interface IScheduleItem{
   place: string,
   groups: string[],
 };
+
+//api interfaces
 
 export interface IAPI_Login_Request{
   login: string,

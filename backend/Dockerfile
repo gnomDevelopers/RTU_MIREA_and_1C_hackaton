@@ -1,14 +1,13 @@
-# Этап сборки
+# сборка
 FROM golang:1.22.5-alpine as builder
 WORKDIR /build
-COPY go.mod .
-COPY go.sum .
+COPY go.mod go.sum ./
 RUN go mod download
-COPY .. .
+COPY . .
 RUN go build -o /main ./cmd/main.go
 
-# Финальный этап
-FROM alpine:3
+# рантайм
+FROM alpine:3.18
 WORKDIR /app
-COPY --from=builder /main /bin/main
-ENTRYPOINT ["/bin/main"]
+COPY --from=builder /main /app/main
+ENTRYPOINT ["/app/main"]

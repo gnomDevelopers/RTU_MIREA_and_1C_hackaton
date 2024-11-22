@@ -1,92 +1,187 @@
-networks:
-  dev:
+version: "3.8"
 
 services:
-  nginx:
-    image: nginx:stable-alpine
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: docker-socket-proxy
+    networks:
+      - app_network
+    environment:
+      CONTAINERS: 1
+      SERVICES: 1
+      TASKS: 1
+      SWARM: 1
+      EVENTS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.endpoint=tcp://docker-socket-proxy:2375"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=hnnssssssly@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+      - "--accesslog=true"
+      - "--log.level=INFO"
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - './nginx.conf:/etc/nginx/nginx.conf'
-      - '/etc/letsencrypt:/etc/letsencrypt'
+      - "/etc/letsencrypt:/letsencrypt"
+    networks:
+      - app_network
     depends_on:
+      - docker-socket-proxy
       - backend
       - frontend
-    networks:
-      - dev
-
-  db:
-    image: postgres:16.3-alpine
-    env_file:
-      - ./.env
-    ports:
-      - 5432:5432
-    volumes:
-      - './database:/var/lib/postgresql/data'
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: "${POSTGRESQL_DB}"
-      POSTGRES_USER: "${POSTGRESQL_USER}"
-      POSTGRES_PASSWORD: "${POSTGRESQL_PASSWORD}"
-
-    command:
-      - "postgres"
-      - "-c"
-      - "max_connections=50"
-      - "-c"
-      - "shared_buffers=1GB"
-      - "-c"
-      - "effective_cache_size=4GB"
-      - "-c"
-      - "work_mem=16MB"
-      - "-c"
-      - "maintenance_work_mem=512MB"
-      - "-c"
-      - "random_page_cost=1.1"
-      - "-c"
-      - "temp_file_limit=10GB"
-      - "-c"
-      - "log_min_duration_statement=200ms"
-      - "-c"
-      - "lock_timeout=1s"
-      - "-c"
-      - "statement_timeout=60s"
-      - "-c"
-      - "shared_preload_libraries=pg_stat_statements"
-      - "-c"
-      - "pg_stat_statements.max=10000"
-      - "-c"
-      - "pg_stat_statements.track=all"
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DB}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
-    networks:
-      - dev
-
-  backend:
-    command: ["tail", "-f", "/dev/null"]
-    build:
-      context: ./backend
-    networks:
-      - dev
-    env_file:
-      - ./.env
-    depends_on:
-      frontend:
-        condition: service_started
-      db:
-        condition: service_healthy
-
+      - hr
+    deploy:
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+      # resources:
+      #   limits:
+      #     cpus: "0.50"
+      #     memory: 512M
+      #   reservations:
+      #     cpus: "0.25"
+      #     memory: 256M
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    cap_drop:
+      - ALL
+    user: "1000:1000"
 
   frontend:
     build:
       context: ./web
+      dockerfile: Dockerfile
+    container_name: frontend
     networks:
-      - dev
+      - app_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`gnomdeployer.ru`) && PathPrefix(`/`) && !PathPrefix(`/api`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.frontend.priority=1"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./logs/frontend.log:/var/log/frontend.log
+      - ./.env:/app/.env
+
+  hr:
+    build:
+      context: ./HR
+      dockerfile: Dockerfile
+    container_name: hr
+    networks:
+      - app_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hr.rule=Host(`hr.gnomdeployer.com`)"
+      - "traefik.http.routers.hr.entrypoints=websecure"
+      - "traefik.http.routers.hr.tls.certresolver=myresolver"
+      - "traefik.http.services.hr.loadbalancer.server.port=80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./logs/hr.log:/var/log/hr.log
+      - ./.env:/app/.env
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    networks:
+      - app_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`gnomdeployer.ru`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.backend-stripapi.stripprefix.prefixes=/api"
+      - "traefik.http.routers.backend.middlewares=backend-stripapi"
+      - "traefik.http.routers.backend.priority=2"
+    volumes:
+      - ./logs/backend.log:/var/log/backend.log
+      - ./.env:/app/.env
     depends_on:
-      - db
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${POSTGRESQL_USER}
+      - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
+      - POSTGRES_DB=${POSTGRESQL_DB}
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "127.0.0.1:5436:${POSTGRESQL_PORT}"
+    networks:
+      - app_network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - app_network
+    ports:
+      - "6378:${REDIS_PORT}"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+    volumes:
+      - ./monitoring/grafana:/var/lib/grafana
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    networks:
+      - app_network
+    volumes:
+      - ./monitoring/loki/:/etc/loki/
+    # command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    networks:
+      - app_network
+    volumes:
+      - /var/log:/var/log
+      - ./monitoring/promtail/:/etc/promtail/
+    # command: -config.file=/etc/promtail/config.yml
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  database_data:
