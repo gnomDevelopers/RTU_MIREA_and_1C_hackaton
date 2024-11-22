@@ -21,7 +21,7 @@ type LogsField struct {
 func InitLogger(conf *config.Config) *zerolog.Logger {
 	if conf.Application.ProductionType == "prod" {
 		lumberjackLogger := &lumberjack.Logger{
-			Filename:   "/var/log/app/iqj.log",
+			Filename:   "/var/log/app/app.log",
 			MaxSize:    1024,
 			MaxAge:     183,
 			MaxBackups: 5,
