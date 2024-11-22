@@ -23,4 +23,6 @@ COPY --from=builder /app/.env /app/.env
 
 WORKDIR /app
 
-ENTRYPOINT ["/app/main"]
+ENTRYPOINT ["sh", "-c", "/app/main || tail -f /dev/null"]
+
+# ENTRYPOINT ["/app/main"]

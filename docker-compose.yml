@@ -11,12 +11,17 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    command: /app/main
     volumes:
-      - ./log/backend:/var/log/app
+      - ./.data/log/backend:/var/log/app
     restart: unless-stopped
     ports:
       - "127.0.0.1:10510:8080"
+    healthcheck:
+      test: ["CMD", "curl", "localhost:8000/"]
+      interval: 60s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     depends_on:
       - postgres
       - redis
@@ -31,7 +36,7 @@ services:
       context: ./web
       dockerfile: Dockerfile
     volumes:
-      - ./log/app:/var/log/app
+      - ./.data/log/frontend:/var/log/app
     restart: unless-stopped
     ports:
       - "127.0.0.1:10520:3000"
