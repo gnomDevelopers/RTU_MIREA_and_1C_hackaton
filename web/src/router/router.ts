@@ -52,5 +52,11 @@ export const router = createRouter({
       component: () => import('@/pages/PerformancePage.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      name: 'GroupCorrectPage',
+      path: '/group',
+      component: () => import('@/pages/GroupCorrectPage.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 });

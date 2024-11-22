@@ -1,86 +1,93 @@
 <template>
   <div class="w-full h-full scrollable flex flex-col items-center">
-    <div class="w-full px-2 us:px-4 lg:w-10/12 lg:px-0">
-      <p class="text-3xl my-5 text-center lg:text-left">Добро пожаловать, Проректор Проректорович</p>
-      <div class="flex flex-col gap-y-3">
-
-        <MainControl title="Управление вузом">
-          <MainControlItem title="Управление деканами">
-
-            <UserList 
-              title="Введите ФИО декана" 
-              placeholder="ФИО декана"
-              :usersList="decanList" 
-              :itemComponent="getListItemComponent"
-            />
-
-          </MainControlItem>
-          <MainControlItem title="Управление преподавателями">
-            
-            <UserList 
-              title="Введите ФИО преподавателя" 
-              placeholder="ФИО преподавателя"
-              :usersList="prepodList" 
-              :itemComponent="getListItemComponent"
-            />
-
-          </MainControlItem>
-        </MainControl>
-
-        <MainControl title="Управление ресурсами">
-          <MainControlItem title="Управление аудиториями">
-            
-            <label for="fileInput">
-              Choose file
-              <input 
-                type="file" 
-                multiple 
-                name="fileInput" 
-                accept="image/*, .png, .svg, .jpg, .webp" 
-                @change="showFiles" 
-              />
-            </label>
-
-
-          </MainControlItem>
-        </MainControl>
+    <div class="flex flex-col gap-y-4 w-full px-2 us:px-4 lg:w-10/12 lg:px-0">
+      
+      <div class="flex flex-row gap-x-2 items-stretch mt-5">
+        <IconAccounts class="w-20 us:w-36 h-20 us:h-36"/>
+        <div class="flex flex-col gap-y-4">
+          <p class="text-4xl font-medium">Создание учётных записей</p>
+          <p class="text-xl">В этом разделе Вы можете создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента. Для этого загрузите на своё устройство шаблон для заполнения данных о пользователе, а затем отправьте заполненный файл в специальное поле.</p>
+        </div>
       </div>
+
+      <MainControl title="Управление вузом">
+        <MainControlItem title="Управление деканами">
+
+          <SearchList 
+            title="Введите ФИО декана" 
+            placeholder="ФИО декана"
+            :searchList="decanList" 
+            :itemComponent="getListItemComponent"
+          />
+
+        </MainControlItem>
+        <MainControlItem title="Управление преподавателями">
+          
+          <SearchList 
+            title="Введите ФИО преподавателя" 
+            placeholder="ФИО преподавателя"
+            :searchList="prepodList" 
+            :itemComponent="getListItemComponent"
+          />
+
+        </MainControlItem>
+      </MainControl>
+
+      <MainControl title="Управление ресурсами">
+        <MainControlItem title="Управление аудиториями">
+          
+          <label for="fileInput">
+            Choose file
+            <input 
+              type="file" 
+              multiple 
+              name="fileInput" 
+              accept="image/*, .png, .svg, .jpg, .webp" 
+              @change="showFiles" 
+            />
+          </label>
+
+        </MainControlItem>
+      </MainControl>
+
     </div>
   </div>
 </template>
 <script lang="ts">
-import { ROLES_SET_PRORECTOR, ROLES_NAME } from '../helpers/constants';
+import { API_SendFile } from '../api/api';
+import { ROLES_SET_PRORECTOR, ROLES_NAME, type ISearchList, type IUsersList } from '../helpers/constants';
+
 import MainControl from '../shared/mainControl.vue';
 import MainControlItem from '../shared/mainControlItem.vue';
 import UserListItem from '../shared/userListItem.vue';
-import UserList from '../entities/userList.vue';
-
-import { API_SendFile } from '../api/api';
+import SearchList from '../entities/searchList.vue';
+import IconAccounts from '@/shared/iconAccounts.vue';
 
 export default {
   components:{
+    IconAccounts,
     MainControl,
     MainControlItem,
     UserListItem,
-    UserList,
+    SearchList,
   },
   data(){
     return{
       rolesList: ROLES_SET_PRORECTOR,
-      decanList: [
-        {id: 1, name: "Деканов1 Декан1 Деканович1", role: 2}, 
-        {id: 2, name: "Деканов2 Декан2 Деканович2", role: 2}, 
-        {id: 3, name: "Деканов3 Декан3 Деканович3", role: 2}
-      ],
-      prepodList: [
-        {id: 1, name: "Преподов1 Препод1 Преподович1", role: 4}, 
-        {id: 2, name: "Преподов2 Препод2 Преподович2", role: 4}, 
-        {id: 3, name: "Преподов3 Препод3 Преподович3", role: 4}
-      ],
+      decanList: [] as ISearchList[],
+      prepodList: [] as ISearchList[],
     }
   },
   mounted(){
-    for(let i = 0; i < 100; i++) this.decanList.push({id: i+4, name: `Деканов${i+4} Декан${i+4} Деканович${i+4}`, role: 2});
+    for(let i = 1; i < 110; i++) {
+      const data: IUsersList = {id: i, name: `Деканов${i} Декан${i} Деканович${i}`, role: 2};
+      this.decanList.push({id: data.id, search_field: data.name, data: data});
+    }
+
+    for(let i = 1; i < 110; i++) {
+      const data: IUsersList = {id: i, name: `Преподов${i} Препод${i} Преподович${i}`, role: 4};
+      this.prepodList.push({id: data.id, search_field: data.name, data: data});
+    }
   },
   computed: {
     getListItemComponent(){

@@ -16,7 +16,7 @@
           <IconPerformance/>
         </MainTableItem>
 
-        <MainTableItem title="Группы" text="Заполнение учебных групп">
+        <MainTableItem @clicked="$router.push({name: 'GroupCorrectPage'})" title="Группы" text="Заполнение учебных групп">
           <IconGroups/>
         </MainTableItem>
 

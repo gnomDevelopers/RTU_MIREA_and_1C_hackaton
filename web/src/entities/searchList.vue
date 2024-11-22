@@ -11,7 +11,7 @@
       >
 
       <div 
-        class="w-10 h-10 flex flex-col justify-center items-center cursor-pointer rounded-r-lg bg-slate-200 hover:bg-slate-300 active:bg-slate-400"
+        class="w-10 h-10 flex flex-col justify-center items-center cursor-pointer rounded-r-lg btn"
         @click="filterUserList"
         >
         <img class="w-7 h-7" src="../assets/icons/icon-search.svg"/>
@@ -24,9 +24,7 @@
           v-for="item in filteredUsersList" 
           :key="item.id" 
           :is="itemComponent" 
-          :id=item.id 
-          :name=item.name 
-          :role=item.role 
+          :data="item.data"
         /> 
       </div>
     </div>
@@ -34,7 +32,7 @@
 </template>
 <script lang="ts">
 import { type PropType } from 'vue';
-import { type IUsersList } from '@/helpers/constants';
+import { type ISearchList } from '@/helpers/constants';
 
 export default{
   props: {
@@ -47,8 +45,8 @@ export default{
       required: false,
       default: '',
     },
-    usersList: {
-      type: Array as PropType<IUsersList[]>,
+    searchList: {
+      type: Array as PropType<ISearchList[]>,
       required: true,
     },
     itemComponent: {
@@ -58,27 +56,32 @@ export default{
   data(){
     return{
       searchFilter: '',
-      filteredUsersList: this.usersList as IUsersList[],
+      filteredUsersList: this.searchList as ISearchList[],
+      inputFilterMaxSize: 1000, // предел по кол-ву элементов в списке, после которого сортировка после ввода не будет работать
     }
   },
   methods:{
     filterUsersListInput(){
-      if(this.searchFilter === '' || this.usersList.length > 1000) return this.usersList;
+      if(this.searchFilter === '' || this.searchList.length > this.inputFilterMaxSize) return this.searchList;
       this.filterUserList();
     },
     filterUserList(){
-      if(this.searchFilter === '') return this.usersList; 
-      this.filteredUsersList = this.usersList.filter(item => item.name.toLowerCase().includes(this.searchFilter.toLowerCase()));
+      if(this.searchFilter === '') return this.searchList; 
+      this.filteredUsersList = this.searchList.filter(item => item.search_field.toLowerCase().includes(this.searchFilter.toLowerCase()));
     }
   },
   watch:{
     searchFilter(val){
       if(val === '') {
-        this.filteredUsersList = this.usersList;
+        this.filteredUsersList = this.searchList;
         return;
       }
-      if(this.usersList.length > 1000) return;
+      if(this.searchList.length > this.inputFilterMaxSize) return;
       else this.filterUserList();
+    },
+    searchList(val){ // изменился входной массив данных списка
+      this.searchFilter = '';
+      this.filteredUsersList = this.searchList;
     }
   }
 };

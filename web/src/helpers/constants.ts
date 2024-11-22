@@ -12,7 +12,7 @@ export enum StatusCodes {
   'error', 'info', 'loading', 'success'
 };
 
-export const SCHEDULE_TARGET_TEXT = ['Выберите группу для просмотра', 'Выберите проподавателя для просмотра', 'Выберите факультет для просмотра'];
+export const SCHEDULE_TARGET_TEXT = ['Выберите группу для просмотра', 'Выберите преподавателя для просмотра', 'Выберите факультет для просмотра'];
 
 //types
 
@@ -26,11 +26,24 @@ export interface IValidAnswer{
   error: string,
 }
 
+//searchList item interface
+export interface ISearchList{
+  id: number,
+  search_field: string,
+  data: any,
+}
+
 //userList item interface
 export interface IUsersList{
   id: number,
   name: string,
   role: number,
+}
+
+//itemList item interface
+export interface IItemList{
+  id: number,
+  name: string,
 }
 
 //statusWindow interface

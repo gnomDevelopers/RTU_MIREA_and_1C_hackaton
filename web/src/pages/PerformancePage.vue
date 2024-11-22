@@ -10,20 +10,14 @@
         </div>
       </div>
 
-      <div class="flex flex-col items-center gap-y-2">
-        <div class="flex flex-row w-[314px] mb:w-auto rounded-lg header-shadow bg-white">
-          <input 
-            class="p-2 outline-none min-w-0 max-w-none flex-grow mb:w-96 bg-transparent" 
-            type="text" 
-            :placeholder="'Введите название группы'"
-            v-model="searchFilter">
-          <div 
-            class="w-10 h-10 flex flex-col justify-center items-center cursor-pointer rounded-r-lg btn"
-            @click="filterUserList">
-            <img class="w-7 h-7" src="../assets/icons/icon-search.svg"/>
-          </div>
-        </div>
-        <p class="text-lg font-medium cursor-default">
+      <div>
+        <SearchList 
+          title="" 
+          placeholder="Введите название группы"
+          :searchList="groupsList" 
+          :itemComponent="getListItemComponent"
+        />
+        <p class="text-lg text-center font-medium cursor-default">
           Выбранная группа: 
           <span class="underline cursor-pointer">ЭФБО-01-23</span>
         </p>
@@ -106,23 +100,39 @@
   </div>
 </template>
 <script lang="ts">
+import SearchList from '@/entities/searchList.vue';
 import IconPerformance from '@/shared/iconPerformance.vue';
 import SubjectItem from '@/shared/subjectItem.vue';
+import { type ISearchList, type IItemList } from '@/helpers/constants';
+import PerformanceSearchListItem from '@/entities/performanceSearchListItem.vue';
 
 export default{
   components:{
     IconPerformance,
     SubjectItem,
+    SearchList,
+    PerformanceSearchListItem,
   },
   data(){
     return{
       tableType: 0 as number, // 0 - таблица для больших экранов (>=756px), 1 - таблица для маленьких экранов (<756px)
       searchFilter: '' as string,
+      groupsList: [] as ISearchList[],
+    }
+  },
+  computed:{
+    getListItemComponent(){
+      return PerformanceSearchListItem;
     }
   },
   mounted() {
     this.setTableType();
     window.addEventListener('resize', this.setTableType);
+
+    for(let i = 1; i < 20; i++){
+      const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};
+      this.groupsList.push({id: data.id, search_field: data.name, data: data});
+    }
   },
   methods:{
     setTableType(){
