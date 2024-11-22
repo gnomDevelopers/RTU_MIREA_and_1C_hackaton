@@ -168,8 +168,8 @@ services:
     networks:
       - app_network
     volumes:
-      - ./monitoring/loki/loki-config.yaml:/etc/loki/local-config.yaml
-    command: -config.file=/etc/loki/local-config.yaml
+      - ./monitoring/loki/:/etc/loki/
+    # command: -config.file=/etc/loki/local-config.yaml
 
   promtail:
     image: grafana/promtail:latest
@@ -178,8 +178,8 @@ services:
       - app_network
     volumes:
       - /var/log:/var/log
-      - ./monitoring/promtail/promtail-config.yaml:/etc/promtail/config.yml
-    command: -config.file=/etc/promtail/config.yml
+      - ./monitoring/promtail/:/etc/promtail/
+    # command: -config.file=/etc/promtail/config.yml
 
 networks:
   app_network:
