@@ -22,6 +22,7 @@ type UserData struct {
 	UniversityID         int    `json:"university_id"`
 	PermissionID         int    `json:"permission_id"`
 	FacultyID            int    `json:"faculty_id"`
+	Group                string `json:"group"`
 	DepartmentID         int    `json:"department_id"`
 	EducationalDirection string `json:"educational_direction"`
 	IsDeleted            bool   `json:"is_deleted"`
@@ -37,6 +38,7 @@ type AddUserDataRequest struct {
 	University           string `json:"university"`
 	PermissionID         int    `json:"permission_id"`
 	Faculty              string `json:"faculty"`
+	Group                string `json:"group"`
 	EducationalDirection string `json:"educational_direction"`
 	Department           string `json:"department"`
 }

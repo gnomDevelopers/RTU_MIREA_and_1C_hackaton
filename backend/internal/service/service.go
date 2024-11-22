@@ -13,7 +13,7 @@ type User interface {
 }
 
 type UserData interface {
-	Add(context.Context, *entities.AddUserDataRequest) error
+	Add(context.Context, *[]entities.AddUserDataRequest) error
 }
 
 type University interface {
@@ -51,7 +51,7 @@ type Service struct {
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
 		UserService:         NewUserService(repositories.User, conf),
-		UserData:            NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University),
+		UserData:            NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University, repositories.Group),
 		UniversityService:   NewUniversityService(repositories.University),
 		CampusService:       NewCampusService(repositories.Campus),
 		ClassService:        NewClassService(repositories.Class),
