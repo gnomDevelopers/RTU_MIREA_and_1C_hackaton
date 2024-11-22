@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"server/internal/entities"
 	"server/internal/repository"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -122,7 +121,11 @@ func (s *ClassService) find(rows [][]string) error {
 			class.Date = rows[i][j+5]
 			class.Auditory = rows[i][j+3]
 			class.Weekday = countDay + 1
-			class.Week, _ = strconv.Atoi(rows[i][1])
+			if rows[i][4] == "I" {
+				class.Week = 1
+			} else {
+				class.Week = 2
+			}
 			if last > rows[i][1] {
 				countDay++
 			}
