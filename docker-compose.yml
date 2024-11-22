@@ -1,187 +1,165 @@
-version: "3.8"
+version: "3.9"
+
+networks:
+  hackaton_app:
+    name: "hackaton_network"
+    driver: bridge
 
 services:
-  docker-socket-proxy:
-    image: tecnativa/docker-socket-proxy:latest
-    container_name: docker-socket-proxy
-    networks:
-      - app_network
-    environment:
-      CONTAINERS: 1
-      SERVICES: 1
-      TASKS: 1
-      SWARM: 1
-      EVENTS: 1
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    restart: unless-stopped
-
-  traefik:
-    image: traefik:v2.10
-    container_name: traefik
-    command:
-      - "--providers.docker=true"
-      - "--providers.docker.endpoint=tcp://docker-socket-proxy:2375"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=hnnssssssly@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--api.dashboard=true"
-      - "--api.insecure=false"
-      - "--accesslog=true"
-      - "--log.level=INFO"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/etc/letsencrypt:/letsencrypt"
-    networks:
-      - app_network
-    depends_on:
-      - docker-socket-proxy
-      - backend
-      - frontend
-      - hr
-    deploy:
-      restart_policy:
-        condition: on-failure
-      placement:
-        constraints:
-          - node.role == manager
-      # resources:
-      #   limits:
-      #     cpus: "0.50"
-      #     memory: 512M
-      #   reservations:
-      #     cpus: "0.25"
-      #     memory: 256M
-    security_opt:
-      - no-new-privileges:true
-    read_only: true
-    cap_drop:
-      - ALL
-    user: "1000:1000"
-
-  frontend:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    container_name: frontend
-    networks:
-      - app_network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`gnomdeployer.ru`) && PathPrefix(`/`) && !PathPrefix(`/api`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
-      - "traefik.http.routers.frontend.priority=1"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./logs/frontend.log:/var/log/frontend.log
-      - ./.env:/app/.env
-
-  hr:
-    build:
-      context: ./HR
-      dockerfile: Dockerfile
-    container_name: hr
-    networks:
-      - app_network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.hr.rule=Host(`hr.gnomdeployer.com`)"
-      - "traefik.http.routers.hr.entrypoints=websecure"
-      - "traefik.http.routers.hr.tls.certresolver=myresolver"
-      - "traefik.http.services.hr.loadbalancer.server.port=80"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./logs/hr.log:/var/log/hr.log
-      - ./.env:/app/.env
-
   backend:
+    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend
-    networks:
-      - app_network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`gnomdeployer.ru`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.tls.certresolver=myresolver"
-      - "traefik.http.middlewares.backend-stripapi.stripprefix.prefixes=/api"
-      - "traefik.http.routers.backend.middlewares=backend-stripapi"
-      - "traefik.http.routers.backend.priority=2"
+    command: /app/main
     volumes:
-      - ./logs/backend.log:/var/log/backend.log
-      - ./.env:/app/.env
+      - ./log/backend:/var/log/app
+    # restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
     depends_on:
       - postgres
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      - POSTGRES_USER=${POSTGRESQL_USER}
-      - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
-      - POSTGRES_DB=${POSTGRESQL_DB}
-    volumes:
-      - ./database/data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "127.0.0.1:5436:${POSTGRESQL_PORT}"
+      - redis
+      - promtail
+      - loki
     networks:
-      - app_network
+      - hackaton_app
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    networks:
-      - app_network
-    ports:
-      - "6378:${REDIS_PORT}"
+  frontend:
+    container_name: frontend
+    build:
+      context: ./web
+      dockerfile: Dockerfile
     volumes:
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
+      - ./log/app:/var/log/app
+    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     networks:
-      - app_network
-    volumes:
-      - ./monitoring/grafana:/var/lib/grafana
+      - hackaton_app
 
   loki:
-    image: grafana/loki:latest
-    container_name: loki
-    networks:
-      - app_network
+    container_name: "loki"
+    image: grafana/loki:2.9.2
+    ports:
+      - "127.0.0.1:3100:3100"
     volumes:
-      - ./monitoring/loki/:/etc/loki/
-    # command: -config.file=/etc/loki/local-config.yaml
+      - ./backend/internal/log/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+    command: -config.file=/etc/loki/loki-config.yml
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3100/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - hackaton_app
 
   promtail:
-    image: grafana/promtail:latest
     container_name: promtail
-    networks:
-      - app_network
+    image: grafana/promtail:2.9.2
     volumes:
-      - /var/log:/var/log
-      - ./monitoring/promtail/:/etc/promtail/
-    # command: -config.file=/etc/promtail/config.yml
+      - ./backend/internal/log/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - hackaton_app
 
-networks:
-  app_network:
-    driver: bridge
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    environment:
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_SECURITY_ANONYMOUS_ENABLED: "false"
+      GF_AUTH_BASIC_ENABLED: "true"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      TG_BOT_TOKEN: "${TG_BOT_TOKEN}"
+      TG_CHAT_ID: '"${TG_CHAT_ID}"'
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}"
+    volumes:
+      - ./backend/internal/log/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./backend/internal/log/grafana-provisioning/alerting:/etc/grafana/provisioning/alerting:ro
+    ports:
+      - "127.0.0.1:3011:3000"
+    depends_on:
+      - loki
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - hackaton_app
 
-volumes:
-  database_data:
+  # PostgreSQL Database
+  postgres:
+    container_name: "postgres"
+    image: postgres:14.7-alpine
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=4GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=512MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "temp_file_limit=10GB"
+      - "-c"
+      - "log_min_duration_statement=200ms"
+      - "-c"
+      - "lock_timeout=1s"
+      - "-c"
+      - "statement_timeout=60s"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
+    environment:
+      POSTGRES_DB: "${POSTGRESQL_DB}"
+      POSTGRES_USER: "${POSTGRESQL_USER}"
+      POSTGRES_PASSWORD: "${POSTGRESQL_PASSWORD}"
+    volumes:
+      - ./.data/postgres/dump:/docker-entrypoint-initdb.d/:ro
+      - ./.data/postgres/postgresql:/var/lib/postgresql/
+    ports:
+      - "127.0.0.1:5442:5432"
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - hackaton_app
+
+  redis:
+    container_name: "redis"
+    image: redis:6.2-alpine
+    environment:
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+    volumes:
+      - ./.data/redis/data:/data
+    ports:
+      - "127.0.0.1:${REDIS_PORT}:6379"
+    # command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "localhost", "-p", "6379", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - hackaton_app
