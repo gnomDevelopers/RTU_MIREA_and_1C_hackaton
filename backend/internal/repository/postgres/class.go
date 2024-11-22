@@ -93,8 +93,10 @@ func (r *ClassRepository) GetByGroupName(ctx context.Context, groupName string) 
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE $1=ANY(group_names)`
-	rows, err := r.db.QueryContext(ctx, query, groupName)
+
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE $1=ANY(group_names) AND date < $2`
+	rows, err := r.db.QueryContext(ctx, query, groupName, dateLimit)
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +123,9 @@ func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName stri
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE $1=ANY(teacher_names)`
-	rows, err := r.db.QueryContext(ctx, query, teacherName)
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE $1=ANY(teacher_names) AND date < $2`
+	rows, err := r.db.QueryContext(ctx, query, teacherName, dateLimit)
 	if err != nil {
 		return nil, err
 	}
@@ -149,8 +152,9 @@ func (r *ClassRepository) GetByName(ctx context.Context, name string) (*[]entiti
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ';`
-	rows, err := r.db.QueryContext(ctx, query, name)
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ' AND date < $2;`
+	rows, err := r.db.QueryContext(ctx, query, name, dateLimit)
 	if err != nil {
 		return nil, err
 	}
@@ -177,8 +181,9 @@ func (r *ClassRepository) GetByAuditory(ctx context.Context, auditory string) (*
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE auditory=$1`
-	rows, err := r.db.QueryContext(ctx, query, auditory)
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE auditory=$1 AND date < $2;`
+	rows, err := r.db.QueryContext(ctx, query, auditory, dateLimit)
 	if err != nil {
 		return nil, err
 	}
@@ -271,7 +276,7 @@ func (r *ClassRepository) SearchNames(ctx context.Context, university string) ([
 	query := `
 		SELECT name
 		FROM class
-		WHERE university = $1
+		WHERE university = $1 AND type='ФАКУЛЬТАТИВ'
 	`
 
 	rows, err := r.db.QueryContext(ctx, query, university)
