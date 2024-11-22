@@ -73,10 +73,18 @@ func (h *Handler) Router() *fiber.App {
 	f.Delete("/audience/:id", h.DeleteAudience)
 
 	f.Get("/class/id/:id", h.GetByIdClass)
-	f.Get("/class/auditory_id/:id", h.GetByAuditoryIdClass)
+	f.Get("/class/auditory/:name", h.GetByAuditoryClass)
 	f.Post("/class", h.CreateClasses)
 	f.Put("/class", h.UpdateClass)
 	f.Delete("/class/:id", h.DeleteClass)
+
+	f.Get("/schedule/group/:group", h.GetScheduleByGroup)
+	f.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
+	f.Get("/schedule/name/:name", h.GetScheduleByName)
+
+	f.Get("/schedule/search/group", h.GetScheduleSearchGroup)
+	f.Get("/schedule/search/teacher", h.GetScheduleSearchTeacher)
+	f.Get("/schedule/search/name", h.GetScheduleSearchName)
 
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {

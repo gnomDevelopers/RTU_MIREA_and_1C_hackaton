@@ -44,12 +44,6 @@
 
           </MainControlItem>
         </MainControl>
-
-        <MainControl title="Мониторинг посещаемости">
-          <MainControlItem title="Просмотр отчетов о посещаемости вуза">
-            скрытая часть
-          </MainControlItem>
-        </MainControl>
       </div>
     </div>
   </div>

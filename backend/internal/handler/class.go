@@ -76,24 +76,23 @@ func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(class)
 }
 
-// GetByAuditoryIdClass
+// GetByAuditoryClass
 // @Tags class
-// @Summary      Get class by auditory id
+// @Summary      Get class by auditory
 // @Accept       json
 // @Produce      json
-// @Param id path string true "class auditory id"
+// @Param id path string true "class auditory"
 // @Success 200 {object} entities.Class
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class/auditory_id/{id} [get]
-func (h *Handler) GetByAuditoryIdClass(c *fiber.Ctx) error {
+// @Router       /class/auditory/{name} [get]
+func (h *Handler) GetByAuditoryClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
-	auditoryIdStr := c.Params(":id")
-	auditoryId, err := strconv.Atoi(auditoryIdStr)
+	auditoryName := c.Params(":name")
 
-	h.logger.Debug().Msg("call h.services.ClassService.GetByAuditoryId")
-	class, err := h.services.ClassService.GetByAuditoryId(c.Context(), auditoryId)
+	h.logger.Debug().Msg("call h.services.ClassService.GetByAuditory")
+	class, err := h.services.ClassService.GetByAuditory(c.Context(), auditoryName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

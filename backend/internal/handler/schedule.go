@@ -3,7 +3,9 @@ package handler
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"net/url"
 	"os"
+	"server/internal/entities"
 	"server/internal/log"
 	"server/util"
 )
@@ -20,10 +22,14 @@ import (
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /schedule/group/{group} [get]
 func (h *Handler) GetScheduleByGroup(c *fiber.Ctx) error {
-	groupName := c.Params("name")
+	groupName := c.Params("group")
+	decodedGroupName, err := url.QueryUnescape(groupName)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid group name")
+	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.GetByGroupName")
-	classes, err := h.services.ClassService.GetByGroupName(c.Context(), groupName)
+	classes, err := h.services.ClassService.GetByGroupName(c.Context(), decodedGroupName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -49,11 +55,14 @@ func (h *Handler) GetScheduleByGroup(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /schedule/teacher/{teacher} [get]
 func (h *Handler) GetScheduleByTeacher(c *fiber.Ctx) error {
-	// TODO: добавить проверку на роль проректора
-	teacherName := c.Params("name")
+	teacherName := c.Params("teacher")
+	decodedTeacherName, err := url.QueryUnescape(teacherName)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid teacher name")
+	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.GetByTeacherName")
-	class, err := h.services.ClassService.GetByTeacherName(c.Context(), teacherName)
+	class, err := h.services.ClassService.GetByTeacherName(c.Context(), decodedTeacherName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -79,8 +88,25 @@ func (h *Handler) GetScheduleByTeacher(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /schedule/name/{name} [get]
 func (h *Handler) GetScheduleByName(c *fiber.Ctx) error {
+	name := c.Params("name")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid teacher name")
+	}
 
-	return c.Status(fiber.StatusOK).JSON("")
+	h.logger.Debug().Msg("call h.services.ClassService.GetByTeacherName")
+	class, err := h.services.ClassService.GetByName(c.Context(), decodedName)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(class)
 }
 
 // ParseSchedule
@@ -127,4 +153,85 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success"})
+}
+
+// GetScheduleSearchGroup
+// @Tags schedule
+// @Summary      Search groups
+// @Accept       json
+// @Produce      json
+// @Success 200 {object} entities.ScheduleGroups
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /schedule/search/group [get]
+func (h *Handler) GetScheduleSearchGroup(c *fiber.Ctx) error {
+	university := "МИРЭА" // TODO: поменять
+	h.logger.Debug().Msg("call h.services.ClassService.SearchGroups")
+	groups, err := h.services.ClassService.SearchGroups(c.Context(), university)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(entities.ScheduleGroups{Groups: groups})
+}
+
+// GetScheduleSearchTeacher
+// @Tags schedule
+// @Summary      Search teachers
+// @Accept       json
+// @Produce      json
+// @Success 200 {object} entities.ScheduleTeachers
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /schedule/search/teacher [get]
+func (h *Handler) GetScheduleSearchTeacher(c *fiber.Ctx) error {
+	university := "МИРЭА" // TODO: поменять
+	h.logger.Debug().Msg("call h.services.ClassService.SearchGroups")
+	teachers, err := h.services.ClassService.SearchTeachers(c.Context(), university)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(entities.ScheduleTeachers{Teachers: teachers})
+}
+
+// GetScheduleSearchName
+// @Tags schedule
+// @Summary      Search names
+// @Accept       json
+// @Produce      json
+// @Success 200 {object} entities.ScheduleNames
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /schedule/search/name [get]
+func (h *Handler) GetScheduleSearchName(c *fiber.Ctx) error {
+	university := "МИРЭА" // TODO: поменять
+	h.logger.Debug().Msg("call h.services.ClassService.SearchGroups")
+	names, err := h.services.ClassService.SearchNames(c.Context(), university)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(entities.ScheduleNames{Names: names})
 }
