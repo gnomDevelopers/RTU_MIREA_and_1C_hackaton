@@ -118,13 +118,11 @@ services:
       - "traefik.http.middlewares.backend-stripapi.stripprefix.prefixes=/api"
       - "traefik.http.routers.backend.middlewares=backend-stripapi"
       - "traefik.http.routers.backend.priority=2"
-    environment:
-      - DATABASE_URL=postgresql://user:password@database:5432/db
     volumes:
       - ./logs/backend.log:/var/log/backend.log
       - ./.env:/app/.env
     depends_on:
-      - database
+      - postgres
 
   postgres:
     image: postgres:latest
