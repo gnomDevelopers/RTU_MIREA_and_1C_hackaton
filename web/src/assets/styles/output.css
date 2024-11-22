@@ -767,6 +767,10 @@ video {
   height: 100%;
 }
 
+.h-20 {
+  height: 5rem;
+}
+
 .max-h-\[600px\] {
   max-height: 600px;
 }
@@ -839,6 +843,22 @@ video {
   width: 100%;
 }
 
+.w-48 {
+  width: 12rem;
+}
+
+.w-40 {
+  width: 10rem;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.w-20 {
+  width: 5rem;
+}
+
 .min-w-0 {
   min-width: 0px;
 }
@@ -851,8 +871,16 @@ video {
   min-width: 16rem;
 }
 
+.min-w-32 {
+  min-width: 8rem;
+}
+
 .max-w-none {
   max-width: none;
+}
+
+.max-w-96 {
+  max-width: 24rem;
 }
 
 .flex-1 {
@@ -887,6 +915,10 @@ video {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+}
+
+.resize {
+  resize: both;
 }
 
 .list-disc {
@@ -1019,6 +1051,14 @@ video {
 
 .overflow-x-scroll {
   overflow-x: scroll;
+}
+
+.text-wrap {
+  text-wrap: wrap;
+}
+
+.text-nowrap {
+  text-wrap: nowrap;
 }
 
 .rounded-lg {
@@ -2007,8 +2047,16 @@ thead th, tbody td {
     margin-left: 0.5rem;
   }
 
+  .us\:h-36 {
+    height: 9rem;
+  }
+
   .us\:w-auto {
     width: auto;
+  }
+
+  .us\:w-36 {
+    width: 9rem;
   }
 
   .us\:flex-row {
@@ -2103,6 +2151,14 @@ thead th, tbody td {
 }
 
 @media (min-width: 640px) {
+  .sm\:w-64 {
+    width: 16rem;
+  }
+
+  .sm\:min-w-64 {
+    min-width: 16rem;
+  }
+
   .sm\:flex-row {
     flex-direction: row;
   }
