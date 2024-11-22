@@ -26,7 +26,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=your-admin@gnomdeployer.ru"
+      - "--certificatesresolvers.myresolver.acme.email=hnnssssssly@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
       - "--api.dashboard=true"
       - "--api.insecure=false"
@@ -36,7 +36,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "/etc/letsencrypt:/letsencrypt:ro"
+      - "/etc/letsencrypt:/letsencrypt"
     networks:
       - app_network
     depends_on:
