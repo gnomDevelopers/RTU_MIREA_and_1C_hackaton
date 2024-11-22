@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row justify-between items-stretch h-24 shrink-0 w-full px-5 header-shadow z-10 bg-color-light">
     <div class="h-full grid content-center md:ml-16">
-      <div class="header-logo">VUZ+</div>
+      <div @click="$router.push({name: 'MainPage'})" class="header-logo">VUZ+</div>
     </div>
     <div class="flex flex-row gap-x-2 justify-center items-center md:mr-16">
 

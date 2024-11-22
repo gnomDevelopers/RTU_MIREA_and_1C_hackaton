@@ -154,6 +154,7 @@
 *{
   color: var(--bg-color-bold);
   font-family: 'Arsenal';
+  /* outline: 1px solid green; */
 }
 
 .box-shadow{
@@ -192,7 +193,7 @@
 .scrollable::-moz-scrollbar {
   width: var(--scroll-bar-width);
 }
-.scrollabl::-webkit-scrollbar-track{
+.scrollable::-webkit-scrollbar-track{
   background-color: var(--bg-color-1);
   border-radius: var(--border-radius-scroll-bar);
   transition: background-color 1s ease-in-out;
@@ -223,6 +224,20 @@
 }
 .scrollable:hover::-moz-scrollbar-track {
   background-color: var(--bg-color-1);
+}
+
+.scrollable-table{
+  @apply scrollable;
+  overflow-y: auto;
+  overflow-x: scroll;
+}
+.scrollable-table::-webkit-scrollbar{
+  width: auto;
+  height: 8px;
+}
+.scrollable-table::-moz-scrollbar {
+  width: auto;
+  height: 8px;
 }
 
 .markers li::marker {
@@ -312,6 +327,33 @@
   background-color: #d9dbdf;
 }
 
+
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+thead th, tbody td {
+  text-align: center;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.no-x-border thead th:first-child{
+  border-left-width: 0;
+}
+.no-x-border tbody td:first-child{
+  border-left-width: 0;
+}
+.no-x-border thead th:last-child{
+  border-right-width: 0;
+}
+.no-x-border tbody td:last-child{
+  border-right-width: 0;
+}
+.table-decorate tbody tr:nth-child(2n) td{
+  background-color: var(--bg-color-light);
+}
 
 @keyframes timeLine{
   from{
