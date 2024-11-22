@@ -16,7 +16,7 @@ services:
       - ./log/backend:/var/log/app
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:10510:8080"
     depends_on:
       - postgres
       - redis
@@ -34,7 +34,7 @@ services:
       - ./log/app:/var/log/app
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:10520:3000"
     networks:
       - hackaton_app
 
@@ -42,7 +42,7 @@ services:
     container_name: "loki"
     image: grafana/loki:2.9.2
     ports:
-      - "127.0.0.1:3100:3100"
+      - "127.0.0.1:10530:3100"
     volumes:
       - ./backend/internal/log/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
     command: -config.file=/etc/loki/loki-config.yml
@@ -81,7 +81,7 @@ services:
       - ./backend/internal/log/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./backend/internal/log/grafana-provisioning/alerting:/etc/grafana/provisioning/alerting:ro
     ports:
-      - "127.0.0.1:3011:3000"
+      - "127.0.0.1:10540:3000"
     depends_on:
       - loki
     healthcheck:
@@ -133,7 +133,7 @@ services:
       - ./.data/postgres/dump:/docker-entrypoint-initdb.d/:ro
       - ./.data/postgres/postgresql:/var/lib/postgresql/
     ports:
-      - "127.0.0.1:5442:5432"
+      - "127.0.0.1:10550:5432"
     healthcheck:
       test:
         ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DB}"]
@@ -153,7 +153,7 @@ services:
     volumes:
       - ./.data/redis/data:/data
     ports:
-      - "127.0.0.1:${REDIS_PORT}:6379"
+      - "127.0.0.1:10560:6379"
     # command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     restart: unless-stopped
     healthcheck:
