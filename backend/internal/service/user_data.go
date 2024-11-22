@@ -15,24 +15,28 @@ type UserDataService struct {
 	FacultyRepository    repository.FacultyRepository
 	DepartmentRepository repository.DepartmentRepository
 	UniversityRepository repository.UniversityRepository
+	GroupRepository      repository.GroupRepository
 	UniversityCache      map[string]int
 	DepartmentCache      map[string]int
 	FacultyCache         map[string]int
+	GroupCache           map[string]int
 	timeout              time.Duration
 }
 
 func NewUserDataService(userRepo repository.UserRepository, userDataRepo repository.UserDataRepository, facultyRepo repository.FacultyRepository,
-	departmentRepo repository.DepartmentRepository, universityRepo repository.UniversityRepository) *UserDataService {
+	departmentRepo repository.DepartmentRepository, universityRepo repository.UniversityRepository, groupRepo repository.GroupRepository) *UserDataService {
 	return &UserDataService{
 		UserRepository:       userRepo,
 		UserDataRepository:   userDataRepo,
 		FacultyRepository:    facultyRepo,
 		DepartmentRepository: departmentRepo,
 		UniversityRepository: universityRepo,
+		GroupRepository:      groupRepo,
 		UniversityCache:      make(map[string]int),
 		DepartmentCache:      make(map[string]int),
 		FacultyCache:         make(map[string]int),
-		timeout:              time.Duration(10) * time.Second,
+		GroupCache:           make(map[string]int),
+		timeout:              time.Duration(30) * time.Second,
 	}
 }
 
@@ -43,10 +47,15 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 	for _, request := range *requests {
 		fullName := fmt.Sprintf("%s %s %s", request.LastName, request.FirstName, request.FatherName)
 
+		password := util.GenerateTemporaryPassword(15)
+		hashedPassword, err := util.HashPassword(password)
+		if err != nil {
+			return err
+		}
 		// Создаём пользователя
 		newUser := &entities.User{
 			Login:    util.GenerateLogin(fullName),
-			Password: util.GenerateTemporaryPassword(15),
+			Password: hashedPassword,
 		}
 		user, err := s.UserRepository.CreateUser(ctx, newUser)
 		if err != nil {
@@ -146,6 +155,17 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 			s.DepartmentCache[request.Department] = departmentID
 		}
 		userData.DepartmentID = departmentID
+
+		// Группа
+		addStudent := &entities.CreateGroupRequest{
+			Name:   userData.Group,
+			UserID: user.ID,
+		}
+
+		_, err = s.GroupRepository.Create(ctx, addStudent)
+		if err != nil {
+			return err
+		}
 
 	}
 

@@ -62,6 +62,14 @@ type ClassRepository interface {
 	Delete(context.Context, int) error
 }
 
+type GroupRepository interface {
+	Exists(context.Context, string) (bool, error)
+	Create(context.Context, *entities.CreateGroupRequest) (int, error)
+	GetById(context.Context, int) (*entities.Group, error)
+	GetByName(context.Context, string) (*entities.Group, error)
+	GetAll(context.Context) (*[]entities.Group, error)
+}
+
 type UserScheduleRepository interface {
 	Create(context.Context, *entities.UserSchedule) (int, error)
 	GetByUserId(context.Context, int) (*entities.UserSchedule, error)
@@ -98,6 +106,7 @@ type Repository struct {
 	UserData     UserDataRepository
 	University   UniversityRepository
 	Campus       CampusRepository
+	Group        GroupRepository
 	Audience     AudienceRepository
 	Class        ClassRepository
 	Faculty      FacultyRepository
