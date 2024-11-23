@@ -45,7 +45,7 @@
   </div>
 </template>
 <script lang="ts">
-import GroupCorrectSearchListItem from '@/entities/groupCorrectSearchListItem.vue';
+import GroupCorrectSearchListItem from '@/entities/listItems/groupCorrectSearchListItem.vue';
 import SearchList from '@/entities/searchList.vue';
 import { type ISearchList, type IItemList } from '@/helpers/constants';
 import IconGroups from '@/shared/iconGroups.vue';

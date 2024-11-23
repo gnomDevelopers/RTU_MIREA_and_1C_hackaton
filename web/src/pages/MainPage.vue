@@ -8,6 +8,10 @@
           <IconAccounts/>
         </MainTableItem>
 
+        <MainTableItem @clicked="$router.push({name: 'CreateSchedulePage'})" title="Создание расписания" text="Создать расписание на семестр">
+          <IconShedule/>
+        </MainTableItem>
+
         <MainTableItem @clicked="$router.push({name: 'SchedulePage'})" title="Расписание" text="Посмотреть расписание для своей или любой другой группы">
           <IconShedule/>
         </MainTableItem>

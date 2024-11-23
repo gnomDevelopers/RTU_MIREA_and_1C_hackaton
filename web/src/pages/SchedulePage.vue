@@ -72,8 +72,8 @@ import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList } from '@/helper
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import SearchList from '@/entities/searchList.vue';
-import ScheduleSearchListItem from '@/entities/scheduleSearchListItem.vue';
-import ScheduleClassList from '@/entities/scheduleClassList.vue';
+import ScheduleSearchListItem from '@/entities/listItems/scheduleSearchListItem.vue';
+import ScheduleClassList from '@/entities/listItems/scheduleClassList.vue';
 
 export default {
   components:{

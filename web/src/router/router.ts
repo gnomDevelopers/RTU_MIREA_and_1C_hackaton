@@ -47,6 +47,12 @@ export const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      name: 'CreateSchedulePage',
+      path: '/schedulecreate',
+      component: () => import('@/pages/CreateSchedulePage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       name: 'PerformancePage',
       path: '/performance',
       component: () => import('@/pages/PerformancePage.vue'),
