@@ -780,6 +780,11 @@ const docTemplate = `{
         },
         "/auth/user_schedule": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -794,10 +799,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.UserSchedule"
-                            }
+                            "$ref": "#/definitions/entities.GetUserScheduleResponse"
                         }
                     },
                     "400": {
@@ -821,6 +823,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -870,6 +877,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -921,6 +933,11 @@ const docTemplate = `{
         },
         "/auth/user_schedule/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -2249,6 +2266,23 @@ const docTemplate = `{
             "properties": {
                 "error": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.GetUserScheduleResponse": {
+            "type": "object",
+            "properties": {
+                "classes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Class"
+                    }
+                },
+                "user_schedule": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.UserSchedule"
+                    }
                 }
             }
         },

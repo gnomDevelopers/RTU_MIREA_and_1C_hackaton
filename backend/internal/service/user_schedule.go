@@ -27,7 +27,7 @@ func (s *UserScheduleService) Create(c context.Context, mySchedule *entities.Use
 	return id, err
 }
 
-func (s *UserScheduleService) GetByUserId(c context.Context, id int) (*entities.UserSchedule, error) {
+func (s *UserScheduleService) GetByUserId(c context.Context, id int) (*[]entities.UserSchedule, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
