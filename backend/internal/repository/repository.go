@@ -21,6 +21,7 @@ type UniversityRepository interface {
 	Create(context.Context, *entities.CreateUniversityRequest) (int, error)
 	GetById(context.Context, int) (*entities.University, error)
 	GetByName(context.Context, string) (*entities.University, error)
+	GetByUserID(context.Context, int) (*entities.University, error)
 	GetAll(context.Context) (*[]entities.University, error)
 	Update(context.Context, int, string) error
 	Delete(context.Context, int) error

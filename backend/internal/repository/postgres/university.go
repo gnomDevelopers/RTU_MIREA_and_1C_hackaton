@@ -51,6 +51,21 @@ func (r *UniversityRepository) GetById(ctx context.Context, id int) (*entities.U
 	return &university, nil
 }
 
+func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*entities.University, error) {
+	query := `
+		SELECT university.name AS university_name FROM user_data
+		JOIN university ON user_data.university_id = university.id
+		WHERE user_data.id = 5;
+	`
+	university := &entities.University{}
+
+	err := r.db.QueryRowContext(ctx, query, userID).Scan(&university.Name, &university.Id)
+	if err != nil {
+		return nil, err
+	}
+	return university, ni
+}
+
 func (r *UniversityRepository) GetByName(ctx context.Context, name string) (*entities.University, error) {
 	var university entities.University
 	query := `SELECT * FROM university WHERE name=$1`
