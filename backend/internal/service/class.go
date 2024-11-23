@@ -86,6 +86,29 @@ func (s *ClassService) GetByNameAndGroup(c context.Context, name, group string) 
 	return &gradeClasses, err
 }
 
+func (s *ClassService) GetByNameAndGroupWithoutLk(c context.Context, name, group string) (*[]entities.GradeClass, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	classes, err := s.repository.GetByNameAndGroupWithoutLk(ctx, name, group)
+	var gradeClasses []entities.GradeClass
+	if err == nil {
+		for _, class := range *classes {
+			var gradeClass entities.GradeClass
+			gradeClass.Id = class.Id
+			gradeClass.Name = class.Name
+			gradeClass.Date = class.Date
+			gradeClass.Type = class.Type
+			gradeClasses = append(gradeClasses, gradeClass)
+		}
+		sort.Slice(gradeClasses, func(i, j int) bool {
+			return gradeClasses[i].Date < gradeClasses[j].Date
+		})
+	}
+
+	return &gradeClasses, err
+}
+
 func (s *ClassService) GetByAuditory(c context.Context, auditory string) (*[]entities.Class, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()

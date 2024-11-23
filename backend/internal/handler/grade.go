@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"net/url"
 	"server/internal/entities"
@@ -80,7 +79,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	classes, err := h.services.ClassService.GetByNameAndGroup(c.Context(), decodedName, decodedGroup)
+	classes, err := h.services.ClassService.GetByNameAndGroupWithoutLk(c.Context(), decodedName, decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -88,14 +87,18 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	for _, class := range *classes {
+	for i := range *classes {
+		if (*classes)[i].Grades == nil {
+			(*classes)[i].Grades = []entities.Grade{}
+		}
+
 		for _, member := range *groupMember {
-			grade, _ := h.services.GradeService.GetByUserIdAndClassId(c.Context(), member.ID, class.Id)
+			grade, _ := h.services.GradeService.GetByUserIdAndClassId(c.Context(), member.ID, (*classes)[i].Id)
 			if grade != nil {
-				class.Grades = append(class.Grades, *grade)
-				fmt.Println(class.Grades)
+				(*classes)[i].Grades = append((*classes)[i].Grades, *grade)
 			}
 		}
 	}
+
 	return c.Status(fiber.StatusOK).JSON(entities.GetGradesBySubject{GradeClass: *classes, GroupMember: *groupMember})
 }
