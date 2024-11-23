@@ -78,14 +78,6 @@ func (h *Handler) Router() *fiber.App {
 	f.Put("/class", h.UpdateClass)
 	f.Delete("/class/:id", h.DeleteClass)
 
-	f.Get("/schedule/group/:group", h.GetScheduleByGroup)
-	f.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
-	f.Get("/schedule/name/:name", h.GetScheduleByName)
-
-	f.Get("/schedule/search/group", h.GetScheduleSearchGroup)
-	f.Get("/schedule/search/teacher", h.GetScheduleSearchTeacher)
-	f.Get("/schedule/search/name", h.GetScheduleSearchName)
-
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {
 		return pkg.WithJWTAuth(c, h.conf.Application.SigningKey)

@@ -22,7 +22,7 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	exists, err := s.repository.Exists(ctx, request.Login, request.Email)
+	exists, err := s.repository.Exists(ctx, request.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,6 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 	}
 
 	u := &entities.User{
-		Login:    request.Login,
 		Email:    request.Email,
 		Password: hashedPassword,
 	}
@@ -75,7 +74,7 @@ func (s *UserService) Login(c context.Context, request *entities.LoginUserReques
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	u, err := s.repository.GetByLogin(ctx, request.Login)
+	u, err := s.repository.GetByEmail(ctx, request.Email)
 	if err != nil {
 		return &entities.LoginUserResponse{}, errors.New("wrong data")
 	}

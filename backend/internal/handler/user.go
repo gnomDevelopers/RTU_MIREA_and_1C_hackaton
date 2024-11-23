@@ -40,6 +40,17 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 
 }
 
+// Login
+// @Tags         authentication
+// @Summary      User login
+// @Description  Authenticates a user and sets access and refresh tokens as cookies.
+// @Accept       json
+// @Produce      json
+// @Param        data body entities.LoginUserRequest true "User login credentials"
+// @Success      200 {object} entities.LoginUserResponse
+// @Failure      400 {object} fiber.Map "Invalid request payload"
+// @Failure      500 {object} fiber.Map "Internal server error"
+// @Router       /login [post]
 func (h *Handler) Login(c *fiber.Ctx) error {
 	var user entities.LoginUserRequest
 	if err := c.BodyParser(&user); err != nil {
@@ -51,7 +62,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	u, err := h.services.UserService.Login(c.Context(), &user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 
@@ -76,5 +87,4 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	})
 
 	return c.Status(fiber.StatusOK).JSON(u)
-
 }

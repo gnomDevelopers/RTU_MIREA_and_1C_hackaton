@@ -15,5 +15,7 @@ func NewRepository(db *sql.DB) *repository.Repository {
 		Class:        NewClassRepository(db),
 		Audience:     NewAudienceRepository(db),
 		UserSchedule: NewMyScheduleRepository(db),
+		Department:   NewDepartmentRepository(db),
+		Faculty:      NewFacultyRepository(db),
 	}
 }
