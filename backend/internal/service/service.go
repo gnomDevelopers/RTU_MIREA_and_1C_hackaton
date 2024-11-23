@@ -40,12 +40,17 @@ type Campus interface {
 	Delete(context.Context, int) error
 }
 
+type Group interface {
+	GetByUserID(context.Context, int) (*entities.Group, error)
+}
+
 // TODO Дополнить для других сервисов
 type Service struct {
 	UserService         *UserService
 	UserData            *UserDataService
 	UniversityService   *UniversityService
 	CampusService       *CampusService
+	GroupService        *GroupService
 	AudienceService     *AudienceService
 	ClassService        *ClassService
 	UserScheduleService *UserScheduleService
@@ -60,6 +65,7 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		CampusService:       NewCampusService(repositories.Campus),
 		ClassService:        NewClassService(repositories.Class),
 		AudienceService:     NewAudienceService(repositories.Audience),
+		GroupService:        NewGroupService(repositories.Group),
 		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
 	}
 }

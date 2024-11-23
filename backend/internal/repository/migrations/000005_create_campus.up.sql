@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS campus (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    university VARCHAR NOT NULL,
+    address VARCHAR NOT NULL
+);
