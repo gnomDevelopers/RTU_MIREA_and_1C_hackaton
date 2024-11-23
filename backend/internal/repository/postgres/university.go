@@ -55,7 +55,7 @@ func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*en
 	query := `
 		SELECT university.name AS university_name FROM user_data
 		JOIN university ON user_data.university_id = university.id
-		WHERE user_data.id = 5;
+		WHERE user_data.id = $1;
 	`
 	university := &entities.University{}
 
