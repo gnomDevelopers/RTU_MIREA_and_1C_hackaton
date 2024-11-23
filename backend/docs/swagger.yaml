@@ -159,7 +159,7 @@ definitions:
     type: object
   entities.CreateGradeRequest:
     properties:
-      class_name:
+      class_id:
         type: integer
       user_id:
         type: integer
@@ -1467,6 +1467,25 @@ paths:
       tags:
       - class
   /login:
+    get:
+      consumes:
+      - application/json
+      description: Verifies the validity of the access token stored in cookies and
+        retrieves the associated user ID.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT is valid, user is authenticated
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized, invalid or missing JWT
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Check user authentication
+      tags:
+      - authentication
     post:
       consumes:
       - application/json
@@ -1494,6 +1513,26 @@ paths:
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
       summary: User login
+      tags:
+      - authentication
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out the user by clearing access and refresh tokens stored
+        in cookies.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful message
+          schema:
+            $ref: '#/definitions/entities.LoginUserResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.LoginUserResponse'
+      summary: User logout
       tags:
       - authentication
   /student/add:
