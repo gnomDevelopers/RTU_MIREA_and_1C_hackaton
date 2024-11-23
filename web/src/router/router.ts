@@ -64,5 +64,11 @@ export const router = createRouter({
       component: () => import('@/pages/AttendancePage.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      name: 'AchievementsPage',
+      path: '/achievements',
+      component: () => import('@/pages/AchievementsPage.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 });
