@@ -87,6 +87,13 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	type scoreStruct struct {
+		sum   int
+		count int
+	}
+
+	memberScore := make(map[int]scoreStruct)
+
 	for i := range *classes {
 		if (*classes)[i].Grades == nil {
 			(*classes)[i].Grades = []entities.Grade{}
@@ -96,9 +103,29 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 			grade, _ := h.services.GradeService.GetByUserIdAndClassId(c.Context(), member.ID, (*classes)[i].Id)
 			if grade != nil {
 				(*classes)[i].Grades = append((*classes)[i].Grades, *grade)
+				if _, exists := memberScore[member.ID]; exists {
+					score := memberScore[member.ID]
+					score.sum += grade.Value
+					score.count++
+					memberScore[member.ID] = score
+				} else {
+					memberScore[member.ID] = scoreStruct{sum: grade.Value, count: 1}
+				}
 			}
 		}
 	}
 
-	return c.Status(fiber.StatusOK).JSON(entities.GetGradesBySubject{GradeClass: *classes, GroupMember: *groupMember})
+	var getGradesBySubject entities.GetGradesBySubject
+	getGradesBySubject.GradeClass = *classes
+	getGradesBySubject.GroupMember = *groupMember
+
+	for _, member := range *groupMember {
+		var averageUsersScore entities.AverageUsersScore
+		score := memberScore[member.ID]
+		averageUsersScore.AverageScore = float64(score.sum) / float64(score.count)
+		averageUsersScore.UserId = member.ID
+		getGradesBySubject.AverageUsersScore = append(getGradesBySubject.AverageUsersScore, averageUsersScore)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(getGradesBySubject)
 }
