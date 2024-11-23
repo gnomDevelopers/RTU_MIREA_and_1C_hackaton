@@ -51,3 +51,11 @@ type ScheduleTeachers struct {
 type ScheduleNames struct {
 	Names []string `json:"names"`
 }
+
+type GradeClass struct {
+	Id     int     `json:"id"`
+	Name   string  `json:"name"`
+	Type   string  `json:"type"`
+	Date   string  `json:"date"`
+	Grades []Grade `json:"grades"`
+}

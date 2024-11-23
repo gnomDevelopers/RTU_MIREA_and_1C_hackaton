@@ -176,6 +176,35 @@ func (r *ClassRepository) GetByName(ctx context.Context, name, university string
 	return &classes, nil
 }
 
+func (r *ClassRepository) GetByNameAndGroup(ctx context.Context, name, group string) (*[]entities.Class, error) {
+	if name == "" {
+		return nil, errors.New("name is empty")
+	}
+
+	var classes []entities.Class
+
+	query := `SELECT * FROM class WHERE $1=name AND $2=ANY(group_names);`
+	rows, err := r.db.QueryContext(ctx, query, name, group)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(name, group)
+	for rows.Next() {
+		var class entities.Class
+		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)
+		if err != nil {
+			return nil, err
+		}
+		classes = append(classes, class)
+	}
+
+	if len(classes) == 0 {
+		return nil, errors.New("there are no classes with such parameters")
+	}
+
+	return &classes, nil
+}
+
 func (r *ClassRepository) GetByAuditory(ctx context.Context, auditory string) (*[]entities.Class, error) {
 	if auditory == "" {
 		return nil, errors.New("")
@@ -239,7 +268,7 @@ func (r *ClassRepository) SearchGroups(ctx context.Context, university string) (
 	if len(uniqueGroupNames) == 0 {
 		return nil, errors.New("there are no groups")
 	}
-	fmt.Println(groupMap, len(uniqueGroupNames))
+
 	return uniqueGroupNames, nil
 }
 
@@ -285,6 +314,40 @@ func (r *ClassRepository) SearchNames(ctx context.Context, university string) ([
 	`
 
 	rows, err := r.db.QueryContext(ctx, query, university)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	nameMap := make(map[string]struct{})
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		nameMap[name] = struct{}{}
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	uniqueNames := make([]string, 0, len(nameMap))
+	for name := range nameMap {
+		uniqueNames = append(uniqueNames, name)
+	}
+
+	return uniqueNames, nil
+}
+
+func (r *ClassRepository) SearchNamesWithGroup(ctx context.Context, group string) ([]string, error) {
+	query := `
+		SELECT name
+		FROM class
+		WHERE $1=ANY(group_names)
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, group)
 	if err != nil {
 		return nil, err
 	}

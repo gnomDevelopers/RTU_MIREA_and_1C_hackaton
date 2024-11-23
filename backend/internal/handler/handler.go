@@ -93,6 +93,10 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
 	authGroup.Get("/schedule/name/:name", h.GetScheduleByName)
 
+	authGroup.Get("/schedule/group_subjects", h.GetGroupSubject)
+	authGroup.Post("/grade", h.CreateGrade)
+	authGroup.Get("/grade/:group/:name", h.GetGradesBySubject)
+
 	authGroup.Get("/schedule/search/teacher", h.GetScheduleSearchTeacher)
 	authGroup.Get("/schedule/search/name", h.GetScheduleSearchName)
 	authGroup.Get("/schedule/search/group", h.GetScheduleSearchGroup)

@@ -44,7 +44,6 @@ type Group interface {
 	GetByUserID(context.Context, int) (*entities.Group, error)
 }
 
-// TODO Дополнить для других сервисов
 type Service struct {
 	UserService         *UserService
 	UserData            *UserDataService
@@ -54,6 +53,7 @@ type Service struct {
 	AudienceService     *AudienceService
 	ClassService        *ClassService
 	UserScheduleService *UserScheduleService
+	GradeService        *GradeService
 	conf                *config.Config
 }
 
@@ -67,5 +67,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		AudienceService:     NewAudienceService(repositories.Audience),
 		GroupService:        NewGroupService(repositories.Group),
 		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
+		GradeService:        NewGradeService(repositories.Grade),
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"server/internal/entities"
 	"server/internal/repository"
+	"sort"
 	"strings"
 	"time"
 )
@@ -62,6 +63,29 @@ func (s *ClassService) GetByName(c context.Context, name, university string) (*[
 	return classes, err
 }
 
+func (s *ClassService) GetByNameAndGroup(c context.Context, name, group string) (*[]entities.GradeClass, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	classes, err := s.repository.GetByNameAndGroup(ctx, name, group)
+	var gradeClasses []entities.GradeClass
+	if err == nil {
+		for _, class := range *classes {
+			var gradeClass entities.GradeClass
+			gradeClass.Id = class.Id
+			gradeClass.Name = class.Name
+			gradeClass.Date = class.Date
+			gradeClass.Type = class.Type
+			gradeClasses = append(gradeClasses, gradeClass)
+		}
+		sort.Slice(gradeClasses, func(i, j int) bool {
+			return gradeClasses[i].Date < gradeClasses[j].Date
+		})
+	}
+
+	return &gradeClasses, err
+}
+
 func (s *ClassService) GetByAuditory(c context.Context, auditory string) (*[]entities.Class, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
@@ -92,6 +116,14 @@ func (s *ClassService) SearchNames(c context.Context, university string) ([]stri
 
 	groups, err := s.repository.SearchNames(ctx, university)
 	return groups, err
+}
+
+func (s *ClassService) SearchNamesWithGroup(c context.Context, group string) ([]string, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	names, err := s.repository.SearchNamesWithGroup(ctx, group)
+	return names, err
 }
 
 func (s *ClassService) Update(c context.Context, class *entities.Class) error {
