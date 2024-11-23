@@ -41,8 +41,8 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/swagger/*", swagger.HandlerDefault)
 
 	f.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).SendString("Hello world")
-	})
+		return c.Status(fiber.StatusOK).SendString("ok")
+	}) // healthcheck для докера
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
@@ -52,6 +52,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/schedule/group/{group}", h.GetScheduleByGroup)
 	f.Get("/schedule/teacher/{teacher}", h.GetScheduleByTeacher)
 	f.Get("/schedule/name/{name}", h.GetScheduleByName)
+	f.Post("/schedule/parse", h.ParseSchedule)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)
