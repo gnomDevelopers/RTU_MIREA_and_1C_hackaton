@@ -1,15 +1,16 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/swagger"
-	"github.com/rs/zerolog"
 	_ "server/docs"
 	"server/internal/config"
 	"server/internal/log"
 	"server/internal/service"
 	"server/pkg"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
+	"github.com/rs/zerolog"
 )
 
 type Handler struct {
@@ -39,6 +40,10 @@ func (h *Handler) Router() *fiber.App {
 	f.Use(log.RequestLogger(h.logger))
 
 	f.Get("/swagger/*", swagger.HandlerDefault)
+
+	f.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).SendString("ok")
+	}) // healthcheck для докера
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
