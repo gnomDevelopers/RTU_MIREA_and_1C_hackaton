@@ -1,45 +1,9 @@
 basePath: /
 definitions:
-  entities.AddUserDataRequest:
-    properties:
-      department:
-        type: string
-      educational_direction:
-        type: string
-      faculty:
-        type: string
-      father_name:
-        type: string
-      first_name:
-        type: string
-      group:
-        type: string
-      id:
-        type: integer
-      last_name:
-        type: string
-      permission_id:
-        type: integer
-      university:
-        type: string
-    type: object
-  entities.AddUserDataResponse:
-    properties:
-      email:
-        type: string
-      father_name:
-        type: string
-      first_name:
-        type: string
-      last_name:
-        type: string
-      password:
-        type: string
-    type: object
   entities.Audience:
     properties:
-      campus:
-        type: string
+      campus_id:
+        type: integer
       capacity:
         type: integer
       id:
@@ -59,13 +23,15 @@ definitions:
         type: integer
       name:
         type: string
-      university:
-        type: string
+      university_id:
+        type: integer
     type: object
   entities.Class:
     properties:
-      auditory:
-        type: string
+      academic_discipline_id:
+        type: integer
+      auditory_id:
+        type: integer
       date:
         type: string
       group_names:
@@ -93,7 +59,7 @@ definitions:
     type: object
   entities.CreateAudiencesRequest:
     properties:
-      campus:
+      campus_id:
         type: integer
       capacity:
         type: integer
@@ -115,7 +81,7 @@ definitions:
         type: string
       name:
         type: string
-      university:
+      university_id:
         type: integer
     type: object
   entities.CreateCampusesResponse:
@@ -125,8 +91,10 @@ definitions:
     type: object
   entities.CreateClassesRequest:
     properties:
-      auditory:
-        type: string
+      academic_discipline_id:
+        type: integer
+      auditory_id:
+        type: integer
       date:
         type: string
       group_names:
@@ -1199,43 +1167,6 @@ paths:
       summary: Get schedule by teacher
       tags:
       - schedule
-  /student/add:
-    post:
-      consumes:
-      - application/json
-      description: Creates multiple users with their associated data (university,
-        faculty, department, group).
-      parameters:
-      - description: Array of user data to be added
-        in: body
-        name: data
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.AddUserDataRequest'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              items:
-                $ref: '#/definitions/entities.AddUserDataResponse'
-              type: array
-            type: array
-        "400":
-          description: Invalid request payload
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Add user data
-      tags:
-      - user data
   /university:
     post:
       consumes:

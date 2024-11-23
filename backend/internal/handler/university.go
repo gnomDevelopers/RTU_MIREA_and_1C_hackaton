@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"net/url"
 	"server/internal/entities"
 	"server/internal/log"
 	"strconv"
@@ -82,9 +83,13 @@ func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	name := c.Params("name")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid university name")
+	}
 
 	h.logger.Debug().Msg("call h.services.UniversityService.GetByName")
-	university, err := h.services.UniversityService.GetByName(c.Context(), name)
+	university, err := h.services.UniversityService.GetByName(c.Context(), decodedName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

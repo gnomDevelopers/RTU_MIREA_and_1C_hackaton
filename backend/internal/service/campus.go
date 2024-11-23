@@ -51,12 +51,12 @@ func (s *CampusService) GetByName(c context.Context, name string) (*entities.Cam
 	return campus, err
 }
 
-func (s *CampusService) GetByUniversityId(c context.Context, universityId int) (*entities.Campus, error) {
+func (s *CampusService) GetByUniversity(c context.Context, university string) (*[]entities.Campus, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	campus, err := s.repository.GetByUniversityId(ctx, universityId)
-	return campus, err
+	campuses, err := s.repository.GetByUniversity(ctx, university)
+	return campuses, err
 }
 
 func (s *CampusService) GetAll(c context.Context) (*[]entities.Campus, error) {

@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"net/url"
 	"server/internal/entities"
 	"server/internal/log"
 	"strconv"
@@ -112,8 +113,12 @@ func (h *Handler) GetByIdCampus(c *fiber.Ctx) error {
 func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	name := c.Params("name")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid campus name")
+	}
 
-	campus, err := h.services.CampusService.GetByName(c.Context(), name)
+	campus, err := h.services.CampusService.GetByName(c.Context(), decodedName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -141,8 +146,12 @@ func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	address := c.Params("address")
-
-	campus, err := h.services.CampusService.GetByAddress(c.Context(), address)
+	decodedAddress, err := url.QueryUnescape(address)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid address")
+	}
+	fmt.Println(decodedAddress)
+	campus, err := h.services.CampusService.GetByAddress(c.Context(), decodedAddress)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -156,23 +165,26 @@ func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(campus)
 }
 
-// GetByUniversityIdCampus
+// GetByUniversityCampuses
 // @Tags campus
-// @Summary      Get campus by university_id
+// @Summary      Get campus by university
 // @Accept       json
 // @Produce      json
-// @Param university_id path string true "campus university_id"
-// @Success 200 {object} entities.Campus
+// @Param university path string true "campus university"
+// @Success 200 {object} []entities.Campus
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /campus/university_id/{id} [get]
-func (h *Handler) GetByUniversityIdCampus(c *fiber.Ctx) error {
+// @Router       /campus/university/{university} [get]
+func (h *Handler) GetByUniversityCampuses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
-	universityIdStr := c.Params("id")
-	universityId, err := strconv.Atoi(universityIdStr)
+	name := c.Params("university")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid university name")
+	}
 
-	campus, err := h.services.CampusService.GetByUniversityId(c.Context(), universityId)
+	campuses, err := h.services.CampusService.GetByUniversity(c.Context(), decodedName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -183,7 +195,7 @@ func (h *Handler) GetByUniversityIdCampus(c *fiber.Ctx) error {
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(campus)
+	return c.Status(fiber.StatusOK).JSON(campuses)
 }
 
 // UpdateCampus

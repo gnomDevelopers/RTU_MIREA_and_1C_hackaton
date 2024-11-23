@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS class (
     weekday INTEGER,
     week INTEGER,
     time_start VARCHAR,
-    time_end VARCHAR
+    time_end VARCHAR,
+    university VARCHAR
 );

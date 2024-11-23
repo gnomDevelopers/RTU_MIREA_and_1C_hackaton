@@ -39,26 +39,29 @@ func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class)
 		var exists bool
 		checkQuery := `SELECT EXISTS (
                     SELECT 1 FROM class 
-                    WHERE date = $1 AND weekday = $2 AND week = $3 AND time_start = $4 AND time_end = $5
+                    WHERE date = $1 AND weekday = $2 AND week = $3 AND time_start = $4 AND time_end = $5 AND auditory = $6
                 );`
-
-		err = tx.QueryRowContext(ctx, checkQuery, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&exists)
+		err = tx.QueryRowContext(ctx, checkQuery, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Auditory).Scan(&exists)
 		if err != nil {
 			return []int{}, err
 		}
 
 		// Если запись не существует, выполняем вставку
 		if !exists {
-			insertQuery := `INSERT INTO class (name, group_names, teacher_names, type, auditory, date, weekday, week, time_start, time_end) 
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+			insertQuery := `INSERT INTO class (name, group_names, teacher_names, type, auditory, date, weekday, week, time_start, time_end, university) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                     RETURNING id;`
 
-			err = tx.QueryRowContext(ctx, insertQuery, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd).Scan(&id)
+			err = tx.QueryRowContext(ctx, insertQuery, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.UniversityStr).Scan(&id)
 			if err != nil {
 				return []int{}, err
 			}
 			ids = append(ids, id)
 		} else {
+			if class.Type == "ЛК" || class.Auditory == "Дистанционно" {
+				continue
+			}
+			err = tx.Rollback()
 			return []int{}, errors.New("class with such fields already exists")
 		}
 	}
@@ -90,19 +93,25 @@ func (r *ClassRepository) GetByGroupName(ctx context.Context, groupName string) 
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE $1=ANY(group_names)`
-	rows, err := r.db.QueryContext(ctx, query, groupName)
+
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE $1=ANY(group_names) AND date < $2`
+	rows, err := r.db.QueryContext(ctx, query, groupName, dateLimit)
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
 		var class entities.Class
-		err = rows.Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)
 		if err != nil {
 			return nil, err
 		}
 		classes = append(classes, class)
+	}
+
+	if len(classes) == 0 {
+		return nil, errors.New("there are no classes with such parameters")
 	}
 
 	return &classes, nil
@@ -114,46 +123,187 @@ func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName stri
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE $1=ANY(teacher_names)`
-	rows, err := r.db.QueryContext(ctx, query, teacherName)
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE $1=ANY(teacher_names) AND date < $2`
+	rows, err := r.db.QueryContext(ctx, query, teacherName, dateLimit)
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
 		var class entities.Class
-		err = rows.Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)
 		if err != nil {
 			return nil, err
 		}
 		classes = append(classes, class)
+	}
+
+	if len(classes) == 0 {
+		return nil, errors.New("there are no classes with such parameters")
 	}
 
 	return &classes, nil
 }
 
-func (r *ClassRepository) GetByAuditoryId(ctx context.Context, auditoryId int) (*[]entities.Class, error) {
-	if auditoryId == 0 {
-		return nil, errors.New("")
+func (r *ClassRepository) GetByName(ctx context.Context, name string) (*[]entities.Class, error) {
+	if name == "" {
+		return nil, errors.New("name is empty")
 	}
 
 	var classes []entities.Class
-	query := `SELECT * FROM class WHERE auditory=$1`
-	rows, err := r.db.QueryContext(ctx, query, auditoryId)
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ' AND date < $2;`
+	rows, err := r.db.QueryContext(ctx, query, name, dateLimit)
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
 		var class entities.Class
-		err = rows.Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)
 		if err != nil {
 			return nil, err
 		}
 		classes = append(classes, class)
 	}
 
+	if len(classes) == 0 {
+		return nil, errors.New("there are no classes with such parameters")
+	}
+
 	return &classes, nil
+}
+
+func (r *ClassRepository) GetByAuditory(ctx context.Context, auditory string) (*[]entities.Class, error) {
+	if auditory == "" {
+		return nil, errors.New("")
+	}
+
+	var classes []entities.Class
+	dateLimit := "09-08-24"
+	query := `SELECT * FROM class WHERE auditory=$1 AND date < $2;`
+	rows, err := r.db.QueryContext(ctx, query, auditory, dateLimit)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var class entities.Class
+		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+		if err != nil {
+			return nil, err
+		}
+		classes = append(classes, class)
+	}
+
+	if len(classes) == 0 {
+		return nil, errors.New("there are no classes with such parameters")
+	}
+
+	return &classes, nil
+}
+
+func (r *ClassRepository) SearchGroups(ctx context.Context, university string) ([]string, error) {
+	query := `
+		SELECT unnest(group_names)
+		FROM class
+		WHERE university = $1
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, university)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	groupMap := make(map[string]struct{})
+	for rows.Next() {
+		var groupName string
+		if err := rows.Scan(&groupName); err != nil {
+			return nil, err
+		}
+		groupMap[groupName] = struct{}{}
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	uniqueGroupNames := make([]string, 0, len(groupMap))
+	for groupName := range groupMap {
+		uniqueGroupNames = append(uniqueGroupNames, groupName)
+	}
+
+	return uniqueGroupNames, nil
+}
+
+func (r *ClassRepository) SearchTeachers(ctx context.Context, university string) ([]string, error) {
+	query := `
+		SELECT unnest(teacher_names)
+		FROM class
+		WHERE university = $1
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, university)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	teacherMap := make(map[string]struct{})
+	for rows.Next() {
+		var teacherName string
+		if err := rows.Scan(&teacherName); err != nil {
+			return nil, err
+		}
+		teacherMap[teacherName] = struct{}{}
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	uniqueTeacherNames := make([]string, 0, len(teacherMap))
+	for groupName := range teacherMap {
+		uniqueTeacherNames = append(uniqueTeacherNames, groupName)
+	}
+
+	return uniqueTeacherNames, nil
+}
+
+func (r *ClassRepository) SearchNames(ctx context.Context, university string) ([]string, error) {
+	query := `
+		SELECT name
+		FROM class
+		WHERE university = $1 AND type='ФАКУЛЬТАТИВ'
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, university)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	nameMap := make(map[string]struct{})
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		nameMap[name] = struct{}{}
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	uniqueNames := make([]string, 0, len(nameMap))
+	for name := range nameMap {
+		uniqueNames = append(uniqueNames, name)
+	}
+
+	return uniqueNames, nil
 }
 
 func (r *ClassRepository) Update(ctx context.Context, class *entities.Class) error {
@@ -163,7 +313,7 @@ func (r *ClassRepository) Update(ctx context.Context, class *entities.Class) err
 
 	query := `UPDATE class SET name=$1, group_names=$2, teacher_names=$3, type=$4, auditory=$5, date=$6, weekday=$7, week=$8, time_start=$9, time_end=$10 WHERE id=$11`
 
-	_, err := r.db.ExecContext(ctx, query, class.Name, class.GroupNames, class.TeacherNames, class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Id)
+	_, err := r.db.ExecContext(ctx, query, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Id)
 	if err != nil {
 		return err
 	}

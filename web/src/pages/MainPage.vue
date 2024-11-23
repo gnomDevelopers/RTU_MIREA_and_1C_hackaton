@@ -4,23 +4,31 @@
       <div class="text-4xl text-center us:text-left">Здравствуйте, Генадий{{ userInfoStore.first_name }} Абрамович{{ userInfoStore.father_name }}!</div>
       <div class="flex flex-col gap-y-4 pb-4">
 
-        <MainTableItem title="Создание учетных записей" text="Создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента">
+        <MainTableItem @clicked="$router.push({name: 'AccountsPage'})" title="Создание учетных записей" text="Создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента">
           <IconAccounts/>
         </MainTableItem>
 
-        <MainTableItem title="Расписание" text="Посмотреть расписание для своей или любой другой группы">
+        <MainTableItem @clicked="$router.push({name: 'SchedulePage'})" title="Расписание" text="Посмотреть расписание для своей или любой другой группы">
           <IconShedule/>
         </MainTableItem>
 
-        <MainTableItem title="Успеваемость" text="Посмотреть успеваемость студентов">
+        <MainTableItem @clicked="$router.push({name: 'PerformancePage'})" title="Успеваемость" text="Посмотреть успеваемость студентов">
           <IconPerformance/>
         </MainTableItem>
 
-        <MainTableItem title="Группы" text="Заполнение учебных групп">
+        <MainTableItem @clicked="$router.push({name: 'GroupCorrectPage'})" title="Группы" text="Заполнение учебных групп">
           <IconGroups/>
         </MainTableItem>
 
         <MainTableItem title="Посещаемость" text="Просмотр, добавление, редактирование посещаемости">
+          <IconAttendance/>
+        </MainTableItem>
+
+        <MainTableItem title="WorkVUZ+" text="Удобный сервис для интеграции HR-специалистов и студентов, который позволяет искать и откликаться на вакансии">
+          <IconAttendance/>
+        </MainTableItem>
+
+        <MainTableItem title="EventVUZ+" text="Удобный сервис для организации и просмотра доступных внутривузовских мероприятий">
           <IconAttendance/>
         </MainTableItem>
 

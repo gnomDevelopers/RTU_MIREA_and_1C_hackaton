@@ -43,18 +43,14 @@
         </Transition>
         
         <Transition name="slowRemove">
-          <div v-if="scheduleStore.scheduleType === 1" class="flex flex-row w-[314px] mb:w-auto rounded-lg header-shadow bg-white">
-            <input 
-              class="p-2 outline-none min-w-0 max-w-none flex-grow mb:w-96 bg-transparent" 
-              type="text" 
-              :placeholder="getScheduleTargetText"
-              v-model="searchFilter">
-            <div 
-              class="w-10 h-10 flex flex-col justify-center items-center cursor-pointer rounded-r-lg btn"
-              @click="filterUserList">
-              <img class="w-7 h-7" src="../assets/icons/icon-search.svg"/>
-            </div>
-          </div>
+          <SearchList 
+            v-if="scheduleStore.scheduleType === 1"
+            title="" 
+            :placeholder="getScheduleTargetText"
+            :searchList="getScheduleTargetList" 
+            :itemComponent="getListItemComponent"
+            class="h-80"
+          />
         </Transition>
         
         <div class="flex flex-col items-center gap-y-2">
@@ -85,19 +81,26 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
-import { SCHEDULE_TARGET_TEXT } from '@/helpers/constants';
+import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import ScheduleItem from '@/shared/scheduleItem.vue';
+import SearchList from '@/entities/searchList.vue';
+import ScheduleSearchListItem from '@/entities/scheduleSearchListItem.vue';
 
 export default {
   components:{
     ScheduleItem,
     CalendarTable,
+    SearchList,
+    ScheduleSearchListItem,
   },
   data(){
     return{
       searchFilter: '' as string,
+      groupsList: [] as ISearchList[],
+      teachersList: [] as ISearchList[],
+      facultyList: [] as ISearchList[],
     }
   },
   computed:{
@@ -105,10 +108,32 @@ export default {
 
     getScheduleTargetText(){
       return SCHEDULE_TARGET_TEXT[this.scheduleStore.scheduleTarget];
+    },
+    getScheduleTargetList(){
+      if (this.scheduleStore.scheduleTarget === 0) return this.groupsList;
+      else if(this.scheduleStore.scheduleTarget === 1) return this.teachersList;
+      else if(this.scheduleStore.scheduleTarget === 2) return this.facultyList;
+      return [] as ISearchList[];
+    },
+    getListItemComponent(){
+      return ScheduleSearchListItem;
     }
   },
   mounted(){
     this.scheduleStore.loadScheduleTable();
+
+    for(let i = 1; i < 20; i++){
+      const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};
+      this.groupsList.push({id: data.id, search_field: data.name, data: data});
+    }
+    for(let i = 1; i < 20; i++){
+      const data: IItemList = {id: i, name: `Преподов${i} Препод${i} Преподович${i}`};
+      this.teachersList.push({id: data.id, search_field: data.name, data: data});
+    }
+    for(let i = 1; i < 20; i++){
+      const data: IItemList = {id: i, name: `Мобильная разработка${i}`};
+      this.facultyList.push({id: data.id, search_field: data.name, data: data});
+    }
   },
   methods:{
     filterUserList(){

@@ -36,11 +36,6 @@ func (h *Handler) Router() *fiber.App {
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
 		AllowMethods:     "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
-
-	f.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).SendString("Hello world")
-	})
-
 	f.Use(log.RequestLogger(h.logger))
 
 	f.Get("/swagger/*", swagger.HandlerDefault)
@@ -82,8 +77,6 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/class", h.CreateClasses)
 	f.Put("/class", h.UpdateClass)
 	f.Delete("/class/:id", h.DeleteClass)
-
-	f.Post("/student/add", h.CreateStudent)
 
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {

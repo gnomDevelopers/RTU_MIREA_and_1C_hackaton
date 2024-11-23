@@ -38,7 +38,7 @@ func (r *CampusRepository) Create(ctx context.Context, campuses *[]entities.Camp
 		}
 
 		var id int
-		query = `INSERT INTO campus (name, university_id, address) VALUES ($1, $2, $3) RETURNING id`
+		query = `INSERT INTO campus (name, university, address) VALUES ($1, $2, $3) RETURNING id`
 
 		err = tx.QueryRowContext(ctx, query, campus.Name, campus.University, campus.Address).Scan(&id)
 		if err != nil {
@@ -85,14 +85,28 @@ func (r *CampusRepository) GetByName(ctx context.Context, name string) (*entitie
 	return &campus, nil
 }
 
-func (r *CampusRepository) GetByUniversityId(ctx context.Context, universityId int) (*entities.Campus, error) {
-	var campus entities.Campus
-	query := `SELECT * FROM campus WHERE university_id = $1`
-	err := r.db.QueryRowContext(ctx, query, universityId).Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
+func (r *CampusRepository) GetByUniversity(ctx context.Context, university string) (*[]entities.Campus, error) {
+	var campuses []entities.Campus
+	query := `SELECT * FROM campus WHERE university = $1`
+	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
 		return nil, err
 	}
-	return &campus, nil
+
+	for rows.Next() {
+		var campus entities.Campus
+		err = rows.Scan(&campus.Id, &campus.Name, &campus.University, &campus.Address)
+		if err != nil {
+			return nil, err
+		}
+		campuses = append(campuses, campus)
+	}
+
+	if len(campuses) == 0 {
+		return nil, errors.New("there are no campuses with such parameters")
+	}
+
+	return &campuses, nil
 }
 
 func (r *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, error) {
@@ -112,11 +126,15 @@ func (r *CampusRepository) GetAll(ctx context.Context) (*[]entities.Campus, erro
 		campuses = append(campuses, campus)
 	}
 
+	if len(campuses) == 0 {
+		return nil, errors.New("there are no campuses")
+	}
+
 	return &campuses, nil
 }
 
 func (r *CampusRepository) Update(ctx context.Context, campus *entities.Campus) error {
-	query := `UPDATE campus SET name = $1, university_id = $2, address = $3 WHERE id = $4`
+	query := `UPDATE campus SET name = $1, university = $2, address = $3 WHERE id = $4`
 	err := r.db.QueryRowContext(ctx, query, campus.Name, campus.University, campus.Address, campus.Id).Err()
 	if err != nil {
 		return err

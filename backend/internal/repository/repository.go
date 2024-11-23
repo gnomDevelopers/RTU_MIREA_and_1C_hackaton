@@ -31,7 +31,7 @@ type CampusRepository interface {
 	GetById(context.Context, int) (*entities.Campus, error)
 	GetByAddress(context.Context, string) (*entities.Campus, error)
 	GetByName(context.Context, string) (*entities.Campus, error)
-	GetByUniversityId(context.Context, int) (*entities.Campus, error)
+	GetByUniversity(context.Context, string) (*[]entities.Campus, error)
 	GetAll(context.Context) (*[]entities.Campus, error)
 	Update(context.Context, *entities.Campus) error
 	Delete(context.Context, int) error
@@ -52,8 +52,12 @@ type ClassRepository interface {
 	Create(context.Context, *[]entities.Class) ([]int, error)
 	GetById(context.Context, int) (*entities.Class, error)
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
+	GetByName(context.Context, string) (*[]entities.Class, error)
 	GetByTeacherName(context.Context, string) (*[]entities.Class, error)
-	GetByAuditoryId(context.Context, int) (*[]entities.Class, error)
+	GetByAuditory(context.Context, string) (*[]entities.Class, error)
+	SearchGroups(context.Context, string) ([]string, error)
+	SearchTeachers(context.Context, string) ([]string, error)
+	SearchNames(context.Context, string) ([]string, error)
 	Update(context.Context, *entities.Class) error
 	Delete(context.Context, int) error
 }

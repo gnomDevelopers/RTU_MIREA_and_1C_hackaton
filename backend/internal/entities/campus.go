@@ -9,7 +9,7 @@ type Campus struct {
 
 type CreateCampusesRequest struct {
 	Name       string `json:"name"`
-	University int    `json:"university"`
+	University string `json:"university"`
 	Address    string `json:"address"`
 }
 
