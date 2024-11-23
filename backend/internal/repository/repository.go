@@ -7,8 +7,8 @@ import (
 
 type UserRepository interface {
 	GetById(context.Context, int64) (*entities.User, error)
-	GetByLogin(context.Context, string) (*entities.User, error)
-	Exists(context.Context, string, string) (bool, error)
+	GetByEmail(context.Context, string) (*entities.User, error)
+	Exists(context.Context, string) (bool, error)
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
 }
 
@@ -74,7 +74,7 @@ type UserScheduleRepository interface {
 }
 
 type UserDataRepository interface {
-	Add(context.Context, *entities.UserData) (int, error)
+	AddStudent(context.Context, *entities.UserData) (int, error)
 }
 
 type FacultyRepository interface {

@@ -14,6 +14,9 @@ type User interface {
 
 type UserData interface {
 	Add(context.Context, *[]entities.AddUserDataRequest) error
+	getOrCreateUniversity(ctx context.Context, name string) (int, error)
+	getOrCreateFaculty(ctx context.Context, name string) (int, error)
+	getOrCreateDepartment(ctx context.Context, name string) (int, error)
 }
 
 type University interface {

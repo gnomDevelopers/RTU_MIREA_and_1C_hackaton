@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"log"
 	"server/internal/entities"
 	"server/internal/repository"
 	"server/util"
@@ -40,62 +42,45 @@ func NewUserDataService(userRepo repository.UserRepository, userDataRepo reposit
 	}
 }
 
-func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDataRequest) error {
+func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
+	var responses []entities.AddUserDataResponse
 	for _, request := range *requests {
 		fullName := fmt.Sprintf("%s %s %s", request.LastName, request.FirstName, request.FatherName)
-
+		generatedEmail := util.GenerateLogin(fullName)
 		password := util.GenerateTemporaryPassword(15)
 		hashedPassword, err := util.HashPassword(password)
 		if err != nil {
-			return err
+			return nil, err
 		}
+
 		// Создаём пользователя
 		newUser := &entities.User{
-			Login:    util.GenerateLogin(fullName),
+			Email:    generatedEmail,
 			Password: hashedPassword,
 		}
 		user, err := s.UserRepository.CreateUser(ctx, newUser)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		userData := &entities.UserData{
-			ID:         user.ID,
-			LastName:   request.LastName,
-			FirstName:  request.FirstName,
-			FatherName: request.FatherName,
+			ID:                   user.ID,
+			LastName:             request.LastName,
+			FirstName:            request.FirstName,
+			FatherName:           request.FatherName,
+			EducationalDirection: request.EducationalDirection,
 		}
 
 		// Университет
 		universityID, ok := s.UniversityCache[request.University]
 		if !ok {
-			// Проверяем существование записи
-			exists, err := s.UniversityRepository.Exists(ctx, request.University)
+			universityID, err = s.getOrCreateUniversity(ctx, request.University)
 			if err != nil {
-				return err
+				return nil, err
 			}
-
-			if exists {
-				// Если существует, получаем данные
-				university, err := s.UniversityRepository.GetByName(ctx, request.University)
-				if err != nil {
-					return err
-				}
-				universityID = university.Id
-			} else {
-				createUniversity := &entities.CreateUniversityRequest{
-					Name: request.University,
-				}
-				universityID, err = s.UniversityRepository.Create(ctx, createUniversity)
-				if err != nil {
-					return err
-				}
-			}
-
-			// Сохраняем ID в кэше
 			s.UniversityCache[request.University] = universityID
 		}
 		userData.UniversityID = universityID
@@ -103,27 +88,10 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 		// Факультет
 		facultyID, ok := s.FacultyCache[request.Faculty]
 		if !ok {
-			exists, err := s.FacultyRepository.Exists(ctx, request.Faculty)
+			facultyID, err = s.getOrCreateFaculty(ctx, request.Faculty)
 			if err != nil {
-				return err
+				return nil, err
 			}
-
-			if exists {
-				faculty, err := s.FacultyRepository.GetByName(ctx, request.Faculty)
-				if err != nil {
-					return err
-				}
-				facultyID = faculty.ID
-			} else {
-				createFaculty := &entities.CreateFacultyRequest{
-					Name: request.Faculty,
-				}
-				facultyID, err = s.FacultyRepository.Create(ctx, createFaculty)
-				if err != nil {
-					return err
-				}
-			}
-
 			s.FacultyCache[request.Faculty] = facultyID
 		}
 		userData.FacultyID = facultyID
@@ -131,43 +99,104 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 		// Департамент
 		departmentID, ok := s.DepartmentCache[request.Department]
 		if !ok {
-			exists, err := s.DepartmentRepository.Exists(ctx, request.Department)
+			departmentID, err = s.getOrCreateDepartment(ctx, request.Department)
 			if err != nil {
-				return err
+				return nil, err
 			}
-
-			if exists {
-				department, err := s.DepartmentRepository.GetByName(ctx, request.Department)
-				if err != nil {
-					return err
-				}
-				departmentID = department.ID
-			} else {
-				newDepartment := &entities.CreateDepartmentRequest{
-					Name: request.Department,
-				}
-				departmentID, err = s.DepartmentRepository.Create(ctx, newDepartment)
-				if err != nil {
-					return err
-				}
-			}
-
 			s.DepartmentCache[request.Department] = departmentID
 		}
 		userData.DepartmentID = departmentID
 
 		// Группа
 		addStudent := &entities.CreateGroupRequest{
-			Name:   userData.Group,
+			Name:   request.Group,
 			UserID: user.ID,
 		}
-
+		userData.Group = request.Group
 		_, err = s.GroupRepository.Create(ctx, addStudent)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
+		_, err = s.UserDataRepository.AddStudent(ctx, userData)
+		if err != nil {
+			return nil, err
+		}
+
+		responses = append(responses, entities.AddUserDataResponse{
+			LastName:   request.LastName,
+			FirstName:  request.FirstName,
+			FatherName: request.FatherName,
+			Email:      generatedEmail,
+			Password:   password,
+		})
 	}
 
-	return nil
+	return &responses, nil
+}
+
+// getOrCreateUniversity обрабатывает добавление или получение университета
+func (s *UserDataService) getOrCreateUniversity(ctx context.Context, name string) (int, error) {
+	exists, err := s.UniversityRepository.Exists(ctx, name)
+	if err != nil && err != sql.ErrNoRows { // Пропускаем ошибку, если запись не найдена
+		return 0, err
+	}
+
+	if exists {
+		university, err := s.UniversityRepository.GetByName(ctx, name)
+		if err != nil {
+			return 0, err
+		}
+		return university.Id, nil
+	}
+
+	createUniversity := &entities.CreateUniversityRequest{
+		Name: name,
+	}
+	return s.UniversityRepository.Create(ctx, createUniversity)
+}
+
+// getOrCreateFaculty обрабатывает добавление или получение факультета
+func (s *UserDataService) getOrCreateFaculty(ctx context.Context, name string) (int, error) {
+	log.Println("faculty exists")
+	exists, err := s.FacultyRepository.Exists(ctx, name)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, err
+	}
+
+	if exists {
+		log.Println("faculty get by name")
+		faculty, err := s.FacultyRepository.GetByName(ctx, name)
+		if err != nil {
+			return 0, err
+		}
+		return faculty.ID, nil
+	}
+
+	createFaculty := &entities.CreateFacultyRequest{
+		Name: name,
+	}
+	log.Println("faculty create")
+	return s.FacultyRepository.Create(ctx, createFaculty)
+}
+
+// getOrCreateDepartment обрабатывает добавление или получение департамента
+func (s *UserDataService) getOrCreateDepartment(ctx context.Context, name string) (int, error) {
+	exists, err := s.DepartmentRepository.Exists(ctx, name)
+	if err != nil && err != sql.ErrNoRows {
+		return 0, err
+	}
+
+	if exists {
+		department, err := s.DepartmentRepository.GetByName(ctx, name)
+		if err != nil {
+			return 0, err
+		}
+		return department.ID, nil
+	}
+
+	newDepartment := &entities.CreateDepartmentRequest{
+		Name: name,
+	}
+	return s.DepartmentRepository.Create(ctx, newDepartment)
 }

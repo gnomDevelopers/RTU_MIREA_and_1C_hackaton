@@ -51,7 +51,7 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	u, err := h.services.UserService.Login(c.Context(), &user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err,
+			"error": err.Error(),
 		})
 	}
 
@@ -76,5 +76,4 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 	})
 
 	return c.Status(fiber.StatusOK).JSON(u)
-
 }

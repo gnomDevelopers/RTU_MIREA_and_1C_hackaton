@@ -1460,6 +1460,61 @@ const docTemplate = `{
                 }
             }
         },
+        "/student/add": {
+            "post": {
+                "description": "Creates multiple users with their associated data (university, faculty, department, group).",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user data"
+                ],
+                "summary": "Add user data",
+                "parameters": [
+                    {
+                        "description": "Array of user data to be added",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.AddUserDataRequest"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/entities.AddUserDataResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request payload",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/university": {
             "put": {
                 "consumes": [
@@ -1703,11 +1758,66 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entities.AddUserDataRequest": {
+            "type": "object",
+            "properties": {
+                "department": {
+                    "type": "string"
+                },
+                "educational_direction": {
+                    "type": "string"
+                },
+                "faculty": {
+                    "type": "string"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "permission_id": {
+                    "type": "integer"
+                },
+                "university": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.AddUserDataResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "entities.Audience": {
             "type": "object",
             "properties": {
-                "campus_id": {
-                    "type": "integer"
+                "campus": {
+                    "type": "string"
                 },
                 "capacity": {
                     "type": "integer"
@@ -1738,19 +1848,16 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "university_id": {
-                    "type": "integer"
+                "university": {
+                    "type": "string"
                 }
             }
         },
         "entities.Class": {
             "type": "object",
             "properties": {
-                "academic_discipline_id": {
-                    "type": "integer"
-                },
-                "auditory_id": {
-                    "type": "integer"
+                "auditory": {
+                    "type": "string"
                 },
                 "date": {
                     "type": "string"
@@ -1793,7 +1900,7 @@ const docTemplate = `{
         "entities.CreateAudiencesRequest": {
             "type": "object",
             "properties": {
-                "campus_id": {
+                "campus": {
                     "type": "integer"
                 },
                 "capacity": {
@@ -1827,7 +1934,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "university_id": {
+                "university": {
                     "type": "integer"
                 }
             }
@@ -1843,11 +1950,8 @@ const docTemplate = `{
         "entities.CreateClassesRequest": {
             "type": "object",
             "properties": {
-                "academic_discipline_id": {
-                    "type": "integer"
-                },
-                "auditory_id": {
-                    "type": "integer"
+                "auditory": {
+                    "type": "string"
                 },
                 "date": {
                     "type": "string"
