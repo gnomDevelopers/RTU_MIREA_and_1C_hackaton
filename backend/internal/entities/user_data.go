@@ -37,6 +37,7 @@ type AddUserDataRequest struct {
 	FatherName           string `json:"father_name"`
 	University           string `json:"university"`
 	PermissionID         int    `json:"permission_id"`
+	Group                string `json:"group"`
 	Faculty              string `json:"faculty"`
 	EducationalDirection string `json:"educational_direction"`
 	Department           string `json:"department"`

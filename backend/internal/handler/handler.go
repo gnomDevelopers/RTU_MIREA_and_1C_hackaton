@@ -58,7 +58,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/campus/id/:id", h.GetByIdCampus)
 	f.Get("/campus/name/:name", h.GetByNameCampus)
 	f.Get("/campus/address/:address", h.GetByAddressCampus)
-	f.Get("/campus/university_id/:id", h.GetByUniversityIdCampus)
+	f.Get("/campus/university/:university", h.GetByUniversityCampuses)
 	f.Post("/campus", h.CreateCampuses)
 	f.Put("/campus", h.UpdateCampus)
 	f.Delete("/campus/:id", h.DeleteCampus)
@@ -73,7 +73,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Delete("/audience/:id", h.DeleteAudience)
 
 	f.Get("/class/id/:id", h.GetByIdClass)
-	f.Get("/class/auditory_id/:id", h.GetByAuditoryIdClass)
+	f.Get("/class/auditory/:name", h.GetByAuditoryClass)
 	f.Post("/class", h.CreateClasses)
 	f.Put("/class", h.UpdateClass)
 	f.Delete("/class/:id", h.DeleteClass)
