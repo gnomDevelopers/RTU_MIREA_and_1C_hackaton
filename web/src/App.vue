@@ -5,6 +5,9 @@
 </template>
 
 <script lang="ts">
+import { mapStores } from "pinia";
+import { useUserInfoStore } from "./stores/userInfoStore";
+
 import StatusWindow from "./entities/statusWindow.vue";
 import Header from "./entities/header.vue";
 
@@ -12,6 +15,14 @@ export default {
   components: {
     StatusWindow,
     Header,
+  },
+  computed:{
+    ...mapStores(useUserInfoStore),
+  },
+  async mounted(){
+    console.log('send auth request in app');
+    await this.userInfoStore.Authenticate();
+    console.log('App: ', this.userInfoStore.authenticated);
   },
 };
 </script>

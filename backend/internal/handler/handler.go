@@ -40,12 +40,14 @@ func (h *Handler) Router() *fiber.App {
 
 	f.Get("/swagger/*", swagger.HandlerDefault)
 
-	f.Get("/", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).SendString("ok")
+	f.Get("/health", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).SendString("healthy")
 	}) // healthcheck для докера
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
+	f.Get("/login", h.CheckAuth)
+	f.Post("/logout", h.Logout)
 
 	f.Post("/student/add", h.CreateStudent)
 

@@ -6,7 +6,6 @@
 
         <SertificateItem v-for="i in 10" title="Студенческий хакатон “РТУ МИРЭА и 1С”" :place="-1"/>
 
-
       </div>
     </div>
   </div>
