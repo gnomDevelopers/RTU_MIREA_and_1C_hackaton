@@ -74,7 +74,7 @@ type GroupRepository interface {
 
 type UserScheduleRepository interface {
 	Create(context.Context, *entities.UserSchedule) (int, error)
-	GetByUserId(context.Context, int) (*entities.UserSchedule, error)
+	GetByUserId(context.Context, int) (*[]entities.UserSchedule, error)
 	Update(context.Context, *entities.UserSchedule) error
 	Delete(context.Context, int) error
 }

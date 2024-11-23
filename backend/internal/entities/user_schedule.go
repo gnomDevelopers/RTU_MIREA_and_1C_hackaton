@@ -16,6 +16,11 @@ type CreateUserScheduleRequest struct {
 	TimeEnd   string `json:"time_end"`
 }
 
+type GetUserScheduleResponse struct {
+	UserSchedule *[]UserSchedule `json:"user_schedule"`
+	Classes      *[]Class        `json:"classes"`
+}
+
 type CreateUserScheduleResponse struct {
 	Id int `json:"id"`
 }

@@ -19,6 +19,7 @@ import (
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/user_schedule [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateUserSchedule(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
@@ -55,18 +56,20 @@ func (h *Handler) CreateUserSchedule(c *fiber.Ctx) error {
 // @Summary      Get users schedule
 // @Accept       json
 // @Produce      json
-// @Success 200 {object} []entities.UserSchedule
+// @Success 200 {object} entities.GetUserScheduleResponse
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/user_schedule [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetUserSchedule(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
 		return c.SendStatus(fiber.StatusForbidden)
 	}
-	h.logger.Debug().Msg("call h.services.UserScheduleService.GetByUserId")
-	campuses, err := h.services.UserScheduleService.GetByUserId(c.Context(), userId)
+
+	h.logger.Debug().Msg("call h.services.GroupService.GetByUserID")
+	group, err := h.services.GroupService.GetByUserID(c.Context(), userId)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -74,7 +77,25 @@ func (h *Handler) GetUserSchedule(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(campuses)
+	h.logger.Debug().Msg("call h.services.UserScheduleService.GetByUserId")
+	userSchedule, err := h.services.UserScheduleService.GetByUserId(c.Context(), userId)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	h.logger.Debug().Msg("call h.services.ClassService.GetByGroupName")
+	groupSchedule, err := h.services.ClassService.GetByGroupName(c.Context(), group.Name)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(entities.GetUserScheduleResponse{UserSchedule: userSchedule, Classes: groupSchedule})
 }
 
 // UpdateUserSchedule
@@ -88,6 +109,7 @@ func (h *Handler) GetUserSchedule(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/user_schedule [put]
+// @Security ApiKeyAuth
 func (h *Handler) UpdateUserSchedule(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
@@ -130,6 +152,7 @@ func (h *Handler) UpdateUserSchedule(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/user_schedule/{id} [delete]
+// @Security ApiKeyAuth
 func (h *Handler) DeleteUserSchedule(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := strconv.Atoi(idStr)

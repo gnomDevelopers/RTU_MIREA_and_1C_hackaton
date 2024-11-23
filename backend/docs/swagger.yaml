@@ -188,6 +188,17 @@ definitions:
       error:
         type: string
     type: object
+  entities.GetUserScheduleResponse:
+    properties:
+      classes:
+        items:
+          $ref: '#/definitions/entities.Class'
+        type: array
+      user_schedule:
+        items:
+          $ref: '#/definitions/entities.UserSchedule'
+        type: array
+    type: object
   entities.LoginUserRequest:
     properties:
       email:
@@ -794,9 +805,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/entities.UserSchedule'
-            type: array
+            $ref: '#/definitions/entities.GetUserScheduleResponse'
         "400":
           description: Bad Request
           schema:
@@ -809,6 +818,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get users schedule
       tags:
       - user schedule
@@ -841,6 +852,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create user schedule
       tags:
       - user schedule
@@ -873,6 +886,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update users schedule
       tags:
       - user schedule
@@ -905,6 +920,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete users schedule
       tags:
       - user schedule
