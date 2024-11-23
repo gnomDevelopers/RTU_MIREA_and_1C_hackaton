@@ -3,7 +3,7 @@
 //contants
 
 //api
-export const API = 'https://...';
+export const API = '/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
 
