@@ -82,7 +82,7 @@ definitions:
       name:
         type: string
       university:
-        type: integer
+        type: string
     type: object
   entities.CreateCampusesResponse:
     properties:
@@ -853,14 +853,14 @@ paths:
       summary: Get campus by name
       tags:
       - campus
-  /campus/university_id/{id}:
+  /campus/university/{university}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: campus university_id
+      - description: campus university
         in: path
-        name: university_id
+        name: university
         required: true
         type: string
       produces:
@@ -869,7 +869,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Campus'
+            items:
+              $ref: '#/definitions/entities.Campus'
+            type: array
         "400":
           description: Bad Request
           schema:
@@ -882,7 +884,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get campus by university_id
+      summary: Get campus by university
       tags:
       - campus
   /class:

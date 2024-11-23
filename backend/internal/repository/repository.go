@@ -31,7 +31,7 @@ type CampusRepository interface {
 	GetById(context.Context, int) (*entities.Campus, error)
 	GetByAddress(context.Context, string) (*entities.Campus, error)
 	GetByName(context.Context, string) (*entities.Campus, error)
-	GetByUniversityId(context.Context, int) (*entities.Campus, error)
+	GetByUniversity(context.Context, string) (*[]entities.Campus, error)
 	GetAll(context.Context) (*[]entities.Campus, error)
 	Update(context.Context, *entities.Campus) error
 	Delete(context.Context, int) error

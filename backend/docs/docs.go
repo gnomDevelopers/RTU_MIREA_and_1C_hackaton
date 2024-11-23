@@ -901,7 +901,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/campus/university_id/{id}": {
+        "/campus/university/{university}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -912,12 +912,12 @@ const docTemplate = `{
                 "tags": [
                     "campus"
                 ],
-                "summary": "Get campus by university_id",
+                "summary": "Get campus by university",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "campus university_id",
-                        "name": "university_id",
+                        "description": "campus university",
+                        "name": "university",
                         "in": "path",
                         "required": true
                     }
@@ -926,7 +926,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.Campus"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Campus"
+                            }
                         }
                     },
                     "400": {
@@ -1948,7 +1951,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "university": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
