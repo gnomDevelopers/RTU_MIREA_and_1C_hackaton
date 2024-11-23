@@ -18,7 +18,7 @@ import {
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/auth`)
+    axios.get(`${API}/login`)
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
       resolve(response);
