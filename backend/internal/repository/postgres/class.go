@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/lib/pq"
 	"server/internal/entities"
 )
@@ -117,15 +118,15 @@ func (r *ClassRepository) GetByGroupName(ctx context.Context, groupName string) 
 	return &classes, nil
 }
 
-func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName string) (*[]entities.Class, error) {
+func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName, university string) (*[]entities.Class, error) {
 	if teacherName == "" {
 		return nil, errors.New("")
 	}
 
 	var classes []entities.Class
 	dateLimit := "09-08-24"
-	query := `SELECT * FROM class WHERE $1=ANY(teacher_names) AND date < $2`
-	rows, err := r.db.QueryContext(ctx, query, teacherName, dateLimit)
+	query := `SELECT * FROM class WHERE $1=ANY(teacher_names) AND date < $2 AND university = $3`
+	rows, err := r.db.QueryContext(ctx, query, teacherName, dateLimit, university)
 	if err != nil {
 		return nil, err
 	}
@@ -146,15 +147,15 @@ func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName stri
 	return &classes, nil
 }
 
-func (r *ClassRepository) GetByName(ctx context.Context, name string) (*[]entities.Class, error) {
+func (r *ClassRepository) GetByName(ctx context.Context, name, university string) (*[]entities.Class, error) {
 	if name == "" {
 		return nil, errors.New("name is empty")
 	}
 
 	var classes []entities.Class
 	dateLimit := "09-08-24"
-	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ' AND date < $2;`
-	rows, err := r.db.QueryContext(ctx, query, name, dateLimit)
+	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ' AND date < $2 AND university = $3;`
+	rows, err := r.db.QueryContext(ctx, query, name, dateLimit, university)
 	if err != nil {
 		return nil, err
 	}
@@ -235,6 +236,10 @@ func (r *ClassRepository) SearchGroups(ctx context.Context, university string) (
 		uniqueGroupNames = append(uniqueGroupNames, groupName)
 	}
 
+	if len(uniqueGroupNames) == 0 {
+		return nil, errors.New("there are no groups")
+	}
+	fmt.Println(groupMap, len(uniqueGroupNames))
 	return uniqueGroupNames, nil
 }
 

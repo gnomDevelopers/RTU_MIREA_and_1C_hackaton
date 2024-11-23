@@ -59,7 +59,7 @@ func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*en
 	`
 	university := &entities.University{}
 
-	err := r.db.QueryRowContext(ctx, query, userID).Scan(&university.Name, &university.Id)
+	err := r.db.QueryRowContext(ctx, query, userID).Scan(&university.Name)
 	if err != nil {
 		return nil, err
 	}

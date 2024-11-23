@@ -40,13 +40,18 @@ func (h *Handler) Router() *fiber.App {
 
 	f.Get("/swagger/*", swagger.HandlerDefault)
 
+	f.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).SendString("Hello world")
+	})
+
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
+
+	f.Post("/student/add", h.CreateStudent)
 
 	f.Get("/schedule/group/{group}", h.GetScheduleByGroup)
 	f.Get("/schedule/teacher/{teacher}", h.GetScheduleByTeacher)
 	f.Get("/schedule/name/{name}", h.GetScheduleByName)
-	f.Post("/schedule/parse", h.ParseSchedule)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)
@@ -86,6 +91,15 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Post("/user_schedule", h.CreateUserSchedule)
 	authGroup.Put("/user_schedule", h.UpdateUserSchedule)
 	authGroup.Delete("/user_schedule/:id", h.DeleteUserSchedule)
+
+	authGroup.Post("/schedule/parse", h.ParseSchedule)
+	authGroup.Get("/schedule/group/:group", h.GetScheduleByGroup)
+	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
+	authGroup.Get("/schedule/name/:name", h.GetScheduleByName)
+
+	authGroup.Get("/schedule/search/teacher", h.GetScheduleSearchTeacher)
+	authGroup.Get("/schedule/search/name", h.GetScheduleSearchName)
+	authGroup.Get("/schedule/search/group", h.GetScheduleSearchGroup)
 
 	return f
 }

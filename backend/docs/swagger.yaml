@@ -188,6 +188,22 @@ definitions:
       error:
         type: string
     type: object
+  entities.LoginUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  entities.LoginUserResponse:
+    properties:
+      access_token:
+        type: string
+      id:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
   entities.ParseScheduleResponse:
     properties:
       message:
@@ -540,6 +556,234 @@ paths:
       summary: Get audience by type
       tags:
       - audience
+  /auth/schedule/group/{group}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: schedule group
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Class'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get schedule
+      tags:
+      - schedule
+  /auth/schedule/name/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: schedule name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Class'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get schedule by name
+      tags:
+      - schedule
+  /auth/schedule/parse:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Upload schedule file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.ParseScheduleResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get schedule by name
+      tags:
+      - schedule
+  /auth/schedule/search/group:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ScheduleGroups'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Search groups
+      tags:
+      - schedule
+  /auth/schedule/search/name:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ScheduleNames'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Search names
+      tags:
+      - schedule
+  /auth/schedule/search/teacher:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.ScheduleTeachers'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Search teachers
+      tags:
+      - schedule
+  /auth/schedule/teacher/{teacher}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: schedule teacher
+        in: path
+        name: teacher
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Class'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get schedule by teacher
+      tags:
+      - schedule
   /auth/user_schedule:
     get:
       consumes:
@@ -1088,220 +1332,36 @@ paths:
       summary: Get class by id
       tags:
       - class
-  /schedule/group/{group}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: schedule group
-        in: path
-        name: group
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.Class'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get schedule
-      tags:
-      - schedule
-  /schedule/name/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: schedule name
-        in: path
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.Class'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get schedule by name
-      tags:
-      - schedule
-  /schedule/parse:
+  /login:
     post:
       consumes:
-      - multipart/form-data
+      - application/json
+      description: Authenticates a user and sets access and refresh tokens as cookies.
       parameters:
-      - description: Upload schedule file
-        in: formData
-        name: file
+      - description: User login credentials
+        in: body
+        name: data
         required: true
-        type: file
+        schema:
+          $ref: '#/definitions/entities.LoginUserRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/entities.ParseScheduleResponse'
-            type: array
+            $ref: '#/definitions/entities.LoginUserResponse'
         "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
+          description: Invalid request payload
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
         "500":
-          description: Internal Server Error
+          description: Internal server error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get schedule by name
+      summary: User login
       tags:
-      - schedule
-  /schedule/search/group:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.ScheduleGroups'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Search groups
-      tags:
-      - schedule
-  /schedule/search/name:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.ScheduleNames'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Search names
-      tags:
-      - schedule
-  /schedule/search/teacher:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.ScheduleTeachers'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Search teachers
-      tags:
-      - schedule
-  /schedule/teacher/{teacher}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: schedule teacher
-        in: path
-        name: teacher
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.Class'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get schedule by teacher
-      tags:
-      - schedule
+      - authentication
   /student/add:
     post:
       consumes:

@@ -46,19 +46,19 @@ func (s *ClassService) GetByGroupName(c context.Context, groupName string) (*[]e
 	return classes, err
 }
 
-func (s *ClassService) GetByTeacherName(c context.Context, teacherName string) (*[]entities.Class, error) {
+func (s *ClassService) GetByTeacherName(c context.Context, teacherName, university string) (*[]entities.Class, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	classes, err := s.repository.GetByTeacherName(ctx, teacherName)
+	classes, err := s.repository.GetByTeacherName(ctx, teacherName, university)
 	return classes, err
 }
 
-func (s *ClassService) GetByName(c context.Context, name string) (*[]entities.Class, error) {
+func (s *ClassService) GetByName(c context.Context, name, university string) (*[]entities.Class, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	classes, err := s.repository.GetByName(ctx, name)
+	classes, err := s.repository.GetByName(ctx, name, university)
 	return classes, err
 }
 
@@ -110,7 +110,7 @@ func (s *ClassService) Delete(c context.Context, id int) error {
 	return err
 }
 
-func (s *ClassService) Parse(fileName string) error {
+func (s *ClassService) Parse(fileName, university string) error {
 	path := "./backend/tmp"
 	filePath := filepath.Join(path, fileName)
 
@@ -120,7 +120,7 @@ func (s *ClassService) Parse(fileName string) error {
 	}
 
 	rows, _ := xlFile.GetRows("Расписание")
-	err = s.find(rows)
+	err = s.find(rows, university)
 	if err != nil {
 		return err
 	}
@@ -128,7 +128,7 @@ func (s *ClassService) Parse(fileName string) error {
 	return nil
 }
 
-func (s *ClassService) find(rows [][]string) error {
+func (s *ClassService) find(rows [][]string, university string) error {
 	countDay, last := 0, "-1"
 	for j := 5; j < len(rows[1]); j += 6 {
 		group := rows[0][j]
@@ -172,7 +172,7 @@ func (s *ClassService) find(rows [][]string) error {
 				}
 				class.TimeStart = rows[i][2]
 				class.TimeEnd = rows[i][3]
-				class.UniversityStr = "МИРЭА" // TODO: изменить на получение по id пользователя
+				class.UniversityStr = university
 				classes = append(classes, class)
 
 				newDate := startDate.AddDate(0, 0, 14)
