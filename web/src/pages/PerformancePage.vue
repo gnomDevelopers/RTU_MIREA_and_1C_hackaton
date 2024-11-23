@@ -100,7 +100,7 @@ import SearchList from '@/entities/searchList.vue';
 import IconPerformance from '@/shared/iconPerformance.vue';
 import SubjectItem from '@/shared/subjectItem.vue';
 import { type ISearchList, type IItemList } from '@/helpers/constants';
-import PerformanceSearchListItem from '@/entities/performanceSearchListItem.vue';
+import PerformanceSearchListItem from '@/entities/listItems/performanceSearchListItem.vue';
 import PageTitle from '@/shared/pageTitle.vue';
 
 export default{

@@ -47,6 +47,12 @@ export const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      name: 'CreateSchedulePage',
+      path: '/schedulecreate',
+      component: () => import('@/pages/CreateSchedulePage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       name: 'PerformancePage',
       path: '/performance',
       component: () => import('@/pages/PerformancePage.vue'),
@@ -62,6 +68,12 @@ export const router = createRouter({
       name: 'AttendancePage',
       path: '/attendance',
       component: () => import('@/pages/AttendancePage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      name: 'AchievementsPage',
+      path: '/achievements',
+      component: () => import('@/pages/AchievementsPage.vue'),
       meta: { requiresAuth: true },
     },
   ],

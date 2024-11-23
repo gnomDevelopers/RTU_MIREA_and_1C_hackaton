@@ -15,10 +15,12 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { useUserInfoStore } from '@/stores/userInfoStore';
 import loginInput from '../shared/loginInput.vue';
 import submitButton from '../shared/submitButton.vue';
 import { ValidUserLogin, ValidUserPassword } from '../helpers/validator';
-import { type IValidAnswer, StatusCodes } from '../helpers/constants';
+import { type IValidAnswer, StatusCodes, type IAPI_Login_Request } from '../helpers/constants';
+import { API_Login } from '@/api/api';
 
 export default{
   components:{
@@ -32,12 +34,24 @@ export default{
     }
   },
   computed:{
-    ...mapStores(useStatusWindowStore),
+    ...mapStores(useStatusWindowStore, useUserInfoStore),
   },
   methods: {
     sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
-        //API
+        const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+        const data:IAPI_Login_Request = { login: this.login.value, password: this.password.value };
+        API_Login(data)
+        .then(response => {
+          this.statusWindowStore.deteleStatusWindow(stID);
+          this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          
+          this.$router.push({name: 'MainPage'});
+        })
+        .catch(error => {
+          this.statusWindowStore.deteleStatusWindow(stID);
+          this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+        });
         return;
       }
 

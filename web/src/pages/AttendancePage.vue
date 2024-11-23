@@ -46,13 +46,13 @@ import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { type ISearchList, type IItemList } from '@/helpers/constants';
 
-import AttendanceSearchListItem from '@/entities/attendanceSearchListItem.vue';
+import AttendanceSearchListItem from '@/entities/listItems/attendanceSearchListItem.vue';
 import CalendarTable from '@/entities/calendarTable.vue';
-import ScheduleClassList from '@/entities/scheduleClassList.vue';
+import ScheduleClassList from '@/entities/listItems/scheduleClassList.vue';
 import SearchList from '@/entities/searchList.vue';
 import IconAttendance from '@/shared/iconAttendance.vue';
 import PageTitle from '@/shared/pageTitle.vue';
-import AttendanceUsersListItem from '@/entities/attendanceUsersListItem.vue';
+import AttendanceUsersListItem from '@/entities/listItems/attendanceUsersListItem.vue';
 
 export default {
   components:{
