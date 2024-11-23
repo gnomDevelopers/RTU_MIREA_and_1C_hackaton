@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"github.com/lib/pq"
 	"server/internal/entities"
 )
@@ -188,7 +187,35 @@ func (r *ClassRepository) GetByNameAndGroup(ctx context.Context, name, group str
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(name, group)
+
+	for rows.Next() {
+		var class entities.Class
+		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)
+		if err != nil {
+			return nil, err
+		}
+		classes = append(classes, class)
+	}
+
+	if len(classes) == 0 {
+		return nil, errors.New("there are no classes with such parameters")
+	}
+
+	return &classes, nil
+}
+func (r *ClassRepository) GetByNameAndGroupWithoutLk(ctx context.Context, name, group string) (*[]entities.Class, error) {
+	if name == "" {
+		return nil, errors.New("name is empty")
+	}
+
+	var classes []entities.Class
+
+	query := `SELECT * FROM class WHERE $1=name AND $2=ANY(group_names) AND type<>'ЛК';`
+	rows, err := r.db.QueryContext(ctx, query, name, group)
+	if err != nil {
+		return nil, err
+	}
+
 	for rows.Next() {
 		var class entities.Class
 		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)

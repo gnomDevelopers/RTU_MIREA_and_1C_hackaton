@@ -50,7 +50,8 @@ export default{
         })
         .catch(error => {
           this.statusWindowStore.deteleStatusWindow(stID);
-          this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+          if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+          else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
         });
         return;
       }

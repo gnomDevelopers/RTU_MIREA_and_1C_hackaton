@@ -554,6 +554,10 @@ video {
   display: none;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 .absolute {
   position: absolute;
 }
@@ -678,12 +682,12 @@ video {
   margin-top: 2.5rem;
 }
 
-.mt-5 {
-  margin-top: 1.25rem;
-}
-
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .flex {
@@ -698,6 +702,10 @@ video {
   display: grid;
 }
 
+.hidden {
+  display: none;
+}
+
 .aspect-square {
   aspect-ratio: 1 / 1;
 }
@@ -706,12 +714,20 @@ video {
   aspect-ratio: 16 / 9;
 }
 
+.h-0 {
+  height: 0px;
+}
+
 .h-1 {
   height: 0.25rem;
 }
 
 .h-10 {
   height: 2.5rem;
+}
+
+.h-11 {
+  height: 2.75rem;
 }
 
 .h-12 {
@@ -774,10 +790,6 @@ video {
   height: 100%;
 }
 
-.h-11 {
-  height: 2.75rem;
-}
-
 .max-h-\[600px\] {
   max-height: 600px;
 }
@@ -792,6 +804,14 @@ video {
 
 .min-h-8 {
   min-height: 2rem;
+}
+
+.w-0 {
+  width: 0px;
+}
+
+.w-1\/2 {
+  width: 50%;
 }
 
 .w-10 {
@@ -858,22 +878,6 @@ video {
   width: 100%;
 }
 
-.w-40 {
-  width: 10rem;
-}
-
-.w-96 {
-  width: 24rem;
-}
-
-.w-\[440px\] {
-  width: 440px;
-}
-
-.w-1\/2 {
-  width: 50%;
-}
-
 .min-w-0 {
   min-width: 0px;
 }
@@ -886,36 +890,28 @@ video {
   min-width: 5rem;
 }
 
-.min-w-\[600px\] {
-  min-width: 600px;
-}
-
-.min-w-40 {
-  min-width: 10rem;
-}
-
 .max-w-96 {
   max-width: 24rem;
-}
-
-.max-w-none {
-  max-width: none;
 }
 
 .max-w-\[500px\] {
   max-width: 500px;
 }
 
+.max-w-none {
+  max-width: none;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
 
-.flex-shrink-0 {
-  flex-shrink: 0;
-}
-
 .flex-shrink {
   flex-shrink: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
 }
 
 .shrink-0 {
@@ -924,10 +920,6 @@ video {
 
 .flex-grow {
   flex-grow: 1;
-}
-
-.basis-\[440px\] {
-  flex-basis: 440px;
 }
 
 .basis-full {
@@ -1100,6 +1092,10 @@ video {
   text-wrap: nowrap;
 }
 
+.rounded {
+  border-radius: 0.25rem;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -1110,10 +1106,6 @@ video {
 
 .rounded-xl {
   border-radius: 0.75rem;
-}
-
-.rounded {
-  border-radius: 0.25rem;
 }
 
 .rounded-l-lg {
@@ -1148,6 +1140,11 @@ video {
   border-style: solid;
 }
 
+.border-blue-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(30 64 175 / var(--tw-border-opacity, 1));
+}
+
 .border-red-600 {
   --tw-border-opacity: 1;
   border-color: rgb(220 38 38 / var(--tw-border-opacity, 1));
@@ -1165,11 +1162,6 @@ video {
 
 .border-transparent {
   border-color: transparent;
-}
-
-.border-blue-800 {
-  --tw-border-opacity: 1;
-  border-color: rgb(30 64 175 / var(--tw-border-opacity, 1));
 }
 
 .bg-amber-500 {

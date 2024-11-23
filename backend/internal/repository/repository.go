@@ -55,6 +55,7 @@ type ClassRepository interface {
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
 	GetByName(context.Context, string, string) (*[]entities.Class, error)
 	GetByNameAndGroup(context.Context, string, string) (*[]entities.Class, error)
+	GetByNameAndGroupWithoutLk(context.Context, string, string) (*[]entities.Class, error)
 	GetByTeacherName(context.Context, string, string) (*[]entities.Class, error)
 	GetByAuditory(context.Context, string) (*[]entities.Class, error)
 	SearchGroups(context.Context, string) ([]string, error)
