@@ -63,7 +63,7 @@ func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*en
 	if err != nil {
 		return nil, err
 	}
-	return university, ni
+	return university, nil
 }
 
 func (r *UniversityRepository) GetByName(ctx context.Context, name string) (*entities.University, error) {
