@@ -48,8 +48,8 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        data body entities.LoginUserRequest true "User login credentials"
 // @Success      200 {object} entities.LoginUserResponse
-// @Failure      400 {object} fiber.Map "Invalid request payload"
-// @Failure      500 {object} fiber.Map "Internal server error"
+// @Failure      400 {object} entities.ErrorResponse "Invalid request payload"
+// @Failure      500 {object} entities.ErrorResponse "Internal server error"
 // @Router       /login [post]
 func (h *Handler) Login(c *fiber.Ctx) error {
 	var user entities.LoginUserRequest
