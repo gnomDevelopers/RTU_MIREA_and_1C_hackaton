@@ -11,7 +11,7 @@ type Audience struct {
 
 type CreateAudiencesRequest struct {
 	Name     string `json:"name"`
-	Campus   int    `json:"campus"`
+	Campus   string `json:"campus"`
 	Type     string `json:"type"`
 	Profile  string `json:"profile"`
 	Capacity int    `json:"capacity"`

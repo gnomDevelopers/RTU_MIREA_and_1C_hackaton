@@ -64,7 +64,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Delete("/campus/:id", h.DeleteCampus)
 
 	f.Get("/audience/id/:id", h.GetByIdAudience)
-	f.Get("/audience/campus_id/:id", h.GetByCampusIdAudience)
+	f.Get("/audience/campus/:name", h.GetByCampusAudience)
 	f.Get("/audience/type/:type", h.GetByTypeAudience)
 	f.Get("/audience/profile/:profile", h.GetByProfileAudience)
 	f.Get("/audience/capacity/:capacity", h.GetByCapacityAudience)

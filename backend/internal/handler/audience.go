@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"net/url"
 	"server/internal/entities"
 	"server/internal/log"
 	"strconv"
@@ -75,23 +76,26 @@ func (h *Handler) GetByIdAudience(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(audience)
 }
 
-// GetByCampusIdAudience
+// GetByCampusAudience
 // @Tags audience
 // @Summary      Get audience by name
 // @Accept       json
 // @Produce      json
-// @Param name path string true "audience name"
+// @Param name path string true "campus name"
 // @Success 200 {object} entities.Audience
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/campus_id/{id} [get]
-func (h *Handler) GetByCampusIdAudience(c *fiber.Ctx) error {
+// @Router       /audience/campus/{name} [get]
+func (h *Handler) GetByCampusAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
-	idStr := c.Params("id")
-	campusId, err := strconv.Atoi(idStr)
+	name := c.Params("name")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid campus name")
+	}
 
-	audience, err := h.services.AudienceService.GetByCampusId(c.Context(), campusId)
+	audience, err := h.services.AudienceService.GetByCampus(c.Context(), decodedName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -119,8 +123,12 @@ func (h *Handler) GetByCampusIdAudience(c *fiber.Ctx) error {
 func (h *Handler) GetByTypeAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	typeStr := c.Params("type")
+	decodedType, err := url.QueryUnescape(typeStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid type")
+	}
 
-	audiences, err := h.services.AudienceService.GetByType(c.Context(), typeStr)
+	audiences, err := h.services.AudienceService.GetByType(c.Context(), decodedType)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -148,8 +156,12 @@ func (h *Handler) GetByTypeAudience(c *fiber.Ctx) error {
 func (h *Handler) GetByProfileAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	profile := c.Params("profile")
+	decodedProfile, err := url.QueryUnescape(profile)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid profile")
+	}
 
-	audiences, err := h.services.AudienceService.GetByProfile(c.Context(), profile)
+	audiences, err := h.services.AudienceService.GetByProfile(c.Context(), decodedProfile)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

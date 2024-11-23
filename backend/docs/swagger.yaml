@@ -60,7 +60,7 @@ definitions:
   entities.CreateAudiencesRequest:
     properties:
       campus:
-        type: integer
+        type: string
       capacity:
         type: integer
       name:
@@ -344,12 +344,12 @@ paths:
       summary: Delete audience
       tags:
       - audience
-  /audience/campus_id/{id}:
+  /audience/campus/{name}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: audience name
+      - description: campus name
         in: path
         name: name
         required: true

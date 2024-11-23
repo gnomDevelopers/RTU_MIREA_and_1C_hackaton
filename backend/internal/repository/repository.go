@@ -41,7 +41,7 @@ type AudienceRepository interface {
 	Create(context.Context, *[]entities.Audience) ([]int, error)
 	GetById(context.Context, int) (*entities.Audience, error)
 	GetByType(context.Context, string) (*[]entities.Audience, error)
-	GetByCampusId(context.Context, int) (*[]entities.Audience, error)
+	GetByCampus(context.Context, string) (*[]entities.Audience, error)
 	GetByProfile(context.Context, string) (*[]entities.Audience, error)
 	GetByCapacity(context.Context, int) (*[]entities.Audience, error)
 	Update(context.Context, *entities.Audience) error

@@ -29,7 +29,7 @@ func (r *AudienceRepository) Create(ctx context.Context, audiences *[]entities.A
 			return []int{}, errors.New("")
 		}
 
-		query := `SELECT * FROM auditory WHERE name=$1 AND campus_id=$2 AND type=$3 AND profile=$4 AND capacity=$5`
+		query := `SELECT * FROM auditory WHERE name=$1 AND campus=$2 AND type=$3 AND profile=$4 AND capacity=$5`
 		row := tx.QueryRowContext(ctx, query, audience.Name, audience.Campus, audience.Type, audience.Profile, audience.Capacity)
 		var tmp interface{}
 		err := row.Scan(&tmp)
@@ -38,7 +38,7 @@ func (r *AudienceRepository) Create(ctx context.Context, audiences *[]entities.A
 		}
 
 		var id int
-		query = `INSERT INTO auditory VALUES(name, campus_id, type, profile, capacity) RETURNING id`
+		query = `INSERT INTO auditory (name, campus, type, profile, capacity) VALUES($1, $2, $3, $4, $5) RETURNING id`
 
 		err = tx.QueryRowContext(ctx, query, audience.Name, audience.Campus, audience.Type, audience.Profile, audience.Capacity).Scan(&id)
 		if err != nil {
@@ -61,7 +61,7 @@ func (r *AudienceRepository) GetById(ctx context.Context, id int) (*entities.Aud
 	}
 
 	var audience entities.Audience
-	query := `SELECT * FROM class WHERE id = $1`
+	query := `SELECT * FROM auditory WHERE id = $1`
 	err := r.db.QueryRowContext(ctx, query, id).Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
 	if err != nil {
 		return nil, err
@@ -69,14 +69,14 @@ func (r *AudienceRepository) GetById(ctx context.Context, id int) (*entities.Aud
 	return &audience, nil
 }
 
-func (r *AudienceRepository) GetByCampusId(ctx context.Context, campusId int) (*[]entities.Audience, error) {
-	if campusId == 0 {
+func (r *AudienceRepository) GetByCampus(ctx context.Context, campus string) (*[]entities.Audience, error) {
+	if campus == "" {
 		return nil, errors.New("")
 	}
 
 	var audiences []entities.Audience
-	query := `SELECT * FROM auditory WHERE campus_id = $1`
-	rows, err := r.db.QueryContext(ctx, query, campusId)
+	query := `SELECT * FROM auditory WHERE campus = $1`
+	rows, err := r.db.QueryContext(ctx, query, campus)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +88,10 @@ func (r *AudienceRepository) GetByCampusId(ctx context.Context, campusId int) (*
 			return nil, err
 		}
 		audiences = append(audiences, audience)
+	}
+
+	if len(audiences) == 0 {
+		return nil, errors.New("there are no audiences with such parameters")
 	}
 
 	return &audiences, nil
@@ -114,6 +118,10 @@ func (r *AudienceRepository) GetByType(ctx context.Context, typeStr string) (*[]
 		audiences = append(audiences, audience)
 	}
 
+	if len(audiences) == 0 {
+		return nil, errors.New("there are no audiences with such parameters")
+	}
+
 	return &audiences, nil
 }
 
@@ -136,6 +144,10 @@ func (r *AudienceRepository) GetByProfile(ctx context.Context, profile string) (
 			return nil, err
 		}
 		audiences = append(audiences, audience)
+	}
+
+	if len(audiences) == 0 {
+		return nil, errors.New("there are no audiences with such parameters")
 	}
 
 	return &audiences, nil
@@ -162,6 +174,10 @@ func (r *AudienceRepository) GetByCapacity(ctx context.Context, capacity int) (*
 		audiences = append(audiences, audience)
 	}
 
+	if len(audiences) == 0 {
+		return nil, errors.New("there are no audiences with such parameters")
+	}
+
 	return &audiences, nil
 }
 
@@ -170,7 +186,7 @@ func (r *AudienceRepository) Update(ctx context.Context, audience *entities.Audi
 		return errors.New("")
 	}
 
-	query := `UPDATE auditory SET name=$1, campus_id=$2, type=$3, profile=$4, capacity=$5 WHERE id=$6`
+	query := `UPDATE auditory SET name=$1, campus=$2, type=$3, profile=$4, capacity=$5 WHERE id=$6`
 
 	_, err := r.db.ExecContext(ctx, query, audience.Name, audience.Campus, audience.Type, audience.Profile, audience.Capacity, audience.Id)
 	if err != nil {

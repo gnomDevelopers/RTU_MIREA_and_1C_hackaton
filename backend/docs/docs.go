@@ -121,7 +121,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/campus_id/{id}": {
+        "/audience/campus/{name}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -136,7 +136,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "audience name",
+                        "description": "campus name",
                         "name": "name",
                         "in": "path",
                         "required": true
@@ -1917,7 +1917,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "campus": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "capacity": {
                     "type": "integer"

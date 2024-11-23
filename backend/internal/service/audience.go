@@ -35,11 +35,11 @@ func (s *AudienceService) GetById(c context.Context, id int) (*entities.Audience
 	return audience, err
 }
 
-func (s *AudienceService) GetByCampusId(c context.Context, campusId int) (*[]entities.Audience, error) {
+func (s *AudienceService) GetByCampus(c context.Context, campus string) (*[]entities.Audience, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	audiences, err := s.repository.GetByCampusId(ctx, campusId)
+	audiences, err := s.repository.GetByCampus(ctx, campus)
 	return audiences, err
 }
 
