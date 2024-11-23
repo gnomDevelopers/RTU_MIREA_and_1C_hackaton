@@ -61,6 +61,15 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 			Email:    generatedEmail,
 			Password: hashedPassword,
 		}
+
+		ok, err := s.UserRepository.Exists(ctx, newUser.Email)
+		if err != nil && err != sql.ErrNoRows {
+			return nil, err
+		}
+		if ok {
+			continue
+		}
+
 		user, err := s.UserRepository.CreateUser(ctx, newUser)
 		if err != nil {
 			return nil, err

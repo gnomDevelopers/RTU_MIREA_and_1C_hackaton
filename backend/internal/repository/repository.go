@@ -68,6 +68,7 @@ type GroupRepository interface {
 	Create(context.Context, *entities.CreateGroupRequest) (int, error)
 	GetById(context.Context, int) (*entities.Group, error)
 	GetByUserID(context.Context, int) (*entities.Group, error)
+	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 	GetByName(context.Context, string) (*entities.Group, error)
 	GetAll(context.Context) (*[]entities.Group, error)
 }
