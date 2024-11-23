@@ -33,6 +33,12 @@ export interface ISearchList{
   data: any,
 }
 
+//itemList item interface
+export interface IItemList{
+  id: number,
+  name: string,
+}
+
 //userList item interface
 export interface IUsersList{
   id: number,
@@ -40,10 +46,9 @@ export interface IUsersList{
   role: number,
 }
 
-//itemList item interface
-export interface IItemList{
-  id: number,
-  name: string,
+//groupCOrrect item interface
+export interface IGroupCorrectUserItem{
+  //
 }
 
 //statusWindow interface

@@ -2,13 +2,9 @@
   <div class="w-full h-full scrollable flex flex-col items-center">
     <div class="flex flex-col gap-y-4 w-full px-2 us:px-4 lg:w-10/12 lg:px-0">
       
-      <div class="flex flex-row gap-x-2 items-stretch mt-5">
+      <PageTitle title="Создание учётных записей" description="В этом разделе Вы можете создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента. Для этого загрузите на своё устройство шаблон для заполнения данных о пользователе, а затем отправьте заполненный файл в специальное поле.">
         <IconAccounts class="w-20 us:w-36 h-20 us:h-36"/>
-        <div class="flex flex-col gap-y-4">
-          <p class="text-4xl font-medium">Создание учётных записей</p>
-          <p class="text-xl">В этом разделе Вы можете создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента. Для этого загрузите на своё устройство шаблон для заполнения данных о пользователе, а затем отправьте заполненный файл в специальное поле.</p>
-        </div>
-      </div>
+      </PageTitle>
 
       <MainControl title="Управление вузом">
         <MainControlItem title="Управление деканами">
@@ -62,9 +58,11 @@ import MainControlItem from '../shared/mainControlItem.vue';
 import UserListItem from '../shared/userListItem.vue';
 import SearchList from '../entities/searchList.vue';
 import IconAccounts from '@/shared/iconAccounts.vue';
+import PageTitle from '@/shared/pageTitle.vue';
 
 export default {
   components:{
+    PageTitle,
     IconAccounts,
     MainControl,
     MainControlItem,
