@@ -31,6 +31,6 @@ func (s *GradeService) GetByUserIdAndClassId(c context.Context, userId, classId 
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	campus, err := s.repository.GetByUserIdAndClassId(ctx, userId, classId)
-	return campus, err
+	grade, err := s.repository.GetByUserIdAndClassId(ctx, userId, classId)
+	return grade, err
 }

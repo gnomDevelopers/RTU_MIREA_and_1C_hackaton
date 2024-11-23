@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"net/url"
 	"server/internal/entities"
@@ -71,6 +72,14 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid name")
 	}
 
+	groupMember, err := h.services.GroupService.GetGroupMembers(c.Context(), decodedGroup)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
 	classes, err := h.services.ClassService.GetByNameAndGroup(c.Context(), decodedName, decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -80,11 +89,13 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 	}
 
 	for _, class := range *classes {
-		grade, _ := h.services.GradeService.GetByUserIdAndClassId(c.Context(), class.Id, 2)
-		if grade != nil {
-			class.Grades = append(class.Grades, *grade)
+		for _, member := range *groupMember {
+			grade, _ := h.services.GradeService.GetByUserIdAndClassId(c.Context(), member.ID, class.Id)
+			if grade != nil {
+				class.Grades = append(class.Grades, *grade)
+				fmt.Println(class.Grades)
+			}
 		}
 	}
-
-	return c.Status(fiber.StatusOK).JSON(classes)
+	return c.Status(fiber.StatusOK).JSON(entities.GetGradesBySubject{GradeClass: *classes, GroupMember: *groupMember})
 }

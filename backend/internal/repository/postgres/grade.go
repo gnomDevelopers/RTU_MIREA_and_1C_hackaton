@@ -31,6 +31,7 @@ func (r *GradeRepository) Create(ctx context.Context, grade *entities.Grade) (in
 
 func (r *GradeRepository) GetByUserIdAndClassId(ctx context.Context, userId, classId int) (*entities.Grade, error) {
 	var grade entities.Grade
+
 	query := `SELECT * FROM grade WHERE user_id = $1 AND class_id = $2`
 	err := r.db.QueryRowContext(ctx, query, userId, classId).Scan(&grade.Id, &grade.ClassId, &grade.UserId, &grade.Value)
 	if err != nil {

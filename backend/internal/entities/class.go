@@ -52,6 +52,11 @@ type ScheduleNames struct {
 	Names []string `json:"names"`
 }
 
+type GetGradesBySubject struct {
+	GroupMember []GroupMember `json:"group_member"`
+	GradeClass  []GradeClass  `json:"grade_class"`
+}
+
 type GradeClass struct {
 	Id     int     `json:"id"`
 	Name   string  `json:"name"`
