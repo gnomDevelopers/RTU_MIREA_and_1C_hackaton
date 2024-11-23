@@ -27,6 +27,7 @@ func (s *GroupService) GetGroupMembers(c context.Context, groupName string) (*[]
 	if err != nil {
 		return nil, err
 	}
+	return members, nil
 }
 
 func (s *GroupService) GetByUserID(c context.Context, userID int) (*entities.Group, error) {
