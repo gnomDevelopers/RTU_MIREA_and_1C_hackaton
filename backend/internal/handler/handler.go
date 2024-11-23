@@ -1,16 +1,15 @@
 package handler
 
 import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
+	"github.com/rs/zerolog"
 	_ "server/docs"
 	"server/internal/config"
 	"server/internal/log"
 	"server/internal/service"
 	"server/pkg"
-
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/swagger"
-	"github.com/rs/zerolog"
 )
 
 type Handler struct {
@@ -47,11 +46,10 @@ func (h *Handler) Router() *fiber.App {
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
+	f.Get("/login", h.CheckAuth)
+	f.Post("/logout", h.Logout)
 
-	f.Get("/schedule/group/{group}", h.GetScheduleByGroup)
-	f.Get("/schedule/teacher/{teacher}", h.GetScheduleByTeacher)
-	f.Get("/schedule/name/{name}", h.GetScheduleByName)
-	f.Post("/schedule/parse", h.ParseSchedule)
+	f.Post("/student/add", h.CreateStudent)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)
@@ -91,6 +89,19 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Post("/user_schedule", h.CreateUserSchedule)
 	authGroup.Put("/user_schedule", h.UpdateUserSchedule)
 	authGroup.Delete("/user_schedule/:id", h.DeleteUserSchedule)
+
+	authGroup.Post("/schedule/parse", h.ParseSchedule)
+	authGroup.Get("/schedule/group/:group", h.GetScheduleByGroup)
+	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
+	authGroup.Get("/schedule/name/:name", h.GetScheduleByName)
+
+	authGroup.Get("/schedule/group_subjects", h.GetGroupSubject)
+	authGroup.Post("/grade", h.CreateGrade)
+	authGroup.Get("/grade/:group/:name", h.GetGradesBySubject)
+
+	authGroup.Get("/schedule/search/teacher", h.GetScheduleSearchTeacher)
+	authGroup.Get("/schedule/search/name", h.GetScheduleSearchName)
+	authGroup.Get("/schedule/search/group", h.GetScheduleSearchGroup)
 
 	return f
 }

@@ -1,3 +1,5 @@
+
+
 CREATE TABLE IF NOT EXISTS class (
     id SERIAL PRIMARY KEY,
     name VARCHAR,

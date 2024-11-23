@@ -61,6 +61,32 @@ func (r *GroupRepository) GetByName(ctx context.Context, name string) (*entities
 	return &group, err
 }
 
+func (r *GroupRepository) GetGroupMembers(ctx context.Context, groupName string) (*[]entities.GroupMember, error) {
+	query := `
+		SELECT u.id AS user_id, ud.last_name, ud.first_name, ud.father_name FROM "group" g
+	JOIN users u ON g.user_id = u.id
+	JOIN user_data ud ON u.id = ud.id
+	WHERE g.name = $1;
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, groupName)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var members []entities.GroupMember
+	for rows.Next() {
+		var member entities.GroupMember
+		err = rows.Scan(&member.ID, &member.LastName, &member.FirstName, &member.FatherName)
+		if err != nil {
+			return nil, err
+		}
+		members = append(members, member)
+	}
+	return &members, nil
+}
+
 func (r *GroupRepository) GetAll(ctx context.Context) (*[]entities.Group, error) {
 	query := `SELECT id, name, user_id FROM "group"`
 	rows, err := r.db.QueryContext(ctx, query)

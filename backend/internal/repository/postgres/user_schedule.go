@@ -32,7 +32,7 @@ func (r *UserScheduleRepository) Create(ctx context.Context, userSchedule *entit
 	}
 
 	var id int
-	query = `INSERT INTO my_schedule (user_data_id, name, date, time_start, time_end) VALUES ($1) RETURNING id`
+	query = `INSERT INTO my_schedule (user_data_id, name, date, time_start, time_end) VALUES ($1, $2, $3, $4, $5) RETURNING id`
 
 	err = r.db.QueryRowContext(ctx, query, userSchedule.UserDataId, userSchedule.Name, userSchedule.Date, userSchedule.TimeStart, userSchedule.TimeEnd).Scan(&id)
 	if err != nil {
@@ -43,14 +43,28 @@ func (r *UserScheduleRepository) Create(ctx context.Context, userSchedule *entit
 	return id, nil
 }
 
-func (r *UserScheduleRepository) GetByUserId(ctx context.Context, userId int) (*entities.UserSchedule, error) {
-	var mySchedule entities.UserSchedule
+func (r *UserScheduleRepository) GetByUserId(ctx context.Context, userId int) (*[]entities.UserSchedule, error) {
+	var schedules []entities.UserSchedule // Изменяем на массив
 	query := `SELECT * FROM my_schedule WHERE user_data_id = $1`
-	err := r.db.QueryRowContext(ctx, query, userId).Scan(&mySchedule.Id, &mySchedule.Name, &mySchedule.Date, &mySchedule.TimeStart, &mySchedule.TimeEnd)
+	rows, err := r.db.QueryContext(ctx, query, userId) // Используем QueryContext
 	if err != nil {
 		return nil, err
 	}
-	return &mySchedule, nil
+	defer rows.Close() // Закрываем rows после использования
+
+	for rows.Next() {
+		var mySchedule entities.UserSchedule
+		if err := rows.Scan(&mySchedule.Id, &mySchedule.Name, &mySchedule.Date, &mySchedule.TimeStart, &mySchedule.TimeEnd, &mySchedule.UserDataId); err != nil {
+			return nil, err
+		}
+		schedules = append(schedules, mySchedule) // Добавляем расписание в массив
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return &schedules, nil
 }
 
 func (r *UserScheduleRepository) Update(ctx context.Context, mySchedule *entities.UserSchedule) error {

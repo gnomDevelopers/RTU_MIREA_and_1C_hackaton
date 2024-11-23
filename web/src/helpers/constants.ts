@@ -3,7 +3,7 @@
 //contants
 
 //api
-export const API = 'https://...';
+export const API = '/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
 
@@ -11,6 +11,8 @@ export const StatusWindowTime = 3000;
 export enum StatusCodes {
   'error', 'info', 'loading', 'success'
 };
+
+export const MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
 export const SCHEDULE_TARGET_TEXT = ['Выберите группу для просмотра', 'Выберите преподавателя для просмотра', 'Выберите факультет для просмотра'];
 
@@ -33,6 +35,12 @@ export interface ISearchList{
   data: any,
 }
 
+//itemList item interface
+export interface IItemList{
+  id: number,
+  name: string,
+}
+
 //userList item interface
 export interface IUsersList{
   id: number,
@@ -40,10 +48,9 @@ export interface IUsersList{
   role: number,
 }
 
-//itemList item interface
-export interface IItemList{
-  id: number,
-  name: string,
+//groupCOrrect item interface
+export interface IGroupCorrectUserItem{
+  //
 }
 
 //statusWindow interface
@@ -59,7 +66,6 @@ export interface Day{
   year: number,
   month: number,
   day: number,
-  isThisMonth: boolean,
 };
 
 // schedule item interface

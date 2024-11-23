@@ -326,6 +326,10 @@
 .schedule > tbody > tr > td:hover{
   background-color: #d9dbdf;
 }
+.selected-day{
+  color:white !important;
+  background-color: var(--bg-color-bold) !important;
+}
 
 
 table {

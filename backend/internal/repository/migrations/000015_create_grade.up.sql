@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS visiting (
+CREATE TABLE IF NOT EXISTS grade (
     id SERIAL PRIMARY KEY,
     class_id INTEGER REFERENCES class(id),
     user_id INTEGER REFERENCES users(id),
-    type VARCHAR NOT NULL
+    value INTEGER NOT NULL
 );

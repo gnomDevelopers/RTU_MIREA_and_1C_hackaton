@@ -53,12 +53,15 @@ type ClassRepository interface {
 	Create(context.Context, *[]entities.Class) ([]int, error)
 	GetById(context.Context, int) (*entities.Class, error)
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
-	GetByName(context.Context, string) (*[]entities.Class, error)
-	GetByTeacherName(context.Context, string) (*[]entities.Class, error)
+	GetByName(context.Context, string, string) (*[]entities.Class, error)
+	GetByNameAndGroup(context.Context, string, string) (*[]entities.Class, error)
+	GetByNameAndGroupWithoutLk(context.Context, string, string) (*[]entities.Class, error)
+	GetByTeacherName(context.Context, string, string) (*[]entities.Class, error)
 	GetByAuditory(context.Context, string) (*[]entities.Class, error)
 	SearchGroups(context.Context, string) ([]string, error)
 	SearchTeachers(context.Context, string) ([]string, error)
 	SearchNames(context.Context, string) ([]string, error)
+	SearchNamesWithGroup(context.Context, string) ([]string, error)
 	Update(context.Context, *entities.Class) error
 	Delete(context.Context, int) error
 }
@@ -68,13 +71,14 @@ type GroupRepository interface {
 	Create(context.Context, *entities.CreateGroupRequest) (int, error)
 	GetById(context.Context, int) (*entities.Group, error)
 	GetByUserID(context.Context, int) (*entities.Group, error)
+	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 	GetByName(context.Context, string) (*entities.Group, error)
 	GetAll(context.Context) (*[]entities.Group, error)
 }
 
 type UserScheduleRepository interface {
 	Create(context.Context, *entities.UserSchedule) (int, error)
-	GetByUserId(context.Context, int) (*entities.UserSchedule, error)
+	GetByUserId(context.Context, int) (*[]entities.UserSchedule, error)
 	Update(context.Context, *entities.UserSchedule) error
 	Delete(context.Context, int) error
 }
@@ -103,6 +107,11 @@ type DepartmentRepository interface {
 	Delete(context.Context, int) error
 }
 
+type GradeRepository interface {
+	Create(context.Context, *entities.Grade) (int, error)
+	GetByUserIdAndClassId(context.Context, int, int) (*entities.Grade, error)
+}
+
 type Repository struct {
 	User         UserRepository
 	UserData     UserDataRepository
@@ -114,4 +123,5 @@ type Repository struct {
 	Faculty      FacultyRepository
 	Department   DepartmentRepository
 	UserSchedule UserScheduleRepository
+	Grade        GradeRepository
 }

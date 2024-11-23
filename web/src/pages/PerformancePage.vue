@@ -1,14 +1,10 @@
 <template>
   <div class="flex flex-col items-center scrollable px-4 lg:px-0">
     <div class="flex flex-col w-full lg:w-10/12 items-center gap-y-4 mb-4">
-      
-      <div class="flex flex-row gap-x-2 items-stretch mt-5">
+
+      <PageTitle title="Успеваемость" description="В этом разделе Вы можете посмотреть и изменить успеваемость студентов. Для этого найдите в поиске нужную группу и предмет, а затем посмотрите или отредактируйте успеваемость.">
         <IconPerformance class="w-20 us:w-36 h-20 us:h-36"/>
-        <div class="flex flex-col gap-y-4">
-          <p class="text-4xl font-medium">Успеваемость</p>
-          <p class="text-xl">В этом разделе Вы можете посмотреть и изменить успеваемость студентов. Для этого найдите в поиске нужную группу и предмет, а затем посмотрите или отредактируйте успеваемость.</p>
-        </div>
-      </div>
+      </PageTitle>
 
       <div>
         <SearchList 
@@ -104,10 +100,12 @@ import SearchList from '@/entities/searchList.vue';
 import IconPerformance from '@/shared/iconPerformance.vue';
 import SubjectItem from '@/shared/subjectItem.vue';
 import { type ISearchList, type IItemList } from '@/helpers/constants';
-import PerformanceSearchListItem from '@/entities/performanceSearchListItem.vue';
+import PerformanceSearchListItem from '@/entities/listItems/performanceSearchListItem.vue';
+import PageTitle from '@/shared/pageTitle.vue';
 
 export default{
   components:{
+    PageTitle,
     IconPerformance,
     SubjectItem,
     SearchList,

@@ -48,6 +48,14 @@ func (u *UniversityService) GetById(c context.Context, id int) (*entities.Univer
 	return university, err
 }
 
+func (u *UniversityService) GetByUserID(c context.Context, id int) (*entities.University, error) {
+	ctx, cancel := context.WithTimeout(c, u.timeout)
+	defer cancel()
+
+	university, err := u.repository.GetByUserID(ctx, id)
+	return university, err
+}
+
 func (u *UniversityService) GetByName(c context.Context, name string) (*entities.University, error) {
 	ctx, cancel := context.WithTimeout(c, u.timeout)
 	defer cancel()
