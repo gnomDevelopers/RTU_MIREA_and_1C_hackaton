@@ -58,5 +58,11 @@ export const router = createRouter({
       component: () => import('@/pages/GroupCorrectPage.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      name: 'AttendancePage',
+      path: '/attendance',
+      component: () => import('@/pages/AttendancePage.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 });

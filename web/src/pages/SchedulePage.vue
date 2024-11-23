@@ -1,9 +1,10 @@
 <template>
   <div class="flex flex-col w-full items-center scrollable">
-    <div class="flex flex-col gap-y-4 lg:flex-row xl:w-10/12 pt-6 px-2 us:px-0">
-      <div class="flex flex-col w-full lg:w-1/2 items-center gap-y-5">
+    <div class="flex flex-col gap-y-4 lg:flex-row xl:w-10/12 pt-4 px-2 us:px-0">
 
-        <p class=" text-4xl font-medium text-center">Просмотр расписания</p>
+      <div class="flex flex-col w-full lg:w-1/2 items-center gap-y-4">
+        <p class="text-4xl font-medium text-center">Просмотр расписания</p>
+        
         <div class="flex flex-row gap-x-2 p-2 rounded-lg bg-color-light w-full us:w-auto">
           <p 
             @click="selectScheduleType(0)"
@@ -59,21 +60,7 @@
 
       </div>
       <div class="flex flex-col gap-y-4 items-center lg:w-1/2">
-        <div class="flex flex-col items-center gap-y-4 bg-color-light rounded-xl p-4">
-          <div class="flex flex-col gap-y-1 w-full items-stretch">
-            <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">12.11.2024, Вторник</div>
-            <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">11 неделя</div>
-          </div>
-          <div class="flex flex-col gap-y-1 w-full items-stretch">
-            <ScheduleItem 
-              v-for="(item, ind) in scheduleStore.scheduleTableDay"
-              :index="ind + 1" 
-              :time="`${item.time} ${item.type}`" 
-              :title="item.title" 
-              :room="item.place" 
-              :group="item.groups.join(', ')"/>
-          </div>
-        </div>
+        <ScheduleClassList :canAddFaculties="true"/>
       </div>
     </div>
   </div>
@@ -84,16 +71,16 @@ import { useScheduleStore } from '@/stores/scheduleStore';
 import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
-import ScheduleItem from '@/shared/scheduleItem.vue';
 import SearchList from '@/entities/searchList.vue';
 import ScheduleSearchListItem from '@/entities/scheduleSearchListItem.vue';
+import ScheduleClassList from '@/entities/scheduleClassList.vue';
 
 export default {
   components:{
-    ScheduleItem,
     CalendarTable,
     SearchList,
     ScheduleSearchListItem,
+    ScheduleClassList,
   },
   data(){
     return{

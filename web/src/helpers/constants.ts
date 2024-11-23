@@ -12,6 +12,8 @@ export enum StatusCodes {
   'error', 'info', 'loading', 'success'
 };
 
+export const MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
 export const SCHEDULE_TARGET_TEXT = ['Выберите группу для просмотра', 'Выберите преподавателя для просмотра', 'Выберите факультет для просмотра'];
 
 //types
@@ -64,7 +66,6 @@ export interface Day{
   year: number,
   month: number,
   day: number,
-  isThisMonth: boolean,
 };
 
 // schedule item interface

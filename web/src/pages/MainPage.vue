@@ -20,7 +20,7 @@
           <IconGroups/>
         </MainTableItem>
 
-        <MainTableItem title="Посещаемость" text="Просмотр, добавление, редактирование посещаемости">
+        <MainTableItem @click="$router.push({name: 'AttendancePage'})" title="Посещаемость" text="Просмотр, добавление, редактирование посещаемости">
           <IconAttendance/>
         </MainTableItem>
 

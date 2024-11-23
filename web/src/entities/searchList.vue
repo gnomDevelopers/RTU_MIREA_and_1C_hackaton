@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-y-2 mt-2 max-h-[600px]">
-    <p class=" text-lg">{{ title }}</p>
+  <div class="flex flex-col gap-y-2 max-h-[600px]">
+    <p v-if="title !== ''" class="text-lg">{{ title }}</p>
     <div class="flex flex-row mb:self-start rounded-lg bg-white header-shadow ">
 
       <input 
