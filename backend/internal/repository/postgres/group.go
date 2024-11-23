@@ -39,6 +39,17 @@ func (r *GroupRepository) GetById(ctx context.Context, id int) (*entities.Group,
 	return &group, err
 }
 
+func (r *GroupRepository) GetByUserID(ctx context.Context, userID int) (*entities.Group, error) {
+	group := &entities.Group{}
+
+	query := `SELECT id, name, user_id FROM "group" WHERE user_id = $1`
+	err := r.db.QueryRowContext(ctx, query, userID).Scan(&group.ID, &group.Name, &group.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return group, nil
+}
+
 func (r *GroupRepository) GetByName(ctx context.Context, name string) (*entities.Group, error) {
 	var group entities.Group
 	query := `SELECT id, name, user_id FROM "group" WHERE name = $1`
