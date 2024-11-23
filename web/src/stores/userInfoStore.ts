@@ -19,9 +19,13 @@ export const useUserInfoStore = defineStore('userInfo', {
   },
   actions: {
     async Authenticate(){
-      const data = await API_Authenticate();
-      
-      //...
+      try{
+        console.log('sending reequest');
+        const data = await API_Authenticate();
+        console.log('data: ', data);
+      }catch (error){
+        this.authenticated = false;
+      }
     }
   }
 });
