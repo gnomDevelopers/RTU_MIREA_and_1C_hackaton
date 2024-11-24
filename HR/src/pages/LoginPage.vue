@@ -107,9 +107,9 @@
                   <input
                       type="file"
                       id="resume"
-                      @change="handleFileUpload"
+                      
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  />
+                  /> <!--@change="handleFileUpload"-->
                 </div>
               </form>
             </div>
@@ -169,7 +169,10 @@ export default {
   },
   methods: {
     sendLogin(){
+      console.log('login: ', this.login);
+      console.log('password: ', this.password);
       if(this.login.value !== '' && this.password.value !== ''){
+        console.log('here1');
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
         API_Login(data)
@@ -188,10 +191,12 @@ export default {
       }
 
       if(this.login.value === ''){
+        console.log('here2');
         if(this.login.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите логин!');
         else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.login.error);
       }
       if(this.password.value === ''){
+        console.log('here3');
         if(this.password.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите пароль!');
         else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.password.error);
       }

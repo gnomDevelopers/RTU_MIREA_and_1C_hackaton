@@ -137,3 +137,12 @@
 .progress-step.active {
     background-color: var(--btn-color-normal);
 }
+
+@keyframes timeLine{
+    from{
+      width: 100%;
+    }
+    to{
+      width: 0px;
+    }
+  }
