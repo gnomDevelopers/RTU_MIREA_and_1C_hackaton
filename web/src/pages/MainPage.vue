@@ -4,6 +4,14 @@
       <div class="text-4xl text-center us:text-left">Здравствуйте, Генадий{{ userInfoStore.first_name }} Абрамович{{ userInfoStore.father_name }}!</div>
       <div class="flex flex-col gap-y-4 pb-4">
 
+        <MainTableItem @clicked="$router.push({name: 'QRCodeShowPage'})" title="Страница с QR кодом" text="тест">
+          <IconAccounts/>
+        </MainTableItem>
+
+        <MainTableItem @clicked="$router.push({name: 'QRCodeScanPage'})" title="Чтение QR кода" text="тест">
+          <IconAccounts/>
+        </MainTableItem>
+
         <MainTableItem @clicked="$router.push({name: 'AccountsPage'})" title="Создание учетных записей" text="Создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента">
           <IconAccounts/>
         </MainTableItem>
