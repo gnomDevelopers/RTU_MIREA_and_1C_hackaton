@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/lib/pq"
+	"github.com/rs/zerolog/log"
 	"server/internal/entities"
 )
 
@@ -41,21 +42,23 @@ func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class)
                     SELECT 1 FROM class 
                     WHERE date = $1 AND weekday = $2 AND week = $3 AND time_start = $4 AND time_end = $5 AND auditory = $6
                 );`
+		log.Printf("start exist %v", class)
 		err = tx.QueryRowContext(ctx, checkQuery, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Auditory).Scan(&exists)
 		if err != nil && err != sql.ErrNoRows {
 			return []int{}, err
 		}
-
+		log.Printf("exist %v", class)
 		// Если запись не существует, выполняем вставку
 		if !exists {
 			insertQuery := `INSERT INTO class (name, group_names, teacher_names, type, auditory, date, weekday, week, time_start, time_end, university) 
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                     RETURNING id;`
-
+			log.Printf("start create %v", class)
 			err = tx.QueryRowContext(ctx, insertQuery, class.Name, pq.Array(class.GroupNames), pq.Array(class.TeacherNames), class.Type, class.Auditory, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.UniversityStr).Scan(&id)
 			if err != nil {
 				return []int{}, err
 			}
+			log.Printf("create %v", class)
 			ids = append(ids, id)
 		} else {
 			if class.Type == "ЛК" || class.Auditory == "Дистанционно" {
