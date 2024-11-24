@@ -53,9 +53,9 @@ type ScheduleNames struct {
 }
 
 type GetGradesBySubject struct {
-	GroupMember       []GroupMember       `json:"group_member"`
-	GradeClass        []GradeClass        `json:"grade_class"`
-	AverageUsersScore []AverageUsersScore `json:"average_users_score"`
+	GroupMember []GroupMember `json:"group_member"`
+	GradeClass  []GradeClass  `json:"grade_class"`
+	UsersScore  []UsersScore  `json:"users_score"`
 }
 
 type GradeClass struct {

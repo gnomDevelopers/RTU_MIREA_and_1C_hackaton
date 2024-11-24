@@ -80,7 +80,7 @@ func (r *ClassRepository) GetById(ctx context.Context, id int) (*entities.Class,
 
 	var class entities.Class
 	query := `SELECT * FROM class WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&class.Id, &class.Name, &class.GroupNames, &class.TeacherNames, &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)
 	if err != nil {
 		return nil, err
 	}

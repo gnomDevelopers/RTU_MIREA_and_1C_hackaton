@@ -20,7 +20,7 @@ type UserData struct {
 	FirstName            string `json:"first_name"`
 	FatherName           string `json:"father_name"`
 	UniversityID         int    `json:"university_id"`
-	PermissionID         int    `json:"permission_id"`
+	Role                 string `json:"role"`
 	FacultyID            int    `json:"faculty_id"`
 	Group                string `json:"group"`
 	DepartmentID         int    `json:"department_id"`
@@ -36,7 +36,7 @@ type AddUserDataRequest struct {
 	FirstName            string `json:"first_name"`
 	FatherName           string `json:"father_name"`
 	University           string `json:"university"`
-	PermissionID         int    `json:"permission_id"`
+	Role                 string `json:"role"`
 	Group                string `json:"group"`
 	Faculty              string `json:"faculty"`
 	EducationalDirection string `json:"educational_direction"`

@@ -84,7 +84,8 @@ type UserScheduleRepository interface {
 }
 
 type UserDataRepository interface {
-	AddStudent(context.Context, *entities.UserData) (int, error)
+	AddUserData(context.Context, *entities.UserData) (int, error)
+	AddAdmin(context.Context, *entities.UserData) (int, error)
 }
 
 type FacultyRepository interface {
@@ -112,6 +113,11 @@ type GradeRepository interface {
 	GetByUserIdAndClassId(context.Context, int, int) (*entities.Grade, error)
 }
 
+type ScoreRepository interface {
+	Update(context.Context, *entities.Score) error
+	Get(context.Context, *entities.Score) (*entities.Score, error)
+}
+
 type Repository struct {
 	User         UserRepository
 	UserData     UserDataRepository
@@ -124,4 +130,5 @@ type Repository struct {
 	Department   DepartmentRepository
 	UserSchedule UserScheduleRepository
 	Grade        GradeRepository
+	Score        ScoreRepository
 }

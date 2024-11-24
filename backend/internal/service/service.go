@@ -13,10 +13,11 @@ type User interface {
 }
 
 type UserData interface {
-	Add(context.Context, *[]entities.AddUserDataRequest) error
-	getOrCreateUniversity(ctx context.Context, name string) (int, error)
-	getOrCreateFaculty(ctx context.Context, name string) (int, error)
-	getOrCreateDepartment(ctx context.Context, name string) (int, error)
+	AddStudent(context.Context, *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error)
+	getOrCreateUniversity(context.Context, string) (int, error)
+	getOrCreateFaculty(context.Context, string) (int, error)
+	getOrCreateDepartment(context.Context, string) (int, error)
+	AddAdmin(context.Context) error
 }
 
 type University interface {
@@ -55,6 +56,7 @@ type Service struct {
 	ClassService        *ClassService
 	UserScheduleService *UserScheduleService
 	GradeService        *GradeService
+	ScoreService        *ScoreService
 	conf                *config.Config
 }
 
@@ -69,5 +71,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		GroupService:        NewGroupService(repositories.Group),
 		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
 		GradeService:        NewGradeService(repositories.Grade),
+		ScoreService:        NewScoreService(repositories.Score),
 	}
 }

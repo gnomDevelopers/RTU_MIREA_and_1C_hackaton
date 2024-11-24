@@ -13,9 +13,10 @@ type CreateGradeRequest struct {
 	Value   int `json:"value"`
 }
 
-type AverageUsersScore struct {
+type UsersScore struct {
 	UserId       int     `json:"user_id"`
 	AverageScore float64 `json:"average_score"`
+	SumScore     int     `json:"sum_score"`
 }
 
 type CreateGradeResponse struct {

@@ -439,10 +439,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.CreateGradeRequest"
-                            }
+                            "$ref": "#/definitions/entities.CreateGradeRequest"
                         }
                     }
                 ],
@@ -450,10 +447,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.CreateCampusesResponse"
-                            }
+                            "$ref": "#/definitions/entities.CreateGradeResponse"
                         }
                     },
                     "400": {
@@ -516,7 +510,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entities.Campus"
+                                "$ref": "#/definitions/entities.GetGradesBySubject"
                             }
                         }
                     },
@@ -2233,8 +2227,8 @@ const docTemplate = `{
                 "last_name": {
                     "type": "string"
                 },
-                "permission_id": {
-                    "type": "integer"
+                "role": {
+                    "type": "string"
                 },
                 "university": {
                     "type": "string"
@@ -2461,6 +2455,14 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CreateGradeResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.CreateUniversityRequest": {
             "type": "object",
             "properties": {
@@ -2510,6 +2512,29 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.GetGradesBySubject": {
+            "type": "object",
+            "properties": {
+                "grade_class": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.GradeClass"
+                    }
+                },
+                "group_member": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.GroupMember"
+                    }
+                },
+                "users_score": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.UsersScore"
+                    }
+                }
+            }
+        },
         "entities.GetUserScheduleResponse": {
             "type": "object",
             "properties": {
@@ -2524,6 +2549,63 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/entities.UserSchedule"
                     }
+                }
+            }
+        },
+        "entities.Grade": {
+            "type": "object",
+            "properties": {
+                "class_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.GradeClass": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "grades": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Grade"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.GroupMember": {
+            "type": "object",
+            "properties": {
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
                 }
             }
         },
@@ -2683,6 +2765,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_data_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.UsersScore": {
+            "type": "object",
+            "properties": {
+                "average_score": {
+                    "type": "number"
+                },
+                "sum_score": {
+                    "type": "integer"
+                },
+                "user_id": {
                     "type": "integer"
                 }
             }

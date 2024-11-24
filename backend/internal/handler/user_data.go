@@ -27,7 +27,7 @@ func (h *Handler) CreateStudent(c *fiber.Ctx) error {
 	}
 
 	// Вызываем метод сервиса
-	resp, err := h.services.UserData.Add(c.Context(), &requests)
+	resp, err := h.services.UserData.AddStudent(c.Context(), &requests)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
