@@ -1,12 +1,12 @@
 <template>
-  <div v-if="fileList.length !== 0" class="flex flex-col gap-y-1 p-2 cursor-default">
-    <div v-for="file in fileList" class="flex flex-row items-center py-1 px-2 rounded-lg bg-slate-200">
+  <div v-if="fileList.length !== 0" class="flex flex-col gap-y-1 p-1 us:p-2 cursor-default">
+    <div v-for="file in fileList" class="flex flex-row items-center py-1 px-1 us:px-2 rounded-lg bg-slate-200">
       <img class="w-8 h-11" alt="Файл" src="../assets/icons/icon-excel.svg"/>
-      <div class="flex flex-col flex-grow min-w-40 px-2">
-        <p class="text-lg">{{ file.name }}</p>
+      <div class="flex flex-col flex-grow min-w-40 us:px-2">
+        <p class="text-lg text-wrap break-words">{{ file.name }}</p>
         <p class=" text-sm text-gray-500">Size: {{ compileFileSize(file.size) }}</p>
       </div>
-      <div @click="deleteFile(file)" class="w-9 h-9 flex flex-row justify-center items-center rounded-lg cursor-pointer bg-red-400">
+      <div @click="deleteFile(file)" class="w-9 h-9 flex flex-row flex-shrink-0 justify-center items-center rounded-lg cursor-pointer bg-red-400">
         <img class="w-6 h-8" src="../assets/icons/icon-delete.svg"/>
       </div>
     </div>

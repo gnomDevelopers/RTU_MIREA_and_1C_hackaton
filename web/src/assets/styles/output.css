@@ -682,16 +682,16 @@ video {
   margin-top: 2.5rem;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
 .mt-5 {
   margin-top: 1.25rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
 }
 
 .flex {
@@ -1112,8 +1112,16 @@ video {
   overflow-x: scroll;
 }
 
+.text-wrap {
+  text-wrap: wrap;
+}
+
 .text-nowrap {
   text-wrap: nowrap;
+}
+
+.break-words {
+  overflow-wrap: break-word;
 }
 
 .rounded {
@@ -1317,6 +1325,11 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
 .pb-10 {
   padding-bottom: 2.5rem;
 }
@@ -1404,12 +1417,12 @@ video {
   font-weight: 500;
 }
 
-.font-semibold {
-  font-weight: 600;
-}
-
 .font-normal {
   font-weight: 400;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .leading-normal {
@@ -2180,6 +2193,10 @@ thead th, tbody td {
     padding: 0.75rem;
   }
 
+  .us\:p-2 {
+    padding: 0.5rem;
+  }
+
   .us\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
@@ -2188,6 +2205,11 @@ thead th, tbody td {
   .us\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .us\:px-2 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .us\:text-left {
@@ -2214,6 +2236,10 @@ thead th, tbody td {
 
   .mb\:basis-\[440px\] {
     flex-basis: 440px;
+  }
+
+  .mb\:flex-row {
+    flex-direction: row;
   }
 
   .mb\:self-start {
@@ -2333,10 +2359,6 @@ thead th, tbody td {
 
   .lg\:w-10\/12 {
     width: 83.333333%;
-  }
-
-  .lg\:w-11\/12 {
-    width: 91.666667%;
   }
 
   .lg\:flex-row {
