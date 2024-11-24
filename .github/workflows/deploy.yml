@@ -22,7 +22,7 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ vars.NODE1_SSH_PORT }} ${{ vars.NODE1_SSH_USER }}@${{ secrets.NODE1_SERVER_IP }} << 'EOF'
-          cd /path/to/your/project
+          cd ${{ vars.NODE1_PROJECT_PATH }}
 
           # Save local changes and pull the latest code
           git stash
