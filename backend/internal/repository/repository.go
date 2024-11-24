@@ -85,6 +85,7 @@ type UserScheduleRepository interface {
 
 type UserDataRepository interface {
 	AddUserData(context.Context, *entities.UserData) (int, error)
+	AddAdmin(context.Context, *entities.UserData) (int, error)
 }
 
 type FacultyRepository interface {

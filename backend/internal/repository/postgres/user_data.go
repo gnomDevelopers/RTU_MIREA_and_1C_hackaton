@@ -35,3 +35,18 @@ func (r *UserDataRepository) AddUserData(ctx context.Context, userData *entities
 
 	return userData.ID, nil
 }
+
+func (r *UserDataRepository) AddAdmin(ctx context.Context, adminData *entities.UserData) (int, error) {
+	query := `
+		INSERT INTO user_data (
+			id, last_name, first_name, father_name, role
+		) VALUES ($1, $2, $3, $4, $5)
+	`
+
+	_, err := r.db.ExecContext(ctx, query, adminData.ID, adminData.LastName, adminData.FirstName, adminData.FatherName, adminData.Role)
+	if err != nil {
+		return 0, err
+	}
+
+	return adminData.ID, nil
+}
