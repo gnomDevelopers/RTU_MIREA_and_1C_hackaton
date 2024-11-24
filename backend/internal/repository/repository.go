@@ -112,6 +112,11 @@ type GradeRepository interface {
 	GetByUserIdAndClassId(context.Context, int, int) (*entities.Grade, error)
 }
 
+type ScoreRepository interface {
+	Update(context.Context, *entities.Score) error
+	Get(context.Context, *entities.Score) (*entities.Score, error)
+}
+
 type Repository struct {
 	User         UserRepository
 	UserData     UserDataRepository
@@ -124,4 +129,5 @@ type Repository struct {
 	Department   DepartmentRepository
 	UserSchedule UserScheduleRepository
 	Grade        GradeRepository
+	Score        ScoreRepository
 }

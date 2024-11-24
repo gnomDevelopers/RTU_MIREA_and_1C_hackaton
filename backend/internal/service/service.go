@@ -56,6 +56,7 @@ type Service struct {
 	ClassService        *ClassService
 	UserScheduleService *UserScheduleService
 	GradeService        *GradeService
+	ScoreService        *ScoreService
 	conf                *config.Config
 }
 
@@ -70,5 +71,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		GroupService:        NewGroupService(repositories.Group),
 		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
 		GradeService:        NewGradeService(repositories.Grade),
+		ScoreService:        NewScoreService(repositories.Score),
 	}
 }
