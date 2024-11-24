@@ -13,7 +13,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./.data/log/backend:/var/log/app
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - "127.0.0.1:10510:8080"
     healthcheck:
@@ -81,7 +81,7 @@ services:
       GF_USERS_ALLOW_SIGN_UP: "false"
       TG_BOT_TOKEN: "${TG_BOT_TOKEN}"
       TG_CHAT_ID: '"${TG_CHAT_ID}"'
-      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}"
+      # GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}"
     volumes:
       - ./backend/internal/log/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./backend/internal/log/grafana-provisioning/alerting:/etc/grafana/provisioning/alerting:ro
