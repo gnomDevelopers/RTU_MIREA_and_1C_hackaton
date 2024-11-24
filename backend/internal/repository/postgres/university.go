@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
 	"server/internal/entities"
 )
 
@@ -62,7 +61,6 @@ func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*en
 	university := &entities.University{}
 
 	err := r.db.QueryRowContext(ctx, query, userID).Scan(&university.Name)
-	log.Println("жопа:", err)
 	if err != nil {
 		return nil, err
 	}
