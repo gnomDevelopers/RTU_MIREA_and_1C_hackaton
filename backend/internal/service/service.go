@@ -18,6 +18,8 @@ type UserData interface {
 	getOrCreateFaculty(context.Context, string) (int, error)
 	getOrCreateDepartment(context.Context, string) (int, error)
 	AddAdmin(context.Context) error
+	GetEducationalDirection(context.Context, int) (string, error)
+	GetById(context.Context, int) (*entities.UserData, error)
 }
 
 type University interface {

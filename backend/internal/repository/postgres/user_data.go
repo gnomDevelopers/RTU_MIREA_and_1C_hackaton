@@ -117,3 +117,19 @@ func (r *UserDataRepository) GetEducationalDirection(ctx context.Context, userId
 
 	return educationalDirection, nil
 }
+
+func (r *UserDataRepository) GetById(ctx context.Context, userID int) (*entities.UserData, error) {
+	var user entities.UserData
+
+	query := `
+		SELECT first_name, last_name, father_name, role, faculty_id, department_id, educational_direction, university_id
+		FROM user_data 
+		WHERE id = $1 LIMIT 1;
+	`
+
+	err := r.db.QueryRowContext(ctx, query, userID).Scan(&user.FirstName, &user.LastName, &user.FatherName, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection, &user.UniversityID)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

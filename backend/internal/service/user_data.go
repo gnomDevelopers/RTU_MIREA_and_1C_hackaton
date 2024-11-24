@@ -155,3 +155,14 @@ func (s *UserDataService) GetEducationalDirection(c context.Context, userId int)
 	educationalDirection, err := s.UserDataRepository.GetEducationalDirection(ctx, userId)
 	return educationalDirection, err
 }
+
+func (s *UserDataService) GetById(c context.Context, userID int) (*entities.UserData, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	req, err := s.UserDataRepository.GetById(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	return req, nil
+}
