@@ -20,7 +20,7 @@ func (s *FacultyService) GetAll(c context.Context, req *entities.GetFacultyReque
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	faculties, err := s.repositories.GetAllByUniName(ctx, req.UniversityName)
+	faculties, err := s.repositories.GetAllByUniName(ctx, req)
 	if err != nil {
 		return nil, err
 	}

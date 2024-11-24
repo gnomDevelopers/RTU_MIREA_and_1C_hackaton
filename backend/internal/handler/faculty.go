@@ -11,5 +11,9 @@ func (h *Handler) GetFacultiesByUniversityName(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
-	res := h.services.FacultyService.GetAll(c.Context(), req)
+	res, err := h.services.FacultyService.GetAll(c.Context(), &req)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(res)
 }

@@ -95,7 +95,7 @@ type FacultyRepository interface {
 	Create(context.Context, *entities.CreateFacultyRequest) (int, error)
 	GetById(context.Context, int) (*entities.Faculty, error)
 	GetByName(context.Context, string) (*entities.Faculty, error)
-	GetAllByUniName(context.Context, string) (*[]entities.Faculty, error)
+	GetAllByUniName(context.Context, *entities.GetFacultyRequest) (*[]entities.Faculty, error)
 	GetAll(context.Context) (*[]entities.Faculty, error)
 	Update(context.Context, *entities.UpdateFacultyRequest) error
 	Delete(context.Context, int) error
