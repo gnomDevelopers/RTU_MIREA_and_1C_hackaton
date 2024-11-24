@@ -99,15 +99,15 @@ export function API_SendFile(data: FormData){
 /////// AUDIENCE ///////
 
 //создание аудитории
-export function API_Audience_Create(data: IAPI_Audience_Create){
+export function API_Audience_Create(data: IAPI_Audience_Create[]){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/audience`, data)
     .then(response => {
-      if(DEVMODE) console.log('Audience create success: ', response);
+      if(DEVMODE) console.log('Audiences create success: ', response);
       resolve(response);
     })
     .catch(error => {
-      if(DEVMODE) console.log('Audience create error: ', error);
+      if(DEVMODE) console.log('Audiences create error: ', error);
       reject(error);
     })
   });
