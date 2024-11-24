@@ -1,17 +1,7 @@
 import axios from "axios";
 import { 
   API, DEVMODE, 
-  type IAPI_Login_Request, 
-  type IAPI_Audience_Create, 
-  type IAPI_Audience_Update, 
-  type IAPI_Campus_Create,
-  type IAPI_Campus_Update, 
-  type IAPI_Class_Create, 
-  type IAPI_Class_Update, 
-  type IAPI_User_Schedule_Create, 
-  type IAPI_User_Schedule_Update, 
-  type IAPI_University_Create, 
-  type IAPI_University_Update 
+  type IAPI_Login_Request,
 } from '../helpers/constants';
 
 
