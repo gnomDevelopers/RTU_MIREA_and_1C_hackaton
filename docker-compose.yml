@@ -94,6 +94,7 @@ services:
     volumes:
       - ./backend/internal/log/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./backend/internal/log/grafana-provisioning/alerting:/etc/grafana/provisioning/alerting:ro
+      - .data/grafana/:/etc/grafana
     ports:
       - "127.0.0.1:10540:3000"
     depends_on:
