@@ -3,3 +3,4 @@
 database
 monitoring
 .data
+*.bak

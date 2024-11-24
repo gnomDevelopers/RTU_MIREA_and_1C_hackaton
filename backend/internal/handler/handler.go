@@ -1,15 +1,17 @@
 package handler
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/swagger"
-	"github.com/rs/zerolog"
 	_ "server/docs"
 	"server/internal/config"
 	"server/internal/log"
 	"server/internal/service"
 	"server/pkg"
+
+	fiberSwagger "github.com/swaggo/fiber-swagger"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/rs/zerolog"
 )
 
 type Handler struct {
@@ -38,7 +40,7 @@ func (h *Handler) Router() *fiber.App {
 	}))
 	f.Use(log.RequestLogger(h.logger))
 
-	f.Get("/swagger/*", swagger.HandlerDefault)
+	f.Get("/swagger/*", fiberSwagger.WrapHandler)
 
 	f.Get("/health", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).SendString("healthy")
@@ -74,6 +76,12 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/audience", h.CreateAudiences)
 	f.Put("/audience", h.UpdateAudience)
 	f.Delete("/audience/:id", h.DeleteAudience)
+
+	f.Get("/discipline/semester/:ed_dir/:semester", h.GetAcademicDisciplinesByEducationalDirectionAndSemester)
+	f.Get("/discipline/name/:ed_dir/:name", h.GetAcademicDisciplineByEducationalDirectionAndName)
+	f.Post("/discipline", h.CreateAcademicDiscipline)
+	f.Put("/discipline", h.UpdateAcademicDiscipline)
+	f.Delete("/discipline/:id", h.DeleteAcademicDiscipline)
 
 	f.Get("/class/id/:id", h.GetByIdClass)
 	f.Get("/class/auditory/:name", h.GetByAuditoryClass)

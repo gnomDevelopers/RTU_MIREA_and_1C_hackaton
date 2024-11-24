@@ -1792,6 +1792,276 @@
                 }
             }
         },
+        "/discipline": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Update discipline",
+                "parameters": [
+                    {
+                        "description": "university data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.AcademicDiscipline"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Create discipline",
+                "parameters": [
+                    {
+                        "description": "class data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateAcademicDisciplineRequest"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateAcademicDisciplineResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/discipline/name/{ed_dir}/{name}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Get discipline by ed dir and name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ed_dir",
+                        "name": "ed_dir",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.AcademicDiscipline"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/discipline/semester/{ed_dir}/{semester}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Get discipline by ed dir and semester",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ed_dir",
+                        "name": "ed_dir",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "semester",
+                        "name": "semester",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.AcademicDiscipline"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/discipline/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Delete discipline",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "discipline id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "get": {
                 "description": "Verifies the validity of the access token stored in cookies and retrieves the associated user ID.",
@@ -2192,6 +2462,38 @@
         }
     },
     "definitions": {
+        "entities.AcademicDiscipline": {
+            "type": "object",
+            "properties": {
+                "educational_direction": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "individual_hours": {
+                    "type": "integer"
+                },
+                "lab_hours": {
+                    "type": "integer"
+                },
+                "lecture_hours": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "practice_hours": {
+                    "type": "integer"
+                },
+                "semester": {
+                    "type": "integer"
+                },
+                "type_of_assessment": {
+                    "type": "string"
+                }
+            }
+        },
         "entities.AddUserDataRequest": {
             "type": "object",
             "properties": {
@@ -2330,6 +2632,43 @@
                     "type": "integer"
                 },
                 "weekday": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.CreateAcademicDisciplineRequest": {
+            "type": "object",
+            "properties": {
+                "educational_direction": {
+                    "type": "string"
+                },
+                "individual_hours": {
+                    "type": "integer"
+                },
+                "lab_hours": {
+                    "type": "integer"
+                },
+                "lecture_hours": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "practice_hours": {
+                    "type": "integer"
+                },
+                "semester": {
+                    "type": "integer"
+                },
+                "type_of_assessment": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.CreateAcademicDisciplineResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
                     "type": "integer"
                 }
             }

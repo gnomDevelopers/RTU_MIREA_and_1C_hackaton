@@ -1,5 +1,26 @@
 basePath: /
 definitions:
+  entities.AcademicDiscipline:
+    properties:
+      educational_direction:
+        type: string
+      id:
+        type: integer
+      individual_hours:
+        type: integer
+      lab_hours:
+        type: integer
+      lecture_hours:
+        type: integer
+      name:
+        type: string
+      practice_hours:
+        type: integer
+      semester:
+        type: integer
+      type_of_assessment:
+        type: string
+    type: object
   entities.AddUserDataRequest:
     properties:
       department_id:
@@ -91,6 +112,30 @@ definitions:
       week:
         type: integer
       weekday:
+        type: integer
+    type: object
+  entities.CreateAcademicDisciplineRequest:
+    properties:
+      educational_direction:
+        type: string
+      individual_hours:
+        type: integer
+      lab_hours:
+        type: integer
+      lecture_hours:
+        type: integer
+      name:
+        type: string
+      practice_hours:
+        type: integer
+      semester:
+        type: integer
+      type_of_assessment:
+        type: string
+    type: object
+  entities.CreateAcademicDisciplineResponse:
+    properties:
+      id:
         type: integer
     type: object
   entities.CreateAudiencesRequest:
@@ -1528,6 +1573,183 @@ paths:
       summary: Get class by id
       tags:
       - class
+  /discipline:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: class data
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.CreateAcademicDisciplineRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.CreateAcademicDisciplineResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create discipline
+      tags:
+      - discipline
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.AcademicDiscipline'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update discipline
+      tags:
+      - discipline
+  /discipline/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: discipline id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete discipline
+      tags:
+      - discipline
+  /discipline/name/{ed_dir}/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ed_dir
+        in: path
+        name: ed_dir
+        required: true
+        type: string
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.AcademicDiscipline'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get discipline by ed dir and name
+      tags:
+      - discipline
+  /discipline/semester/{ed_dir}/{semester}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ed_dir
+        in: path
+        name: ed_dir
+        required: true
+        type: string
+      - description: semester
+        in: path
+        name: semester
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.AcademicDiscipline'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get discipline by ed dir and semester
+      tags:
+      - discipline
   /login:
     get:
       consumes:

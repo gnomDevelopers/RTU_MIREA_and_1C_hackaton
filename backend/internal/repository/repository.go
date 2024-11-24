@@ -121,17 +121,26 @@ type ScoreRepository interface {
 	Get(context.Context, *entities.Score) (*entities.Score, error)
 }
 
+type AcademicDisciplineRepository interface {
+	Create(context.Context, *entities.AcademicDiscipline) (int, error)
+	GetByEducationalDirectionAndSemester(context.Context, string, int) (*[]entities.AcademicDiscipline, error)
+	GetByEducationalDirectionAndName(context.Context, string, string) (*entities.AcademicDiscipline, error)
+	Update(context.Context, *entities.AcademicDiscipline) error
+	Delete(context.Context, int) error
+}
+
 type Repository struct {
-	User         UserRepository
-	UserData     UserDataRepository
-	University   UniversityRepository
-	Campus       CampusRepository
-	Group        GroupRepository
-	Audience     AudienceRepository
-	Class        ClassRepository
-	Faculty      FacultyRepository
-	Department   DepartmentRepository
-	UserSchedule UserScheduleRepository
-	Grade        GradeRepository
-	Score        ScoreRepository
+	User               UserRepository
+	UserData           UserDataRepository
+	University         UniversityRepository
+	Campus             CampusRepository
+	Group              GroupRepository
+	Audience           AudienceRepository
+	Class              ClassRepository
+	Faculty            FacultyRepository
+	Department         DepartmentRepository
+	UserSchedule       UserScheduleRepository
+	Grade              GradeRepository
+	Score              ScoreRepository
+	AcademicDiscipline AcademicDisciplineRepository
 }
