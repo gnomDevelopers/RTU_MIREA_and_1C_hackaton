@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"server/internal/entities"
 	"server/internal/log"
@@ -54,12 +53,6 @@ func (h *Handler) GetByUserId(c *fiber.Ctx) error {
 	var disciplines []entities.AcademicDiscipline
 	for _, className := range classNames {
 		discipline, _ := h.services.AcademicDisciplineService.GetByEducationalDirectionAndName(c.Context(), className, edDir)
-		//if err != nil {
-		//	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-		//		Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		//	logEvent.Msg(err.Error())
-		//	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-		//}
 
 		if discipline != nil {
 			disciplines = append(disciplines, *discipline)
@@ -74,7 +67,6 @@ func (h *Handler) GetByUserId(c *fiber.Ctx) error {
 			disciplineHour := discipline.IndividualHours + discipline.PracticeHours + discipline.LectureHours + discipline.LabHours
 			sumAllWorkHour += disciplineHour
 			gpa += (float64(score.Sum) / float64(score.Count)) * float64(disciplineHour)
-			fmt.Println(disciplineHour, float64(score.Sum)/float64(score.Count))
 		}
 	}
 	gpa /= float64(sumAllWorkHour)

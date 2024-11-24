@@ -16,7 +16,7 @@ func NewUserDataRepository(db *sql.DB) *UserDataRepository {
 	}
 }
 
-func (r *UserDataRepository) AddUserData(ctx context.Context, userData *entities.UserData) (int, error) {
+func (r *UserDataRepository) AddUser(ctx context.Context, userData *entities.UserData) (int, error) {
 	query := `
 		INSERT INTO user_data (
 			id, last_name, first_name, father_name, university_id, 
