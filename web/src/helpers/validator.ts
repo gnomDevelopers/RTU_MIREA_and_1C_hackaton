@@ -29,10 +29,10 @@ export function ValidUserPassword(value: string): IValidAnswer{
   if(value.match(/[0-9]+/) === null){
     return {value: '', error: 'Пароль должен содержать хотя бы одну цифру!'};
   }
-  if(value.match(/[!"№;%:\?\*()_\+`~@#\$\^&\-=]+/) === null){
-    return {value: '', error: 'Пароль должен содержать хотя бы один спецсимвол!'};
-  }
-  if(value.match(/^[a-zA-Z0-9!"№;%:\?\*()_\+`~@#\$\^&\-=]+$/) === null){
+  // if(value.match(/[!"№;%:\?\*()_\+`~@#\$\^&\-=]+/) === null){
+  //   return {value: '', error: 'Пароль должен содержать хотя бы один спецсимвол!'};
+  // }
+  if(value.match(/^[a-zA-Z0-9]+$/) === null){ // !"№;%:\?\*()_\+`~@#\$\^&\-=
     return {value: '', error: 'Некорректный пароль!'};
   }
   if(value.length < 6){

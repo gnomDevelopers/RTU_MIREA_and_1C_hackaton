@@ -9,7 +9,7 @@
       <div class="flex flex-row gap-4 w-full justify-center items-start">
         <div class="flex flex-col w-1/2 gap-y-4 p-4 rounded-xl bg-color-light">
           <div class="p-2 rounded-lg bg-white">
-            <p class="text-center text-xl">Автоматическая генерация расписания</p>
+            <p class="text-center text-xl">Загрузка готового расписания</p>
           </div>
           <div>
             <p class="text-justify text-lg">Для того, чтобы расписание сгенерировалось корректно, внимательно вносите в таблицу требуемые данные об образовательном процессе. </p>
@@ -32,7 +32,7 @@
                 
                 <img class="w-8 h-11" src="../assets/icons/icon-upload-file.svg"/>
                 <p class="text-lg">Выберите файл</p>
-                <input class=" hidden invisible w-0 h-0" type="file" ref="fileInput" @change="handleFilesChange">
+                <input class=" hidden invisible w-0 h-0" type="file" ref="fileInput" accept=".xlsx" @change="handleFilesChange">
               </div>
 
               <div
@@ -86,6 +86,14 @@ export default {
   methods: {
     handleFilesChange(event: any){
       this.filesList = Array.from(event.target.files!);
+      const wrongFiles = [] as File[];
+      for(let i = 0; i < this.filesList.length; i++){
+        if(!this.filesList[i].name.endsWith('.xlsx')) {
+          if(wrongFiles.length === 0) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверное расширение файла!');
+          wrongFiles.push(this.filesList[i]);
+        }
+      }
+      for(let file of wrongFiles) this.handleDeleteFile(file);
     },
     handleDeleteFile(fileDelete: File){
       this.filesList = this.filesList.filter((file) => file !== fileDelete);

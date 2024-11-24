@@ -38,7 +38,7 @@
             {{ item.text }}
           </div>
         </div>
-        <div class="bg-slate-200 w-full h-1 self-start" :style="{'animation': item.time > 0 ? `timeLine ${item.time}ms linear forwards` : ''}">
+        <div v-if="item.time > 0" class="bg-slate-200 w-full h-1 self-start" :style="{'animation': item.time > 0 ? `timeLine ${item.time}ms linear forwards` : ''}">
         </div>
       </div>
     </TransitionGroup>
