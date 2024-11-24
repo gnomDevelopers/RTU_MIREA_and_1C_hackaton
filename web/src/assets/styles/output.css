@@ -2316,6 +2316,18 @@ thead th, tbody td {
     width: auto;
   }
 
+  .md\:w-56 {
+    width: 14rem;
+  }
+
+  .md\:w-48 {
+    width: 12rem;
+  }
+
+  .md\:w-52 {
+    width: 13rem;
+  }
+
   .md\:flex-row {
     flex-direction: row;
   }
