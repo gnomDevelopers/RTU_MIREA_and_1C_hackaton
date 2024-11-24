@@ -19,6 +19,7 @@ func NewScoreRepository(db *sql.DB) *ScoreRepository {
 func (r *ScoreRepository) Update(ctx context.Context, score *entities.Score) error {
 	if check, _ := r.Exist(ctx, score); check != true {
 		err := r.Create(ctx, score)
+
 		if err != nil {
 			return err
 		}
@@ -53,9 +54,8 @@ func (r *ScoreRepository) Exist(ctx context.Context, score *entities.Score) (boo
 }
 
 func (r *ScoreRepository) Create(ctx context.Context, score *entities.Score) error {
-	var exists int
 	query := `INSERT INTO score (user_id, sum, count, subject_name) VALUES($1, $2, $3, $4)`
-	err := r.db.QueryRowContext(ctx, query, score.UserId, 0, 0, score.SubjectName).Scan(&exists)
+	err := r.db.QueryRowContext(ctx, query, score.UserId, 0, 0, score.SubjectName).Err()
 	if err != nil {
 		return err
 	}
