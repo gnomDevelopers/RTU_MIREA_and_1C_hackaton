@@ -1976,6 +1976,38 @@ paths:
       summary: Get all universities
       tags:
       - university
+  /university/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.University'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get university by name
+      tags:
+      - university
   /university/name/{name}:
     get:
       consumes:
