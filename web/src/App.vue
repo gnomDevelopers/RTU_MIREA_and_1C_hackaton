@@ -20,9 +20,7 @@ export default {
     ...mapStores(useUserInfoStore),
   },
   async mounted(){
-    console.log('send auth request in app');
     await this.userInfoStore.Authenticate();
-    console.log('App: ', this.userInfoStore.authenticated);
   },
 };
 </script>
