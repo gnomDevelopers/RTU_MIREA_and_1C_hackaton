@@ -155,6 +155,7 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 	if !ok {
 		return c.SendStatus(fiber.StatusForbidden)
 	}
+	fmt.Printf("userId: %v", userId)
 	h.logger.Debug().Msg("call h.services.UniversityService.GetByUserID")
 	university, err := h.services.UniversityService.GetByUserID(c.Context(), userId)
 	if err != nil {

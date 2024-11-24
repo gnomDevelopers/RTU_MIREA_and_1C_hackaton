@@ -45,6 +45,36 @@ export function API_Login(data: IAPI_Login_Request){
   });
 };
 
+//выход из аккаунта
+export function API_Logout(){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/logout`)
+    .then(response => {
+      if(DEVMODE) console.log('Logout post success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Logout post error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение данных об аккаунте
+export function API_UserInfo(userID: number){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/user/${userID}`)
+    .then(response => {
+      if(DEVMODE) console.log('UserInfo get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('UserInfo get error: ', error);
+      reject(error);
+    })
+  });
+};
+
 //тест отправки файла на сервер
 export function API_SendFile(data: FormData){
   if (DEVMODE) for(let item of data) console.log('API_SendFile: ', item[1]);

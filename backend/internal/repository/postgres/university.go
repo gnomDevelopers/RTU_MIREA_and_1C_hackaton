@@ -43,6 +43,7 @@ func (r *UniversityRepository) Create(ctx context.Context, university *entities.
 
 func (r *UniversityRepository) GetById(ctx context.Context, id int) (*entities.University, error) {
 	var university entities.University
+
 	query := `SELECT * FROM university WHERE id = $1`
 	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name)
 	if err != nil {
