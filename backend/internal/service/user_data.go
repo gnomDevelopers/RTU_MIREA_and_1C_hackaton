@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"log"
 	"server/internal/entities"
@@ -218,7 +217,7 @@ func (s *UserDataService) AddAdmin(c context.Context) error {
 		return err
 	}
 	if exists {
-		return errors.New("admin already exists")
+		return nil
 	}
 
 	password := util.GenerateTemporaryPassword(15)
@@ -238,19 +237,14 @@ func (s *UserDataService) AddAdmin(c context.Context) error {
 	}
 
 	adminData := &entities.UserData{
-		ID:                   admin.ID,
-		LastName:             "Админов",
-		FirstName:            "Админ",
-		FatherName:           "Админович",
-		UniversityID:         -1,
-		Role:                 "Администратор",
-		FacultyID:            -1,
-		Group:                "-1",
-		DepartmentID:         -1,
-		EducationalDirection: "-1",
+		ID:         admin.ID,
+		LastName:   "Админов",
+		FirstName:  "Админ",
+		FatherName: "Админович",
+		Role:       "Администратор",
 	}
 
-	_, err = s.UserDataRepository.AddUserData(ctx, adminData)
+	_, err = s.UserDataRepository.AddAdmin(ctx, adminData)
 	if err != nil {
 		return err
 	}

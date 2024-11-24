@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"database/sql"
-	"log"
 	"server/internal/entities"
 )
 
@@ -45,7 +44,7 @@ func (r *UserRepository) Exists(ctx context.Context, email string) (bool, error)
 	query := "SELECT 1 FROM users WHERE email = $1 LIMIT 1"
 
 	err := r.db.QueryRowContext(ctx, query, email).Scan(&exists)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return false, err
 	}
 	if exists == 1 {
@@ -60,7 +59,6 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *entities.User) (*
 	VALUES ($1, $2) RETURNING id`
 
 	err := r.db.QueryRowContext(ctx, query, user.Email, user.Password).Scan(&lastInsertId)
-	log.Println(lastInsertId)
 	if err != nil {
 		return &entities.User{}, err
 	}
