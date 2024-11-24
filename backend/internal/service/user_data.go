@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"server/internal/entities"
@@ -42,7 +43,7 @@ func NewUserDataService(userRepo repository.UserRepository, userDataRepo reposit
 	}
 }
 
-func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error) {
+func (s *UserDataService) AddStudent(c context.Context, requests *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -81,6 +82,7 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 			FirstName:            request.FirstName,
 			FatherName:           request.FatherName,
 			EducationalDirection: request.EducationalDirection,
+			Role:                 "Студент",
 		}
 
 		// Университет
@@ -127,7 +129,7 @@ func (s *UserDataService) Add(c context.Context, requests *[]entities.AddUserDat
 			return nil, err
 		}
 
-		_, err = s.UserDataRepository.AddStudent(ctx, userData)
+		_, err = s.UserDataRepository.AddUserData(ctx, userData)
 		if err != nil {
 			return nil, err
 		}
@@ -167,14 +169,12 @@ func (s *UserDataService) getOrCreateUniversity(ctx context.Context, name string
 
 // getOrCreateFaculty обрабатывает добавление или получение факультета
 func (s *UserDataService) getOrCreateFaculty(ctx context.Context, name string) (int, error) {
-	log.Println("faculty exists")
 	exists, err := s.FacultyRepository.Exists(ctx, name)
 	if err != nil && err != sql.ErrNoRows {
 		return 0, err
 	}
 
 	if exists {
-		log.Println("faculty get by name")
 		faculty, err := s.FacultyRepository.GetByName(ctx, name)
 		if err != nil {
 			return 0, err
@@ -185,7 +185,6 @@ func (s *UserDataService) getOrCreateFaculty(ctx context.Context, name string) (
 	createFaculty := &entities.CreateFacultyRequest{
 		Name: name,
 	}
-	log.Println("faculty create")
 	return s.FacultyRepository.Create(ctx, createFaculty)
 }
 
@@ -208,4 +207,53 @@ func (s *UserDataService) getOrCreateDepartment(ctx context.Context, name string
 		Name: name,
 	}
 	return s.DepartmentRepository.Create(ctx, newDepartment)
+}
+
+func (s *UserDataService) AddAdmin(c context.Context) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	exists, err := s.UserRepository.Exists(ctx, "admin")
+	if err != nil {
+		return err
+	}
+	if exists {
+		return errors.New("admin already exists")
+	}
+
+	password := util.GenerateTemporaryPassword(15)
+	hashedPassword, err := util.HashPassword(password)
+	if err != nil {
+		return err
+	}
+	// Создаём пользователя
+	newAdmin := &entities.User{
+		Email:    "admin",
+		Password: hashedPassword,
+	}
+
+	admin, err := s.UserRepository.CreateUser(ctx, newAdmin)
+	if err != nil {
+		return err
+	}
+
+	adminData := &entities.UserData{
+		ID:                   admin.ID,
+		LastName:             "Админов",
+		FirstName:            "Админ",
+		FatherName:           "Админович",
+		UniversityID:         -1,
+		Role:                 "Администратор",
+		FacultyID:            -1,
+		Group:                "-1",
+		DepartmentID:         -1,
+		EducationalDirection: "-1",
+	}
+
+	_, err = s.UserDataRepository.AddUserData(ctx, adminData)
+	if err != nil {
+		return err
+	}
+	log.Println("admin added\nemail:%s password:%s", admin.Email, password)
+	return nil
 }
