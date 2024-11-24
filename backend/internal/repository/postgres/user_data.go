@@ -50,3 +50,15 @@ func (r *UserDataRepository) AddAdmin(ctx context.Context, adminData *entities.U
 
 	return adminData.ID, nil
 }
+
+func (r *UserDataRepository) GetEducationalDirection(ctx context.Context, userId int) (string, error) {
+	var educationalDirection string
+	query := `SELECT educational_direction FROM user_data WHERE id = $1`
+
+	err := r.db.QueryRowContext(ctx, query, userId).Scan(&educationalDirection)
+	if err != nil {
+		return "", err
+	}
+
+	return educationalDirection, nil
+}

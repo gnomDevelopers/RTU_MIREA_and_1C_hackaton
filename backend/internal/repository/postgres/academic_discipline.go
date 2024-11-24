@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"server/internal/entities"
 )
 
@@ -81,7 +80,6 @@ func (r *AcademicDisciplineRepository) GetByEducationalDirectionAndName(ctx cont
 	if educationalDirection == "" {
 		return nil, errors.New("educationalDirection is empty")
 	}
-	fmt.Println("name: ", name, educationalDirection)
 
 	var academicDiscipline entities.AcademicDiscipline
 	query := `SELECT * FROM academic_discipline WHERE educational_direction=$1 AND name=$2`

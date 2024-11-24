@@ -251,3 +251,11 @@ func (s *UserDataService) AddAdmin(c context.Context) error {
 	log.Println("admin added\nemail:%s password:%s", admin.Email, password)
 	return nil
 }
+
+func (s *UserDataService) GetEducationalDirection(c context.Context, userId int) (string, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	educationalDirection, err := s.UserDataRepository.GetEducationalDirection(ctx, userId)
+	return educationalDirection, err
+}

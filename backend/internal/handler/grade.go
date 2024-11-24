@@ -47,7 +47,7 @@ func (h *Handler) CreateGrade(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	fmt.Println("OK")
+
 	err = h.services.ScoreService.Update(c.Context(), &entities.Score{UserId: grade.UserId, Sum: grade.Value, Count: 1, SubjectName: class.Name})
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -55,7 +55,7 @@ func (h *Handler) CreateGrade(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	fmt.Println("OK")
+
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
@@ -87,7 +87,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid name")
 	}
-	fmt.Println("OK")
+
 	groupMember, err := h.services.GroupService.GetGroupMembers(c.Context(), decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -95,7 +95,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	fmt.Println("OK")
+
 	classes, err := h.services.ClassService.GetByNameAndGroupWithoutLk(c.Context(), decodedName, decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),

@@ -89,6 +89,8 @@ func (h *Handler) Router() *fiber.App {
 	f.Put("/class", h.UpdateClass)
 	f.Delete("/class/:id", h.DeleteClass)
 
+	f.Get("/gpa/id/:id", h.GetByUserId)
+
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {
 		return pkg.WithJWTAuth(c, h.conf.Application.SigningKey)
