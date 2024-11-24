@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"server/internal/config"
@@ -32,6 +33,11 @@ func main() {
 	repository := postgres.NewRepository(dbConn.GetDB())
 	services := service.NewService(repository, conf)
 	handlers := handler.NewHandler(services, log, conf)
+
+	err = services.UserData.AddAdmin(context.Background())
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
 
 	app := handlers.Router()
 	app.Listen(":8080")
