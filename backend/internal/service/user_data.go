@@ -72,9 +72,12 @@ func (s *UserDataService) AddUser(c context.Context, requests *[]entities.AddUse
 		switch request.Role {
 		case "Учебный отдел", "Декан":
 			userData.FacultyID = request.FacultyID
+			userData.DepartmentID = -1
+			userData.EducationalDirection = "-1"
 		case "Заведующий кафедрой", "Преподаватель":
 			userData.FacultyID = request.FacultyID
 			userData.DepartmentID = request.DepartmentID
+			userData.EducationalDirection = "-1"
 		case "Студент":
 			userData.FacultyID = request.FacultyID
 			userData.DepartmentID = request.DepartmentID
@@ -138,9 +141,15 @@ func (s *UserDataService) AddAdmin(c context.Context) error {
 		FirstName:  "Админ",
 		FatherName: "Админович",
 		Role:       "Администратор",
+		//DepartmentID:         -1,
+		UniversityID: 1,
+		//EducationalDirection: "-1",
+		//FacultyID:            -1,
 	}
 
+	log.Println("a", adminData)
 	_, err = s.UserDataRepository.AddAdmin(ctx, adminData)
+	log.Println(err)
 	if err != nil {
 		return err
 	}

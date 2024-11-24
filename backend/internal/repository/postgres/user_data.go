@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"log"
 	"server/internal/entities"
 )
 
@@ -39,11 +40,12 @@ func (r *UserDataRepository) AddUser(ctx context.Context, userData *entities.Use
 func (r *UserDataRepository) AddAdmin(ctx context.Context, adminData *entities.UserData) (int, error) {
 	query := `
 		INSERT INTO user_data (
-			id, last_name, first_name, father_name, role
-		) VALUES ($1, $2, $3, $4, $5)
+			id, last_name, first_name, father_name, role, department_id, university_id, educational_direction, faculty_id
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 	`
 
-	_, err := r.db.ExecContext(ctx, query, adminData.ID, adminData.LastName, adminData.FirstName, adminData.FatherName, adminData.Role)
+	_, err := r.db.ExecContext(ctx, query, adminData.ID, adminData.LastName, adminData.FirstName, adminData.FatherName, adminData.Role,
+		adminData.DepartmentID, adminData.UniversityID, adminData.EducationalDirection, adminData.FacultyID)
 	if err != nil {
 		return 0, err
 	}
@@ -119,8 +121,9 @@ func (r *UserDataRepository) GetEducationalDirection(ctx context.Context, userId
 }
 
 func (r *UserDataRepository) GetById(ctx context.Context, userID int) (*entities.UserData, error) {
-	var user entities.UserData
+	user := entities.UserData{}
 
+	log.Println(userID)
 	query := `
 		SELECT first_name, last_name, father_name, role, faculty_id, department_id, educational_direction, university_id
 		FROM user_data 
@@ -128,8 +131,10 @@ func (r *UserDataRepository) GetById(ctx context.Context, userID int) (*entities
 	`
 
 	err := r.db.QueryRowContext(ctx, query, userID).Scan(&user.FirstName, &user.LastName, &user.FatherName, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection, &user.UniversityID)
+	log.Println(err)
 	if err != nil {
 		return nil, err
 	}
+	log.Println(user)
 	return &user, nil
 }
