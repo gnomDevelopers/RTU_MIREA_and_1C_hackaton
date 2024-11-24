@@ -42,7 +42,7 @@ func (r *ClassRepository) Create(ctx context.Context, classes *[]entities.Class)
                     WHERE date = $1 AND weekday = $2 AND week = $3 AND time_start = $4 AND time_end = $5 AND auditory = $6
                 );`
 		err = tx.QueryRowContext(ctx, checkQuery, class.Date, class.Weekday, class.Week, class.TimeStart, class.TimeEnd, class.Auditory).Scan(&exists)
-		if err != nil {
+		if err != nil && err != sql.ErrNoRows {
 			return []int{}, err
 		}
 
