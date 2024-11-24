@@ -23,7 +23,7 @@ export default {
     ...mapStores(useUserInfoStore),
 
     checkUserLogin(){
-      return this.userInfoStore.authenticated;
+      return this.userInfoStore.authorized;
     }
   }
 

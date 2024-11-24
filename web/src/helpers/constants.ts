@@ -19,6 +19,7 @@ export const SCHEDULE_TARGET_TEXT = ['Выберите группу для пр�
 //types
 
 export type TMaybeNumber = number | null;
+export type TMaybeBoolean = boolean | null;
 
 //interfaces
 
