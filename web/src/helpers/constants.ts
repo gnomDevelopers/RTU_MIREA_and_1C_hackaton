@@ -7,6 +7,9 @@ export const API = '/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
 
+export const AUDITORY_TYPE_LIST = ['Лекторий', 'Практика', 'Спортивный зал', 'Лаборантская', 'Склад'];
+export const AUDITORY_PROFILE_LIST = ['Обычная', 'Компьютерный класс', 'Химический класс', 'Физический класс', 'Биологический класс', 'Географический класс', 'Литературный класс', 'Исторический класс'];
+
 //statusWindow codes
 export enum StatusCodes {
   'error', 'info', 'loading', 'success'

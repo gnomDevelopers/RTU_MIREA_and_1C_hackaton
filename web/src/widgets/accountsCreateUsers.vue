@@ -76,7 +76,7 @@
         <div @click="addUser" class="rounded-lg p-1 cursor-pointer btn">
           <img class="w-8 h-8" src="../assets/icons/icon-plus.svg"/>
         </div>
-        <div @click="sendUsersList" class="px-2 h-10 rounded-lg cursor-pointer btn">
+        <div v-if="usersList.length !== 0" @click="sendUsersList" class="px-2 h-10 rounded-lg cursor-pointer btn">
           <p class="text-white text-xl">Отправить</p>
         </div>
       </div>
