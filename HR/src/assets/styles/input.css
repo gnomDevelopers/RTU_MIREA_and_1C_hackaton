@@ -118,7 +118,7 @@
     border-radius: 12px;
 }
 .auth-description{
-    @apply text-xl mb:text-2xl text-center;
+    @apply text-xl mb:text-2xl text-center mb-8;
 }
 .progress-bar {
     width: 100%;

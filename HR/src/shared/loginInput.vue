@@ -14,7 +14,7 @@
         <input
             v-if="type === 'password'"
             placeholder="your_password"
-            class="bg-transparent outline-none"
+            class="bg-transparent outline-none w-11/12"
             :type="inputType"
             v-model="inputValue"
             @focusin="onFocus"
@@ -23,8 +23,8 @@
         />
         <input
             v-else
-            placeholder="student_s_s"
-            class="bg-transparent outline-none"
+            placeholder="your_login"
+            class="bg-transparent outline-none w-11/12"
             :type="inputType"
             v-model="inputValue"
             @focusin="onFocus"

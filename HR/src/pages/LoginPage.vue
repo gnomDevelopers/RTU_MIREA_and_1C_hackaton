@@ -1,9 +1,9 @@
 <template>
   <div class="flex h-screen">
-    <div class="flex flex-col w-1/2 h-full items-start justify-start p-4">
+    <div class="flex flex-col md:w-1/2 uus:w-full h-full items-start justify-start p-4">
       <p class="logo-hr">WorkVUZ+</p>
-      <div class="flex flex-col w-full items-center justify-center">
-        <div class="flex flex-col w-10/12 items-center m-10">
+      <div class="flex flex-col w-full h-full items-center justify-center">
+        <div class="flex flex-col w-10/12 h-full items-center m-10">
           <!-- Переключатель Студент/HR -->
           <div class="toggle-container">
             <div class="toggle">
@@ -19,7 +19,7 @@
                   @click="userType = 'hr'"
                   class="toggle-btn"
               >
-                HR-специалист
+                HR
               </button>
             </div>
           </div>
@@ -35,25 +35,26 @@
           </div>
 
           <!-- Форма для студента -->
-          <div v-if="userType === 'student'" class="w-full relative">
+          <div v-if="userType === 'student'" class="w-full h-full">
             <p class="auth-description">Войдите с помощью учётной записи VUZ+</p>
             <div v-if="currentStep === 1">
               <form @submit.prevent="nextStep">
-                <div class="mb-4">
+                <div class="mb-4 h-full">
 
                   <loginInput type="text"  text="Логин:" @input-change="checkLogin"/>
                   <loginInput type="password" id="student-password" text="Ваш пароль:" @input-change="checkPassword"/>
 
-                  <submitButton value="Войти" class="btn" @click="sendLogin"/>
+
                 </div>
               </form>
+              <submitButton value="Войти" class="btn" @click="sendLogin"/>
             </div>
 
             <!-- Второй шаг -->
             <div v-else-if="currentStep === 2">
               <form @submit.prevent="nextStep">
                 <div class="mb-4">
-                  <label for="specialty" class="block text-gray-700 text-sm font-bold mb-2">Специальность:</label>
+                  <label for="specialty" class="block text-gray-700 text-lg font-bold mb-2">Специальность:</label>
                   <input
                       type="text"
                       id="specialty"
@@ -64,7 +65,7 @@
                   />
                 </div>
                 <div class="mb-4">
-                  <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Номер телефона:</label>
+                  <label for="phone" class="block text-gray-700 text-lg font-bold mb-2">Номер телефона:</label>
                   <input
                       type="tel"
                       pattern="8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
@@ -76,14 +77,14 @@
                   />
                 </div>
                 <div class="mb-4">
-                  <label for="experience" class="block text-gray-700 text-sm font-bold mb-2">Опыт работы:</label>
-                  <input
+                  <label for="experience" class="block text-gray-700 text-lg font-bold mb-2">Опыт работы:</label>
+                  <textarea
                       type="text"
                       id="experience"
                       required
                       v-model="formData.experience"
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      placeholder="Введите ваш опыт работы"
+                      placeholder="Расскажите о Вашем опыте работы"
                   />
                 </div>
               </form>
@@ -93,41 +94,84 @@
             <div v-else-if="currentStep === 3">
               <form @submit.prevent="completeForm">
                 <div class="mb-4">
-                  <label for="links" class="block text-gray-700 text-sm font-bold mb-2">Полезные ссылки:</label>
+                  <label for="additional-experience" class="block text-gray-700 text-lg font-bold mb-2">Дополнительный опыт:</label>
+                  <textarea
+                      type="text"
+                      id="additional-experience"
+                      required
+                      v-model="formData.add_experience"
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      placeholder="Расскажите об опыте участия в различных мероприятиях или о своих личных проектах"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label for="links" class="block text-gray-700 text-lg font-bold mb-2">Полезные ссылки:</label>
                   <input
                       type="text"
                       id="links"
                       v-model="formData.links"
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      placeholder="Добавьте ссылки"
+                      placeholder="Добавьте ссылки, которые могут быть полезны"
                   />
                 </div>
+<!--                Хз оно сохраняет этот файл куда-то?????-->
                 <div class="mb-4">
-                  <label for="resume" class="block text-gray-700 text-sm font-bold mb-2">Резюме:</label>
-                  <input
-                      type="file"
-                      id="resume"
-                      
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  /> <!--@change="handleFileUpload"-->
+                  <label for="resume" class="block text-gray-700 text-lg font-bold mb-2">Резюме:</label>
+                  <div>
+                    <div class="shadow flex flex-col items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border rounded" >
+                      <div
+                          v-if="filesList.length === 0"
+                          @click="$refs.fileInput.click()"
+                          class="flex flex-row items-center gap-x-1">
+
+                        <img class="w-8 h-11" src="../assets/icons/icon-upload-file.svg"/>
+                        <p class="text-lg">Выберите .pdf файл</p>
+                        <input class=" hidden invisible w-0 h-0" type="file" ref="fileInput" accept=".pdf" @change="handleFilesChange">
+                      </div>
+
+                      <FilesList :file-list="getFilesList" @delete-file="handleDeleteFile"/>
+
+                    </div>
+                  </div>
+
                 </div>
               </form>
             </div>
 
-            <!-- Кнопка продолжения -->
+
+
+<!--            Кнопка продолжения (далее на первом шаге надо убрать, когда можно будет авторизацию проверять)-->
             <div class=" left-0 w-full px-4">
-              <button v-if="currentStep < 3" @click="nextStep" class="w-full btn h-10 rounded-md">
+              <button v-if="currentStep < 3" @click="nextStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
                 Продолжить
               </button>
-              <button v-else @click="completeForm" class="w-full btn h-10 rounded-md">
+              <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-8">
+                Назад
+              </button>
+              <button v-if="currentStep == 3" @click="completeForm" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100">
                 Завершить заполнение
               </button>
             </div>
           </div>
+          <!--            Форма для HR-->
+          <div v-if="userType === 'hr'" class="w-full h-full">
+            <div class="flex flex-row items-stretch justify-center gap-2">
+              <p class="auth-description">Войдите с помощью аккаунта hh.ru</p>
+              <img class="w-8 h-8" src="../assets/icons/icon-hhru.svg">
+            </div>
+
+
+            <div class="mb-4">
+              <loginInput type="text" text="Логин:" @input-change="checkLogin"/>
+              <loginInput type="password" text="Пароль:" @input-change="checkPassword"/>
+            </div>
+
+            <submitButton value="Войти" class="btn" @click="sendLogin"/>
+          </div>
         </div>
       </div>
     </div>
-    <div class="login-bg w-1/2"></div>
+    <div class="login-bg w-1/2 uus:hidden md:block"></div>
   </div>
 </template>
 
@@ -141,9 +185,12 @@ import submitButton from '../shared/submitButton.vue';
 import { ValidUserLogin, ValidUserPassword } from '../helpers/validator';
 import { type IValidAnswer, StatusCodes, type IAPI_Login_Request } from '../helpers/constants';
 import { API_Login } from '@/api/api';
+import FilesList from "@/entities/filesList.vue";
+
 export default {
 
   components:{
+    FilesList,
     loginInput,
     submitButton,
   },
@@ -159,20 +206,23 @@ export default {
         specialty: '',
         phone: '',
         experience: '',
+        add_experience: '',
         links: '',
-        resume: null,
+        filesList: [] as File[],
       },
+      filesList: [] as File[]
     }
   },
   computed:{
     ...mapStores(useStatusWindowStore, useUserInfoStore),
+    getFilesList(){
+      return this.filesList;
+    }
   },
+
   methods: {
     sendLogin(){
-      console.log('login: ', this.login);
-      console.log('password: ', this.password);
       if(this.login.value !== '' && this.password.value !== ''){
-        console.log('here1');
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
         API_Login(data)
@@ -191,12 +241,10 @@ export default {
       }
 
       if(this.login.value === ''){
-        console.log('here2');
         if(this.login.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите логин!');
         else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.login.error);
       }
       if(this.password.value === ''){
-        console.log('here3');
         if(this.password.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите пароль!');
         else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.password.error);
       }
@@ -209,10 +257,30 @@ export default {
       this.password = ValidUserPassword(value);
       if(value === '') this.password.error = '';
     },
+
     nextStep() {
       if (this.currentStep < 3) {
         this.currentStep++;
       }
+    },
+    previousStep() {
+      if (this.currentStep == 3) {
+        this.currentStep--;
+      }
+    },
+    handleFilesChange(event: any){
+      this.filesList = Array.from(event.target.files!);
+      const wrongFiles = [] as File[];
+      for(let i = 0; i < this.filesList.length; i++){
+        if(!this.filesList[i].name.endsWith('.pdf')) {
+          if(wrongFiles.length === 0) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверное расширение файла!');
+          wrongFiles.push(this.filesList[i]);
+        }
+      }
+      for(let file of wrongFiles) this.handleDeleteFile(file);
+    },
+    handleDeleteFile(fileDelete: File){
+      this.filesList = this.filesList.filter((file) => file !== fileDelete);
     },
     completeForm() {
       alert(`Форма завершена! Данные: ${JSON.stringify(this.formData)}`);
