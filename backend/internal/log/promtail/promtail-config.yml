@@ -14,4 +14,4 @@ scrape_configs:
       - targets:
           - localhost
         labels:
-          __path__: /var/log/app/*.log
+          __path__: /app/*.log
