@@ -144,6 +144,6 @@ func (s *UserDataService) AddAdmin(c context.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Println("admin added\nemail:%s password:%s", admin.Email, password)
+	log.Printf("admin added\nemail:%s password:%s", admin.Email, password)
 	return nil
 }
