@@ -40,6 +40,7 @@
       <MainControl title="Управление ресурсами">
         <MainControlItem title="Управление аудиториями">
           
+          <AccountsCreateAuditory class="flex flex-col gap-y-4 items-stretch"/>
 
         </MainControlItem>
       </MainControl>
@@ -65,6 +66,7 @@ import SearchList from '../entities/searchList.vue';
 import IconAccounts from '@/shared/iconAccounts.vue';
 import PageTitle from '@/shared/pageTitle.vue';
 import AccountsCreateUsers from '@/widgets/accountsCreateUsers.vue';
+import AccountsCreateAuditory from '@/widgets/accountsCreateAuditory.vue';
 
 export default {
   components:{
@@ -75,6 +77,7 @@ export default {
     UserListItem,
     SearchList,
     AccountsCreateUsers,
+    AccountsCreateAuditory,
   },
   data(){
     return{
@@ -105,6 +108,4 @@ export default {
     
   }
 };
-
-
 </script>

@@ -21,6 +21,7 @@ export default {
   },
   async mounted(){
     await this.userInfoStore.Authenticate();
+    if(this.userInfoStore.authorized) this.userInfoStore.loadUserData();
   },
 };
 </script>

@@ -11,8 +11,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    # volumes:
-    #   - ./.data/log/backend/app.log:/app/app.log
+    volumes:
+      - ./.data/log/backend/app.log:/app/app.log
     restart: on-failure
     ports:
       - "127.0.0.1:10510:8080"
@@ -40,6 +40,8 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:10520:3800"
+    depends_on:
+      - backend
     networks:
       - hackaton_app
 
@@ -72,16 +74,23 @@ services:
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:latest
+    image: grafana/grafana:11.1.4
     environment:
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning
+
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_SECURITY_ANONYMOUS_ENABLED: "false"
       GF_AUTH_BASIC_ENABLED: "true"
       GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_AUTO_ASSIGN: ORG_ROLE=Admin
+      GF_SERVER_ROOT_URL: https://gnomedeployer.ru
+
       TG_BOT_TOKEN: "${TG_BOT_TOKEN}"
       TG_CHAT_ID: '"${TG_CHAT_ID}"'
-      #  GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}"
+
+      GF_LOG_LEVEL: warning
     volumes:
       - ./backend/internal/log/grafana-provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./backend/internal/log/grafana-provisioning/alerting:/etc/grafana/provisioning/alerting:ro
@@ -98,32 +107,47 @@ services:
     networks:
       - hackaton_app
 
-  # PostgreSQL Database
   postgres:
     container_name: "postgres"
     image: postgres:14.7-alpine
     command:
       - "postgres"
       - "-c"
-      - "max_connections=50"
+      - "max_connections=200" # Позволяет до 200 соединений, достаточно для большинства приложений
       - "-c"
-      - "shared_buffers=1GB"
+      - "shared_buffers=4GB" # 25% от доступной ОЗУ
       - "-c"
-      - "effective_cache_size=4GB"
+      - "effective_cache_size=12GB" # 75% от доступной ОЗУ
       - "-c"
-      - "work_mem=16MB"
+      - "work_mem=32MB" # Память для сортировки на каждое соединение
       - "-c"
-      - "maintenance_work_mem=512MB"
+      - "maintenance_work_mem=1GB" # Память для операций VACUUM/CREATE INDEX
       - "-c"
-      - "random_page_cost=1.1"
+      - "checkpoint_completion_target=0.9" # Уменьшает нагрузку на диски во время checkpoint
       - "-c"
-      - "temp_file_limit=10GB"
+      - "wal_buffers=16MB" # Размер буферов WAL
       - "-c"
-      - "log_min_duration_statement=200ms"
+      - "default_statistics_target=100" # Улучшает точность статистики для планирования запросов
       - "-c"
-      - "lock_timeout=1s"
+      - "random_page_cost=1.1" # Оптимизировано для SSD
       - "-c"
-      - "statement_timeout=60s"
+      - "temp_file_limit=10GB" # Лимит для временных файлов
+      - "-c"
+      - "log_min_duration_statement=200ms" # Логировать запросы, выполняющиеся более 200 мс
+      - "-c"
+      - "lock_timeout=1s" # Ограничение времени ожидания блокировок
+      - "-c"
+      - "statement_timeout=60s" # Ограничение времени выполнения запросов
+      - "-c"
+      - "autovacuum=on" # Включить автоматическое обслуживание
+      - "-c"
+      - "autovacuum_vacuum_scale_factor=0.05" # Более агрессивный автовакиум
+      - "-c"
+      - "autovacuum_analyze_scale_factor=0.02" # Улучшает актуальность статистики
+      - "-c"
+      - "autovacuum_max_workers=4" # Использовать до 4 потоков на автовакиум
+      - "-c"
+      - "autovacuum_naptime=10s" # Проверять таблицы каждые 10 секунд
       - "-c"
       - "shared_preload_libraries=pg_stat_statements"
       - "-c"
@@ -141,11 +165,14 @@ services:
       - "127.0.0.1:10550:5432"
     healthcheck:
       test:
-        ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DB}"]
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DB} -h 127.0.0.1 -p 5432",
+        ]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 10s
+      retries: 3
+      start_period: 15s
     restart: unless-stopped
     networks:
       - hackaton_app
@@ -159,7 +186,6 @@ services:
       - ./.data/redis/data:/data
     ports:
       - "127.0.0.1:10560:6379"
-    # command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "-h", "localhost", "-p", "6379", "ping"]

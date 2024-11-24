@@ -89,6 +89,7 @@ type UserDataRepository interface {
 	GetEducationalDirection(context.Context, int) (string, error)
 	GetAll(context.Context, int) (*[]entities.GetUserDataResponse, error)
 	GetAllByRole(context.Context, int, string) (*[]entities.GetUserDataResponse, error)
+	GetById(context.Context, int) (*entities.UserData, error)
 }
 
 type FacultyRepository interface {

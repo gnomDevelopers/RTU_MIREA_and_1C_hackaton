@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	"server/internal/entities"
+	"strconv"
 )
 
 // CreateStudent
@@ -36,4 +37,17 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 
 	// Возвращаем успешный ответ
 	return c.Status(fiber.StatusOK).JSON(resp)
+}
+
+func (h *Handler) GetUserByID(c *fiber.Ctx) error {
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{})
+	}
+	req, err := h.services.UserData.GetById(c.Context(), id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{})
+	}
+	return c.Status(fiber.StatusOK).JSON(req)
 }

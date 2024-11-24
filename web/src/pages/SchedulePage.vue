@@ -107,7 +107,7 @@ export default {
     }
   },
   mounted(){
-    this.scheduleStore.loadScheduleTable();
+    this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
 
     for(let i = 1; i < 20; i++){
       const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};

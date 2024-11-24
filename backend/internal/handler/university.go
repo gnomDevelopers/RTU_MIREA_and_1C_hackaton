@@ -103,6 +103,37 @@ func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(university)
 }
 
+// GetByIdUniversity
+// @Tags university
+// @Summary      Get university by name
+// @Accept       json
+// @Produce      json
+// @Param id path string true "university id"
+// @Success 200 {object} entities.University
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /university/id/{id} [get]
+func (h *Handler) GetByIdUniversity(c *fiber.Ctx) error {
+	// TODO: добавить проверку на роль админа
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+
+	h.logger.Debug().Msg("call h.services.UniversityService.GetById")
+	university, err := h.services.UniversityService.GetById(c.Context(), id)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(university)
+}
+
 // UpdateUniversity
 // @Tags university
 // @Summary      Update university
