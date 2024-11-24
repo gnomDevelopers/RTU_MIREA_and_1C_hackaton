@@ -12,37 +12,22 @@ import (
 )
 
 type UserDataService struct {
-	UserRepository       repository.UserRepository
-	UserDataRepository   repository.UserDataRepository
-	FacultyRepository    repository.FacultyRepository
-	DepartmentRepository repository.DepartmentRepository
-	UniversityRepository repository.UniversityRepository
-	GroupRepository      repository.GroupRepository
-	UniversityCache      map[string]int
-	DepartmentCache      map[string]int
-	FacultyCache         map[string]int
-	GroupCache           map[string]int
-	timeout              time.Duration
+	UserRepository     repository.UserRepository
+	UserDataRepository repository.UserDataRepository
+	GroupRepository    repository.GroupRepository
+	timeout            time.Duration
 }
 
-func NewUserDataService(userRepo repository.UserRepository, userDataRepo repository.UserDataRepository, facultyRepo repository.FacultyRepository,
-	departmentRepo repository.DepartmentRepository, universityRepo repository.UniversityRepository, groupRepo repository.GroupRepository) *UserDataService {
+func NewUserDataService(userRepo repository.UserRepository, userDataRepo repository.UserDataRepository, groupRepo repository.GroupRepository) *UserDataService {
 	return &UserDataService{
-		UserRepository:       userRepo,
-		UserDataRepository:   userDataRepo,
-		FacultyRepository:    facultyRepo,
-		DepartmentRepository: departmentRepo,
-		UniversityRepository: universityRepo,
-		GroupRepository:      groupRepo,
-		UniversityCache:      make(map[string]int),
-		DepartmentCache:      make(map[string]int),
-		FacultyCache:         make(map[string]int),
-		GroupCache:           make(map[string]int),
-		timeout:              time.Duration(30) * time.Second,
+		UserRepository:     userRepo,
+		UserDataRepository: userDataRepo,
+		GroupRepository:    groupRepo,
+		timeout:            time.Duration(30) * time.Second,
 	}
 }
 
-func (s *UserDataService) AddStudent(c context.Context, requests *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error) {
+func (s *UserDataService) AddUser(c context.Context, requests *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -76,62 +61,36 @@ func (s *UserDataService) AddStudent(c context.Context, requests *[]entities.Add
 		}
 
 		userData := &entities.UserData{
-			ID:                   user.ID,
-			LastName:             request.LastName,
-			FirstName:            request.FirstName,
-			FatherName:           request.FatherName,
-			EducationalDirection: request.EducationalDirection,
-			Role:                 "Студент",
+			ID:           user.ID,
+			LastName:     request.LastName,
+			FirstName:    request.FirstName,
+			FatherName:   request.FatherName,
+			UniversityID: request.UniversityID,
+			Role:         request.Role,
 		}
 
-		// Университет
-		universityID, ok := s.UniversityCache[request.University]
-		if !ok {
-			universityID, err = s.getOrCreateUniversity(ctx, request.University)
+		switch request.Role {
+		case "Учебный отдел", "Декан":
+			userData.FacultyID = request.FacultyID
+		case "Заведующий кафедрой", "Преподаватель":
+			userData.FacultyID = request.FacultyID
+			userData.DepartmentID = request.DepartmentID
+		case "Студент":
+			userData.FacultyID = request.FacultyID
+			userData.DepartmentID = request.DepartmentID
+			userData.EducationalDirection = request.EducationalDirection
+			userData.Group = request.Group
+			joinGroup := &entities.CreateGroupRequest{
+				Name:   request.Group,
+				UserID: user.ID,
+			}
+			_, err = s.GroupRepository.Create(ctx, joinGroup)
 			if err != nil {
 				return nil, err
 			}
-			s.UniversityCache[request.University] = universityID
-		}
-		userData.UniversityID = universityID
-
-		// Факультет
-		facultyID, ok := s.FacultyCache[request.Faculty]
-		if !ok {
-			facultyID, err = s.getOrCreateFaculty(ctx, request.Faculty)
-			if err != nil {
-				return nil, err
-			}
-			s.FacultyCache[request.Faculty] = facultyID
-		}
-		userData.FacultyID = facultyID
-
-		// Департамент
-		departmentID, ok := s.DepartmentCache[request.Department]
-		if !ok {
-			departmentID, err = s.getOrCreateDepartment(ctx, request.Department)
-			if err != nil {
-				return nil, err
-			}
-			s.DepartmentCache[request.Department] = departmentID
-		}
-		userData.DepartmentID = departmentID
-
-		// Группа
-		addStudent := &entities.CreateGroupRequest{
-			Name:   request.Group,
-			UserID: user.ID,
-		}
-		userData.Group = request.Group
-		_, err = s.GroupRepository.Create(ctx, addStudent)
-		if err != nil {
-			return nil, err
 		}
 
-		_, err = s.UserDataRepository.AddUserData(ctx, userData)
-		if err != nil {
-			return nil, err
-		}
+		_, err = s.UserDataRepository.AddUser(ctx, userData)
 
 		responses = append(responses, entities.AddUserDataResponse{
 			LastName:   request.LastName,
@@ -143,69 +102,6 @@ func (s *UserDataService) AddStudent(c context.Context, requests *[]entities.Add
 	}
 
 	return &responses, nil
-}
-
-// getOrCreateUniversity обрабатывает добавление или получение университета
-func (s *UserDataService) getOrCreateUniversity(ctx context.Context, name string) (int, error) {
-	exists, err := s.UniversityRepository.Exists(ctx, name)
-	if err != nil && err != sql.ErrNoRows { // Пропускаем ошибку, если запись не найдена
-		return 0, err
-	}
-
-	if exists {
-		university, err := s.UniversityRepository.GetByName(ctx, name)
-		if err != nil {
-			return 0, err
-		}
-		return university.Id, nil
-	}
-
-	createUniversity := &entities.CreateUniversityRequest{
-		Name: name,
-	}
-	return s.UniversityRepository.Create(ctx, createUniversity)
-}
-
-// getOrCreateFaculty обрабатывает добавление или получение факультета
-func (s *UserDataService) getOrCreateFaculty(ctx context.Context, name string) (int, error) {
-	exists, err := s.FacultyRepository.Exists(ctx, name)
-	if err != nil && err != sql.ErrNoRows {
-		return 0, err
-	}
-
-	if exists {
-		faculty, err := s.FacultyRepository.GetByName(ctx, name)
-		if err != nil {
-			return 0, err
-		}
-		return faculty.ID, nil
-	}
-
-	createFaculty := &entities.CreateFacultyRequest{
-		Name: name,
-	}
-	return s.FacultyRepository.Create(ctx, createFaculty)
-}
-
-// getOrCreateDepartment обрабатывает добавление или получение департамента
-func (s *UserDataService) getOrCreateDepartment(ctx context.Context, name string) (int, error) {
-	exists, err := s.DepartmentRepository.Exists(ctx, name)
-	if err != nil && err != sql.ErrNoRows {
-		return 0, err
-	}
-
-	if exists {
-		department, err := s.DepartmentRepository.GetByName(ctx, name)
-		if err != nil {
-			return 0, err
-		}
-		return department.ID, nil
-	}
-
-	newDepartment := &entities.CreateDepartmentRequest{
-		Name: name,
-	}
-	return s.DepartmentRepository.Create(ctx, newDepartment)
 }
 
 func (s *UserDataService) AddAdmin(c context.Context) error {
@@ -248,7 +144,7 @@ func (s *UserDataService) AddAdmin(c context.Context) error {
 	if err != nil {
 		return err
 	}
-	log.Println("admin added\nemail:%s password:%s", admin.Email, password)
+	log.Printf("admin added\nemail:%s password:%s", admin.Email, password)
 	return nil
 }
 

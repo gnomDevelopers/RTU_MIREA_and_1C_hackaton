@@ -12,7 +12,7 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useUserInfoStore } from '@/stores/userInfoStore';
-import { ROLES_NAME, ROLES_SET_PRORECTOR, ROLES_SET_DECAN_TO_PREPOD, ROLES_SET_DECAN_TO_STUDENT, type IUsersList } from '@/helpers/constants';
+import { ROLES_NAME, ROLES_SET_PRORECTOR, ROLES_SET_DECAN_TO_PREPOD, type IUsersList } from '@/helpers/constants';
 import type { PropType } from 'vue';
 export default{
   props:{
@@ -37,11 +37,11 @@ export default{
           if(this.data.role === 3) return 'Понизить до ' + ROLES_NAME[rolesSum - this.data.role];
           if(this.data.role === 4) return 'Повысить до ' + ROLES_NAME[rolesSum - this.data.role]; 
         }
-        else{
-          rolesSum = ROLES_SET_DECAN_TO_STUDENT.reduce((sum, item) => sum += item);
-          if(this.data.role === 5) return 'Понизить до ' + ROLES_NAME[rolesSum - this.data.role];
-          if(this.data.role === 6) return 'Повысить до ' + ROLES_NAME[rolesSum - this.data.role]; 
-        }
+        // else{
+        //   rolesSum = ROLES_SET_DECAN_TO_STUDENT.reduce((sum, item) => sum += item);
+        //   if(this.data.role === 5) return 'Понизить до ' + ROLES_NAME[rolesSum - this.data.role];
+        //   if(this.data.role === 6) return 'Повысить до ' + ROLES_NAME[rolesSum - this.data.role]; 
+        // }
       }
       if(this.userInfoStore.role === 3){
         // 

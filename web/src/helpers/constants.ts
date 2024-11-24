@@ -78,10 +78,21 @@ export interface IScheduleItem{
   groups: string[],
 };
 
+// user interface
+export interface IUser{
+  name: string,
+  surname: string,
+  thirdname: string,
+  role: number,
+  faculty_id: number,
+  department_id: number,
+  educational_direction: string,
+}
+
 //api interfaces
 
 export interface IAPI_Login_Request{
-  login: string,
+  email: string,
   password: string,
 };
 
@@ -152,15 +163,30 @@ export enum ROLES_NAME {
   'Администратор' = 0,
   'Проректор' = 1,
   'Декан' = 2,
-  'Заведующий кафедры' = 3,
-  'Преподаватель' = 4,
-  'Староста группы' = 5,
+  'Учебный отдел' = 3,
+  'Заведующий кафедры' = 4,
+  'Преподаватель' = 5,
   'Студент' = 6,
 };
 
-export const ROLES_SET_PRORECTOR = [2, 4];
+export const ROLES_SET_PRORECTOR = [2, 3, 4, 5, 6]; //  
 
-export const ROLES_SET_DECAN_TO_PREPOD = [3, 4];
-export const ROLES_SET_DECAN_TO_STUDENT = [5, 6];
+export const ROLES_SET_DECAN_TO_PREPOD = [4, 5]; // 
 
-export const ROLES_SET_ZAV_CAF = [2, 4];
+export const ROLES_SET_ZAV_CAF = [2, 4]; // ?
+
+export enum INFO_FIELDS {
+  'faculty' = 0, 
+  'department' = 1,
+  'educationDirection' = 2,
+};
+
+export const INFO_FIELDS_ROLE = [
+  [], // 0
+  [], // 1
+  ['faculty'], // 2
+  ['faculty'], // 3
+  ['faculty', 'department'], // 4
+  ['faculty', 'department'], // 5
+  ['faculty', 'department', 'educationDirection'], // 6
+];

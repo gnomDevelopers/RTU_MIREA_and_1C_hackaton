@@ -23,12 +23,12 @@ definitions:
     type: object
   entities.AddUserDataRequest:
     properties:
-      department:
-        type: string
+      department_id:
+        type: integer
       educational_direction:
         type: string
-      faculty:
-        type: string
+      faculty_id:
+        type: integer
       father_name:
         type: string
       first_name:
@@ -41,8 +41,8 @@ definitions:
         type: string
       role:
         type: string
-      university:
-        type: string
+      university_id:
+        type: integer
     type: object
   entities.AddUserDataResponse:
     properties:
@@ -1851,43 +1851,6 @@ paths:
       summary: User logout
       tags:
       - authentication
-  /student/add:
-    post:
-      consumes:
-      - application/json
-      description: Creates multiple students with their associated data (university,
-        faculty, department, group).
-      parameters:
-      - description: Array of user data to be added
-        in: body
-        name: data
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.AddUserDataRequest'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              items:
-                $ref: '#/definitions/entities.AddUserDataResponse'
-              type: array
-            type: array
-        "400":
-          description: Invalid request payload
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Create student
-      tags:
-      - user data
   /university:
     post:
       consumes:
@@ -2045,6 +2008,43 @@ paths:
       summary: Get university by name
       tags:
       - university
+  /user/add:
+    post:
+      consumes:
+      - application/json
+      description: Creates multiple students with their associated data (university,
+        faculty, department, group).
+      parameters:
+      - description: Array of user data to be added
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.AddUserDataRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/entities.AddUserDataResponse'
+              type: array
+            type: array
+        "400":
+          description: Invalid request payload
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create user
+      tags:
+      - user data
 securityDefinitions:
   ApiKeyAuth:
     in: header

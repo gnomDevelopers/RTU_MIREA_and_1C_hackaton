@@ -57,6 +57,7 @@ type Service struct {
 	UserScheduleService       *UserScheduleService
 	GradeService              *GradeService
 	ScoreService              *ScoreService
+	FacultyService            *FacultyService
 	AcademicDisciplineService *AcademicDisciplineService
 	conf                      *config.Config
 }
@@ -64,7 +65,7 @@ type Service struct {
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
 		UserService:               NewUserService(repositories.User, conf),
-		UserData:                  NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University, repositories.Group),
+		UserData:                  NewUserDataService(repositories.User, repositories.UserData, repositories.Group),
 		UniversityService:         NewUniversityService(repositories.University),
 		CampusService:             NewCampusService(repositories.Campus),
 		ClassService:              NewClassService(repositories.Class),
@@ -73,6 +74,7 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		UserScheduleService:       NewUserScheduleService(repositories.UserSchedule),
 		GradeService:              NewGradeService(repositories.Grade),
 		ScoreService:              NewScoreService(repositories.Score),
+		FacultyService:            NewFacultyService(repositories.Faculty),
 		AcademicDisciplineService: NewAcademicDisciplineService(repositories.AcademicDiscipline),
 	}
 }

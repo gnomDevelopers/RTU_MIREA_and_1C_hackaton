@@ -18,7 +18,7 @@ groups:
             datasourceUid: P8E80F9AEF21F6940
             model:
               editorMode: code
-              expr: count_over_time({filename="/var/log/app/iqj.log"} |= "Fatal" [1m])
+              expr: count_over_time({filename="/app/iqj.log"} |= "Fatal" [1m])
               intervalMs: 1000
               maxDataPoints: 43200
               queryType: instant
@@ -53,7 +53,7 @@ groups:
         annotations:
           summary: Произошло что-то ужасное. Бегом спасать приложение!!!!!!!!!
         labels:
-          filename: /var/log/app/iqj.log
+          filename: /app/iqj.log
         isPaused: false
         notification_settings:
           receiver: Telegram

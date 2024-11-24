@@ -51,7 +51,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/login", h.CheckAuth)
 	f.Post("/logout", h.Logout)
 
-	f.Post("/student/add", h.CreateStudent)
+	f.Post("/user/add", h.CreateUser)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)

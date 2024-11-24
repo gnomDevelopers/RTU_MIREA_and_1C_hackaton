@@ -2,10 +2,11 @@ package log
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"os"
 	"server/internal/config"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 
 	"github.com/natefinch/lumberjack"
 	"github.com/rs/zerolog"
@@ -21,7 +22,7 @@ type LogsField struct {
 func InitLogger(conf *config.Config) *zerolog.Logger {
 	if conf.Application.ProductionType == "prod" {
 		lumberjackLogger := &lumberjack.Logger{
-			Filename:   "/var/log/app/app.log",
+			Filename:   "/app/app.log",
 			MaxSize:    1024,
 			MaxAge:     183,
 			MaxBackups: 5,

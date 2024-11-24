@@ -32,9 +32,9 @@ func (r *FacultyRepository) Create(ctx context.Context, faculty *entities.Create
 		return 0, errors.New("")
 	}
 	var id int
-	query := `INSERT INTO faculty (name) VALUES ($1) RETURNING id`
+	query := `INSERT INTO faculty (name, university) VALUES ($1) RETURNING id`
 
-	err := r.db.QueryRowContext(ctx, query, faculty.Name).Scan(&id)
+	err := r.db.QueryRowContext(ctx, query, faculty.Name, faculty.University).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
@@ -43,8 +43,8 @@ func (r *FacultyRepository) Create(ctx context.Context, faculty *entities.Create
 
 func (r *FacultyRepository) GetById(ctx context.Context, id int) (*entities.Faculty, error) {
 	faculty := &entities.Faculty{}
-	query := `SELECT id, name FROM faculty WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&faculty.ID, &faculty.Name)
+	query := `SELECT id, name, university FROM faculty WHERE id = $1`
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&faculty.ID, &faculty.Name, &faculty.University)
 	if err != nil {
 		return nil, err
 	}
@@ -53,8 +53,8 @@ func (r *FacultyRepository) GetById(ctx context.Context, id int) (*entities.Facu
 
 func (r *FacultyRepository) GetByName(ctx context.Context, name string) (*entities.Faculty, error) {
 	faculty := &entities.Faculty{}
-	query := `SELECT id, name FROM faculty WHERE name = $1`
-	err := r.db.QueryRowContext(ctx, query, name).Scan(&faculty.ID, &faculty.Name)
+	query := `SELECT id, name, university FROM faculty WHERE name = $1`
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&faculty.ID, &faculty.Name, &faculty.University)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (r *FacultyRepository) GetByName(ctx context.Context, name string) (*entiti
 
 func (r *FacultyRepository) GetAll(ctx context.Context) (*[]entities.Faculty, error) {
 	var faculties []entities.Faculty
-	query := `SELECT id, name FROM faculty`
+	query := `SELECT id, name, university FROM faculty`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,27 @@ func (r *FacultyRepository) GetAll(ctx context.Context) (*[]entities.Faculty, er
 
 	for rows.Next() {
 		var faculty entities.Faculty
-		err = rows.Scan(&faculty.ID, &faculty.Name)
+		err = rows.Scan(&faculty.ID, &faculty.Name, &faculty.University)
+		if err != nil {
+			return nil, err
+		}
+		faculties = append(faculties, faculty)
+	}
+
+	return &faculties, nil
+}
+
+func (r *FacultyRepository) GetAllByUniName(ctx context.Context, request *entities.GetFacultyRequest) (*[]entities.Faculty, error) {
+	var faculties []entities.Faculty
+	query := `SELECT id, name, university FROM faculty WHERE university = $1`
+	rows, err := r.db.QueryContext(ctx, query, request.UniversityName)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var faculty entities.Faculty
+		err = rows.Scan(&faculty.ID, &faculty.Name, &faculty.University)
 		if err != nil {
 			return nil, err
 		}
@@ -82,8 +102,8 @@ func (r *FacultyRepository) GetAll(ctx context.Context) (*[]entities.Faculty, er
 }
 
 func (r *FacultyRepository) Update(ctx context.Context, faculty *entities.UpdateFacultyRequest) error {
-	query := `UPDATE faculty SET name = $1 WHERE id = $2`
-	_, err := r.db.ExecContext(ctx, query, faculty.Name, faculty.ID)
+	query := `UPDATE faculty SET name = $1, university = $2 WHERE id = $3`
+	_, err := r.db.ExecContext(ctx, query, faculty.Name, faculty.University, faculty.ID)
 	if err != nil {
 		return err
 	}
