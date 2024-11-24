@@ -1,3 +1,139 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Arsenal';
+    src: url('../fonts/Arsenal-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arsenal';
+    src: url('../fonts/Arsenal-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BacasimeAntique';
+    src: url('../fonts/BacasimeAntique-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root{
+    --bg-color-default: #FFFFFF;
+    --bg-color-bold: #8F0101;
+    --bg-color-bold-hover: #F2F0F2;
+    --bg-color-bold-active: #D9D9D9;
+
+    --btn-color-normal: #8F0101;
+    --btn-color-normal-hover: #C40707;
+    --btn-color-normal-active: #944747;
+
+    --btn-color-bad: #ca4040;
+    --btn-color-bad-hover: #e64e4e;
+    --btn-color-bad-active: #ee6060;
+}
+
+#app{
+    width: 100svw;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+
+.transition-bg{
+    transition: background-color .1s ease-out;
+}
+
+*{
+    font-family: 'Arsenal', 'Arial', sans-serif;
+}
+
+.btn{
+    @apply flex flex-row justify-center items-center text-center;
+    background-color: var(--btn-color-normal);
+    transition: background-color 150ms ease-out;
+}
+.btn:hover{
+    background-color: var(--btn-color-normal-hover);
+}
+.btn:active{
+    background-color: var(--btn-color-normal-active);
+}
+
+.login-bg {
+    background-image: url('../images/background-loginPage.png');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    width: 50vw;
+}
+
+.logo-hr {
+    @apply text-3xl mb:text-4xl md:text-5xl cursor-pointer;
+    color: #8F0101;
+    font-family: 'BacasimeAntique';
+    text-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px;
+}
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    margin: 20px;
+    width: 100%;
+}
+.toggle {
+    display: flex;
+    border: 1px solid #e6e6e6;
+    background-color: #f6f5f7;
+    border-radius: 12px;
+    overflow: hidden;
+    width: 80%;
+    height: 40px;
+}
+.toggle-btn {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+.toggle-btn.active {
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+.auth-description{
+    @apply text-xl mb:text-2xl text-center;
+}
+.progress-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.progress-step {
+    width: 30%;
+    height: 5px;
+    background-color: #e5e5e5;
+    transition: background-color 0.3s;
+}
+
+.progress-step.active {
+    background-color: var(--btn-color-normal);
+}
