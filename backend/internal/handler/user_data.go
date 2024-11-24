@@ -7,7 +7,7 @@ import (
 
 // CreateStudent
 // @Tags         user data
-// @Summary      Create student
+// @Summary      Create user
 // @Description  Creates multiple students with their associated data (university, faculty, department, group).
 // @Accept       json
 // @Produce      json
@@ -15,8 +15,8 @@ import (
 // @Success      200 {array} []entities.AddUserDataResponse
 // @Failure      400 {object} entities.ErrorResponse "Invalid request payload"
 // @Failure      500 {object} entities.ErrorResponse "Internal server error"
-// @Router       /student/add [post]
-func (h *Handler) CreateStudent(c *fiber.Ctx) error {
+// @Router       /user/add [post]
+func (h *Handler) CreateUser(c *fiber.Ctx) error {
 	var requests []entities.AddUserDataRequest
 
 	// Парсим JSON из запроса
@@ -27,7 +27,7 @@ func (h *Handler) CreateStudent(c *fiber.Ctx) error {
 	}
 
 	// Вызываем метод сервиса
-	resp, err := h.services.UserData.AddStudent(c.Context(), &requests)
+	resp, err := h.services.UserData.AddUser(c.Context(), &requests)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

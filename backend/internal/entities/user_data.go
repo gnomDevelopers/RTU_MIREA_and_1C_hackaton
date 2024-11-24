@@ -35,12 +35,12 @@ type AddUserDataRequest struct {
 	LastName             string `json:"last_name"`
 	FirstName            string `json:"first_name"`
 	FatherName           string `json:"father_name"`
-	University           string `json:"university"`
+	UniversityID         int    `json:"university_id"`
 	Role                 string `json:"role"`
 	Group                string `json:"group"`
-	Faculty              string `json:"faculty"`
+	FacultyID            int    `json:"faculty_id"`
 	EducationalDirection string `json:"educational_direction"`
-	Department           string `json:"department"`
+	DepartmentID         int    `json:"department_id"`
 }
 
 type AddUserDataResponse struct {
@@ -49,4 +49,16 @@ type AddUserDataResponse struct {
 	FatherName string `json:"father_name"`
 	Email      string `json:"email"`
 	Password   string `json:"password"`
+}
+
+type GetUserDataResponse struct {
+	ID                   int    `json:"id"`
+	LastName             string `json:"last_name"`
+	FirstName            string `json:"first_name"`
+	FatherName           string `json:"father_name"`
+	Role                 string `json:"role"`
+	Group                string `json:"group"`
+	FacultyID            int    `json:"faculty_id"`
+	EducationalDirection string `json:"educational_direction"`
+	DepartmentID         int    `json:"department_id"`
 }

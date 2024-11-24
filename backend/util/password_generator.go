@@ -19,5 +19,5 @@ func GenerateTemporaryPassword(length int) string {
 		password[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
 
-	return string(password)
+	return string(password) + "!"
 }

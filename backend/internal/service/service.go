@@ -13,11 +13,9 @@ type User interface {
 }
 
 type UserData interface {
-	AddStudent(context.Context, *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error)
-	getOrCreateUniversity(context.Context, string) (int, error)
-	getOrCreateFaculty(context.Context, string) (int, error)
-	getOrCreateDepartment(context.Context, string) (int, error)
+	AddUser(context.Context, *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error)
 	AddAdmin(context.Context) error
+	//GetAll(context.Context, string) *[]entities.UserData
 }
 
 type University interface {
@@ -46,6 +44,10 @@ type Group interface {
 	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 }
 
+type Faculty interface {
+	GetAll(context.Context, string) (*[]entities.Faculty, error)
+}
+
 type Service struct {
 	UserService         *UserService
 	UserData            *UserDataService
@@ -57,13 +59,14 @@ type Service struct {
 	UserScheduleService *UserScheduleService
 	GradeService        *GradeService
 	ScoreService        *ScoreService
+	FacultyService      *FacultyService
 	conf                *config.Config
 }
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
 		UserService:         NewUserService(repositories.User, conf),
-		UserData:            NewUserDataService(repositories.User, repositories.UserData, repositories.Faculty, repositories.Department, repositories.University, repositories.Group),
+		UserData:            NewUserDataService(repositories.User, repositories.UserData, repositories.Group),
 		UniversityService:   NewUniversityService(repositories.University),
 		CampusService:       NewCampusService(repositories.Campus),
 		ClassService:        NewClassService(repositories.Class),
@@ -72,5 +75,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		UserScheduleService: NewUserScheduleService(repositories.UserSchedule),
 		GradeService:        NewGradeService(repositories.Grade),
 		ScoreService:        NewScoreService(repositories.Score),
+		FacultyService:      NewFacultyService(repositories.Faculty),
 	}
 }
