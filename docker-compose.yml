@@ -12,7 +12,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./.data/log/backend:/var/log/app
+      - ./.data/log/backend/app.log:/var/log/app/app.log
     restart: on-failure
     ports:
       - "127.0.0.1:10510:8080"
