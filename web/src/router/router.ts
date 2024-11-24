@@ -77,6 +77,18 @@ export const router = createRouter({
       component: () => import('@/pages/AchievementsPage.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      name: 'QRCodeShowPage',
+      path: '/qrshow',
+      component: () => import('@/pages/ShowQRPage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      name: 'QRCodeScanPage',
+      path: '/qrscan',
+      component: () => import('@/pages/ScanQRPage.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 });
 
