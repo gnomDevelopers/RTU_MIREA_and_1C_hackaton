@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"net/url"
 	"server/internal/entities"
@@ -46,7 +47,7 @@ func (h *Handler) CreateGrade(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
+	fmt.Println("OK")
 	err = h.services.ScoreService.Update(c.Context(), &entities.Score{UserId: grade.UserId, Sum: grade.Value, Count: 1, SubjectName: class.Name})
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -54,7 +55,7 @@ func (h *Handler) CreateGrade(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
+	fmt.Println("OK")
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
@@ -68,7 +69,7 @@ func (h *Handler) CreateGrade(c *fiber.Ctx) error {
 // @Produce      json
 // @Param group path string true "group"
 // @Param name path string true "name"
-// @Success 200 {object} []entities.Campus
+// @Success 200 {object} []entities.GetGradesBySubject
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -86,7 +87,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid name")
 	}
-
+	fmt.Println("OK")
 	groupMember, err := h.services.GroupService.GetGroupMembers(c.Context(), decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -94,7 +95,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
+	fmt.Println("OK")
 	classes, err := h.services.ClassService.GetByNameAndGroupWithoutLk(c.Context(), decodedName, decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -102,7 +103,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
+	fmt.Println("OK")
 	for i := range *classes {
 		if (*classes)[i].Grades == nil {
 			(*classes)[i].Grades = []entities.Grade{}
@@ -122,12 +123,9 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 
 	for _, member := range *groupMember {
 		var averageUsersScore entities.UsersScore
-		score, err := h.services.ScoreService.Get(c.Context(), &entities.Score{UserId: member.ID, SubjectName: decodedName})
-		if err != nil {
-			logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-				Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-			logEvent.Msg(err.Error())
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		score, _ := h.services.ScoreService.Get(c.Context(), &entities.Score{UserId: member.ID, SubjectName: decodedName})
+		if score == nil {
+			continue
 		}
 		averageUsersScore.UserId = member.ID
 		averageUsersScore.SumScore = score.Sum

@@ -18,8 +18,8 @@ definitions:
         type: integer
       last_name:
         type: string
-      permission_id:
-        type: integer
+      role:
+        type: string
       university:
         type: string
     type: object
@@ -166,6 +166,11 @@ definitions:
       value:
         type: integer
     type: object
+  entities.CreateGradeResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   entities.CreateUniversityRequest:
     properties:
       name:
@@ -197,6 +202,21 @@ definitions:
       error:
         type: string
     type: object
+  entities.GetGradesBySubject:
+    properties:
+      grade_class:
+        items:
+          $ref: '#/definitions/entities.GradeClass'
+        type: array
+      group_member:
+        items:
+          $ref: '#/definitions/entities.GroupMember'
+        type: array
+      users_score:
+        items:
+          $ref: '#/definitions/entities.UsersScore'
+        type: array
+    type: object
   entities.GetUserScheduleResponse:
     properties:
       classes:
@@ -207,6 +227,43 @@ definitions:
         items:
           $ref: '#/definitions/entities.UserSchedule'
         type: array
+    type: object
+  entities.Grade:
+    properties:
+      class_id:
+        type: integer
+      id:
+        type: integer
+      user_id:
+        type: integer
+      value:
+        type: integer
+    type: object
+  entities.GradeClass:
+    properties:
+      date:
+        type: string
+      grades:
+        items:
+          $ref: '#/definitions/entities.Grade'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  entities.GroupMember:
+    properties:
+      father_name:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
     type: object
   entities.LoginUserRequest:
     properties:
@@ -308,6 +365,15 @@ definitions:
       time_start:
         type: string
       user_data_id:
+        type: integer
+    type: object
+  entities.UsersScore:
+    properties:
+      average_score:
+        type: number
+      sum_score:
+        type: integer
+      user_id:
         type: integer
     type: object
 info:
@@ -586,18 +652,14 @@ paths:
         name: data
         required: true
         schema:
-          items:
-            $ref: '#/definitions/entities.CreateGradeRequest'
-          type: array
+          $ref: '#/definitions/entities.CreateGradeRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/entities.CreateCampusesResponse'
-            type: array
+            $ref: '#/definitions/entities.CreateGradeResponse'
         "400":
           description: Bad Request
           schema:
@@ -637,7 +699,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entities.Campus'
+              $ref: '#/definitions/entities.GetGradesBySubject'
             type: array
         "400":
           description: Bad Request
