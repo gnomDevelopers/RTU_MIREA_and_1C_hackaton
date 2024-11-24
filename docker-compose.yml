@@ -83,7 +83,7 @@ services:
       # GF_AUTH_ANONYMOUS_ENABLED: "true"
       # GF_SECURITY_ANONYMOUS_ENABLED: "false"
       # GF_AUTH_BASIC_ENABLED: "true"
-      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_ALLOW_SIGN_UP: "true"
       GF_USERS_AUTO_ASSIGN: ORG_ROLE=Admin
       GF_SERVER_ROOT_URL: https://gnomedeployer.ru
 
