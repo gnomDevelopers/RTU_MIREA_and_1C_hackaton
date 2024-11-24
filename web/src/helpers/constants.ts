@@ -92,7 +92,7 @@ export interface IUser{
 //api interfaces
 
 export interface IAPI_Login_Request{
-  login: string,
+  email: string,
   password: string,
 };
 

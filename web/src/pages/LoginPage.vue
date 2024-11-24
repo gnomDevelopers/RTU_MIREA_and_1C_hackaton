@@ -40,7 +40,7 @@ export default{
     sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-        const data:IAPI_Login_Request = { login: this.login.value, password: this.password.value };
+        const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
         API_Login(data)
         .then(response => {
           this.statusWindowStore.deteleStatusWindow(stID);
