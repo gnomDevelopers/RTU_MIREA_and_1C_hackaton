@@ -1,6 +1,7 @@
 FROM golang:1.22.5-alpine AS builder
 
-RUN apk add --no-cache git
+# Установка необходимых инструментов
+RUN apk add --no-cache git make curl bash gcc musl-dev
 
 WORKDIR /app
 
@@ -9,20 +10,32 @@ RUN go mod download
 
 COPY . .
 
+# Установка утилит для миграций и генерации Swagger
+RUN go install -ldflags="-s -w" github.com/golang-migrate/migrate/v4/cmd/migrate@latest && \
+    go install -ldflags="-s -w" github.com/swaggo/swag/cmd/swag@latest && \
+    go install -ldflags="-s -w" -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+# Сборка основного приложения
 RUN go build -ldflags="-s -w" -o /main ./cmd/main.go
 
+# Финальный образ
 FROM alpine:3.18
 
-RUN apk add --no-cache ca-certificates curl && \
-    adduser -D -g '' appuser
+# Установка зависимостей для работы приложения
+RUN apk add --no-cache ca-certificates curl bash make
 
-USER appuser
 
+# Копирование приложения, окружения и makefile
 COPY --from=builder /main /app/main
 COPY --from=builder /app/.env /app/.env
+COPY --from=builder /app/makefile /app/makefile
+COPY --from=builder /app/internal /app/internal
+
+# Копирование утилит migrate и swag
+COPY --from=builder /go/bin/migrate /usr/local/bin/migrate
+COPY --from=builder /go/bin/swag /usr/local/bin/swag
 
 WORKDIR /app
 
-ENTRYPOINT ["sh", "-c", "/app/main || exit 1"]
-# ENTRYPOINT ["sh", "-c", "/app/main || tail -f /dev/null"]
-# ENTRYPOINT ["/app/main"]
+# Установка точки входа: выполнение makefile и запуск приложения
+ENTRYPOINT ["sh", "-c", "make && /app/main || exit 1"]

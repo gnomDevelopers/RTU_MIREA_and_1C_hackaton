@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { API_Authenticate } from "@/api/api";
-import { type TMaybeNumber } from "@/helpers/constants";
+import { type TMaybeNumber, type TMaybeBoolean } from "@/helpers/constants";
+
 
 export const useUserInfoStore = defineStore('userInfo', {
   state() {
     return{
-      authenticated: false, // проверка авторизованности
+      authorized: null as TMaybeBoolean, // проверка авторизованности
       first_name: '', // имя
       last_name: '', // фамилия
       father_name: '', //отчество
@@ -20,11 +21,11 @@ export const useUserInfoStore = defineStore('userInfo', {
   actions: {
     async Authenticate(){
       try{
-        console.log('sending reequest');
-        const data = await API_Authenticate();
-        console.log('data: ', data);
+        const response:any = await API_Authenticate();
+        if(response.data.authorized !== undefined) this.authorized = response.data.authorized;
+        else this.authorized = false;
       }catch (error){
-        this.authenticated = false;
+        this.authorized = false;
       }
     }
   }

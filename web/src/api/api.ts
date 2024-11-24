@@ -226,10 +226,10 @@ export function API_Class_Delete(classID: number){
 
 //создание расписания из файла
 export function API_Schedule_Create(data: FormData){
-  if (DEVMODE) for(let item of data) { console.log('File with schedule: ', item[1]); break; }
+  if (DEVMODE) for(let item of data) { console.log('File schedule: ', item[1]); break; }
   
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/schedule/parse`, data, {
+    axios.post(`${API}/auth/schedule/parse`, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
