@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"log"
 	"server/internal/config"
 	"server/internal/entities"
 	"server/internal/repository"
@@ -97,16 +98,33 @@ func (s *UserService) Login(c context.Context, request *entities.LoginUserReques
 
 }
 
-func (s *UserService) CreateAdmin(c context.Context, req *entities.CreateUserRequest) (*entities.CreateUserResponse, error) {
+func (s *UserService) CreateAdmin(c context.Context) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
+	exists, err := s.repository.Exists(ctx, "admin")
+	if err != nil {
+		return err
+	}
+	if exists {
+		log.Println("admin already exists")
+		return nil
+	} else {
+		log.Println("admin doesn't exist, creating")
+	}
+
+	password := util.GenerateTemporaryPassword(15)
+	hashedPassword, err := util.HashPassword(password)
+	if err != nil {
+		return err
+	}
+
 	createAdmin := &entities.User{
-		Email:                req.Email,
-		Password:             req.Password,
-		FirstName:            req.FirstName,
-		LastName:             req.LastName,
-		FatherName:           req.FatherName,
+		Email:                "admin",
+		Password:             hashedPassword,
+		FirstName:            "Админ",
+		LastName:             "Админов",
+		FatherName:           "Админович",
 		Role:                 "Администратор",
 		UniversityID:         1,
 		FacultyID:            1,
@@ -117,19 +135,11 @@ func (s *UserService) CreateAdmin(c context.Context, req *entities.CreateUserReq
 
 	user, err := s.repository.CreateUser(ctx, createAdmin)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	res := &entities.CreateUserResponse{
-		ID:         user.ID,
-		LastName:   user.LastName,
-		FirstName:  user.FirstName,
-		FatherName: user.FatherName,
-		Password:   user.Password,
-		Email:      user.Email,
-	}
-
-	return res, nil
+	log.Printf("Admin created\nemail: %s\npassword: %s", user.Email, password)
+	return nil
 }
 
 func (s *UserService) GetEducationalDirection(c context.Context, userID int) (string, error) {

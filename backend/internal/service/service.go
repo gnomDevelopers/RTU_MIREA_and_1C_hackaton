@@ -10,7 +10,7 @@ import (
 type User interface {
 	CreateUser(context.Context, *entities.CreateUserRequest) (*entities.CreateUserResponse, error)
 	Login(context.Context, *entities.LoginUserRequest) (*entities.LoginUserResponse, error)
-	CreateAdmin(context.Context, *entities.CreateUserRequest) (*entities.CreateUserResponse, error)
+	CreateAdmin(context.Context) error
 	GetEducationalDirection(context.Context, int) (string, error)
 }
 
