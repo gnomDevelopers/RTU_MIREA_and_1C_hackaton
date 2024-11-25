@@ -30,8 +30,8 @@ services:
     networks:
       - hackaton_app
 
-  frontend:
-    container_name: frontend
+  frontend_app:
+    container_name: frontend_app
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -39,7 +39,22 @@ services:
       - ./.data/log/frontend:/var/log/app
     restart: unless-stopped
     ports:
-      - "127.0.0.1:10520:3800"
+      - "127.0.0.1:10521:3800"
+    depends_on:
+      - backend
+    networks:
+      - hackaton_app
+
+  frontend_hr:
+    container_name: frontend_hr
+    build:
+      context: ./HR
+      dockerfile: Dockerfile
+    volumes:
+      - ./.data/log/HR:/var/log/app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:10521:3800"
     depends_on:
       - backend
     networks:
