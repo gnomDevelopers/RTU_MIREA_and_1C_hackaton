@@ -8,14 +8,19 @@
           <span class="font-bold">{{ time }}</span>
           {{ title }}
         </p>
-        <p class="flex flex-row flex-wrap gap-x-1 text-base">
+        <div v-if="showAddMySchedule" class="flex flex-row gap-x-1 w-full">
+          <input class="flex-grow text-lg px-2 outline-none header-shadow rounded" type="text" placeholder="Введите ваше расписание" v-model="mySchedule">
+          <svg @click="closeMySchedule" class="w-6 h-6 rotate-45" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2V30M2 16H30" stroke="#e64545" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p v-else class="flex flex-row flex-wrap gap-x-1 text-base">
           <span class="font-bold">{{ room }}</span>
-          {{ group }}
+          {{ group }}{{ mySheduleText }}
         </p>
       </div>
-
-      <div class="self-center cursor-pointer" v-if="title === '' && canAddFaculties">
-        <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="flex flex-col items-center justify-center gap-y-2 cursor-pointer px-2" v-if="title === '' && canAddFaculties">
+        <svg @click="addMySchedule" class="w-6 h-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2V30M2 16H30" stroke="#063C73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
@@ -26,6 +31,8 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
+import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { StatusCodes } from '@/helpers/constants';
 export default{
   props: {
     index: {
@@ -54,12 +61,33 @@ export default{
       default: false,
     }
   },
+  data() {
+    return {
+      showAddMySchedule: false,
+      mySchedule: '',
+      mySheduleText: '',
+    }
+  },
   computed: {
-    ...mapStores(useScheduleStore),
+    ...mapStores(useScheduleStore, useStatusWindowStore),
   },
   methods: {
     selectClass(){
       this.scheduleStore.selectedClass = 1; //
+    },
+    addMySchedule(){
+      if(!this.showAddMySchedule){
+        this.showAddMySchedule = true;
+        return;
+      }
+      this.mySheduleText = this.mySchedule;
+      this.mySchedule = '';
+      this.showAddMySchedule = false;
+      if(this.mySheduleText !== '') this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Расписание обновлено!');
+    },
+    closeMySchedule(){
+      this.mySchedule = '';
+      this.showAddMySchedule = false;
     }
   }
 };

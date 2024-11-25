@@ -7,6 +7,7 @@
     <div class="flex flex-col gap-y-1 w-full items-stretch">
       <ScheduleClassListItem 
         v-for="(item, ind) in scheduleStore.scheduleTableDay"
+        :key="uniqueID++"
         :index="ind + 1" 
         :time="`${item.time} ${item.type}`" 
         :title="item.title" 
@@ -35,6 +36,11 @@ export default {
   },
   computed:{
     ...mapStores(useScheduleStore),
+  },
+  data(){
+    return {
+      uniqueID: 1,
+    }
   }
 };
 </script>

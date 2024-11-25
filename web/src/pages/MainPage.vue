@@ -8,7 +8,7 @@
           <IconAccounts/>
         </MainTableItem> -->
 
-        <MainTableItem @clicked="$router.push({name: 'QRCodeScanPage'})" title="Отмечание с помощью QR кода" text="Отметьтесь на паре при помощи qr кода">
+        <MainTableItem v-if="false" @clicked="$router.push({name: 'QRCodeScanPage'})" title="Отмечание с помощью QR кода" text="Отметьтесь на паре при помощи qr кода">
           <IconAccounts/>
         </MainTableItem>
 

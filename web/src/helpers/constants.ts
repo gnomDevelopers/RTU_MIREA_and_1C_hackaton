@@ -105,6 +105,7 @@ export interface IGroupScores {
   user: IUserGet,
   scores: number[],
   avg: number,
+  gpa: number,
 }
 
 export interface IGroupAttendance {

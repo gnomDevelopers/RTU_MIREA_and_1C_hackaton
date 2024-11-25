@@ -105,11 +105,9 @@ export const useUniversityStore = defineStore('university', {
         {id: 20, surname: `Лебедев`, name: `Антон`, thirdname: `Валерьевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
       ];
 
-      this.groupMembersList = this.sortPeople(this.groupMembersList);
-
       this.groupMembersScores = [];
       for(let user of this.groupMembersList){
-        const data = {user: user, scores: [], avg: 0} as IGroupScores;
+        const data = {user: user, scores: [], avg: 0, gpa: 0} as IGroupScores;
         let summ = 0;
         let count = 0;
         for(let i = 0; i < 16; i++) {
@@ -119,10 +117,10 @@ export const useUniversityStore = defineStore('university', {
           data.scores.push(j);
         }
         data.avg = summ / count;
+        data.gpa = data.avg + ((Math.ceil(Math.random() * 10)) > 5 ? 1 : -1) * (Math.random()*0.3);
         this.groupMembersScores.push(data);
       }
-
-
+      this.groupMembersScores = this.sortByName(this.groupMembersScores);
         
       for(let i = 1; i < 10; i++) {
         const data: IAPI_Audience_Update = {  
@@ -162,6 +160,24 @@ export const useUniversityStore = defineStore('university', {
         {id: 3, name: 'Автошкола'},
       ];
     },
+    sortByName(people: IGroupScores[]): IGroupScores[] {
+      return [...people].sort((a, b) => {
+        const surnameComparison = a.user.surname.localeCompare(b.user.surname);
+        if (surnameComparison !== 0) {
+          return surnameComparison;
+        }
+
+        const nameComparison = a.user.name.localeCompare(b.user.name);
+        if (nameComparison !== 0) {
+          return nameComparison;
+        }
+
+        return a.user.thirdname.localeCompare(b.user.thirdname);
+      });
+    },
+    sortByGpa(students: IGroupScores[]): IGroupScores[] {
+      return [...students].sort((a, b) => b.gpa - a.gpa);
+    },
     sortPeople(people: IUserGet[]): IUserGet[] {
       return [...people].sort((a, b) => {
         const surnameComparison = a.surname.localeCompare(b.surname);
@@ -176,6 +192,6 @@ export const useUniversityStore = defineStore('university', {
 
         return a.thirdname.localeCompare(b.thirdname);
       });
-    }
+    },
   }
 });
