@@ -22,15 +22,27 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no -p ${{ vars.NODE1_SSH_PORT }} ${{ vars.NODE1_SSH_USER }}@${{ secrets.NODE1_SERVER_IP }} << 'EOF'
+          set -e  # Остановка выполнения на ошибке
+
           cd ${{ vars.NODE1_PROJECT_PATH }}
 
-          # Save local changes and pull the latest code
-          git stash
+          git stash || true  # Если нечего сохранять, игнорируем ошибку
           git pull origin main
 
-          # Rebuild and deploy containers with zero downtime
-          docker compose up -d --build
+          echo "Backing up current state of containers..."
+          docker compose config > backup-docker-compose.yml || true
 
-          # Clean up any unused resources
+          echo "Starting deployment..."
+          if ! docker compose up -d --build; then
+            echo "Deployment failed. Restoring previous state..."
+            if [ -f backup-docker-compose.yml ]; then
+              docker compose -f backup-docker-compose.yml up -d
+              echo "Previous state restored."
+            else
+              echo "No backup available to restore."
+            fi
+            exit 1 
+          fi
+
           docker image prune -f
         EOF
