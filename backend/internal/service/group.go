@@ -40,3 +40,23 @@ func (s *GroupService) GetByUserID(c context.Context, userID int) (*entities.Gro
 	}
 	return group, nil
 }
+
+func (s *GroupService) Create(c context.Context, req *entities.CreateGroupRequest) (*entities.CreateGroupResponse, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	//todo проверить no rows
+
+	//exists, err := s.repository.Exists(ctx, req.Name)
+
+	id, err := s.repository.Create(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &entities.CreateGroupResponse{
+		ID: id,
+	}
+
+	return res, err
+}

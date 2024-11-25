@@ -46,6 +46,7 @@ type Campus interface {
 type Group interface {
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
+	Create(context.Context, *entities.CreateGroupRequest) (*entities.CreateGroupResponse, error)
 }
 
 type Service struct {

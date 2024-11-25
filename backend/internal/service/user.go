@@ -45,25 +45,8 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 		return nil, err
 	}
 
-	TokenExpiration, err := strconv.Atoi(s.conf.Application.TokenExpiration)
-	if err != nil {
-		return &entities.CreateUserResponse{}, errors.New("wrong data")
-	}
-	accessToken, err := pkg.GenerateAccessToken(u.ID, TokenExpiration,
-		s.conf.Application.SigningKey)
-	if err != nil {
-		return &entities.CreateUserResponse{}, err
-	}
-
-	refreshToken, err := pkg.GenerateRefreshToken(u.ID, s.conf.Application.SigningKey)
-	if err != nil {
-		return &entities.CreateUserResponse{}, err
-	}
-
 	res := &entities.CreateUserResponse{
-		ID:           r.ID,
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		ID: r.ID,
 	}
 
 	return res, nil

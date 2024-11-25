@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"server/internal/entities"
 	"server/internal/repository"
@@ -25,7 +26,7 @@ func (u *UniversityService) Create(c context.Context, request *entities.CreateUn
 	defer cancel()
 
 	exists, err := u.repository.Exists(ctx, request.Name)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return 0, err
 	}
 	if exists {

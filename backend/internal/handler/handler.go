@@ -32,11 +32,11 @@ func (h *Handler) Router() *fiber.App {
 	})
 
 	f.Use(cors.New(cors.Config{
-		AllowOrigins: "http://frontend:3000/",
+		AllowOrigins: "*",
 		//AllowOrigins:     "http://localhost:8080/",
-		AllowCredentials: true,
-		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
-		AllowMethods:     "GET, HEAD, PUT, PATCH, POST, DELETE",
+		//AllowCredentials: true,
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowMethods: "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
 	f.Use(log.RequestLogger(h.logger))
 
@@ -48,10 +48,10 @@ func (h *Handler) Router() *fiber.App {
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
-	f.Get("/login", h.CheckAuth)
-	f.Post("/logout", h.Logout)
 
 	f.Post("/user/add", h.CreateUser)
+
+	f.Post("/group", h.CreateGroup)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)

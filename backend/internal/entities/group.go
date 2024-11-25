@@ -10,3 +10,7 @@ type CreateGroupRequest struct {
 	Name   string `json:"name"`
 	UserID int    `json:"user_id"`
 }
+
+type CreateGroupResponse struct {
+	ID int `json:"id"`
+}
