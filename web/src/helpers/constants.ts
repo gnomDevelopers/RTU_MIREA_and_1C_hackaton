@@ -112,6 +112,11 @@ export interface IGroupAttendance {
   attendace: number,
 }
 
+export interface ITimeTable{
+  date: string,
+  timeTable: IScheduleItem[],
+}
+
 //api interfaces
 
 export interface IAPI_Login_Request{

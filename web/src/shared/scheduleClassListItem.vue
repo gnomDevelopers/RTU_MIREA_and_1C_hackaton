@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row justify-start items-stretch min-h-14">
+  <div class="flex flex-row justify-start items-stretch min-h-14 mb:min-w-[500px] w-full mb:w-auto">
     <p class="text-xl font-medium w-14 flex flex-row flex-shrink-0 justify-center items-center rounded-l-xl cursor-default bg-color-bold text-white">{{ index }}</p>
     <div @click="selectClass" class="flex flex-row flex-grow items-stretch bg-white rounded-r-xl px-2 cursor-pointer">
       

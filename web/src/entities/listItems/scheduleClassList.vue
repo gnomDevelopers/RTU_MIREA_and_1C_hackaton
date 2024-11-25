@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center gap-y-4 bg-color-light rounded-xl p-4">
+  <div class="flex flex-col items-center w-full mb:w-auto gap-y-4 bg-color-light rounded-xl p-4">
     <div class="flex flex-col gap-y-1 w-full items-stretch">
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">25.11.2024, Понедельник</div>
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">13 неделя</div>
