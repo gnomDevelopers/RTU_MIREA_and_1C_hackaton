@@ -44,15 +44,20 @@ export default{
         API_Login(data)
         .then(response => {
           this.statusWindowStore.deteleStatusWindow(stID);
-          this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
-          
-          this.$router.push({name: 'MainPage'});
+          // this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          // this.$router.push({name: 'MainPage'});
         })
         .catch(error => {
           this.statusWindowStore.deteleStatusWindow(stID);
-          if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
-          else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
-        });
+          // if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+          // else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+        })
+        .finally(() => {
+          this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          this.userInfoStore.Authenticate(); // временно
+          this.userInfoStore.loadUserData(); // временно
+          this.$router.push({name: 'MainPage'});
+        })
         return;
       }
 

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { type IScheduleItem, StatusCodes } from "@/helpers/constants";
+import { type IScheduleItem, StatusCodes, type TMaybeNumber } from "@/helpers/constants";
 import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName } from "@/api/api";
 import { useStatusWindowStore } from "./statusWindowStore";
 
@@ -8,12 +8,14 @@ const statusWindow = useStatusWindowStore();
 export const useScheduleStore = defineStore('schedule', {
   state() {
     return{
-      scheduleType: 1 as number, // 0 - my schedule, 1 - general schedule
+      scheduleType: 0 as number, // 0 - my schedule, 1 - general schedule
       scheduleTarget: 0 as number, // 0 - group, 1 - teacher, 2 - faculty
 
       selectedTarget: '' as string, // selected in search
 
       scheduleTableDay: [] as IScheduleItem[], // таблица расписания
+
+      selectedClass: null as TMaybeNumber,
 
       ScheduleData: [] as IScheduleItem[][], // расписание на весь семестр
     }
@@ -30,12 +32,6 @@ export const useScheduleStore = defineStore('schedule', {
         statusWindow.deteleStatusWindow(stID);
         statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
       })
-      // .finally(() => {
-      //   const res = [
-      //     { academic_discipline_id: 0, auditory_id: 0, date: '', group_names: ['ЭФБО-01-23'], id: 0, name: 'Философия', teacher_names: ['Teacher Teacherovich'], time_end: '9:00', time_start: '10:30', type: 'ПР', week: 0, weekday: 0 },
-      //   ];
-      // });
-
 
       this.scheduleTableDay = [
         { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },

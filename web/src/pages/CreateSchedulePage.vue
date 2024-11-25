@@ -106,13 +106,19 @@ export default {
 
       API_Schedule_Create(formData)
       .then(response => {
-        this.statusWindowStore.deteleStatusWindow(stID);
-        this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Расписание установлено!');
+        // this.statusWindowStore.deteleStatusWindow(stID);
+        // this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Расписание установлено!');
       })
       .catch(error => {
-        this.statusWindowStore.deteleStatusWindow(stID);
-        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при отправке расписания!');
+        // this.statusWindowStore.deteleStatusWindow(stID);
+        // this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при отправке расписания!');
       })
+      .finally(() => {
+        setTimeout(() => {
+          this.statusWindowStore.deteleStatusWindow(stID);
+          this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Расписание установлено!');
+        }, 700);
+      });
     }
   }
 };

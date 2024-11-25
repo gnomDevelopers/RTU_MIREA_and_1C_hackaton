@@ -7,6 +7,7 @@
 <script lang="ts">
 import { mapStores } from "pinia";
 import { useUserInfoStore } from "./stores/userInfoStore";
+import { useUniversityStore } from "./stores/universityStore";
 
 import StatusWindow from "./entities/statusWindow.vue";
 import Header from "./entities/header.vue";
@@ -17,11 +18,16 @@ export default {
     Header,
   },
   computed:{
-    ...mapStores(useUserInfoStore),
+    ...mapStores(useUserInfoStore, useUniversityStore),
   },
   async mounted(){
-    await this.userInfoStore.Authenticate();
-    if(this.userInfoStore.authorized) this.userInfoStore.loadUserData();
+    // await this.userInfoStore.Authenticate();
+    if(this.userInfoStore.authorized) {
+      // this.userInfoStore.loadUserData();
+      // this.universityStore.loadUniversityInfo(); 
+    }
+    // this.userInfoStore.loadUserData(); // тоже
+    this.universityStore.loadUniversityInfo(); // временное решение
   },
 };
 </script>

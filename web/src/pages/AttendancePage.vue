@@ -11,28 +11,28 @@
           <SearchList 
             title="" 
             placeholder="Выберите группу" 
-            :search-list="groupsList" 
+            :search-list="groupsSearchList" 
             :item-component="getListItemComponent"
             class="h-80"
           />
           
-          <CalendarTable :month="10" />
-
-          <ScheduleClassList :canAddFaculties="false"/>
+          <ScheduleClassList v-if="isGroupSelected" :canAddFaculties="false"/>
+          
+          <CalendarTable v-if="isGroupSelected && isClassSelected" :month="10" />
 
         </div>
 
         <div class="flex flex-col flex-shrink-0 gap-y-4 items-center">
-          <div class="flex flex-col items-center gap-y-4 min-w-20 xl:min-w-[600px] p-4 rounded-xl bg-color-light">
+          <div v-if="isGroupSelected && isClassSelected" class="flex flex-col items-center gap-y-4 min-w-20 xl:min-w-[600px] p-4 rounded-xl bg-color-light">
             <div class="flex flex-col w-full items-stretch gap-y-1">
               <AttendanceUsersListItem 
-                v-for="(item, index) in studentsList" 
-                :key="item.id" 
+                v-for="(item, index) in getAttendaceList" 
+                :key="item.user.id" 
                 :index="index + 1"
-                :data="item"
+                :data="item.user"
               />
             </div>
-            <div class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
+            <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
               <p class="text-2xl text-white">Заверить</p>
             </div>
           </div>
@@ -44,7 +44,10 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
-import { type ISearchList, type IItemList } from '@/helpers/constants';
+import { useUniversityStore } from '@/stores/universityStore';
+import { useAttendacePageStore } from '@/stores/attendacePageStore';
+import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { type ISearchList, type IItemList, type IUserGet, type IGroupAttendance, StatusCodes } from '@/helpers/constants';
 
 import AttendanceSearchListItem from '@/entities/listItems/attendanceSearchListItem.vue';
 import CalendarTable from '@/entities/calendarTable.vue';
@@ -66,28 +69,58 @@ export default {
   },
   data(){
     return {
-      groupsList: [] as ISearchList[],
-      studentsList: [] as any[],
+      groupsSearchList: [] as ISearchList[],
+      // studentsAttendanceList: [] as ISearchList[],
     }
   },
   computed:{
-    ...mapStores(useScheduleStore),
+    ...mapStores(useScheduleStore, useUniversityStore, useAttendacePageStore, useStatusWindowStore),
 
     getListItemComponent(){
       return AttendanceSearchListItem;
-    }
+    },
+
+    isGroupSelected(){
+      return this.attendancePageStore.selectedGroupID !== null;
+    },
+
+    isClassSelected(){
+      return this.scheduleStore.selectedClass !== null;
+    },
+
+    getAttendaceList(){
+      return this.attendancePageStore.attendanceGroupMembers;
+    },
   },
   mounted() {
     this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
-    
-    for(let i = 1; i < 20; i++){
-      const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};
-      this.groupsList.push({id: data.id, search_field: data.name, data: data});
-    }
-    for(let i = 1; i < 30; i++){
-      const data:any = {id: i, name: `Иванов Иван Иванович`};
-      this.studentsList.push(data);
+
+    this.attendancePageStore.attendanceGroupMembers = [];
+    for(let item of this.universityStore.groupMembersList){
+      const data: IGroupAttendance = {user: item, attendace: 1};
+      this.attendancePageStore.attendanceGroupMembers.push(data);
     }
   },
+  methods: {
+    saveAttendance(){
+      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Сохраняем посещения...', -1);
+      setTimeout(() => {
+        this.statusWindowStore.deteleStatusWindow(stID);
+        this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Посещения сохранены!');
+      }, 300);
+    }
+  },
+  watch: {
+    'universityStore.groupsList' : {
+      handler(val: IUserGet[]){
+        this.groupsSearchList = [];
+        for(let item of val){
+          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  }
 };
 </script>

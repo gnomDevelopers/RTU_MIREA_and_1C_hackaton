@@ -146,13 +146,6 @@ export default {
       return AccountAuditoryListItem;
     },
   },
-  mounted(){
-    //получение всей информации об университете и его составных
-    this.universityStore.loadUniversityInfo();
-  },
-  methods:{
-    
-  },
   watch: {
     'universityStore.auditoriesList' : {
       handler(val: IAPI_Audience_Update[]){

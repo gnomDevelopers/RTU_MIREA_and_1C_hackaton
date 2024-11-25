@@ -726,6 +726,10 @@ video {
   height: 0.25rem;
 }
 
+.h-1\/2 {
+  height: 50%;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -822,10 +826,6 @@ video {
   width: 0px;
 }
 
-.w-1\/2 {
-  width: 50%;
-}
-
 .w-10 {
   width: 2.5rem;
 }
@@ -868,6 +868,10 @@ video {
 
 .w-8 {
   width: 2rem;
+}
+
+.w-8\/12 {
+  width: 66.666667%;
 }
 
 .w-9 {
@@ -1365,6 +1369,10 @@ video {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {
@@ -2015,16 +2023,17 @@ video {
 
 .profile-list > li {
   margin-bottom: 0.5rem;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1.75rem;
+  font-weight: 600;
 }
 
 .profile-list > li:last-child{
   margin-bottom: 0px;
 }
 
-.profile-list > li > span{
-  text-decoration: underline;
+.profile-list > li > span {
+  font-weight: 400;
 }
 
 .schedule > * > tr > td {
@@ -2096,6 +2105,18 @@ thead th, tbody td {
 
 .table-decorate tbody tr:nth-child(2n) td{
   background-color: var(--bg-color-light);
+}
+
+.selected-list-item{
+  border-color: #0754a1;
+}
+
+.unselected-attendace{
+  background-color: #6ba2da;
+}
+
+.selected-attendace{
+  background-color: #0958a8;
 }
 
 @keyframes timeLine{
@@ -2364,6 +2385,10 @@ thead th, tbody td {
 
   .lg\:w-10\/12 {
     width: 83.333333%;
+  }
+
+  .lg\:w-\[400px\] {
+    width: 400px;
   }
 
   .lg\:flex-row {

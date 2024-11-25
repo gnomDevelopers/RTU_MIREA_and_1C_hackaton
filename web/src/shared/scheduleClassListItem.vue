@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row justify-start items-stretch min-h-14">
     <p class="text-xl font-medium w-14 flex flex-row flex-shrink-0 justify-center items-center rounded-l-xl cursor-default bg-color-bold text-white">{{ index }}</p>
-    <div class="flex flex-row flex-grow items-stretch bg-white rounded-r-xl px-2">
+    <div @click="selectClass" class="flex flex-row flex-grow items-stretch bg-white rounded-r-xl px-2 cursor-pointer">
       
       <div class="flex flex-col flex-grow items-start gap-y-1">
         <p class="flex flex-row flex-wrap gap-x-1 text-lg">
@@ -24,6 +24,8 @@
   </div>
 </template>
 <script lang="ts">
+import { mapStores } from 'pinia';
+import { useScheduleStore } from '@/stores/scheduleStore';
 export default{
   props: {
     index: {
@@ -52,6 +54,13 @@ export default{
       default: false,
     }
   },
-
+  computed: {
+    ...mapStores(useScheduleStore),
+  },
+  methods: {
+    selectClass(){
+      this.scheduleStore.selectedClass = 1; //
+    }
+  }
 };
 </script>

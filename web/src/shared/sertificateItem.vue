@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-col flex-shrink flex-grow basis-full mb:basis-[440px] gap-y-4 p-4 w-full mb:w-[440px] max-w-[500px] rounded-lg bg-color-light">
-    <div class="flex flex-row gap-x-2 items-start">
-      <img class="flex-grow w-1/2 aspect-video" src="../assets/images/1ass.webp"/>
+    <div class="flex flex-row gap-x-2 items-start h-1/2">
+      <div class="flex-shrink-0 w-8/12 aspect-video">
+        <slot></slot>
+      </div>
       <p class="text-xl text-center font-semibold">{{ title }}</p>
     </div>
     <div>

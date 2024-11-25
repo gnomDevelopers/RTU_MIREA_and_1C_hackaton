@@ -23,6 +23,7 @@ export const SCHEDULE_TARGET_TEXT = ['Выберите группу для пр�
 
 export type TMaybeNumber = number | null;
 export type TMaybeBoolean = boolean | null;
+export type TMaybeString = string | null;
 
 //interfaces
 
@@ -90,6 +91,26 @@ export interface IUserGet extends IUser{
   id: number,
 }
 
+export interface IGroup {
+  id: number,
+  name: string,
+}
+
+export interface ISubject {
+  id: number,
+  name: string,
+}
+
+export interface IGroupScores {
+  user: IUserGet,
+  scores: number[],
+  avg: number,
+}
+
+export interface IGroupAttendance {
+  user: IUserGet,
+  attendace: number,
+}
 
 //api interfaces
 
