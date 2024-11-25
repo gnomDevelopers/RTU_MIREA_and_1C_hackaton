@@ -45,13 +45,6 @@ export interface IItemList{
   name: string,
 }
 
-//userList item interface
-export interface IUsersList{
-  id: number,
-  name: string,
-  role: number,
-}
-
 //groupCOrrect item interface
 export interface IGroupCorrectUserItem{
   //
@@ -91,6 +84,12 @@ export interface IUser{
   department_id: number,
   educational_direction: string,
 }
+
+//userList item interface
+export interface IUserGet extends IUser{
+  id: number,
+}
+
 
 //api interfaces
 
