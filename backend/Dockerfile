@@ -38,4 +38,4 @@ COPY --from=builder /go/bin/swag /usr/local/bin/swag
 WORKDIR /app
 
 # Установка точки входа: выполнение makefile и запуск приложения
-ENTRYPOINT ["sh", "-c", "make && /app/main || exit 1"]
+ENTRYPOINT ["sh", "-c", "make generateswag migrateup && /app/main || exit 1"]
