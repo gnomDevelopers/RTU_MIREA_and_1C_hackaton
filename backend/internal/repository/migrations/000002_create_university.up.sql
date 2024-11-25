@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS university (
     id SERIAL PRIMARY KEY,
-    name VARCHAR
+    name VARCHAR,
+    postfix VARCHAR
 );
