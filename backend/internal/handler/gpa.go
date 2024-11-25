@@ -33,7 +33,7 @@ func (h *Handler) GetByUserId(c *fiber.Ctx) error {
 	}
 
 	h.logger.Debug().Msg("call h.services.UserData.GetEducationalDirection")
-	edDir, err := h.services.UserData.GetEducationalDirection(c.Context(), id)
+	edDir, err := h.services.UserService.GetEducationalDirection(c.Context(), id)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

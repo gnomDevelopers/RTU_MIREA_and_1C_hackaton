@@ -10,16 +10,8 @@ import (
 type User interface {
 	CreateUser(context.Context, *entities.CreateUserRequest) (*entities.CreateUserResponse, error)
 	Login(context.Context, *entities.LoginUserRequest) (*entities.LoginUserResponse, error)
-}
-
-type UserData interface {
-	AddStudent(context.Context, *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error)
-	getOrCreateUniversity(context.Context, string) (int, error)
-	getOrCreateFaculty(context.Context, string) (int, error)
-	getOrCreateDepartment(context.Context, string) (int, error)
-	AddAdmin(context.Context) error
+	CreateAdmin(context.Context, *entities.CreateUserRequest) (*entities.CreateUserResponse, error)
 	GetEducationalDirection(context.Context, int) (string, error)
-	GetById(context.Context, int) (*entities.UserData, error)
 }
 
 type University interface {
@@ -51,7 +43,6 @@ type Group interface {
 
 type Service struct {
 	UserService               *UserService
-	UserData                  *UserDataService
 	UniversityService         *UniversityService
 	CampusService             *CampusService
 	GroupService              *GroupService
@@ -68,7 +59,6 @@ type Service struct {
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
 		UserService:               NewUserService(repositories.User, conf),
-		UserData:                  NewUserDataService(repositories.User, repositories.UserData, repositories.Group),
 		UniversityService:         NewUniversityService(repositories.University),
 		CampusService:             NewCampusService(repositories.Campus),
 		ClassService:              NewClassService(repositories.Class),

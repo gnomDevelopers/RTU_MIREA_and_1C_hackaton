@@ -10,7 +10,7 @@ type User struct {
 	UniversityID         int    `json:"university_id"`
 	Role                 string `json:"role"`
 	FacultyID            int    `json:"faculty_id"`
-	Group                string `json:"group"`
+	GroupID              int    `json:"group_id"`
 	DepartmentID         int    `json:"department_id"`
 	EducationalDirection string `json:"educational_direction"`
 	IsDeleted            bool   `json:"is_deleted"`
@@ -27,7 +27,7 @@ type CreateUserRequest struct {
 	UniversityID         int    `json:"university_id"`
 	Role                 string `json:"role"`
 	FacultyID            int    `json:"faculty_id"`
-	Group                string `json:"group"`
+	GroupID              int    `json:"group_id"`
 	DepartmentID         int    `json:"department_id"`
 	EducationalDirection string `json:"educational_direction"`
 }
