@@ -31,6 +31,8 @@ export const useUniversityStore = defineStore('university', {
       facultiesList: [] as IItemList[],
       deparmentsList: [] as IItemList[],
       educationalDirectionsList: [] as IItemList[],
+
+      tmpuserID: 100,
     }
   },
   actions: {
@@ -55,52 +57,52 @@ export const useUniversityStore = defineStore('university', {
       // }
       this.decansList = [
         {id: 1, surname: `Иванова`, name: `Алина`, thirdname: `Сергеевна`, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
-        {id: 1, surname: `Петров`, name: `Дмитрий`, thirdname: `Алексеевич `, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
+        {id: 2, surname: `Петров`, name: `Дмитрий`, thirdname: `Алексеевич `, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
       ];  
       // for(let i = 1; i < 110; i++) {
       //   const data: IUserGet = {id: i, surname: `УчОтделов${i}`, name: `УчОтдел${i}`, thirdname: `УчОтделович${i}`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',};
       //   this.educationDepartmentsList.push(data);
       // }
       this.educationDepartmentsList = [
-        {id: 1, surname: `Смирнова`, name: `Елена`, thirdname: `Владимировна`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
-        {id: 1, surname: `Кузнецов`, name: `Сергей`, thirdname: `Николаевич`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
+        {id: 3, surname: `Смирнова`, name: `Елена`, thirdname: `Владимировна`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
+        {id: 4, surname: `Кузнецов`, name: `Сергей`, thirdname: `Николаевич`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
       ];  
       // for(let i = 1; i < 110; i++) {
       //   const data: IUserGet = {id: i, surname: `ЗавКафов${i}`, name: `ЗавКаф${i}`, thirdname: `ЗавКафович${i}`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',};
       //   this.zavCafsList.push(data);
       // }
       this.zavCafsList = [
-        {id: 1, surname: `Попова`, name: `Ольга`, thirdname: `Павловна`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
-        {id: 1, surname: `Соколов`, name: `Андрей`, thirdname: `Михайлович`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
+        {id: 5, surname: `Попова`, name: `Ольга`, thirdname: `Павловна`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
+        {id: 6, surname: `Соколов`, name: `Андрей`, thirdname: `Михайлович`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
       ];    
       // for(let i = 1; i < 110; i++) {
       //   const data: IUserGet = {id: i, surname: `Преподов${i}`, name: `Препод${i}`, thirdname: `Преподович${i}`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',};
       //   this.teachersList.push(data);
       // }
       this.teachersList = [
-        {id: 1, surname: `Морозова`, name: `Наталья`, thirdname: `Юрьевна`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
-        {id: 1, surname: `Васильев`, name: `Алексей`, thirdname: `Иванович`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
+        {id: 7, surname: `Морозова`, name: `Наталья`, thirdname: `Юрьевна`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
+        {id: 8, surname: `Васильев`, name: `Алексей`, thirdname: `Иванович`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
       ];  
       // for(let i = 1; i < 110; i++) {
       //   const data: IUserGet = {id: i, surname: `Студентов${i}`, name: `Студент${i}`, thirdname: `Студентович${i}`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',};
       //   this.studentsList.push(data);
       // }
       this.studentsList = [
-        {id: 1, surname: `Новикова`, name: `Екатерина`, thirdname: `Александровна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 1, surname: `Волков`, name: `Павел`, thirdname: `Дмитриевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 9, surname: `Новикова`, name: `Екатерина`, thirdname: `Александровна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 10, surname: `Волков`, name: `Павел`, thirdname: `Дмитриевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
       ];  
 
       this.groupMembersList = [
-        {id: 1, surname: `Романова`, name: `Анастасия`, thirdname: `Игоревна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 2, surname: `Белов`, name: `Кирилл`, thirdname: `Олегович`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 3, surname: `Крылова`, name: `Ирина`, thirdname: `Викторовна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 4, surname: `Орлов`, name: `Денис`, thirdname: `Сергеевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 5, surname: `Савина`, name: `Светлана`, thirdname: `Николаевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 6, surname: `Богданов`, name: `Евгений`, thirdname: `Александрович`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 7, surname: `Титова`, name: `Мария`, thirdname: `Дмитриевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 8, surname: `Сидоров`, name: `Даниил`, thirdname: `Алексеевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 9, surname: `Волкова`, name: `Юлия`, thirdname: `Андреевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 10, surname: `Лебедев`, name: `Антон`, thirdname: `Валерьевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 11, surname: `Романова`, name: `Анастасия`, thirdname: `Игоревна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 12, surname: `Белов`, name: `Кирилл`, thirdname: `Олегович`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 13, surname: `Крылова`, name: `Ирина`, thirdname: `Викторовна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 14, surname: `Орлов`, name: `Денис`, thirdname: `Сергеевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 15, surname: `Савина`, name: `Светлана`, thirdname: `Николаевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 16, surname: `Богданов`, name: `Евгений`, thirdname: `Александрович`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 17, surname: `Титова`, name: `Мария`, thirdname: `Дмитриевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 18, surname: `Сидоров`, name: `Даниил`, thirdname: `Алексеевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 19, surname: `Волкова`, name: `Юлия`, thirdname: `Андреевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
+        {id: 20, surname: `Лебедев`, name: `Антон`, thirdname: `Валерьевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
       ];
 
       this.groupMembersList = this.sortPeople(this.groupMembersList);
@@ -125,7 +127,7 @@ export const useUniversityStore = defineStore('university', {
       for(let i = 1; i < 10; i++) {
         const data: IAPI_Audience_Update = {  
           id: i,
-          campus_id: i % 3,
+          campus_id: i % 3 + 1,
           capacity: Math.ceil(Math.random() * 100) + 20,
           name: `A-${i}`,
           profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],

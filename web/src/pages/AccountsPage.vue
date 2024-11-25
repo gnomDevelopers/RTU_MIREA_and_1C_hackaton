@@ -93,7 +93,6 @@ import { mapStores } from 'pinia';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { 
-  ROLES_SET_PRORECTOR, 
   StatusCodes, 
   type ISearchList, 
   type IUserGet, 

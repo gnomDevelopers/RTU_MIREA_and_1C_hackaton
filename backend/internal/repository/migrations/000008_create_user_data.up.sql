@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     father_name VARCHAR,
     university_id INTEGER REFERENCES university(id) ON DELETE CASCADE ,
     role VARCHAR NOT NULL,
-    group_id INTEGER UNIQUE,
+    group_id INTEGER REFERENCES "group"(id) ON DELETE CASCADE ,
     faculty_id INTEGER REFERENCES faculty(id) ON DELETE CASCADE,
     department_id INTEGER REFERENCES department(id) ON DELETE CASCADE,
     educational_direction VARCHAR,
