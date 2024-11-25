@@ -156,7 +156,10 @@
               <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-8">
                 Назад
               </button>
-              <button v-if="currentStep == 3" @click="completeForm" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100">
+              <button v-if="currentStep == 3 && !formData.agreed" @click="emptyCheck" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn-badd w-full text-slate-100 ">
+                Завершить заполнение
+              </button>
+              <button v-if="currentStep == 3 && formData.agreed" @click="completeForm" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100">
                 Завершить заполнение
               </button>
             </div>
@@ -230,6 +233,10 @@ export default {
   },
 
   methods: {
+    emptyCheck(){
+      this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Необходимо принять согласие об обработке!');
+      return;
+    },
     sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);

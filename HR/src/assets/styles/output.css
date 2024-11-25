@@ -662,10 +662,6 @@ video {
   height: 100vh;
 }
 
-.h-2 {
-  height: 0.5rem;
-}
-
 .w-0 {
   width: 0px;
 }
@@ -700,10 +696,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-2 {
-  width: 0.5rem;
 }
 
 .min-w-40 {
@@ -975,10 +967,6 @@ video {
   outline-offset: 2px;
 }
 
-.outline {
-  outline-style: solid;
-}
-
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
@@ -1074,6 +1062,16 @@ video {
   justify-content: center;
   text-align: center;
   background-color: var(--btn-color-normal);
+  transition: background-color 150ms ease-out;
+}
+
+.btn-badd {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #A9A6A6;
   transition: background-color 150ms ease-out;
 }
 
