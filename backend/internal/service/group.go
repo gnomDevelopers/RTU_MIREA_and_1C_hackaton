@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"server/internal/entities"
 	"server/internal/repository"
 	"time"
@@ -45,9 +47,13 @@ func (s *GroupService) Create(c context.Context, req *entities.CreateGroupReques
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	//todo проверить no rows
-
-	//exists, err := s.repository.Exists(ctx, req.Name)
+	exists, err := s.repository.Exists(ctx, req.Name)
+	if err != nil && err != sql.ErrNoRows {
+		return nil, err
+	}
+	if exists {
+		return nil, errors.New("group already exists")
+	}
 
 	id, err := s.repository.Create(ctx, req)
 	if err != nil {
