@@ -32,9 +32,9 @@
                 :data="item.user"
               />
             </div>
-            <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
+            <!-- <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
               <p class="text-2xl text-white">Заверить</p>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default {
 
     this.attendancePageStore.attendanceGroupMembers = [];
     for(let item of this.universityStore.groupMembersList){
-      const data: IGroupAttendance = {user: item, attendace: 1};
+      const data: IGroupAttendance = {user: item, attendace: Math.ceil(Math.random()*3)-1}; // 1
       this.attendancePageStore.attendanceGroupMembers.push(data);
     }
   },

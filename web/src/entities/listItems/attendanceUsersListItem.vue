@@ -57,12 +57,12 @@ export default {
   },
   methods: {
     setAttendance(attendaceType: number){
-      for(let item of this.attendancePageStore.attendanceGroupMembers){
-        if(item.user.id === this.data.id) {
-          item.attendace = attendaceType;
-          return;
-        }
-      }
+      // for(let item of this.attendancePageStore.attendanceGroupMembers){
+      //   if(item.user.id === this.data.id) {
+      //     item.attendace = attendaceType;
+      //     return;
+      //   }
+      // }
     }
   }
 };
