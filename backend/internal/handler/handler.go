@@ -32,11 +32,11 @@ func (h *Handler) Router() *fiber.App {
 	})
 
 	f.Use(cors.New(cors.Config{
-		AllowOrigins: "http://frontend:3000/",
+		AllowOrigins: "*",
 		//AllowOrigins:     "http://localhost:8080/",
-		AllowCredentials: true,
-		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
-		AllowMethods:     "GET, HEAD, PUT, PATCH, POST, DELETE",
+		//AllowCredentials: true,
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+		AllowMethods: "GET, HEAD, PUT, PATCH, POST, DELETE",
 	}))
 	f.Use(log.RequestLogger(h.logger))
 
