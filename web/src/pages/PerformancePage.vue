@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div v-if="tableType === 0 && isSelectedDiscipline" class="flex flex-row items-start flex-wrap-0">
+      <div v-if="tableType === 0 && isSelectedDiscipline" class="flex flex-row self-stretch items-start flex-wrap-0">
         <table class="flex-shrink-0 cursor-default table-decorate">
           <thead>
             <tr>
@@ -82,16 +82,16 @@
             <tr>
               <th class="w-10">№</th>
               <th class="max-w-96 overflow-hidden text-nowrap">ФИО</th>
-              <th v-for="i in 50">01.09</th>
-              <th>GPA</th>
+              <th v-for="i in getGroupMembersScores[0].scores">01.09</th>
+              <th>Ср.балл</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="j in 30">
-              <td class="font-semibold">{{ j }}</td>
-              <td>Иванов Иван Иванович</td>
-              <td v-for="i in 50">5</td>
-              <td class="font-semibold">10.23</td>
+            <tr v-for="(item, index) in getGroupMembersScores">
+              <td class="font-semibold">{{ index + 1 }}</td>
+              <td>{{ item.user.surname }} {{ item.user.name }} {{ item.user.thirdname }}</td>
+              <td v-for="score in item.scores">{{ (score !== 0 ? score : '') }}</td>
+              <td class="font-semibold">{{ item.avg.toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>

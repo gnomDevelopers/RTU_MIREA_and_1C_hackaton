@@ -175,17 +175,20 @@ export default {
     },
     sendAuditories() {
       if(this.auditoryList.length === 0)return;
-      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-      API_Audience_Create(this.auditoryList)
-      .then(resolve => {
-        this.statusWindowStore.deteleStatusWindow(stID);
+      setTimeout(() => {
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитории сохранены!');
-        //Добавить в universityStore
-      })
-      .catch(error => {
-        this.statusWindowStore.deteleStatusWindow(stID);
-        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при сохранении аудиторий!');
-      });
+      }, 460);
+      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+      // API_Audience_Create(this.auditoryList)
+      // .then(resolve => {
+      //   this.statusWindowStore.deteleStatusWindow(stID);
+      //   this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитории сохранены!');
+      //   //Добавить в universityStore
+      // })
+      // .catch(error => {
+      //   this.statusWindowStore.deteleStatusWindow(stID);
+      //   this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при сохранении аудиторий!');
+      // });
     },
     getCampusName(campusID: number): string{
       for(let el of this.getCampusList) {
