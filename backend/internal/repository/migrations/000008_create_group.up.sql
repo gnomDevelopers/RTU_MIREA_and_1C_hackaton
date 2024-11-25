@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS "group" (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR,
-    user_id INTEGER REFERENCES users(id)
+    id SERIAL PRIMARY KEY REFERENCES users(group_id),
+    name VARCHAR
 );

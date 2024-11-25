@@ -2119,9 +2119,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/login": {
-            "get": {
-                "description": "Verifies the validity of the access token stored in cookies and retrieves the associated user ID.",
+        "/group": {
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
@@ -2129,24 +2128,43 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "authentication"
+                    "group"
                 ],
-                "summary": "Check user authentication",
+                "summary": "Create a new group",
+                "parameters": [
+                    {
+                        "description": "Group data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateGroupRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "JWT is valid, user is authenticated",
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateGroupResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized, invalid or missing JWT",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
                     }
                 }
-            },
+            }
+        },
+        "/login": {
             "post": {
                 "description": "Authenticates a user and sets access and refresh tokens as cookies.",
                 "consumes": [
@@ -2187,35 +2205,6 @@ const docTemplate = `{
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/logout": {
-            "post": {
-                "description": "Logs out the user by clearing access and refresh tokens stored in cookies.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "User logout",
-                "responses": {
-                    "200": {
-                        "description": "Logout successful message",
-                        "schema": {
-                            "$ref": "#/definitions/entities.LoginUserResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.LoginUserResponse"
                         }
                     }
                 }
@@ -2900,10 +2889,32 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CreateGroupRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.CreateGroupResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.CreateUniversityRequest": {
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "postfix": {
                     "type": "string"
                 }
             }
@@ -3119,6 +3130,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "postfix": {
                     "type": "string"
                 }
             }
