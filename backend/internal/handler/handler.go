@@ -48,10 +48,10 @@ func (h *Handler) Router() *fiber.App {
 
 	f.Post("/sign-up", h.SignUp)
 	f.Post("/login", h.Login)
-	f.Get("/login", h.CheckAuth)
-	f.Post("/logout", h.Logout)
 
-	f.Post("/user/add", h.CreateUser)
+	//f.Post("/user/add", h.CreateUser)
+
+	f.Post("/group", h.CreateGroup)
 
 	f.Get("/university/all", h.GetAllUniversities)
 	f.Get("/university/name/:name", h.GetByNameUniversity)
@@ -92,7 +92,7 @@ func (h *Handler) Router() *fiber.App {
 
 	f.Get("/gpa/id/:id", h.GetByUserId)
 
-	f.Get("/user/:id", h.GetUserByID)
+	//f.Get("/user/:id", h.GetUserByID)
 
 	authGroup := f.Group("/auth")
 	authGroup.Use(func(c *fiber.Ctx) error {

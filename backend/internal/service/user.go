@@ -18,6 +18,14 @@ type UserService struct {
 	conf       *config.Config
 }
 
+func NewUserService(repository repository.UserRepository, conf *config.Config) *UserService {
+	return &UserService{
+		repository: repository,
+		timeout:    time.Duration(10) * time.Second,
+		conf:       conf,
+	}
+}
+
 func (s *UserService) CreateUser(c context.Context, request *entities.CreateUserRequest) (*entities.CreateUserResponse, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
@@ -45,25 +53,8 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 		return nil, err
 	}
 
-	TokenExpiration, err := strconv.Atoi(s.conf.Application.TokenExpiration)
-	if err != nil {
-		return &entities.CreateUserResponse{}, errors.New("wrong data")
-	}
-	accessToken, err := pkg.GenerateAccessToken(u.ID, TokenExpiration,
-		s.conf.Application.SigningKey)
-	if err != nil {
-		return &entities.CreateUserResponse{}, err
-	}
-
-	refreshToken, err := pkg.GenerateRefreshToken(u.ID, s.conf.Application.SigningKey)
-	if err != nil {
-		return &entities.CreateUserResponse{}, err
-	}
-
 	res := &entities.CreateUserResponse{
-		ID:           r.ID,
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		ID: r.ID,
 	}
 
 	return res, nil
@@ -106,10 +97,45 @@ func (s *UserService) Login(c context.Context, request *entities.LoginUserReques
 
 }
 
-func NewUserService(repository repository.UserRepository, conf *config.Config) *UserService {
-	return &UserService{
-		repository: repository,
-		timeout:    time.Duration(10) * time.Second,
-		conf:       conf,
+func (s *UserService) CreateAdmin(c context.Context, req *entities.CreateUserRequest) (*entities.CreateUserResponse, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	createAdmin := &entities.User{
+		Email:                req.Email,
+		Password:             req.Password,
+		FirstName:            req.FirstName,
+		LastName:             req.LastName,
+		FatherName:           req.FatherName,
+		Role:                 "Администратор",
+		UniversityID:         1,
+		FacultyID:            1,
+		GroupID:              1,
+		DepartmentID:         1,
+		EducationalDirection: "admin",
 	}
+
+	user, err := s.repository.CreateUser(ctx, createAdmin)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &entities.CreateUserResponse{
+		ID:         user.ID,
+		LastName:   user.LastName,
+		FirstName:  user.FirstName,
+		FatherName: user.FatherName,
+		Password:   user.Password,
+		Email:      user.Email,
+	}
+
+	return res, nil
+}
+
+func (s *UserService) GetEducationalDirection(c context.Context, userID int) (string, error) {
+	user, err := s.repository.GetById(c, userID)
+	if err != nil {
+		return "", err
+	}
+	return user.EducationalDirection, nil
 }

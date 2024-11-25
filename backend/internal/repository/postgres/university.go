@@ -32,9 +32,10 @@ func (r *UniversityRepository) Create(ctx context.Context, university *entities.
 		return 0, errors.New("")
 	}
 	var id int
-	query := `INSERT INTO university (name) VALUES ($1) RETURNING id`
+	query := `INSERT INTO university (name, postfix) VALUES ($1, $2) RETURNING id`
 
-	err := r.db.QueryRowContext(ctx, query, university.Name).Scan(&id)
+	err := r.db.QueryRowContext(ctx, query, university.Name, university.Postfix).Scan(&id)
+
 	if err != nil {
 		return 0, err
 	}
@@ -45,7 +46,7 @@ func (r *UniversityRepository) GetById(ctx context.Context, id int) (*entities.U
 	var university entities.University
 
 	query := `SELECT * FROM university WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name, &university.Postfix)
 	if err != nil {
 		return nil, err
 	}
@@ -54,9 +55,9 @@ func (r *UniversityRepository) GetById(ctx context.Context, id int) (*entities.U
 
 func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*entities.University, error) {
 	query := `
-		SELECT university.name AS university_name FROM user_data
-		JOIN university ON user_data.university_id = university.id
-		WHERE user_data.id = $1;
+		SELECT university.name AS university_name FROM users
+		JOIN university ON users.university_id = university.id
+		WHERE users.id = $1;
 	`
 	university := &entities.University{}
 
@@ -70,7 +71,7 @@ func (r *UniversityRepository) GetByUserID(ctx context.Context, userID int) (*en
 func (r *UniversityRepository) GetByName(ctx context.Context, name string) (*entities.University, error) {
 	var university entities.University
 	query := `SELECT * FROM university WHERE name=$1`
-	err := r.db.QueryRowContext(ctx, query, name).Scan(&university.Id, &university.Name)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&university.Id, &university.Name, &university.Postfix)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +80,7 @@ func (r *UniversityRepository) GetByName(ctx context.Context, name string) (*ent
 
 func (r *UniversityRepository) GetAll(ctx context.Context) (*[]entities.University, error) {
 	var universities []entities.University
-	query := `SELECT * FROM university`
+	query := `SELECT id, name FROM university`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err

@@ -305,13 +305,13 @@
 }
 
 .profile-list > li{
-  @apply text-lg mb-2;
+  @apply text-xl font-semibold mb-2;
 }
 .profile-list > li:last-child{
   margin-bottom: 0px;
 }
 .profile-list > li > span{
-  text-decoration: underline;
+  @apply font-normal;
 }
 
 .schedule > * > tr > td{
@@ -357,6 +357,17 @@ thead th, tbody td {
 }
 .table-decorate tbody tr:nth-child(2n) td{
   background-color: var(--bg-color-light);
+}
+
+.selected-list-item{
+  border-color: #0754a1;
+}
+
+.unselected-attendace{
+  background-color: #6ba2da;
+}
+.selected-attendace{
+  background-color: #0958a8;
 }
 
 @keyframes timeLine{

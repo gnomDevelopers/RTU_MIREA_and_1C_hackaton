@@ -44,11 +44,7 @@
           class="min-w-20 w-full md:w-auto max-w-none px-2 py-1 text-lg outline-none rounded-lg border-2 border-solid border-transparent focus:border-blue-800">
           
           <option class="text-lg" :value="-1" disabled>Выберите факультет</option>
-          <option class="text-lg" :value="2">{{getRolesName(2)}}</option>
-          <option class="text-lg" :value="3">{{getRolesName(3)}}</option>
-          <option class="text-lg" :value="4">{{getRolesName(4)}}</option>
-          <option class="text-lg" :value="5">{{getRolesName(5)}}</option>
-          <option class="text-lg" :value="6">{{getRolesName(6)}}</option>
+          <option v-for="item in getFaculties" class="text-lg" :value="item.id">{{ item.name }}</option>
         </select>
 
         <select 
@@ -57,11 +53,7 @@
           class="min-w-20 w-full md:w-auto max-w-none px-2 py-1 text-lg outline-none rounded-lg border-2 border-solid border-transparent focus:border-blue-800">
           
           <option class="text-lg" :value="-1" disabled>Выберите кафедру</option>
-          <option class="text-lg" :value="2">{{getRolesName(2)}}</option>
-          <option class="text-lg" :value="3">{{getRolesName(3)}}</option>
-          <option class="text-lg" :value="4">{{getRolesName(4)}}</option>
-          <option class="text-lg" :value="5">{{getRolesName(5)}}</option>
-          <option class="text-lg" :value="6">{{getRolesName(6)}}</option>
+          <option v-for="item in getDepartments" class="text-lg" :value="item.id">{{ item.name }}</option>
         </select>
 
         <input 
@@ -137,6 +129,7 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { useUniversityStore } from '@/stores/universityStore';
 import { 
   ROLES_NAME, 
   INFO_FIELDS, 
@@ -163,7 +156,14 @@ export default {
     }
   },
   computed: {
-    ...mapStores(useStatusWindowStore),
+    ...mapStores(useStatusWindowStore, useUniversityStore),
+
+    getFaculties(){
+      return this.universityStore.facultiesList;
+    },
+    getDepartments(){
+      return this.universityStore.deparmentsList;
+    },
   },
   methods:{
     getRolesName(ind: number){
@@ -220,8 +220,22 @@ export default {
     },
     sendUsersList(){
       if(this.usersList.length === 0) return;
-      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
 
+      for(let item of this.usersList){
+        switch(item.role){
+          case 2: this.universityStore.decansList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 3: this.universityStore.educationDepartmentsList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 4: this.universityStore.zavCafsList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 5: this.universityStore.teachersList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 6: this.universityStore.studentsList.push({...item, id: this.universityStore.tmpuserID++}); break;
+        }
+      }
+      //очистка буфера пользователей
+      this.usersList = [];
+      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+      setTimeout(() => {
+        this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Пользователи добавлены!');
+      }, 460);
       //api request
     },
     showFaculty(role: number){

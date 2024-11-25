@@ -1,12 +1,14 @@
 package entities
 
 type University struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id      int    `json:"id"`
+	Name    string `json:"name"`
+	Postfix string `json:"postfix"`
 }
 
 type CreateUniversityRequest struct {
-	Name string `json:"name"`
+	Name    string `json:"name"`
+	Postfix string `json:"postfix"`
 }
 
 type CreateUniversityResponse struct {

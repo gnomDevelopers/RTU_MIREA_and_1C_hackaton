@@ -23,6 +23,7 @@ export const SCHEDULE_TARGET_TEXT = ['Выберите группу для пр�
 
 export type TMaybeNumber = number | null;
 export type TMaybeBoolean = boolean | null;
+export type TMaybeString = string | null;
 
 //interfaces
 
@@ -43,13 +44,6 @@ export interface ISearchList{
 export interface IItemList{
   id: number,
   name: string,
-}
-
-//userList item interface
-export interface IUsersList{
-  id: number,
-  name: string,
-  role: number,
 }
 
 //groupCOrrect item interface
@@ -90,6 +84,37 @@ export interface IUser{
   faculty_id: number,
   department_id: number,
   educational_direction: string,
+}
+
+//userList item interface
+export interface IUserGet extends IUser{
+  id: number,
+}
+
+export interface IGroup {
+  id: number,
+  name: string,
+}
+
+export interface ISubject {
+  id: number,
+  name: string,
+}
+
+export interface IGroupScores {
+  user: IUserGet,
+  scores: number[],
+  avg: number,
+}
+
+export interface IGroupAttendance {
+  user: IUserGet,
+  attendace: number,
+}
+
+export interface ITimeTable{
+  date: string,
+  timeTable: IScheduleItem[],
 }
 
 //api interfaces

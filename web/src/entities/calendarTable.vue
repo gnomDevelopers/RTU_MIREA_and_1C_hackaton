@@ -44,7 +44,7 @@ export default{
       currentMonthIndex: this.month,
       currentYear: 2024,
 
-      selectedDay: {year: -1, month: -1, day: -1} as Day,
+      selectedDay: {year: 2024, month: 10, day: 25} as Day,
     }
   },
   computed:{

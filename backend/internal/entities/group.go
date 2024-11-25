@@ -1,12 +1,14 @@
 package entities
 
 type Group struct {
-	ID     int    `json:"id"`
-	Name   string `json:"name"`
-	UserID int    `json:"user_id"`
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 type CreateGroupRequest struct {
-	Name   string `json:"name"`
-	UserID int    `json:"user_id"`
+	Name string `json:"name"`
+}
+
+type CreateGroupResponse struct {
+	ID int `json:"id"`
 }

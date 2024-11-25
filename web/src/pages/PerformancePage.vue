@@ -10,34 +10,39 @@
         <SearchList 
           title="" 
           placeholder="Введите название группы"
-          :searchList="groupsList" 
+          :searchList="groupsSearchList" 
           :itemComponent="getListItemComponent"
         />
-        <p class="text-lg text-center font-medium cursor-default">
+        <p v-if="isSelectedGroup" class="text-lg text-center font-medium cursor-default">
           Выбранная группа: 
-          <span class="underline cursor-pointer">ЭФБО-01-23</span>
+          <span class="underline cursor-pointer">{{ getSelectedGroup }}</span>
         </p>
       </div>
 
-      <div class="flex flex-col p-4 rounded-lg gap-y-4 bg-color-light">
+      <div v-if="isSelectedGroup" class="flex flex-col p-4 rounded-lg gap-y-4 bg-color-light">
         <p class="text-center text-xl p-1 rounded-lg cursor-default bg-white">Выберите дисциплину</p>
         <div class="flex flex-col gap-y-1">
-          <SubjectItem v-for="i in 6" :id="i" :name="'Дискретная математика (часть 2/2) [I.24-25]'"/>
+          <SubjectItem :data="{id: 1, name: 'Дискретная математика (часть 2/2) [I.24-25]'}"/>
+          <SubjectItem :data="{id: 2, name: 'Иностранный язык (часть 3/4) [I.24-25]'}"/>
+          <SubjectItem :data="{id: 3, name: 'Математический анализ ФД_(часть 3/3) [I.24-25]'}"/>
+          <SubjectItem :data="{id: 4, name: 'Программирование корпоративных систем (часть 1/4) [I.24-25]'}"/>
+          <SubjectItem :data="{id: 5, name: 'Создание программного обеспечения (часть 1/2) [I.24-25]'}"/>
+          <SubjectItem :data="{id: 6, name: 'Технологии индустриального программирования (часть 3/3) [I.24-25]'}"/>
         </div>
       </div>
 
-      <div v-show="tableType === 0" class="flex flex-row items-start flex-wrap-0 self-stretch">
+      <div v-if="tableType === 0 && isSelectedDiscipline" class="flex flex-row self-stretch items-start flex-wrap-0">
         <table class="flex-shrink-0 cursor-default table-decorate">
           <thead>
             <tr>
-              <th class="w-10">№</th>
-              <th class="text-nowrap">ФИО</th>
+              <th class="w-10 h-9">№</th>
+              <th class="text-nowrap h-9">ФИО</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="j in 30">
-              <td class="font-semibold">{{ j }}</td>
-              <td class="max-w-96 overflow-hidden text-nowrap">Иванов Иван Иванович</td>
+            <tr v-for="(item, index) in getGroupMembers" :key="item.id">
+              <td class="font-semibold h-9">{{ index + 1 }}</td>
+              <td class="max-w-96 h-9 overflow-hidden text-nowrap text-left">{{ item.surname }} {{ item.name }} {{ item.thirdname }}</td>
             </tr>
           </tbody>
         </table>
@@ -46,12 +51,12 @@
           <table class="w-auto no-x-border table-decorate">
             <thead>
               <tr>
-                <th v-for="i in 50" class="w-16 min-w-10">01.09</th>
+                <th v-for="i in getGroupMembersScores[0]?.scores" class="w-16 min-w-10 h-9">01.09</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="j in 30">
-                <td v-for="i in 50" class="w-16 min-w-10">5</td>
+              <tr v-for="item in getGroupMembersScores">
+                <td v-for="score in item.scores" class="w-16 min-w-10 h-9">{{ (score === 0 ? '' : score) }}</td>
               </tr>
             </tbody>
           </table>
@@ -60,33 +65,33 @@
         <table class="flex-shrink-0 cursor-default table-decorate">
           <thead>
             <tr>
-              <th>GPA</th>
+              <th class=" h-9">Ср.балл</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="j in 30">
-              <td class="font-semibold">10.23</td>
+            <tr v-for="(item, index) in getGroupMembersScores">
+              <td class="font-semibold h-9">{{ item.avg.toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div v-show="tableType === 1" class="flex flex-row items-start flex-wrap-0 self-stretch overflow-x-scroll scrollable-table ">
+      <div v-if="tableType === 1 && isSelectedDiscipline" class="flex flex-row items-start flex-wrap-0 self-stretch overflow-x-scroll scrollable-table ">
         <table class="cursor-default table-decorate">
           <thead>
             <tr>
               <th class="w-10">№</th>
               <th class="max-w-96 overflow-hidden text-nowrap">ФИО</th>
-              <th v-for="i in 50">01.09</th>
-              <th>GPA</th>
+              <th v-for="i in getGroupMembersScores[0].scores">01.09</th>
+              <th>Ср.балл</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="j in 30">
-              <td class="font-semibold">{{ j }}</td>
-              <td>Иванов Иван Иванович</td>
-              <td v-for="i in 50">5</td>
-              <td class="font-semibold">10.23</td>
+            <tr v-for="(item, index) in getGroupMembersScores">
+              <td class="font-semibold">{{ index + 1 }}</td>
+              <td>{{ item.user.surname }} {{ item.user.name }} {{ item.user.thirdname }}</td>
+              <td v-for="score in item.scores">{{ (score !== 0 ? score : '') }}</td>
+              <td class="font-semibold">{{ item.avg.toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>
@@ -96,10 +101,15 @@
   </div>
 </template>
 <script lang="ts">
+import { mapStores } from 'pinia';
+import { useUserInfoStore } from '@/stores/userInfoStore';
+import { useUniversityStore } from '@/stores/universityStore';
+import { usePerformancePageStore } from '@/stores/performancePageStore';
+import { type ISearchList, type IItemList, type IUserGet, type IGroupScores } from '@/helpers/constants';
+
 import SearchList from '@/entities/searchList.vue';
 import IconPerformance from '@/shared/iconPerformance.vue';
 import SubjectItem from '@/shared/subjectItem.vue';
-import { type ISearchList, type IItemList } from '@/helpers/constants';
 import PerformanceSearchListItem from '@/entities/listItems/performanceSearchListItem.vue';
 import PageTitle from '@/shared/pageTitle.vue';
 
@@ -115,34 +125,63 @@ export default{
     return{
       tableType: 0 as number, // 0 - таблица для больших экранов (>=756px), 1 - таблица для маленьких экранов (<756px)
       searchFilter: '' as string,
-      groupsList: [] as ISearchList[],
+      groupsSearchList: [] as ISearchList[],
     }
   },
   computed:{
+    ...mapStores(useUserInfoStore, useUniversityStore, usePerformancePageStore),
+
     getListItemComponent(){
       return PerformanceSearchListItem;
+    },
+
+    isSelectedGroup(){
+      return this.performancePageStore.selectedGroupID !== null;
+    },
+    isSelectedDiscipline(){
+      return this.performancePageStore.selectedDiscipline !== null;
+    },
+
+    getSelectedGroup(){
+      if(this.performancePageStore.selectedGroupID === null) return '';
+      for(let group of this.universityStore.groupsList){
+        if(group.id === this.performancePageStore.selectedGroupID) return group.name;
+      }
+      return '';
+    },
+
+    getGroupMembers(){
+      return this.universityStore.groupMembersList;
+    },
+
+    getGroupMembersScores(){
+      return this.universityStore.groupMembersScores;
     }
   },
   mounted() {
     this.setTableType();
     window.addEventListener('resize', this.setTableType);
-
-    for(let i = 1; i < 20; i++){
-      const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};
-      this.groupsList.push({id: data.id, search_field: data.name, data: data});
-    }
   },
   methods:{
     setTableType(){
       if(window.innerWidth < 756) this.tableType = 1;
       else this.tableType = 0;
     },
-    filterUserList(){
-
-    }
   },
   unmounted() {
     window.removeEventListener('resize', this.setTableType);
   },
+  watch: {
+    'universityStore.groupsList' : {
+      handler(val: IUserGet[]){
+        this.groupsSearchList = [];
+        for(let item of val){
+          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  }
 };
 </script>

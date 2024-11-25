@@ -3,3 +3,5 @@ CREATE TABLE IF NOT EXISTS faculty (
     name VARCHAR,
     university VARCHAR
 );
+
+--INSERT INTO faculty (id, name, university) VALUES (-1, 'admin', 'admin');

@@ -10,21 +10,21 @@
         <SearchList 
           title="" 
           placeholder="Введите название группы"
-          :searchList="groupsList" 
+          :searchList="groupsSearchList" 
           :itemComponent="getListItemComponent"
         />
       </div>
-      <div class="flex flex-col items-center gap-y-4 rounded-xl p-4 bg-color-light min-w-20 sm:min-w-[500px]">
+      <div v-if="isGroupSelected" class="flex flex-col items-center gap-y-4 rounded-xl p-4 bg-color-light min-w-20 sm:min-w-[500px]">
         <div class="flex flex-col items-stretch w-full gap-y-1">
-          <div v-for="i in 30" class="flex flex-row flex-nowrap items-stretch min-h-10 rounded-lg bg-white ">
+          <div v-for="(item, index) in getGroupMembers" class="flex flex-row flex-nowrap items-stretch min-h-10 rounded-lg bg-white ">
             <div class="flex flex-row justify-center items-center w-16 rounded-l-lg bg-color-bold">
-              <p class="text-white text-xl">{{ i }}</p>
+              <p class="text-white text-xl">{{ index + 1 }}</p>
             </div>
             <div class="flex flex-row flex-grow justify-start items-center px-2">
-              <p class="text-xl">Иванов Иван Иванович</p>
+              <p class="text-xl">{{ item.surname }} {{ item.name }} {{ item.thirdname }}</p>
             </div>
             <div class="flex flex-row justify-center items-center px-2">
-              <svg class="w-5 h-5 cursor-pointer" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg @click="deleteStudent(item)" class="w-5 h-5 cursor-pointer" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 9.5H13M18.25 9.5C18.25 14.3325 14.3325 18.25 9.5 18.25C4.66751 18.25 0.75 14.3325 0.75 9.5C0.75 4.66751 4.66751 0.75 9.5 0.75C14.3325 0.75 18.25 4.66751 18.25 9.5Z" stroke="#063C73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
@@ -32,12 +32,16 @@
         </div>
         <div class="flex flex-row items-stretch gap-x-4 w-full">
           <div class="flex flex-row justify-center items-center">
-            <svg class="w-7 h-7 cursor-pointer" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg @click="addStudent" class="w-7 h-7 cursor-pointer" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14 9V19M9 14H19M26.5 14C26.5 20.9036 20.9036 26.5 14 26.5C7.09644 26.5 1.5 20.9036 1.5 14C1.5 7.09644 7.09644 1.5 14 1.5C20.9036 1.5 26.5 7.09644 26.5 14Z" stroke="#063C73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
           <div class="flex flex-grow">
-            <input class="w-full px-2 py-1 min-w-20 max-w-none outline-none rounded-lg text-lg font-medium header-shadow" type="text" placeholder="Введите ФИО студента">
+            <input 
+              type="text"
+              v-model="inputStudentFIO" 
+              class="w-full px-2 py-1 min-w-20 max-w-none outline-none rounded-lg text-lg font-medium header-shadow" 
+              placeholder="Введите ФИО студента">
           </div>
         </div>
       </div>
@@ -45,9 +49,14 @@
   </div>
 </template>
 <script lang="ts">
+import { mapStores } from 'pinia';
+import { useUniversityStore } from '@/stores/universityStore';
+import { useGroupCorrectPageStore } from '@/stores/groupCorrectPageStore';
+import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { type ISearchList, type IItemList, type IUserGet, StatusCodes } from '@/helpers/constants';
+
 import GroupCorrectSearchListItem from '@/entities/listItems/groupCorrectSearchListItem.vue';
 import SearchList from '@/entities/searchList.vue';
-import { type ISearchList, type IItemList } from '@/helpers/constants';
 import IconGroups from '@/shared/iconGroups.vue';
 import PageTitle from '@/shared/pageTitle.vue';
 
@@ -60,19 +69,60 @@ export default{
   },
   data(){
     return{
-      groupsList: [] as ISearchList[],
+      groupsSearchList: [] as ISearchList[],
+
+      inputStudentFIO: '',
     }
   },
   computed:{
+    ...mapStores(useUniversityStore, useGroupCorrectPageStore, useStatusWindowStore),
+
     getListItemComponent(){
       return GroupCorrectSearchListItem;
+    },
+
+    isGroupSelected(){
+      return this.groupCorrectPageStore.selectedGroupID !== null;
+    },
+
+    getGroupMembers(){
+      return this.universityStore.groupMembersList;
     }
   },
-  mounted(){
-    for(let i = 1; i < 20; i++){
-      const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};
-      this.groupsList.push({id: data.id, search_field: data.name, data: data});
+  methods: {
+    addStudent(){
+      if(this.inputStudentFIO === ''){
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите фио студента!');
+        return;
+      }
+      const input = this.inputStudentFIO.split(' ');
+      if(input.length !== 3){
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Некорректное фио студента!');
+        return;
+      }
+      this.universityStore.groupMembersList.push({id: 12, name: input[1], surname: input[0], thirdname: input[2], role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка'});
+      this.universityStore.groupMembersList = this.universityStore.sortPeople(this.universityStore.groupMembersList);
+      this.inputStudentFIO = '';
+    },
+    deleteStudent(studentDelete: IUserGet){
+      for(let i = 0; i < this.universityStore.groupMembersList.length; i++){
+        if(this.universityStore.groupMembersList[i].id === studentDelete.id){
+          this.universityStore.groupMembersList.splice(i, 1);
+        }
+      }
     }
   },
+  watch: {
+    'universityStore.groupsList' : {
+      handler(val: IUserGet[]){
+        this.groupsSearchList = [];
+        for(let item of val){
+          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  }
 };
 </script>

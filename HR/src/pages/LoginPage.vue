@@ -106,7 +106,7 @@
                 </div>
                 <div class="mb-4">
                   <label for="links" class="block text-gray-700 text-lg font-bold mb-2">Полезные ссылки:</label>
-                  <input
+                  <textarea
                       type="text"
                       id="links"
                       v-model="formData.links"
@@ -130,14 +130,22 @@
                       </div>
 
                       <FilesList :file-list="getFilesList" @delete-file="handleDeleteFile"/>
-
                     </div>
                   </div>
-
+                </div>
+                <!-- Чекбокс согласия на обработку персональных данных -->
+                <div class="m-8 flex items-center justify-center">
+                  <input
+                      type="checkbox"
+                      id="agreement"
+                      v-model="formData.agreed"
+                      class="mr-2"
+                      style="accent-color: #8F0101; transform:scale(1.5);opacity:0.9; cursor:pointer;"
+                  />
+                  <label for="agreement" class="text-gray-700 text-lg font-bold">Согласен на обработку персональных данных</label>
                 </div>
               </form>
             </div>
-
 
 
 <!--            Кнопка продолжения (далее на первом шаге надо убрать, когда можно будет авторизацию проверять)-->
@@ -148,7 +156,10 @@
               <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-8">
                 Назад
               </button>
-              <button v-if="currentStep == 3" @click="completeForm" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100">
+              <button v-if="currentStep == 3 && !formData.agreed" @click="emptyCheck" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn-badd w-full text-slate-100 ">
+                Завершить заполнение
+              </button>
+              <button v-if="currentStep == 3 && formData.agreed" @click="completeForm" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100">
                 Завершить заполнение
               </button>
             </div>
@@ -209,6 +220,7 @@ export default {
         add_experience: '',
         links: '',
         filesList: [] as File[],
+        agreed: false,
       },
       filesList: [] as File[]
     }
@@ -221,6 +233,10 @@ export default {
   },
 
   methods: {
+    emptyCheck(){
+      this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Необходимо принять согласие об обработке!');
+      return;
+    },
     sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);

@@ -1,14 +1,14 @@
 <template>
   <div class="w-full flex flex-col items-center scrollable bg-color-ultralight">
     <div class="flex flex-col h-full w-full md:w-10/12 gap-y-10 py-5 px-4 md:px-0">
-      <div class="text-4xl text-center us:text-left">Здравствуйте, Генадий{{ userInfoStore.first_name }} Абрамович{{ userInfoStore.father_name }}!</div>
+      <div class="text-4xl text-center us:text-left">Здравствуйте, {{ userInfoStore.first_name }} {{ userInfoStore.father_name }}!</div>
       <div class="flex flex-col gap-y-4 pb-4">
 
-        <MainTableItem @clicked="$router.push({name: 'QRCodeShowPage'})" title="Страница с QR кодом" text="тест">
+        <!-- <MainTableItem @clicked="$router.push({name: 'QRCodeShowPage'})" title="Страница с QR кодом" text="тест">
           <IconAccounts/>
-        </MainTableItem>
+        </MainTableItem> -->
 
-        <MainTableItem @clicked="$router.push({name: 'QRCodeScanPage'})" title="Чтение QR кода" text="тест">
+        <MainTableItem @clicked="$router.push({name: 'QRCodeScanPage'})" title="Отмечание с помощью QR кода" text="Отметьтесь на паре при помощи qr кода">
           <IconAccounts/>
         </MainTableItem>
 

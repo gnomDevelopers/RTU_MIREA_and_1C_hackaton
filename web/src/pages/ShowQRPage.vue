@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      value: 'Кто прочитал тот гей!',
+      value: 'Test qr code',
     }
   },
 };

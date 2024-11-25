@@ -61,6 +61,13 @@
     background-color: var(--btn-color-normal);
     transition: background-color 150ms ease-out;
 }
+
+.btn-badd{
+    @apply flex flex-row justify-center items-center text-center;
+    background-color: #A9A6A6;
+    transition: background-color 150ms ease-out;
+}
+
 .btn:hover{
     background-color: var(--btn-color-normal-hover);
 }

@@ -113,10 +113,10 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  if(to.name === 'LoginPage' && userInfoStore.authorized){
-    next({name: 'MainPage'});
-    return;
-  }
+  // if(to.name === 'LoginPage' && userInfoStore.authorized){
+  //   next({name: 'MainPage'});
+  //   return;
+  // }
 
   next();
 });

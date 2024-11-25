@@ -55,12 +55,12 @@
         </Transition>
         
         <div class="flex flex-col items-center gap-y-2">
-          <CalendarTable :month="10"/>
+          <CalendarTable :month="10" @select-day="selectDay"/>
         </div>
 
       </div>
       <div class="flex flex-col gap-y-4 items-center lg:w-1/2">
-        <ScheduleClassList :canAddFaculties="true"/>
+        <ScheduleClassList v-if="scheduleStore.scheduleType === 0 || (scheduleStore.scheduleType === 1 && scheduleStore.selectedSheduleGroup !== null)" :canAddFaculties="scheduleStore.scheduleType === 0"/>
       </div>
     </div>
   </div>
@@ -68,7 +68,8 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
-import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList } from '@/helpers/constants';
+import { useUniversityStore } from '@/stores/universityStore';
+import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import SearchList from '@/entities/searchList.vue';
@@ -84,22 +85,21 @@ export default {
   },
   data(){
     return{
-      searchFilter: '' as string,
-      groupsList: [] as ISearchList[],
-      teachersList: [] as ISearchList[],
-      facultyList: [] as ISearchList[],
+      groupsSearchList: [] as ISearchList[],
+      teachersSearchList: [] as ISearchList[],
+      facultativeList: [] as ISearchList[],
     }
   },
   computed:{
-    ...mapStores(useScheduleStore),
+    ...mapStores(useScheduleStore, useUniversityStore),
 
     getScheduleTargetText(){
       return SCHEDULE_TARGET_TEXT[this.scheduleStore.scheduleTarget];
     },
     getScheduleTargetList(){
-      if (this.scheduleStore.scheduleTarget === 0) return this.groupsList;
-      else if(this.scheduleStore.scheduleTarget === 1) return this.teachersList;
-      else if(this.scheduleStore.scheduleTarget === 2) return this.facultyList;
+      if (this.scheduleStore.scheduleTarget === 0) return this.groupsSearchList;
+      else if(this.scheduleStore.scheduleTarget === 1) return this.teachersSearchList;
+      else if(this.scheduleStore.scheduleTarget === 2) return this.facultativeList;
       return [] as ISearchList[];
     },
     getListItemComponent(){
@@ -108,30 +108,57 @@ export default {
   },
   mounted(){
     this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
-
-    for(let i = 1; i < 20; i++){
-      const data: IItemList = {id: i, name: `ЭФБО-${(i < 10 ? '0' : '')}${i}-23`};
-      this.groupsList.push({id: data.id, search_field: data.name, data: data});
-    }
-    for(let i = 1; i < 20; i++){
-      const data: IItemList = {id: i, name: `Преподов${i} Препод${i} Преподович${i}`};
-      this.teachersList.push({id: data.id, search_field: data.name, data: data});
-    }
-    for(let i = 1; i < 20; i++){
-      const data: IItemList = {id: i, name: `Мобильная разработка${i}`};
-      this.facultyList.push({id: data.id, search_field: data.name, data: data});
-    }
   },
   methods:{
-    filterUserList(){
-
-    },
     selectScheduleType(type: number){
+      if(type === 0) this.scheduleStore.selectedSheduleGroup = null;
       this.scheduleStore.scheduleType = type;
     },
     selectScheduleTarget(target: number){
+      this.scheduleStore.selectedSheduleGroup = null;
       this.scheduleStore.scheduleTarget = target;
+    },
+    selectDay(day: Day){
+      this.scheduleStore.scheduleTableDay = [];
+      for(let item of this.scheduleStore.scheduleData){
+        if(item.date === `${day.day}.${day.month+1}.${day.year}`){
+          this.scheduleStore.scheduleTableDay = item.timeTable;
+          break;
+        }
+      }
     }
+  },
+  watch: {
+    'universityStore.groupsList' : {
+      handler(val: IUserGet[]){
+        this.groupsSearchList = [];
+        for(let item of val){
+          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+    'universityStore.teachersList' : {
+      handler(val: IUserGet[]){
+        this.teachersSearchList = [];
+        for(let item of val){
+          this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+    'universityStore.facultativesList' : {
+      handler(val: IUserGet[]){
+        this.facultativeList = [];
+        for(let item of val){
+          this.facultativeList.push({id: item.id, search_field: item.name, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   }
 };
 </script>

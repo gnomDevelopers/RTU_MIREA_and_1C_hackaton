@@ -726,6 +726,10 @@ video {
   height: 0.25rem;
 }
 
+.h-1\/2 {
+  height: 50%;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -822,10 +826,6 @@ video {
   width: 0px;
 }
 
-.w-1\/2 {
-  width: 50%;
-}
-
 .w-10 {
   width: 2.5rem;
 }
@@ -870,6 +870,10 @@ video {
   width: 2rem;
 }
 
+.w-8\/12 {
+  width: 66.666667%;
+}
+
 .w-9 {
   width: 2.25rem;
 }
@@ -908,6 +912,14 @@ video {
 
 .min-w-40 {
   min-width: 10rem;
+}
+
+.min-w-\[400px\] {
+  min-width: 400px;
+}
+
+.min-w-\[500px\] {
+  min-width: 500px;
 }
 
 .max-w-96 {
@@ -1226,6 +1238,11 @@ video {
   background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
 }
 
+.bg-sky-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(2 132 199 / var(--tw-bg-opacity, 1));
+}
+
 .bg-sky-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(3 105 161 / var(--tw-bg-opacity, 1));
@@ -1248,26 +1265,6 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-
-.bg-red-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(252 165 165 / var(--tw-bg-opacity, 1));
-}
-
-.bg-sky-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(14 165 233 / var(--tw-bg-opacity, 1));
-}
-
-.bg-sky-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(125 211 252 / var(--tw-bg-opacity, 1));
-}
-
-.bg-sky-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(2 132 199 / var(--tw-bg-opacity, 1));
 }
 
 .p-1 {
@@ -1380,6 +1377,10 @@ video {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {
@@ -2030,16 +2031,17 @@ video {
 
 .profile-list > li {
   margin-bottom: 0.5rem;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1.75rem;
+  font-weight: 600;
 }
 
 .profile-list > li:last-child{
   margin-bottom: 0px;
 }
 
-.profile-list > li > span{
-  text-decoration: underline;
+.profile-list > li > span {
+  font-weight: 400;
 }
 
 .schedule > * > tr > td {
@@ -2111,6 +2113,18 @@ thead th, tbody td {
 
 .table-decorate tbody tr:nth-child(2n) td{
   background-color: var(--bg-color-light);
+}
+
+.selected-list-item{
+  border-color: #0754a1;
+}
+
+.unselected-attendace{
+  background-color: #6ba2da;
+}
+
+.selected-attendace{
+  background-color: #0958a8;
 }
 
 @keyframes timeLine{
@@ -2254,6 +2268,14 @@ thead th, tbody td {
     width: 440px;
   }
 
+  .mb\:w-auto {
+    width: auto;
+  }
+
+  .mb\:min-w-\[500px\] {
+    min-width: 500px;
+  }
+
   .mb\:basis-\[440px\] {
     flex-basis: 440px;
   }
@@ -2328,10 +2350,6 @@ thead th, tbody td {
     width: 10rem;
   }
 
-  .md\:w-52 {
-    width: 13rem;
-  }
-
   .md\:w-\[720px\] {
     width: 720px;
   }
@@ -2383,6 +2401,10 @@ thead th, tbody td {
 
   .lg\:w-10\/12 {
     width: 83.333333%;
+  }
+
+  .lg\:w-\[400px\] {
+    width: 400px;
   }
 
   .lg\:flex-row {

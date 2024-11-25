@@ -4,8 +4,12 @@
       <p class="text-3xl mt-4 font-semibold">Мои достижения</p>
       <div class="flex flex-row gap-4 flex-wrap justify-start">
 
-        <SertificateItem v-for="i in 10" title="Студенческий хакатон “РТУ МИРЭА и 1С”" :place="-1"/>
-
+        <SertificateItem title="Студенческий хакатон “РТУ МИРЭА и 1С”" :place="-1">
+          <img class="w-full aspect-video" src="../assets/images/1ass.webp"/>
+        </SertificateItem>
+        <SertificateItem title="Naimix Hackathon" :place="18">
+          <img class="w-full aspect-video" src="../assets/images/naimix.png"/>
+        </SertificateItem>
       </div>
     </div>
   </div>

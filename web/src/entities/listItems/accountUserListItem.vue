@@ -1,53 +1,102 @@
 <template>
   <div class="flex flex-col sm:flex-row items-start sm:items-center p-2 rounded-lg bg-color-light">
     <div class="flex-grow">
-      <p class=" select-none">{{ data.name }}</p>
+      <p class="text-lg">{{ data.surname }} {{ data.name }} {{ data.thirdname }}</p>
     </div>
-    <div class="flex flex-row gap-x-2 flex-shrink-0 ">
-      <div class="py-1 px-2 rounded-lg cursor-pointer text-sm btn">{{ getButtonText }}</div>
-      <div class="py-1 px-2 rounded-lg cursor-pointer text-sm btn btn-bad">Уволить</div>
+    <div class="flex flex-row gap-x-2 items-center flex-shrink-0 ">
+      <select 
+          ref="inputRole" 
+          v-model="userRole" 
+          class="min-w-20 w-full md:w-auto max-w-none px-2 py-1 text-lg outline-none rounded-lg header-shadow border-2 border-solid border-transparent focus:border-blue-800">
+          
+          <option 
+            v-for="roleID in enabledRoles" 
+            :key="roleID" 
+            :value="roleID" 
+            :selected="data.role === roleID"
+            class="text-lg">
+            
+            {{getRolesName(roleID)}}
+          </option>
+
+        </select>
+      <div v-if="userRole !== data.role" @click="updateUser" class="py-1 px-2 rounded-lg cursor-pointer text-base select-none btn">Сохранить</div>
+      <div @click="deleteUser" class="py-1 px-2 rounded-lg cursor-pointer text-base select-none btn btn-bad">{{ data.role !== 6 ? 'Уволить' : 'Отчислить' }}</div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { useUserInfoStore } from '@/stores/userInfoStore';
-import { ROLES_NAME, ROLES_SET_PRORECTOR, ROLES_SET_DECAN_TO_PREPOD, type IUsersList } from '@/helpers/constants';
+import { useUniversityStore } from '@/stores/universityStore';
+import { useStatusWindowStore } from '@/stores/statusWindowStore';
+import { ROLES_NAME, ROLES_SET_PRORECTOR, ROLES_SET_DECAN_TO_PREPOD, type IUserGet, StatusCodes } from '@/helpers/constants';
 import type { PropType } from 'vue';
 export default{
   props:{
     data:{
-      type: Object as PropType<IUsersList>,
+      type: Object as PropType<IUserGet>,
       required: true,
     }
   },
-  computed:{
-    ...mapStores(useUserInfoStore),
-
-    getButtonText(){
-      let rolesSum;
-      if(this.userInfoStore.role === 1){
-        rolesSum = ROLES_SET_PRORECTOR.reduce((sum, item) => sum += item);
-        if(this.data.role === 2) return 'Понизить до ' + ROLES_NAME[rolesSum - this.data.role];
-        if(this.data.role === 4) return 'Повысить до ' + ROLES_NAME[rolesSum - this.data.role]; 
-      }
-      if(this.userInfoStore.role === 2){
-        if(ROLES_SET_DECAN_TO_PREPOD.includes(this.data.role)){
-          rolesSum = ROLES_SET_DECAN_TO_PREPOD.reduce((sum, item) => sum += item);
-          if(this.data.role === 3) return 'Понизить до ' + ROLES_NAME[rolesSum - this.data.role];
-          if(this.data.role === 4) return 'Повысить до ' + ROLES_NAME[rolesSum - this.data.role]; 
-        }
-        // else{
-        //   rolesSum = ROLES_SET_DECAN_TO_STUDENT.reduce((sum, item) => sum += item);
-        //   if(this.data.role === 5) return 'Понизить до ' + ROLES_NAME[rolesSum - this.data.role];
-        //   if(this.data.role === 6) return 'Повысить до ' + ROLES_NAME[rolesSum - this.data.role]; 
-        // }
-      }
-      if(this.userInfoStore.role === 3){
-        // 
-      }
-      return '';
+  data() {
+    return {
+      enabledRoles: [2, 3, 4, 5, 6],
+      userRole: this.data.role,
     }
   },
+  computed:{
+    ...mapStores(useUserInfoStore, useUniversityStore, useStatusWindowStore),
+
+  },
+  methods: {
+    getRolesName(roleID: number): string{
+      return ROLES_NAME[roleID];
+    },
+    getUserList(role: number){
+      switch (role){
+        case 2: return this.universityStore.decansList;
+        case 3: return this.universityStore.educationDepartmentsList;
+        case 4: return this.universityStore.zavCafsList;
+        case 5: return this.universityStore.teachersList;
+        case 6: return this.universityStore.studentsList;
+        default: return [];
+      }
+    },
+    updateUser(){
+      if(this.userRole === this.data.role) return;
+
+      //удаляем из прошлого списка
+      const list = this.getUserList(this.data.role);
+      for(let i = 0; i < list.length; i++){
+        if(list[i].id === this.data.id){
+          list.splice(i, 1);
+          break;
+        }
+      }
+      //добавляем в новый список
+      this.getUserList(this.userRole).push(<IUserGet>{
+        id: this.data.id,
+        name: this.data.name,
+        surname: this.data.surname,
+        thirdname: this.data.thirdname,
+        role: this.userRole,
+        faculty_id: this.data.faculty_id,
+        department_id: this.data.department_id,
+        educational_direction: this.data.educational_direction,
+      });
+      this.statusWindowStore.showStatusWindow(StatusCodes.success, `Должность изменена!`);
+    },
+    deleteUser(){
+      const list = this.getUserList(this.data.role);
+      for(let i = 0; i < list.length; i++){
+        if(list[i].id === this.data.id){
+          list.splice(i, 1);
+          break;
+        }
+      }
+      this.statusWindowStore.showStatusWindow(StatusCodes.success, `Пользователь ${this.data.role === 6 ? 'отсчислен' : 'уволен'}!`);
+    }
+  }
 };
 </script>
