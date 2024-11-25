@@ -22,16 +22,16 @@ export const useScheduleStore = defineStore('schedule', {
   },
   actions: {
     loadScheduleTableByGroupName(groupName: string){
-      let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      API_Schedule_Get_GroupName(groupName)
-      .then(response => {
-        statusWindow.deteleStatusWindow(stID);
-        statusWindow.showStatusWindow(StatusCodes.success, 'Расписание группы получено!');
-      })
-      .catch(error => {
-        statusWindow.deteleStatusWindow(stID);
-        statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      })
+      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
+      // API_Schedule_Get_GroupName(groupName)
+      // .then(response => {
+      //   statusWindow.deteleStatusWindow(stID);
+      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание группы получено!');
+      // })
+      // .catch(error => {
+      //   statusWindow.deteleStatusWindow(stID);
+      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
+      // });
 
       this.scheduleTableDay = [
         { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },
@@ -43,28 +43,28 @@ export const useScheduleStore = defineStore('schedule', {
       ];
     },
     loadScheduleTableByTeacherName(teacherName: string){
-      let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      API_Schedule_Get_TeacherName(teacherName)
-      .then(response => {
-        statusWindow.deteleStatusWindow(stID);
-        statusWindow.showStatusWindow(StatusCodes.success, 'Расписание преподавателя получено!');
-      })
-      .catch(error => {
-        statusWindow.deteleStatusWindow(stID);
-        statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      })
+      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
+      // API_Schedule_Get_TeacherName(teacherName)
+      // .then(response => {
+      //   statusWindow.deteleStatusWindow(stID);
+      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание преподавателя получено!');
+      // })
+      // .catch(error => {
+      //   statusWindow.deteleStatusWindow(stID);
+      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
+      // })
     },
     loadScheduleTableByClassName(className: string){
-      let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      API_Schedule_Get_ClassName(className)
-      .then(response => {
-        statusWindow.deteleStatusWindow(stID);
-        statusWindow.showStatusWindow(StatusCodes.success, 'Расписание предмета получено!');
-      })
-      .catch(error => {
-        statusWindow.deteleStatusWindow(stID);
-        statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      })
+      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
+      // API_Schedule_Get_ClassName(className)
+      // .then(response => {
+      //   statusWindow.deteleStatusWindow(stID);
+      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание предмета получено!');
+      // })
+      // .catch(error => {
+      //   statusWindow.deteleStatusWindow(stID);
+      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
+      // })
     },
     loadGroups(){
       // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные о группах...', -1);
