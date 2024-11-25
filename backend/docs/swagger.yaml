@@ -1,4 +1,4 @@
-basePath: /
+basePath: /api
 definitions:
   entities.AcademicDiscipline:
     properties:
@@ -2077,6 +2077,39 @@ paths:
       summary: Create user
       tags:
       - user data
+  /work/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.LoginUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Login work user
+      tags:
+      - work
 securityDefinitions:
   ApiKeyAuth:
     in: header
