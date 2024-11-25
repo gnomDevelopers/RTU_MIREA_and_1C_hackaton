@@ -125,7 +125,7 @@ export const useUniversityStore = defineStore('university', {
       for(let i = 1; i < 10; i++) {
         const data: IAPI_Audience_Update = {  
           id: i,
-          campus_id: i % 3,
+          campus_id: i % 3 + 1,
           capacity: Math.ceil(Math.random() * 100) + 20,
           name: `A-${i}`,
           profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],

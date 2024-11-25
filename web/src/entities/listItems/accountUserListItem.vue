@@ -86,7 +86,7 @@ export default{
         educational_direction: this.data.educational_direction,
       });
       this.statusWindowStore.showStatusWindow(StatusCodes.success, `Должность изменена!`);
-    },  
+    },
     deleteUser(){
       const list = this.getUserList(this.data.role);
       for(let i = 0; i < list.length; i++){
