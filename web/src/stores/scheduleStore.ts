@@ -37,14 +37,14 @@ export const useScheduleStore = defineStore('schedule', {
       // });
 
 
-      // this.scheduleTableDay = [
-      //   { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },
-      //   { time: '10.40-12.10',  type: 'ПР', title: 'Создание программного обеспечения', place: 'В-407 (В-78)', groups: ['ЭФБО-01-23'] },
-      //   { time: '12.40-14.10',  type: '',   title: '', place: '', groups: [''] },
-      //   { time: '14.20-15.50',  type: 'ПР', title: 'История России', place: 'A-315 (МП-1)', groups: ['ЭФБО-01-23'] },
-      //   { time: '16.20-17.50',  type: 'ЛК', title: 'Программирование корпоративных систем', place: 'A-16 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-      //   { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-      // ];
+      this.scheduleTableDay = [
+        { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },
+        { time: '10.40-12.10',  type: 'ПР', title: 'Создание программного обеспечения', place: 'В-407 (В-78)', groups: ['ЭФБО-01-23'] },
+        { time: '12.40-14.10',  type: '',   title: '', place: '', groups: [''] },
+        { time: '14.20-15.50',  type: 'ПР', title: 'История России', place: 'A-315 (МП-1)', groups: ['ЭФБО-01-23'] },
+        { time: '16.20-17.50',  type: 'ЛК', title: 'Программирование корпоративных систем', place: 'A-16 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
+        { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
+      ];
     },
     loadScheduleTableByTeacherName(teacherName: string){
       let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);

@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,16 +15,18 @@ type tokenClaims struct {
 }
 
 func WithJWTAuth(c *fiber.Ctx, signingKey string) error {
-	// Получаем JWT токен из cookie
-	tokenString := c.Cookies("access_token")
+	header := c.Get("Authorization")
 
-	if tokenString == "" {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "Missing JWT token in cookies",
-		})
+	if header == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Missing auth token"})
 	}
 
-	id, err := ParseToken(tokenString, signingKey)
+	tokenString := strings.Split(header, " ")
+	if len(tokenString) != 2 {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid auth header"})
+	}
+
+	id, err := ParseToken(tokenString[1], signingKey)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -31,6 +34,25 @@ func WithJWTAuth(c *fiber.Ctx, signingKey string) error {
 	c.Locals("id", id)
 	return c.Next()
 }
+
+//func WithJWTAuth(c *fiber.Ctx, signingKey string) error {
+//	// Получаем JWT токен из cookie
+//	tokenString := c.Cookies("access_token")
+//
+//	if tokenString == "" {
+//		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+//			"message": "Missing JWT token in cookies",
+//		})
+//	}
+//
+//	id, err := ParseToken(tokenString, signingKey)
+//	if err != nil {
+//		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": err.Error()})
+//	}
+//	// Записываем id в контекст, чтобы в дальнейшем использовать в других функциях
+//	c.Locals("id", id)
+//	return c.Next()
+//}
 
 func GenerateAccessToken(id, expirationTime int, signingKey string) (string, error) {
 	claims := &tokenClaims{

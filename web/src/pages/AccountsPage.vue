@@ -25,7 +25,27 @@
           <SearchList 
             title="Введите ФИО декана" 
             placeholder="ФИО декана"
-            :searchList="decanList" 
+            :searchList="decansSearchList" 
+            :itemComponent="getListItemComponent"
+          />
+
+        </MainControlItem>
+        <MainControlItem title="Управление учебным отделом">
+          
+          <SearchList 
+            title="Введите ФИО сотрудника учебного отдела" 
+            placeholder="ФИО сотрудника учебного отдела"
+            :searchList="educationDepartmentsSearchList" 
+            :itemComponent="getListItemComponent"
+          />
+
+        </MainControlItem>
+        <MainControlItem title="Управление заведущими кафедрами">
+          
+          <SearchList 
+            title="Введите ФИО заведущего кафедрой" 
+            placeholder="ФИО заведущего кафедрой"
+            :searchList="zavCafsSearchList" 
             :itemComponent="getListItemComponent"
           />
 
@@ -35,7 +55,17 @@
           <SearchList 
             title="Введите ФИО преподавателя" 
             placeholder="ФИО преподавателя"
-            :searchList="prepodList" 
+            :searchList="teachersSearchList" 
+            :itemComponent="getListItemComponent"
+          />
+
+        </MainControlItem>
+        <MainControlItem title="Управление студентами">
+          
+          <SearchList 
+            title="Введите ФИО студента" 
+            placeholder="ФИО студента"
+            :searchList="studentsSearchList" 
             :itemComponent="getListItemComponent"
           />
 
@@ -48,7 +78,7 @@
           <SearchList 
             title="Введите название аудитории" 
             placeholder="Название аудитории"
-            :searchList="auditoriesList" 
+            :searchList="auditoriesSearchList"
             :itemComponent="getAuditoryListItemComponent"
           />
 
@@ -64,11 +94,9 @@ import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { 
   ROLES_SET_PRORECTOR, 
-  AUDITORY_TYPE_LIST, 
-  AUDITORY_PROFILE_LIST,
   StatusCodes, 
   type ISearchList, 
-  type IUsersList, 
+  type IUserGet, 
   type IAPI_Audience_Update, 
 } from '../helpers/constants';
 
@@ -97,12 +125,15 @@ export default {
   },
   data(){
     return{
-      rolesList: ROLES_SET_PRORECTOR,
-      decanList: [] as ISearchList[],
-      prepodList: [] as ISearchList[],
-      auditoriesList: [] as ISearchList[],
+      // списки ресурсов
+      auditoriesSearchList: [] as ISearchList[],
 
-      auditoryID: 0,
+      //списки пользователей
+      decansSearchList: [] as ISearchList[],
+      educationDepartmentsSearchList: [] as ISearchList[],
+      zavCafsSearchList: [] as ISearchList[],
+      teachersSearchList: [] as ISearchList[],
+      studentsSearchList: [] as ISearchList[],
     }
   },
   computed: {
@@ -113,36 +144,81 @@ export default {
     },
     getAuditoryListItemComponent(){
       return AccountAuditoryListItem;
-    }
+    },
   },
   mounted(){
     //получение всей информации об университете и его составных
     this.universityStore.loadUniversityInfo();
-
-    for(let i = 1; i < 110; i++) {
-      const data: IUsersList = {id: i, name: `Деканов${i} Декан${i} Деканович${i}`, role: 2};
-      this.decanList.push({id: data.id, search_field: data.name, data: data});
-    }
-
-    for(let i = 1; i < 110; i++) {
-      const data: IUsersList = {id: i, name: `Преподов${i} Препод${i} Преподович${i}`, role: 4};
-      this.prepodList.push({id: data.id, search_field: data.name, data: data});
-    }
-
-    for(let i = 1; i < 110; i++) {
-      const data: IAPI_Audience_Update = {  
-        id: i,
-        campus_id: i % 3,
-        capacity: 123,
-        name: `A-${i}`,
-        profile: AUDITORY_PROFILE_LIST[i % 8],
-        type: AUDITORY_TYPE_LIST[i % 5],
-      };
-      this.auditoriesList.push({id: data.id, search_field: data.name, data: data});
-    }
   },
   methods:{
     
+  },
+  watch: {
+    'universityStore.auditoriesList' : {
+      handler(val: IAPI_Audience_Update[]){
+        this.auditoriesSearchList = [];
+        for(let item of val){
+          this.auditoriesSearchList.push({id: item.id, search_field: item.name, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+
+    'universityStore.decansList' : {
+      handler(val: IUserGet[]){
+        this.decansSearchList = [];
+        for(let item of val){
+          this.decansSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+
+    'universityStore.educationDepartmentsList' : {
+      handler(val: IUserGet[]){
+        this.educationDepartmentsSearchList = [];
+        for(let item of val){
+          this.educationDepartmentsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+
+    'universityStore.zavCafsList' : {
+      handler(val: IUserGet[]){
+        this.zavCafsSearchList = [];
+        for(let item of val){
+          this.zavCafsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+
+    'universityStore.teachersList' : {
+      handler(val: IUserGet[]){
+        this.teachersSearchList = [];
+        for(let item of val){
+          this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+
+    'universityStore.studentsList' : {
+      handler(val: IUserGet[]){
+        this.studentsSearchList = [];
+        for(let item of val){
+          this.studentsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   }
 };
 </script>
