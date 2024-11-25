@@ -84,8 +84,8 @@ func (s *UserDataService) AddUser(c context.Context, requests *[]entities.AddUse
 			userData.EducationalDirection = request.EducationalDirection
 			userData.Group = request.Group
 			joinGroup := &entities.CreateGroupRequest{
-				Name:   request.Group,
-				UserID: user.ID,
+				Name: request.Group,
+				//ID: user.ID,
 			}
 			_, err = s.GroupRepository.Create(ctx, joinGroup)
 			if err != nil {

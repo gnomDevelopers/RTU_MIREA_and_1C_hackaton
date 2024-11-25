@@ -73,6 +73,7 @@ type GroupRepository interface {
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetByName(context.Context, string) (*entities.Group, error)
 	GetAll(context.Context) (*[]entities.Group, error)
+	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 }
 
 type UserScheduleRepository interface {
