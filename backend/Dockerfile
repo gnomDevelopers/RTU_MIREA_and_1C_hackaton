@@ -10,12 +10,10 @@ RUN go mod download
 
 COPY . .
 
-# Установка утилит для миграций и генерации Swagger
-RUN go install -ldflags="-s -w" github.com/golang-migrate/migrate/v4/cmd/migrate@latest && \
-    go install -ldflags="-s -w" github.com/swaggo/swag/cmd/swag@latest && \
-    go install -ldflags="-s -w" -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+# Установка утилит для генерации Swagger
+RUN go install -ldflags="-s -w" github.com/swaggo/swag/cmd/swag@latest
 
-# Сборка основного приложения
+# Сборка основного приложенияzw
 RUN go build -ldflags="-s -w" -o /main ./cmd/main.go
 
 RUN make generateswag
@@ -30,14 +28,8 @@ RUN apk add --no-cache ca-certificates curl bash make
 # Копирование приложения, окружения и makefile
 COPY --from=builder /main /app/main
 COPY --from=builder /app/.env /app/.env
-COPY --from=builder /app/makefile /app/makefile
-COPY --from=builder /app/internal /app/internal
-
-# Копирование утилит migrate и swag
-COPY --from=builder /go/bin/migrate /usr/local/bin/migrate
 
 WORKDIR /app
 
-
 # Установка точки входа: выполнение makefile и запуск приложения
-ENTRYPOINT ["sh", "-c", "make migrateup && /app/main || exit 1"]
+ENTRYPOINT ["sh", "-c", "/app/main || exit 1"]
