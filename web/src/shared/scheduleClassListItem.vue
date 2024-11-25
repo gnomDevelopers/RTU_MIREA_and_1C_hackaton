@@ -5,8 +5,8 @@
       
       <div class="flex flex-col flex-grow items-start gap-y-1">
         <p class="flex flex-row flex-wrap gap-x-1 text-lg">
-          <span class="font-bold">{{ time }}</span>
-          {{ title }}
+          <span class="font-bold">{{ data.time }}</span>
+          {{ data.title }}
         </p>
         <div v-if="showAddMySchedule" class="flex flex-row gap-x-1 w-full">
           <input class="flex-grow text-lg px-2 outline-none header-shadow rounded" type="text" placeholder="Введите ваше расписание" v-model="mySchedule">
@@ -15,11 +15,11 @@
           </svg>
         </div>
         <p v-else class="flex flex-row flex-wrap gap-x-1 text-base">
-          <span class="font-bold">{{ room }}</span>
-          {{ group }}{{ mySheduleText }}
+          <span class="font-bold">{{ data.room }}</span>
+          {{ data.group }}{{ mySheduleText }}
         </p>
       </div>
-      <div class="flex flex-col items-center justify-center gap-y-2 cursor-pointer px-2" v-if="title === '' && canAddFaculties">
+      <div class="flex flex-col items-center justify-center gap-y-2 cursor-pointer px-2" v-if="data.title === '' && canAddFaculties">
         <svg @click="addMySchedule" class="w-6 h-6" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2V30M2 16H30" stroke="#063C73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -39,20 +39,8 @@ export default{
       type: Number,
       required: true,
     },
-    time: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    room: {
-      type: String,
-      required: true,
-    },
-    group: {
-      type: String,
+    data: {
+      type: Object,
       required: true,
     },
     canAddFaculties:{

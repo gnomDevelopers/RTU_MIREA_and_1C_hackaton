@@ -4,17 +4,16 @@
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">25.11.2024, Понедельник</div>
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">13 неделя</div>
     </div>
-    <div class="flex flex-col gap-y-1 w-full items-stretch">
-      <ScheduleClassListItem 
-        v-for="(item, ind) in scheduleStore.scheduleTableDay"
-        :key="uniqueID++"
-        :index="ind + 1" 
-        :time="`${item.time} ${item.type}`" 
-        :title="item.title" 
-        :room="item.place" 
-        :group="item.groups.join(', ')"
-        :canAddFaculties 
-      />
+    <div v-if="getScheduleTable.length !== 0" class="flex flex-col gap-y-1 w-full items-stretch">
+      
+      <div v-for="(item, ind) in getScheduleTable">
+        <ScheduleClassListItem 
+          :index="ind + 1" 
+          :data="item"
+          :canAddFaculties
+        />
+      </div>
+      
     </div>
   </div>
 </template>
@@ -26,7 +25,7 @@ import ScheduleClassListItem from '@/shared/scheduleClassListItem.vue';
 export default {
   props:{
     canAddFaculties:{
-      type:Boolean,
+      type: Boolean,
       required: false,
       default: false,
     }
@@ -36,11 +35,15 @@ export default {
   },
   computed:{
     ...mapStores(useScheduleStore),
+
+    getScheduleTable(){
+      return this.scheduleStore.scheduleTableDay.length !== 0 ? this.scheduleStore.scheduleTableDay : [];
+    }
   },
   data(){
     return {
       uniqueID: 1,
     }
-  }
+  },
 };
 </script>
