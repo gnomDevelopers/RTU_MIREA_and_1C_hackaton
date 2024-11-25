@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS my_schedule (
     date VARCHAR,
     time_start VARCHAR,
     time_end VARCHAR,
-    user_data_id INTEGER REFERENCES user_data(id)
+    user_id INTEGER REFERENCES users(id)
 );

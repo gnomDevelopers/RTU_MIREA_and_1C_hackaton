@@ -1,5 +1,7 @@
-CREATE TABLE IF NOT EXISTS user_data (
-    id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR,
+    password VARCHAR,
     last_name VARCHAR,
     first_name VARCHAR,
     father_name VARCHAR,
