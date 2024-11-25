@@ -4,4 +4,4 @@ CREATE TABLE IF NOT EXISTS university (
     postfix VARCHAR
 );
 
---INSERT INTO university (id, name, postfix) VALUES (-1, 'admin', 'admin');
+INSERT INTO university (name, postfix) VALUES ('admin', 'admin');
