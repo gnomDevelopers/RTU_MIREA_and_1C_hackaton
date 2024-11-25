@@ -220,8 +220,10 @@ export default {
     },
     sendUsersList(){
       if(this.usersList.length === 0) return;
-      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-
+      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+      setTimeout(() => {
+        this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Пользователи добавлены!');
+      }, 460);
       //api request
     },
     showFaculty(role: number){
