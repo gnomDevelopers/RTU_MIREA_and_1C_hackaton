@@ -220,6 +220,18 @@ export default {
     },
     sendUsersList(){
       if(this.usersList.length === 0) return;
+
+      for(let item of this.usersList){
+        switch(item.role){
+          case 2: this.universityStore.decansList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 3: this.universityStore.educationDepartmentsList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 4: this.universityStore.zavCafsList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 5: this.universityStore.teachersList.push({...item, id: this.universityStore.tmpuserID++}); break;
+          case 6: this.universityStore.studentsList.push({...item, id: this.universityStore.tmpuserID++}); break;
+        }
+      }
+      //очистка буфера пользователей
+      this.usersList = [];
       // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
       setTimeout(() => {
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Пользователи добавлены!');

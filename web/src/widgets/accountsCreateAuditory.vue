@@ -175,6 +175,11 @@ export default {
     },
     sendAuditories() {
       if(this.auditoryList.length === 0)return;
+      for(let item of this.auditoryList){
+        this.universityStore.auditoriesList.push({...item, id: this.universityStore.tmpuserID++});
+      }
+      //очищаем буфер аудиторий
+      this.auditoryList = [];
       setTimeout(() => {
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитории сохранены!');
       }, 460);

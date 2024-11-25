@@ -31,6 +31,8 @@ export const useUniversityStore = defineStore('university', {
       facultiesList: [] as IItemList[],
       deparmentsList: [] as IItemList[],
       educationalDirectionsList: [] as IItemList[],
+
+      tmpuserID: 100,
     }
   },
   actions: {
