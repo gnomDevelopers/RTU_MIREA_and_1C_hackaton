@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row justify-between items-stretch h-24 shrink-0 w-full px-5 header-shadow z-10 bg-color-light">
+  <div v-if="!isWelcomePage" class="flex flex-row justify-between items-stretch h-24 shrink-0 w-full px-5 header-shadow z-10 bg-color-light">
     <div class="h-full grid content-center md:ml-16">
       <div @click="$router.push({name: 'MainPage'})" class="header-logo">VUZ+</div>
     </div>
@@ -29,6 +29,10 @@ export default {
     getNameFatherName(){
       return this.userInfoStore.first_name + ' ' + this.userInfoStore.father_name;
     },
+
+    isWelcomePage(){
+      return this.$route.fullPath === '/';
+    }
   }
 
 };
