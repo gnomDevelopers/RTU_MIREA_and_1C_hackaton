@@ -18,8 +18,8 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 
 func (r *UserRepository) GetById(ctx context.Context, id int) (*entities.User, error) {
 	user := entities.User{}
-	query := "SELECT id, email, last_name, first_name, father_name, university_id, role, faculty_id, department_id, educational_direction FROM users WHERE id = $1"
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&user.ID, &user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
+	query := "SELECT password, id, email, last_name, first_name, father_name, university_id, role, faculty_id, department_id, educational_direction FROM users WHERE id = $1"
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&user.Password, &user.ID, &user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
 	if err != nil {
 		return &entities.User{}, nil
 	}
@@ -30,8 +30,8 @@ func (r *UserRepository) GetById(ctx context.Context, id int) (*entities.User, e
 
 func (r *UserRepository) GetByEmail(ctx context.Context, login string) (*entities.User, error) {
 	user := entities.User{}
-	query := "SELECT id, email, last_name, first_name, father_name, university_id, role, faculty_id, department_id, educational_direction FROM users WHERE email = $1"
-	err := r.db.QueryRowContext(ctx, query, login).Scan(&user.ID, &user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
+	query := "SELECT password, id, email, last_name, first_name, father_name, university_id, role, faculty_id, department_id, educational_direction FROM users WHERE email = $1"
+	err := r.db.QueryRowContext(ctx, query, login).Scan(&user.Password, &user.ID, &user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
 	if err != nil {
 		return &entities.User{}, nil
 	}

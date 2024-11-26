@@ -72,6 +72,7 @@ func (s *UserService) Login(c context.Context, request *entities.LoginUserReques
 	if err != nil {
 		return &entities.LoginUserResponse{}, errors.New("wrong data")
 	}
+
 	err = util.CheckPassword(request.Password, u.Password)
 	if err != nil {
 		return &entities.LoginUserResponse{}, errors.New("wrong data")
