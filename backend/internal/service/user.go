@@ -124,6 +124,18 @@ func (s *UserService) Login(c context.Context, request *entities.LoginUserReques
 
 }
 
+func (s *UserService) RefreshToken(userID int) (string, error) {
+	TokenExpiration, err := strconv.Atoi(s.conf.Application.TokenExpiration)
+	if err != nil {
+		return "", errors.New("wrong data")
+	}
+	accessToken, err := pkg.GenerateAccessToken(userID, TokenExpiration, s.conf.Application.SigningKey)
+	if err != nil {
+		return "", errors.New("wrong data")
+	}
+	return accessToken, nil
+}
+
 func (s *UserService) CreateAdmin(c context.Context) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()

@@ -1,4 +1,4 @@
-basePath: /api
+basePath: /
 definitions:
   entities.AcademicDiscipline:
     properties:
@@ -554,7 +554,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Audience'
+            items:
+              $ref: '#/definitions/entities.Audience'
+            type: array
         "400":
           description: Bad Request
           schema:
@@ -664,6 +666,40 @@ paths:
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
       summary: Get audience by type
+      tags:
+      - audience
+  /auth/audience/university/{university}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience university
+        in: path
+        name: university
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Audience'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get audience by university
       tags:
       - audience
   /auth/campus:
@@ -2015,6 +2051,33 @@ paths:
       tags:
       - class
   /login:
+    get:
+      consumes:
+      - application/json
+      description: Validates the presence and correctness of the JWT token in the
+        Authorization header.
+      parameters:
+      - description: JWT token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT is valid
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: JWT does not exist or is invalid
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Authorization check
+      tags:
+      - authentication
     post:
       consumes:
       - application/json

@@ -5,7 +5,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/api",
+    "basePath": "/",
     "paths": {
         "/audience": {
             "post": {
@@ -189,7 +189,10 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.Audience"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Audience"
+                            }
                         }
                     },
                     "400": {
@@ -337,6 +340,58 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.Audience"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/audience/university/{university}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "audience"
+                ],
+                "summary": "Get audience by university",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "audience university",
+                        "name": "university",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Audience"
+                            }
                         }
                     },
                     "400": {
@@ -2504,6 +2559,44 @@
             }
         },
         "/login": {
+            "get": {
+                "description": "Validates the presence and correctness of the JWT token in the Authorization header.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Authorization check",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token for authentication",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "JWT is valid",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "JWT does not exist or is invalid",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Authenticates a user and sets access and refresh tokens as cookies.",
                 "consumes": [

@@ -2567,6 +2567,44 @@ const docTemplate = `{
             }
         },
         "/login": {
+            "get": {
+                "description": "Validates the presence and correctness of the JWT token in the Authorization header.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Authorization check",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "JWT token for authentication",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "JWT is valid",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "JWT does not exist or is invalid",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Authenticates a user and sets access and refresh tokens as cookies.",
                 "consumes": [
