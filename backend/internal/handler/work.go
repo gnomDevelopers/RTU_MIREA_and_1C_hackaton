@@ -19,6 +19,10 @@ func (h *Handler) LoginWork(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON("")
 }
 
+func (h *Handler) CreateHR(c *fiber.Ctx) error {
+	return c.Status(fiber.StatusOK).JSON("")
+}
+
 // ResponseCandidate
 // @Tags work
 // @Summary      Response
