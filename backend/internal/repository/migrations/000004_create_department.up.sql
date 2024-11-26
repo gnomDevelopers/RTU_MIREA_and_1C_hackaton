@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS department (
     name VARCHAR
 );
 
-INSERT INTO department (name) VALUES ('admin');
+INSERT INTO department (name) VALUES ('null');

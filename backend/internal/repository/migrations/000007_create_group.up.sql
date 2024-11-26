@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS "group" (
     name VARCHAR
 );
 
-INSERT INTO "group" (name) VALUES ('admin');
+INSERT INTO "group" (name) VALUES ('null');

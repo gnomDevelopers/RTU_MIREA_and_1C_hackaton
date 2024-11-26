@@ -37,7 +37,7 @@ export const useUniversityStore = defineStore('university', {
     }
   },
   actions: {
-    loadUniversityInfo(){
+    async loadUniversityInfo(){
       //API get campuses by universityID
       //API get audiences by universityID
       //API get decans by universityID
