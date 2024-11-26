@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { API_Authenticate, API_UserInfo } from "@/api/api";
 import { type TMaybeNumber, type TMaybeBoolean, type TMaybeString } from "@/helpers/constants";
+import { useUniversityStore } from "./universityStore";
 
+// const universityStore = useUniversityStore();
 
 export const useUserInfoStore = defineStore('userInfo', {
   state() {
@@ -22,35 +24,46 @@ export const useUserInfoStore = defineStore('userInfo', {
   actions: {
     async Authenticate(){
       try{
-        const response:any = await API_Authenticate();
-        this.authorized = response.data.authorized;
-        this.userID = response.data.id;
+        const response = await API_Authenticate();
+        this.onAuthorized(response);
+
       }catch (error){
         this.authorized = false;
-        this.userID = -1;
+        this.userID = null;
       }
     },
-    loadUserData(){
-      // if(this.userID === null) return;
-      if(this.userID === null) this.userID = 1;
-      API_UserInfo(this.userID)
-      .then(response => {
+    async loadUserData(){
+      if(this.userID === null) return; // пользователь не авторизован
+      try{
+        const response = await API_UserInfo(this.userID);
 
-      })
-      .catch(error => {
+        // this.first_name = 'Денис';
+        // this.last_name = 'Орлов',
+        // this.father_name = 'Сергеевич';
+        // this.university_id = 1;
+        // this.faculty_id = 1;
+        // this.department_id = 3;
+        // this.educationalDirection = 'Фуллстек разработка';
+        // this.role = 6;
+        // this.email = 'orlov_d_s';
+      }catch(error){
 
-      })
-      .finally(() => {
-        this.first_name = 'Денис';
-        this.last_name = 'Орлов',
-        this.father_name = 'Сергеевич';
-        this.university_id = 1;
-        this.faculty_id = 1;
-        this.department_id = 3;
-        this.educationalDirection = 'Фуллстек разработка';
-        this.role = 6;
-        this.email = 'orlov_d_s';
-      });
+      }
+    },
+    async onAuthorized(response: any){
+      const universityStore = useUniversityStore();
+      this.authorized = true;
+      this.userID = response.data.id;
+      
+      document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
+      document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=strict`;
+      
+      if(this.authorized){
+        console.log('authorized');
+        await this.loadUserData(); // загрузка данных о пользователе
+        console.log('userData loaded')
+        await universityStore.loadUniversityInfo(); // загрузка данных об институте
+      }
     }
   }
 });

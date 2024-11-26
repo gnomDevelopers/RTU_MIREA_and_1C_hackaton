@@ -67,15 +67,15 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Post("/schedule/parse", h.ParseSchedule)
 	authGroup.Get("/schedule/group/:group", h.GetScheduleByGroup)
 	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
-	authGroup.Get("/schedule/name/:name", h.GetScheduleByName)
-
+	authGroup.Get("/schedule/optionals/:optionals", h.GetScheduleOptionals)
 	authGroup.Get("/schedule/group_subjects", h.GetGroupSubject)
+
 	authGroup.Post("/grade", h.CreateGrade)
 	authGroup.Get("/grade/:group/:name", h.GetGradesBySubject)
 
-	authGroup.Get("/schedule/search/teacher", h.GetScheduleSearchTeacher)
-	authGroup.Get("/schedule/search/name", h.GetScheduleSearchName)
-	authGroup.Get("/schedule/search/group", h.GetScheduleSearchGroup)
+	authGroup.Get("/schedule/search/teacher", h.ScheduleSearchTeacher)
+	authGroup.Get("/schedule/search/name", h.ScheduleSearchName)
+	authGroup.Get("/schedule/search/group", h.ScheduleSearchGroup)
 
 	authGroup.Post("/auth/work/response", h.ResponseCandidate)
 	authGroup.Get("/auth/work/response", h.GetResponseCandidate)
@@ -104,6 +104,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/audience/type/:type", h.GetByTypeAudience)
 	authGroup.Get("/audience/profile/:profile", h.GetByProfileAudience)
 	authGroup.Get("/audience/capacity/:capacity", h.GetByCapacityAudience)
+	authGroup.Get("/audience/university/:university", h.GetByUniversityAudiences)
 	authGroup.Post("/audience", h.CreateAudiences)
 	authGroup.Put("/audience", h.UpdateAudience)
 	authGroup.Delete("/audience/:id", h.DeleteAudience)

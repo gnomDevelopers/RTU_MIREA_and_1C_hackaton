@@ -15,6 +15,7 @@ import (
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /work [post]
+// @Security ApiKeyAuth
 func (h *Handler) LoginWork(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON("")
 }
@@ -34,6 +35,7 @@ func (h *Handler) CreateHR(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/work/response [post]
+// @Security ApiKeyAuth
 func (h *Handler) ResponseCandidate(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON("")
 }
@@ -49,6 +51,7 @@ func (h *Handler) ResponseCandidate(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/work/response [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetResponseCandidate(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON("")
 }

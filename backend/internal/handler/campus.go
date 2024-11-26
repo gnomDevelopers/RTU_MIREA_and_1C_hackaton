@@ -19,7 +19,8 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /campus [post]
+// @Router       /auth/campus [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateCampuses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var campuses []entities.Campus
@@ -56,6 +57,7 @@ func (h *Handler) CreateCampuses(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus/all [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetAllCampuses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	campuses, err := h.services.CampusService.GetAll(c.Context())
@@ -80,6 +82,7 @@ func (h *Handler) GetAllCampuses(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus/id/{id} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByIdCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")
@@ -110,6 +113,7 @@ func (h *Handler) GetByIdCampus(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus/name/{name} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	name := c.Params("name")
@@ -143,6 +147,7 @@ func (h *Handler) GetByNameCampus(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus/address/{address} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	address := c.Params("address")
@@ -176,6 +181,7 @@ func (h *Handler) GetByAddressCampus(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus/university/{university} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByUniversityCampuses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	name := c.Params("university")
@@ -209,6 +215,7 @@ func (h *Handler) GetByUniversityCampuses(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus [put]
+// @Security ApiKeyAuth
 func (h *Handler) UpdateCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var campus entities.Campus
@@ -245,6 +252,7 @@ func (h *Handler) UpdateCampus(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/campus/{id} [delete]
+// @Security ApiKeyAuth
 func (h *Handler) DeleteCampus(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

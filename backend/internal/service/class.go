@@ -55,11 +55,11 @@ func (s *ClassService) GetByTeacherName(c context.Context, teacherName, universi
 	return classes, err
 }
 
-func (s *ClassService) GetByName(c context.Context, name, university string) (*[]entities.Class, error) {
+func (s *ClassService) GetOptionals(c context.Context, name, university string) (*[]entities.Class, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	classes, err := s.repository.GetByName(ctx, name, university)
+	classes, err := s.repository.GetOptionals(ctx, name, university)
 	return classes, err
 }
 

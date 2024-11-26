@@ -18,7 +18,8 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class [post]
+// @Router       /auth/class [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateClasses(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var classes []entities.Class
@@ -28,6 +29,23 @@ func (h *Handler) CreateClasses(c *fiber.Ctx) error {
 			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
 		logEvent.Err(err).Msg("invalid request body")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+	}
+
+	userId, ok := c.Locals("id").(int)
+	if !ok {
+		return c.SendStatus(fiber.StatusForbidden)
+	}
+	h.logger.Debug().Msg("call h.services.UniversityService.GetByUserID")
+	university, err := h.services.UniversityService.GetByUserID(c.Context(), userId)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	for i := range classes {
+		classes[i].UniversityStr = university.Name
 	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.Create")
@@ -56,6 +74,7 @@ func (h *Handler) CreateClasses(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/class/id/{id} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")
@@ -87,6 +106,7 @@ func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/class/auditory/{name} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByAuditoryClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	auditoryName := c.Params(":name")
@@ -117,6 +137,7 @@ func (h *Handler) GetByAuditoryClass(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/class [put]
+// @Security ApiKeyAuth
 func (h *Handler) UpdateClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var class entities.Class
@@ -154,6 +175,7 @@ func (h *Handler) UpdateClass(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/class/{id} [delete]
+// @Security ApiKeyAuth
 func (h *Handler) DeleteClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

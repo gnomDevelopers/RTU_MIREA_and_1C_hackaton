@@ -1,6 +1,6 @@
 import axios from "axios";
 import { 
-  API, DEVMODE, 
+  API, DEVMODE, GET_COOKIE
   type IAPI_Login_Request, 
   type IAPI_Audience_Create, 
   type IAPI_Audience_Update, 
@@ -18,7 +18,11 @@ import {
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/login`)
+    axios.get(`${API}/login`, {
+      headers: {
+        Authentication: `Bearer ${GET_COOKIE('access_token')}`,
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
       resolve(response);

@@ -91,19 +91,19 @@ func (h *Handler) GetScheduleByTeacher(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(class)
 }
 
-// GetScheduleByName
+// GetScheduleOptionals
 // @Tags schedule
-// @Summary      Get schedule by name
+// @Summary      Get schedule optionals
 // @Accept       json
 // @Produce      json
-// @Param name path string true "schedule name"
+// @Param optionals path string true "schedule optionals"
 // @Success 200 {object} []entities.Class
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router     /auth/schedule/name/{name} [get]
+// @Router     /auth/schedule/optionals/{optionals} [get]
 // @Security ApiKeyAuth
-func (h *Handler) GetScheduleByName(c *fiber.Ctx) error {
+func (h *Handler) GetScheduleOptionals(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
 		return c.SendStatus(fiber.StatusForbidden)
@@ -117,14 +117,14 @@ func (h *Handler) GetScheduleByName(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	name := c.Params("name")
-	decodedName, err := url.QueryUnescape(name)
+	optionals := c.Params("optionals")
+	decodedOptionals, err := url.QueryUnescape(optionals)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid teacher name")
 	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.GetByTeacherName")
-	class, err := h.services.ClassService.GetByName(c.Context(), decodedName, university.Name)
+	class, err := h.services.ClassService.GetOptionals(c.Context(), decodedOptionals, university.Name)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -199,7 +199,7 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "success"})
 }
 
-// GetScheduleSearchGroup
+// ScheduleSearchGroup
 // @Tags schedule
 // @Summary      Search groups
 // @Accept       json
@@ -210,7 +210,7 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/schedule/search/group [get]
 // @Security ApiKeyAuth
-func (h *Handler) GetScheduleSearchGroup(c *fiber.Ctx) error {
+func (h *Handler) ScheduleSearchGroup(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
 		return c.SendStatus(fiber.StatusForbidden)
@@ -239,7 +239,7 @@ func (h *Handler) GetScheduleSearchGroup(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(entities.ScheduleGroups{Groups: groups})
 }
 
-// GetScheduleSearchTeacher
+// ScheduleSearchTeacher
 // @Tags schedule
 // @Summary      Search teachers
 // @Accept       json
@@ -250,7 +250,7 @@ func (h *Handler) GetScheduleSearchGroup(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/schedule/search/teacher [get]
 // @Security ApiKeyAuth
-func (h *Handler) GetScheduleSearchTeacher(c *fiber.Ctx) error {
+func (h *Handler) ScheduleSearchTeacher(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
 		return c.SendStatus(fiber.StatusForbidden)
@@ -279,7 +279,7 @@ func (h *Handler) GetScheduleSearchTeacher(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(entities.ScheduleTeachers{Teachers: teachers})
 }
 
-// GetScheduleSearchName
+// ScheduleSearchName
 // @Tags schedule
 // @Summary      Search names
 // @Accept       json
@@ -290,7 +290,7 @@ func (h *Handler) GetScheduleSearchTeacher(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/schedule/search/name [get]
 // @Security ApiKeyAuth
-func (h *Handler) GetScheduleSearchName(c *fiber.Ctx) error {
+func (h *Handler) ScheduleSearchName(c *fiber.Ctx) error {
 	userId, ok := c.Locals("id").(int)
 	if !ok {
 		return c.SendStatus(fiber.StatusForbidden)
@@ -321,7 +321,7 @@ func (h *Handler) GetScheduleSearchName(c *fiber.Ctx) error {
 
 // GetGroupSubject
 // @Tags schedule
-// @Summary      Search names
+// @Summary      Получение всех предметов группы
 // @Accept       json
 // @Produce      json
 // @Success 200 {object} entities.ScheduleNames

@@ -5,7 +5,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/",
+    "basePath": "/api",
     "paths": {
         "/audience": {
             "post": {
@@ -189,10 +189,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Audience"
-                            }
+                            "$ref": "#/definitions/entities.Audience"
                         }
                     },
                     "400": {
@@ -340,58 +337,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.Audience"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/audience/university/{university}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "audience"
-                ],
-                "summary": "Get audience by university",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "audience university",
-                        "name": "university",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Audience"
-                            }
                         }
                     },
                     "400": {
@@ -2559,58 +2504,6 @@
             }
         },
         "/login": {
-            "get": {
-                "description": "Validates the JWT token from the Authorization header, extracts user ID, and generates a new access token.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Authorization check",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer JWT token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "New access token and user ID",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Missing auth token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "Invalid auth header or token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "Authenticates a user and sets access and refresh tokens as cookies.",
                 "consumes": [
