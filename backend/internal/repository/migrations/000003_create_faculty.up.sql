@@ -4,4 +4,4 @@ CREATE TABLE IF NOT EXISTS faculty (
     university VARCHAR
 );
 
-INSERT INTO faculty (name, university) VALUES ('admin', 'admin');
+INSERT INTO faculty (name, university) VALUES ('null', 'null');
