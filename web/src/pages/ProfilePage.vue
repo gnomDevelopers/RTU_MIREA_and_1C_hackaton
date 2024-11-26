@@ -58,11 +58,17 @@ export default{
     },
     getFaculty(){
       if(this.userInfoStore.faculty_id === null) return '-';
-      return this.universityStore.facultiesList[this.userInfoStore.faculty_id];
+      for(let item of this.universityStore.facultiesList){
+        if(item.id === this.userInfoStore.faculty_id) return item.name;
+      }
+      return '';
     },
     getDepartment(){
       if(this.userInfoStore.department_id === null) return '-';
-      return this.universityStore.deparmentsList[this.userInfoStore.department_id];
+      for(let item of this.universityStore.deparmentsList){
+        if(item.id === this.userInfoStore.department_id) return item.name;
+      }
+      return '';
     },
     getEducationalDirection(){
       if(this.userInfoStore.educationalDirection === null) return '-';

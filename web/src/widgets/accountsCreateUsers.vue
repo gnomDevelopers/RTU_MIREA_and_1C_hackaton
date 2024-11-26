@@ -96,7 +96,7 @@
             class="font-semibold text-lg cursor-default">
             Факультет: 
             <span class=" font-normal text-base cursor-pointer text-blue-800">
-              {{ InfoFields[user.faculty_id] }}
+              {{ getFacultyName(user.faculty_id) }}
             </span>
           </p>
 
@@ -105,7 +105,7 @@
             class="font-semibold text-lg cursor-default">
             Кафедра: 
             <span class=" font-normal text-base cursor-pointer text-blue-800">
-              {{ InfoFields[user.department_id] }}
+              {{ getDepartmentName(user.department_id) }}
             </span>
           </p>
 
@@ -246,6 +246,18 @@ export default {
     },
     showEducationalDirection(role: number){
       return this.InfoFieldsRole[role]?.includes(this.InfoFields[2]);
+    },
+    getFacultyName(facultyID: number){
+      for(let item of this.universityStore.facultiesList){
+        if(item.id === facultyID) return item.name;
+      }
+      return '';
+    },
+    getDepartmentName(departmentID: number){
+      for(let item of this.universityStore.deparmentsList){
+        if(item.id === departmentID) return item.name;
+      }
+      return '';
     },
   }
 }; 

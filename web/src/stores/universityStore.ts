@@ -33,6 +33,7 @@ export const useUniversityStore = defineStore('university', {
       educationalDirectionsList: [] as IItemList[],
 
       tmpuserID: 100,
+      selectedDate: '25.11.2024',
     }
   },
   actions: {
@@ -147,7 +148,7 @@ export const useUniversityStore = defineStore('university', {
       this.deparmentsList = [ // кафедры
         {id: 1, name: 'Физика'},
         {id: 2, name: 'Высшая математика'},
-        {id: 3, name: 'Индустриальне программирование'},
+        {id: 3, name: 'Индустриальное программирование'},
       ];
       this.educationalDirectionsList = [ // название направления
         {id: 1, name: 'Фуллстек разработка'},

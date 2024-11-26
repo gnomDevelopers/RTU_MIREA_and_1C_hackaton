@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { type IScheduleItem, type ITimeTable, StatusCodes, type TMaybeNumber } from "@/helpers/constants";
-import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName } from "@/api/api";
-import { useStatusWindowStore } from "./statusWindowStore";
+// import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName } from "@/api/api";
+// import { useStatusWindowStore } from "./statusWindowStore";
 
-const statusWindow = useStatusWindowStore();
+// const statusWindow = useStatusWindowStore();
 
 export const useScheduleStore = defineStore('schedule', {
   state() {
@@ -35,6 +35,7 @@ export const useScheduleStore = defineStore('schedule', {
       //   statusWindow.deteleStatusWindow(stID);
       //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
       // });
+
       this.scheduleTableDay = [
         { time: '9.00-10:30',   type: 'ПР', title: 'Иностранный язык', place: 'И-320 (В-78)', groups: ['ЭФБО-01-23'] },
         { time: '10.40-12.10',  type: 'ЛК', title: 'Технологии индустриального программирования', place: 'А-10 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
@@ -43,6 +44,7 @@ export const useScheduleStore = defineStore('schedule', {
         { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
         { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
       ];
+
       this.scheduleData = [
         {
           date: '25.11.2024', 
@@ -122,6 +124,7 @@ export const useScheduleStore = defineStore('schedule', {
           ]
         },
       ];
+
     },
     loadScheduleTableByTeacherName(teacherName: string){
       // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);

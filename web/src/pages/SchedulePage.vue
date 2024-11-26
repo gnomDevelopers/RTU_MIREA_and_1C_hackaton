@@ -119,6 +119,7 @@ export default {
       this.scheduleStore.scheduleTarget = target;
     },
     selectDay(day: Day){
+      this.universityStore.selectedDate = `${day.day}.${day.month+1}.${day.year}`;
       this.scheduleStore.scheduleTableDay = [];
       for(let item of this.scheduleStore.scheduleData){
         if(item.date === `${day.day}.${day.month+1}.${day.year}`){
