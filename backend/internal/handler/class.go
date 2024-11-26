@@ -31,6 +31,23 @@ func (h *Handler) CreateClasses(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
 	}
 
+	userId, ok := c.Locals("id").(int)
+	if !ok {
+		return c.SendStatus(fiber.StatusForbidden)
+	}
+	h.logger.Debug().Msg("call h.services.UniversityService.GetByUserID")
+	university, err := h.services.UniversityService.GetByUserID(c.Context(), userId)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	for i := range classes {
+		classes[i].UniversityStr = university.Name
+	}
+
 	h.logger.Debug().Msg("call h.services.ClassService.Create")
 	ids, err := h.services.ClassService.Create(c.Context(), &classes)
 	if err != nil {

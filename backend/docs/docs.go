@@ -1819,7 +1819,7 @@ const docTemplate = `{
                 "tags": [
                     "schedule"
                 ],
-                "summary": "Search names",
+                "summary": "Получение всех предметов группы",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1848,7 +1848,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/schedule/name/{name}": {
+        "/auth/schedule/optionals/{optionals}": {
             "get": {
                 "security": [
                     {
@@ -1864,12 +1864,12 @@ const docTemplate = `{
                 "tags": [
                     "schedule"
                 ],
-                "summary": "Get schedule by name",
+                "summary": "Get schedule optionals",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "schedule name",
-                        "name": "name",
+                        "description": "schedule optionals",
+                        "name": "optionals",
                         "in": "path",
                         "required": true
                     }

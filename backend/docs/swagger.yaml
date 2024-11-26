@@ -1557,17 +1557,17 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Search names
+      summary: Получение всех предметов группы
       tags:
       - schedule
-  /auth/schedule/name/{name}:
+  /auth/schedule/optionals/{optionals}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: schedule name
+      - description: schedule optionals
         in: path
-        name: name
+        name: optionals
         required: true
         type: string
       produces:
@@ -1593,7 +1593,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Get schedule by name
+      summary: Get schedule optionals
       tags:
       - schedule
   /auth/schedule/parse:

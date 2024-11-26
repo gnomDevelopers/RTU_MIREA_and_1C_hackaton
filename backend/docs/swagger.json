@@ -1811,7 +1811,7 @@
                 "tags": [
                     "schedule"
                 ],
-                "summary": "Search names",
+                "summary": "Получение всех предметов группы",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1840,7 +1840,7 @@
                 }
             }
         },
-        "/auth/schedule/name/{name}": {
+        "/auth/schedule/optionals/{optionals}": {
             "get": {
                 "security": [
                     {
@@ -1856,12 +1856,12 @@
                 "tags": [
                     "schedule"
                 ],
-                "summary": "Get schedule by name",
+                "summary": "Get schedule optionals",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "schedule name",
-                        "name": "name",
+                        "description": "schedule optionals",
+                        "name": "optionals",
                         "in": "path",
                         "required": true
                     }
