@@ -20,6 +20,7 @@ import (
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/discipline [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateAcademicDiscipline(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var academicDisciplines []entities.AcademicDiscipline
@@ -62,6 +63,7 @@ func (h *Handler) CreateAcademicDiscipline(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/discipline/semester/{ed_dir}/{semester} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetAcademicDisciplinesByEducationalDirectionAndSemester(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	edDir := c.Params("ed_dir")
@@ -100,6 +102,7 @@ func (h *Handler) GetAcademicDisciplinesByEducationalDirectionAndSemester(c *fib
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/discipline/name/{ed_dir}/{name} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetAcademicDisciplineByEducationalDirectionAndName(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	edDir := c.Params("ed_dir")
@@ -141,6 +144,7 @@ func (h *Handler) GetAcademicDisciplineByEducationalDirectionAndName(c *fiber.Ct
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/discipline [put]
+// @Security ApiKeyAuth
 func (h *Handler) UpdateAcademicDiscipline(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var academicDiscipline entities.AcademicDiscipline
@@ -178,6 +182,7 @@ func (h *Handler) UpdateAcademicDiscipline(c *fiber.Ctx) error {
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/discipline/{id} [delete]
+// @Security ApiKeyAuth
 func (h *Handler) DeleteAcademicDiscipline(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")
