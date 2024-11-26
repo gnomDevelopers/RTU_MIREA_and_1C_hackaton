@@ -56,7 +56,7 @@ func (h *Handler) CreateAudiences(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/id/{id} [get]
+// @Router       /auth/audience/id/{id} [get]
 func (h *Handler) GetByIdAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")
@@ -86,7 +86,7 @@ func (h *Handler) GetByIdAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/campus/{name} [get]
+// @Router       /auth/audience/campus/{name} [get]
 func (h *Handler) GetByCampusAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	name := c.Params("name")
@@ -119,7 +119,7 @@ func (h *Handler) GetByCampusAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/type/{type} [get]
+// @Router       /auth/audience/type/{type} [get]
 func (h *Handler) GetByTypeAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	typeStr := c.Params("type")
@@ -152,7 +152,7 @@ func (h *Handler) GetByTypeAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/profile/{profile} [get]
+// @Router       /auth/audience/profile/{profile} [get]
 func (h *Handler) GetByProfileAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	profile := c.Params("profile")
@@ -185,7 +185,7 @@ func (h *Handler) GetByProfileAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/capacity/{capacity} [get]
+// @Router       /auth/audience/capacity/{capacity} [get]
 func (h *Handler) GetByCapacityAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	capacityStr := c.Params("capacity")
@@ -215,7 +215,7 @@ func (h *Handler) GetByCapacityAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience [put]
+// @Router       /auth/audience [put]
 func (h *Handler) UpdateAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var audience entities.Audience
@@ -251,7 +251,7 @@ func (h *Handler) UpdateAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/{id} [delete]
+// @Router      /auth/audience/{id} [delete]
 func (h *Handler) DeleteAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

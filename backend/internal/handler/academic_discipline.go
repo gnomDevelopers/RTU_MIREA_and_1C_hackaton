@@ -19,7 +19,7 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /discipline [post]
+// @Router       /auth/discipline [post]
 func (h *Handler) CreateAcademicDiscipline(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var academicDisciplines []entities.AcademicDiscipline
@@ -61,7 +61,7 @@ func (h *Handler) CreateAcademicDiscipline(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /discipline/semester/{ed_dir}/{semester} [get]
+// @Router       /auth/discipline/semester/{ed_dir}/{semester} [get]
 func (h *Handler) GetAcademicDisciplinesByEducationalDirectionAndSemester(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	edDir := c.Params("ed_dir")
@@ -99,7 +99,7 @@ func (h *Handler) GetAcademicDisciplinesByEducationalDirectionAndSemester(c *fib
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /discipline/name/{ed_dir}/{name} [get]
+// @Router       /auth/discipline/name/{ed_dir}/{name} [get]
 func (h *Handler) GetAcademicDisciplineByEducationalDirectionAndName(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	edDir := c.Params("ed_dir")
@@ -140,7 +140,7 @@ func (h *Handler) GetAcademicDisciplineByEducationalDirectionAndName(c *fiber.Ct
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /discipline [put]
+// @Router       /auth/discipline [put]
 func (h *Handler) UpdateAcademicDiscipline(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var academicDiscipline entities.AcademicDiscipline
@@ -177,7 +177,7 @@ func (h *Handler) UpdateAcademicDiscipline(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /discipline/{id} [delete]
+// @Router       /auth/discipline/{id} [delete]
 func (h *Handler) DeleteAcademicDiscipline(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")

@@ -17,7 +17,7 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /gpa/id/{id} [get]
+// @Router       /auth/gpa/id/{id} [get]
 func (h *Handler) GetByUserId(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

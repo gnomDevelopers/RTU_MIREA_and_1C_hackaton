@@ -23,14 +23,12 @@ export const useUserInfoStore = defineStore('userInfo', {
     async Authenticate(){
       try{
         const response:any = await API_Authenticate();
-        if(response.data.authorized !== undefined) this.authorized = response.data.authorized;
-        else this.authorized = false;
+        this.authorized = response.data.authorized;
+        this.userID = response.data.id;
       }catch (error){
         this.authorized = false;
+        this.userID = -1;
       }
-
-      this.authorized = true;
-      this.userID = 1;
     },
     loadUserData(){
       // if(this.userID === null) return;

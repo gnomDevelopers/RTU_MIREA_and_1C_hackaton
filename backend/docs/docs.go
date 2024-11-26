@@ -16,55 +16,6 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/audience": {
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "audience"
-                ],
-                "summary": "Update audience",
-                "parameters": [
-                    {
-                        "description": "audience data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.Audience"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteAudienceResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -121,7 +72,58 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/campus/{name}": {
+        "/auth/audience": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "audience"
+                ],
+                "summary": "Update audience",
+                "parameters": [
+                    {
+                        "description": "audience data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.Audience"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteAudienceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/audience/campus/{name}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -170,7 +172,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/capacity/{capacity}": {
+        "/auth/audience/capacity/{capacity}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -219,7 +221,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/id/{id}": {
+        "/auth/audience/id/{id}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -268,7 +270,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/profile/{profile}": {
+        "/auth/audience/profile/{profile}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -317,7 +319,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/type/{type}": {
+        "/auth/audience/type/{type}": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -366,7 +368,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/audience/{id}": {
+        "/auth/audience/{id}": {
             "delete": {
                 "consumes": [
                     "application/json"
@@ -392,6 +394,865 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.UpdateDeleteAudienceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Update campus",
+                "parameters": [
+                    {
+                        "description": "campus data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.Campus"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteCampusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus/address/{address}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Get campus by address",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "campus address",
+                        "name": "address",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Campus"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus/all": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Get all campuses",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Campus"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus/id/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Get campus by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "campus id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Campus"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus/name/{name}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Get campus by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "campus name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Campus"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus/university/{university}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Get campus by university",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "campus university",
+                        "name": "university",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Campus"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/campus/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "campus"
+                ],
+                "summary": "Delete campus",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "campus id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteCampusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/class": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "class"
+                ],
+                "summary": "Update class",
+                "parameters": [
+                    {
+                        "description": "class data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.Class"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteClassResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/class/auditory/{name}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "class"
+                ],
+                "summary": "Get class by auditory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class auditory",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Class"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/class/id/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "class"
+                ],
+                "summary": "Get class by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Class"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/class/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "class"
+                ],
+                "summary": "Delete class",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteClassResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/discipline": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Update discipline",
+                "parameters": [
+                    {
+                        "description": "university data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.AcademicDiscipline"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Create discipline",
+                "parameters": [
+                    {
+                        "description": "class data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateAcademicDisciplineRequest"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateAcademicDisciplineResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/discipline/name/{ed_dir}/{name}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Get discipline by ed dir and name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ed_dir",
+                        "name": "ed_dir",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.AcademicDiscipline"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/discipline/semester/{ed_dir}/{semester}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Get discipline by ed dir and semester",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ed_dir",
+                        "name": "ed_dir",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "semester",
+                        "name": "semester",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.AcademicDiscipline"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/discipline/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "discipline"
+                ],
+                "summary": "Delete discipline",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "discipline id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/gpa/id/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "gpa"
+                ],
+                "summary": "Get gpa by user id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Class"
                         }
                     },
                     "400": {
@@ -522,6 +1383,51 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/group": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "group"
+                ],
+                "summary": "Create a new group",
+                "parameters": [
+                    {
+                        "description": "Group data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateGroupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateGroupResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
@@ -943,6 +1849,247 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/university": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "university"
+                ],
+                "summary": "Update university",
+                "parameters": [
+                    {
+                        "description": "university data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.University"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/university/all": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "university"
+                ],
+                "summary": "Get all universities",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.University"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/university/id/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "university"
+                ],
+                "summary": "Get university by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "university id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.University"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/university/name/{name}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "university"
+                ],
+                "summary": "Get university by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "university name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.University"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/university/{id}": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "university"
+                ],
+                "summary": "Delete university",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "university id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/user_schedule": {
             "get": {
                 "security": [
@@ -1150,8 +2297,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/campus": {
-            "put": {
+        "/auth/work/response": {
+            "get": {
                 "consumes": [
                     "application/json"
                 ],
@@ -1159,17 +2306,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "campus"
+                    "work"
                 ],
-                "summary": "Update campus",
+                "summary": "Response",
                 "parameters": [
                     {
-                        "description": "campus data",
+                        "description": "university data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.Campus"
+                            "$ref": "#/definitions/entities.CreateUniversityRequest"
                         }
                     }
                 ],
@@ -1177,7 +2324,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteCampusResponse"
+                            "$ref": "#/definitions/entities.CreateUniversityResponse"
                         }
                     },
                     "400": {
@@ -1200,6 +2347,57 @@ const docTemplate = `{
                     }
                 }
             },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "work"
+                ],
+                "summary": "Response",
+                "parameters": [
+                    {
+                        "description": "university data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateUniversityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/campus": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -1256,347 +2454,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/campus/address/{address}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "campus"
-                ],
-                "summary": "Get campus by address",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "campus address",
-                        "name": "address",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Campus"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/campus/all": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "campus"
-                ],
-                "summary": "Get all campuses",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Campus"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/campus/id/{id}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "campus"
-                ],
-                "summary": "Get campus by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "campus id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Campus"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/campus/name/{name}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "campus"
-                ],
-                "summary": "Get campus by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "campus name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Campus"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/campus/university/{university}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "campus"
-                ],
-                "summary": "Get campus by university",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "campus university",
-                        "name": "university",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Campus"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/campus/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "campus"
-                ],
-                "summary": "Delete campus",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "campus id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteCampusResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/class": {
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "class"
-                ],
-                "summary": "Update class",
-                "parameters": [
-                    {
-                        "description": "class data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.Class"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteClassResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -1640,517 +2498,6 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/class/auditory/{name}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "class"
-                ],
-                "summary": "Get class by auditory",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "class auditory",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Class"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/class/id/{id}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "class"
-                ],
-                "summary": "Get class by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "class id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Class"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/class/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "class"
-                ],
-                "summary": "Delete class",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "class id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteClassResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/discipline": {
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "discipline"
-                ],
-                "summary": "Update discipline",
-                "parameters": [
-                    {
-                        "description": "university data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.AcademicDiscipline"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "discipline"
-                ],
-                "summary": "Create discipline",
-                "parameters": [
-                    {
-                        "description": "class data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.CreateAcademicDisciplineRequest"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.CreateAcademicDisciplineResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/discipline/name/{ed_dir}/{name}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "discipline"
-                ],
-                "summary": "Get discipline by ed dir and name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ed_dir",
-                        "name": "ed_dir",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.AcademicDiscipline"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/discipline/semester/{ed_dir}/{semester}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "discipline"
-                ],
-                "summary": "Get discipline by ed dir and semester",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ed_dir",
-                        "name": "ed_dir",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "semester",
-                        "name": "semester",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.AcademicDiscipline"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/discipline/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "discipline"
-                ],
-                "summary": "Delete discipline",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "discipline id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/gpa/id/{id}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "gpa"
-                ],
-                "summary": "Get gpa by user id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Class"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/group": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "group"
-                ],
-                "summary": "Create a new group",
-                "parameters": [
-                    {
-                        "description": "Group data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateGroupRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateGroupResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
                         }
@@ -2211,55 +2558,6 @@ const docTemplate = `{
             }
         },
         "/university": {
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "university"
-                ],
-                "summary": "Update university",
-                "parameters": [
-                    {
-                        "description": "university data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.University"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -2310,252 +2608,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/university/all": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "university"
-                ],
-                "summary": "Get all universities",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.University"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/university/id/{id}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "university"
-                ],
-                "summary": "Get university by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "university id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.University"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/university/name/{name}": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "university"
-                ],
-                "summary": "Get university by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "university name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.University"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/university/{id}": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "university"
-                ],
-                "summary": "Delete university",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "university id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteUniversityResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/add": {
-            "post": {
-                "description": "Creates multiple students with their associated data (university, faculty, department, group).",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user data"
-                ],
-                "summary": "Create user",
-                "parameters": [
-                    {
-                        "description": "Array of user data to be added",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.AddUserDataRequest"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/entities.AddUserDataResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request payload",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/work/login": {
+        "/work": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -2566,15 +2619,15 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Login work user",
+                "summary": "Login in hr",
                 "parameters": [
                     {
-                        "description": "data",
+                        "description": "university data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entities.LoginUserRequest"
+                            "$ref": "#/definitions/entities.CreateUniversityRequest"
                         }
                     }
                 ],
@@ -2582,7 +2635,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.LoginUserResponse"
+                            "$ref": "#/definitions/entities.CreateUniversityResponse"
                         }
                     },
                     "400": {
@@ -2636,61 +2689,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type_of_assessment": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.AddUserDataRequest": {
-            "type": "object",
-            "properties": {
-                "department_id": {
-                    "type": "integer"
-                },
-                "educational_direction": {
-                    "type": "string"
-                },
-                "faculty_id": {
-                    "type": "integer"
-                },
-                "father_name": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "group": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "university_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "entities.AddUserDataResponse": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "father_name": {
-                    "type": "string"
-                },
-                "first_name": {
-                    "type": "string"
-                },
-                "last_name": {
-                    "type": "string"
-                },
-                "password": {
                     "type": "string"
                 }
             }
@@ -2945,9 +2943,6 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
                 }
             }
         },

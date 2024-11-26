@@ -21,42 +21,6 @@ definitions:
       type_of_assessment:
         type: string
     type: object
-  entities.AddUserDataRequest:
-    properties:
-      department_id:
-        type: integer
-      educational_direction:
-        type: string
-      faculty_id:
-        type: integer
-      father_name:
-        type: string
-      first_name:
-        type: string
-      group:
-        type: string
-      id:
-        type: integer
-      last_name:
-        type: string
-      role:
-        type: string
-      university_id:
-        type: integer
-    type: object
-  entities.AddUserDataResponse:
-    properties:
-      email:
-        type: string
-      father_name:
-        type: string
-      first_name:
-        type: string
-      last_name:
-        type: string
-      password:
-        type: string
-    type: object
   entities.Audience:
     properties:
       campus:
@@ -220,8 +184,6 @@ definitions:
     properties:
       name:
         type: string
-      user_id:
-        type: integer
     type: object
   entities.CreateGroupResponse:
     properties:
@@ -479,6 +441,7 @@ paths:
       summary: Create Audiences
       tags:
       - audience
+  /auth/audience:
     put:
       consumes:
       - application/json
@@ -511,7 +474,7 @@ paths:
       summary: Update audience
       tags:
       - audience
-  /audience/{id}:
+  /auth/audience/{id}:
     delete:
       consumes:
       - application/json
@@ -543,7 +506,7 @@ paths:
       summary: Delete audience
       tags:
       - audience
-  /audience/campus/{name}:
+  /auth/audience/campus/{name}:
     get:
       consumes:
       - application/json
@@ -575,7 +538,7 @@ paths:
       summary: Get audience by name
       tags:
       - audience
-  /audience/capacity/{capacity}:
+  /auth/audience/capacity/{capacity}:
     get:
       consumes:
       - application/json
@@ -607,7 +570,7 @@ paths:
       summary: Get audience by capacity
       tags:
       - audience
-  /audience/id/{id}:
+  /auth/audience/id/{id}:
     get:
       consumes:
       - application/json
@@ -639,7 +602,7 @@ paths:
       summary: Get audience by id
       tags:
       - audience
-  /audience/profile/{profile}:
+  /auth/audience/profile/{profile}:
     get:
       consumes:
       - application/json
@@ -671,7 +634,7 @@ paths:
       summary: Get audience by profile
       tags:
       - audience
-  /audience/type/{type}:
+  /auth/audience/type/{type}:
     get:
       consumes:
       - application/json
@@ -703,6 +666,567 @@ paths:
       summary: Get audience by type
       tags:
       - audience
+  /auth/campus:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Campus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update campus
+      tags:
+      - campus
+  /auth/campus/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete campus
+      tags:
+      - campus
+  /auth/campus/address/{address}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus address
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by address
+      tags:
+      - campus
+  /auth/campus/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Campus'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get all campuses
+      tags:
+      - campus
+  /auth/campus/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by id
+      tags:
+      - campus
+  /auth/campus/name/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Campus'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by name
+      tags:
+      - campus
+  /auth/campus/university/{university}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus university
+        in: path
+        name: university
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Campus'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get campus by university
+      tags:
+      - campus
+  /auth/class:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: class data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Class'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteClassResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update class
+      tags:
+      - class
+  /auth/class/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: class id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteClassResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete class
+      tags:
+      - class
+  /auth/class/auditory/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: class auditory
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Class'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get class by auditory
+      tags:
+      - class
+  /auth/class/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: class id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Class'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get class by id
+      tags:
+      - class
+  /auth/discipline:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: class data
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.CreateAcademicDisciplineRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.CreateAcademicDisciplineResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create discipline
+      tags:
+      - discipline
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.AcademicDiscipline'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update discipline
+      tags:
+      - discipline
+  /auth/discipline/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: discipline id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete discipline
+      tags:
+      - discipline
+  /auth/discipline/name/{ed_dir}/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ed_dir
+        in: path
+        name: ed_dir
+        required: true
+        type: string
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.AcademicDiscipline'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get discipline by ed dir and name
+      tags:
+      - discipline
+  /auth/discipline/semester/{ed_dir}/{semester}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ed_dir
+        in: path
+        name: ed_dir
+        required: true
+        type: string
+      - description: semester
+        in: path
+        name: semester
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.AcademicDiscipline'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get discipline by ed dir and semester
+      tags:
+      - discipline
+  /auth/gpa/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Class'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get gpa by user id
+      tags:
+      - gpa
   /auth/grade:
     post:
       consumes:
@@ -779,6 +1303,35 @@ paths:
       summary: Get grade by group
       tags:
       - grade
+  /auth/group:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Group data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateGroupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Create a new group
+      tags:
+      - group
   /auth/schedule/group/{group}:
     get:
       consumes:
@@ -1035,6 +1588,163 @@ paths:
       summary: Get schedule by teacher
       tags:
       - schedule
+  /auth/university:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.University'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Update university
+      tags:
+      - university
+  /auth/university/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: university id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Delete university
+      tags:
+      - university
+  /auth/university/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.University'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get all universities
+      tags:
+      - university
+  /auth/university/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.University'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get university by name
+      tags:
+      - university
+  /auth/university/name/{name}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.University'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Get university by name
+      tags:
+      - university
   /auth/user_schedule:
     get:
       consumes:
@@ -1165,6 +1875,71 @@ paths:
       summary: Delete users schedule
       tags:
       - user schedule
+  /auth/work/response:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateUniversityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Response
+      tags:
+      - work
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateUniversityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Response
+      tags:
+      - work
   /campus:
     post:
       consumes:
@@ -1200,228 +1975,6 @@ paths:
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
       summary: Create campuses
-      tags:
-      - campus
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.Campus'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Update campus
-      tags:
-      - campus
-  /campus/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Delete campus
-      tags:
-      - campus
-  /campus/address/{address}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus address
-        in: path
-        name: address
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Campus'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get campus by address
-      tags:
-      - campus
-  /campus/all:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.Campus'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get all campuses
-      tags:
-      - campus
-  /campus/id/{id}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Campus'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get campus by id
-      tags:
-      - campus
-  /campus/name/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus name
-        in: path
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Campus'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get campus by name
-      tags:
-      - campus
-  /campus/university/{university}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus university
-        in: path
-        name: university
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.Campus'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get campus by university
       tags:
       - campus
   /class:
@@ -1461,372 +2014,6 @@ paths:
       summary: Create classes
       tags:
       - class
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: class data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.Class'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteClassResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Update class
-      tags:
-      - class
-  /class/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: class id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteClassResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Delete class
-      tags:
-      - class
-  /class/auditory/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: class auditory
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Class'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get class by auditory
-      tags:
-      - class
-  /class/id/{id}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: class id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Class'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get class by id
-      tags:
-      - class
-  /discipline:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: class data
-        in: body
-        name: data
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.CreateAcademicDisciplineRequest'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.CreateAcademicDisciplineResponse'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Create discipline
-      tags:
-      - discipline
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: university data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.AcademicDiscipline'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Update discipline
-      tags:
-      - discipline
-  /discipline/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: discipline id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Delete discipline
-      tags:
-      - discipline
-  /discipline/name/{ed_dir}/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: ed_dir
-        in: path
-        name: ed_dir
-        required: true
-        type: string
-      - description: name
-        in: path
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.AcademicDiscipline'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get discipline by ed dir and name
-      tags:
-      - discipline
-  /discipline/semester/{ed_dir}/{semester}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: ed_dir
-        in: path
-        name: ed_dir
-        required: true
-        type: string
-      - description: semester
-        in: path
-        name: semester
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.AcademicDiscipline'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get discipline by ed dir and semester
-      tags:
-      - discipline
-  /gpa/id/{id}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.Class'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get gpa by user id
-      tags:
-      - gpa
-  /group:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Group data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.CreateGroupRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.CreateGroupResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Create a new group
-      tags:
-      - group
   /login:
     post:
       consumes:
@@ -1890,7 +2077,8 @@ paths:
       summary: Create university
       tags:
       - university
-    put:
+  /work:
+    post:
       consumes:
       - application/json
       parameters:
@@ -1899,14 +2087,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/entities.University'
+          $ref: '#/definitions/entities.CreateUniversityRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
+            $ref: '#/definitions/entities.CreateUniversityResponse'
         "400":
           description: Bad Request
           schema:
@@ -1919,201 +2107,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
-      summary: Update university
-      tags:
-      - university
-  /university/{id}:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: university id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.UpdateDeleteUniversityResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Delete university
-      tags:
-      - university
-  /university/all:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.University'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get all universities
-      tags:
-      - university
-  /university/id/{id}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: university id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.University'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get university by name
-      tags:
-      - university
-  /university/name/{name}:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: university name
-        in: path
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.University'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Get university by name
-      tags:
-      - university
-  /user/add:
-    post:
-      consumes:
-      - application/json
-      description: Creates multiple students with their associated data (university,
-        faculty, department, group).
-      parameters:
-      - description: Array of user data to be added
-        in: body
-        name: data
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.AddUserDataRequest'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              items:
-                $ref: '#/definitions/entities.AddUserDataResponse'
-              type: array
-            type: array
-        "400":
-          description: Invalid request payload
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Create user
-      tags:
-      - user data
-  /work/login:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.LoginUserRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.LoginUserResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Login work user
+      summary: Login in hr
       tags:
       - work
 securityDefinitions:
