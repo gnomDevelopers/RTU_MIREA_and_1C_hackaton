@@ -55,7 +55,7 @@ func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/all [get]
+// @Router       /auth/university/all [get]
 func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 	h.logger.Debug().Msg("call h.services.UniversityService.GetAll")
 	universities, err := h.services.UniversityService.GetAll(c.Context())
@@ -79,7 +79,7 @@ func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/name/{name} [get]
+// @Router       /auth/university/name/{name} [get]
 func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	name := c.Params("name")
@@ -113,7 +113,7 @@ func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/id/{id} [get]
+// @Router       /auth/university/id/{id} [get]
 func (h *Handler) GetByIdUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")
@@ -144,7 +144,7 @@ func (h *Handler) GetByIdUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university [put]
+// @Router       /auth/university [put]
 func (h *Handler) UpdateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var university entities.University
@@ -181,7 +181,7 @@ func (h *Handler) UpdateUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/{id} [delete]
+// @Router       /auth/university/{id} [delete]
 func (h *Handler) DeleteUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")

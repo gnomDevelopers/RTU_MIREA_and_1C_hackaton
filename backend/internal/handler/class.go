@@ -55,7 +55,7 @@ func (h *Handler) CreateClasses(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class/id/{id} [get]
+// @Router       /auth/class/id/{id} [get]
 func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")
@@ -86,7 +86,7 @@ func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class/auditory/{name} [get]
+// @Router       /auth/class/auditory/{name} [get]
 func (h *Handler) GetByAuditoryClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	auditoryName := c.Params(":name")
@@ -116,7 +116,7 @@ func (h *Handler) GetByAuditoryClass(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class [put]
+// @Router       /auth/class [put]
 func (h *Handler) UpdateClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var class entities.Class
@@ -153,7 +153,7 @@ func (h *Handler) UpdateClass(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /class/{id} [delete]
+// @Router       /auth/class/{id} [delete]
 func (h *Handler) DeleteClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")
