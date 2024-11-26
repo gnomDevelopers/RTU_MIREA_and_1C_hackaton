@@ -15,8 +15,8 @@
           </svg>
         </div>
         <p v-else class="flex flex-row flex-wrap gap-x-1 text-base">
-          <span class="font-bold">{{ data.room }}</span>
-          {{ data.group }}{{ mySheduleText }}
+          <span class="font-bold">{{ data.place }}</span>
+          {{ data.groups.join(', ') }}{{ mySheduleText }}
         </p>
       </div>
       <div class="flex flex-col items-center justify-center gap-y-2 cursor-pointer px-2" v-if="data.title === '' && canAddFaculties">
@@ -32,7 +32,8 @@
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
-import { StatusCodes } from '@/helpers/constants';
+import { StatusCodes, type IScheduleItem } from '@/helpers/constants';
+import type { PropType } from 'vue';
 export default{
   props: {
     index: {
@@ -40,7 +41,7 @@ export default{
       required: true,
     },
     data: {
-      type: Object,
+      type: Object as PropType<IScheduleItem>,
       required: true,
     },
     canAddFaculties:{
