@@ -3,7 +3,7 @@ import { API_Authenticate, API_UserInfo } from "@/api/api";
 import { type TMaybeNumber, type TMaybeBoolean, type TMaybeString } from "@/helpers/constants";
 import { useUniversityStore } from "./universityStore";
 
-const universityStore = useUniversityStore();
+// const universityStore = useUniversityStore();
 
 export const useUserInfoStore = defineStore('userInfo', {
   state() {
@@ -42,18 +42,19 @@ export const useUserInfoStore = defineStore('userInfo', {
 
       })
       .finally(() => {
-        this.first_name = 'Денис';
-        this.last_name = 'Орлов',
-        this.father_name = 'Сергеевич';
-        this.university_id = 1;
-        this.faculty_id = 1;
-        this.department_id = 3;
-        this.educationalDirection = 'Фуллстек разработка';
-        this.role = 6;
-        this.email = 'orlov_d_s';
+        // this.first_name = 'Денис';
+        // this.last_name = 'Орлов',
+        // this.father_name = 'Сергеевич';
+        // this.university_id = 1;
+        // this.faculty_id = 1;
+        // this.department_id = 3;
+        // this.educationalDirection = 'Фуллстек разработка';
+        // this.role = 6;
+        // this.email = 'orlov_d_s';
       });
     },
     async onAuthorized(response: any){
+      const universityStore = useUniversityStore();
       this.authorized = response.data.authorized;
       this.userID = response.data.id;
       document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
