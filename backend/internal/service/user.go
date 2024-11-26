@@ -45,8 +45,12 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 	}
 
 	u := &entities.User{
-		Email:    request.Email,
-		Password: hashedPassword,
+		Email:      request.Email,
+		Password:   hashedPassword,
+		FirstName:  request.FirstName,
+		LastName:   request.LastName,
+		FatherName: request.FatherName,
+		Role:       request.Role,
 	}
 
 	r, err := s.repository.CreateUser(ctx, u)
