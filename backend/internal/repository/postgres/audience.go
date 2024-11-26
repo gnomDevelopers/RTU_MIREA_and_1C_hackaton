@@ -181,6 +181,34 @@ func (r *AudienceRepository) GetByCapacity(ctx context.Context, capacity int) (*
 	return &audiences, nil
 }
 
+func (r *AudienceRepository) GetByUniversity(ctx context.Context, university string) (*[]entities.Audience, error) {
+	if university == "" {
+		return nil, errors.New("")
+	}
+
+	var audiences []entities.Audience
+	query := `SELECT * FROM auditory JOIN campus ON auditory.campus = campus.name WHERE campus.university = $1;`
+	rows, err := r.db.QueryContext(ctx, query, university)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var audience entities.Audience
+		err = rows.Scan(&audience.Id, &audience.Name, &audience.Campus, &audience.Type, &audience.Profile, &audience.Capacity)
+		if err != nil {
+			return nil, err
+		}
+		audiences = append(audiences, audience)
+	}
+
+	if len(audiences) == 0 {
+		return nil, errors.New("there are no audiences with such parameters")
+	}
+
+	return &audiences, nil
+}
+
 func (r *AudienceRepository) Update(ctx context.Context, audience *entities.Audience) error {
 	if audience.Name == "" || audience.Campus == "" || audience.Type == "" || audience.Profile == "" || audience.Capacity == 0 {
 		return errors.New("")
