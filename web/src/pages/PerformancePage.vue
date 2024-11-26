@@ -6,7 +6,7 @@
         <IconPerformance class="w-20 us:w-36 h-20 us:h-36"/>
       </PageTitle>
 
-      <div>
+      <!-- <div>
         <SearchList 
           title="" 
           placeholder="Введите название группы"
@@ -17,7 +17,7 @@
           Выбранная группа: 
           <span class="underline cursor-pointer">{{ getSelectedGroup }}</span>
         </p>
-      </div>
+      </div> -->
 
       <div v-if="isSelectedGroup" class="flex flex-col p-4 rounded-lg gap-y-4 bg-color-light">
         <p class="text-center text-xl p-1 rounded-lg cursor-default bg-white">Выберите дисциплину</p>
@@ -178,6 +178,8 @@ export default{
   mounted() {
     this.setTableType();
     window.addEventListener('resize', this.setTableType);
+
+    this.performancePageStore.selectedGroupID = 1; // автовыбор
   },
   methods:{
     setTableType(){

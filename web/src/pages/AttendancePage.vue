@@ -8,13 +8,13 @@
 
       <div class="flex flex-col lg:flex-row justify-between flex-nowrap w-full gap-4">
         <div class="flex flex-col gap-y-4 items-center">
-          <SearchList 
+          <!-- <SearchList 
             title="" 
             placeholder="Выберите группу" 
             :search-list="groupsSearchList" 
             :item-component="getListItemComponent"
             class="h-80"
-          />
+          /> -->
           
           <ScheduleClassList v-if="isGroupSelected" :canAddFaculties="false"/>
           
@@ -94,6 +94,8 @@ export default {
   },
   mounted() {
     this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
+
+    this.attendancePageStore.selectedGroupID = 1; // автовыбор
 
     this.attendancePageStore.attendanceGroupMembers = [];
     for(let item of this.universityStore.groupMembersList){
