@@ -2054,10 +2054,10 @@ paths:
     get:
       consumes:
       - application/json
-      description: Validates the presence and correctness of the JWT token in the
-        Authorization header.
+      description: Validates the JWT token from the Authorization header, extracts
+        user ID, and generates a new access token.
       parameters:
-      - description: JWT token for authentication
+      - description: Bearer JWT token
         in: header
         name: Authorization
         required: true
@@ -2066,12 +2066,22 @@ paths:
       - application/json
       responses:
         "200":
-          description: JWT is valid
+          description: New access token and user ID
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Missing auth token
           schema:
             additionalProperties: true
             type: object
         "401":
-          description: JWT does not exist or is invalid
+          description: Invalid auth header or token
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
           schema:
             additionalProperties: true
             type: object

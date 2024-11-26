@@ -2568,7 +2568,7 @@ const docTemplate = `{
         },
         "/login": {
             "get": {
-                "description": "Validates the presence and correctness of the JWT token in the Authorization header.",
+                "description": "Validates the JWT token from the Authorization header, extracts user ID, and generates a new access token.",
                 "consumes": [
                     "application/json"
                 ],
@@ -2582,7 +2582,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "JWT token for authentication",
+                        "description": "Bearer JWT token",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -2590,14 +2590,28 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "JWT is valid",
+                        "description": "New access token and user ID",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Missing auth token",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
                         }
                     },
                     "401": {
-                        "description": "JWT does not exist or is invalid",
+                        "description": "Invalid auth header or token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
