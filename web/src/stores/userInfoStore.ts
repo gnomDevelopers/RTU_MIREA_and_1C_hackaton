@@ -28,12 +28,12 @@ export const useUserInfoStore = defineStore('userInfo', {
         this.onAuthorized(response);
       }catch (error){
         this.authorized = false;
-        this.userID = -1;
+        this.userID = null;
       }
     },
     async loadUserData(){
-      // if(this.userID === null) return;
-      if(this.userID === null) this.userID = 1;
+      console.log('load userinfo, userID: ', this.userID);
+      if(this.userID === null) return;
       API_UserInfo(this.userID)
       .then(response => {
 
@@ -55,12 +55,14 @@ export const useUserInfoStore = defineStore('userInfo', {
     },
     async onAuthorized(response: any){
       const universityStore = useUniversityStore();
-      this.authorized = response.data.authorized;
+      this.authorized = true;
       this.userID = response.data.id;
       document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
       document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 24 * 180}; secure; samesite=strict`;
       if(this.authorized){
+        console.log('authorized');
         await this.loadUserData(); // загрузка данных о пользователе
+        console.log('userData loaded')
         await universityStore.loadUniversityInfo(); // загрузка данных об институте
       }
     }
