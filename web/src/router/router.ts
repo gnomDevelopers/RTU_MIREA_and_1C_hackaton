@@ -107,16 +107,16 @@ router.beforeEach(async (to, from, next) => {
       });
     }
     if(!userInfoStore.authorized) {
-      //next({name: 'LoginPage'});
-      next();
+      next({name: 'LoginPage'});
+      // next();
       return;
     }
   }
 
-  // if(to.name === 'LoginPage' && userInfoStore.authorized){
-  //   next({name: 'MainPage'});
-  //   return;
-  // }
+  if(to.name === 'LoginPage' && userInfoStore.authorized){
+    next({name: 'MainPage'});
+    return;
+  }
 
   next();
 });
