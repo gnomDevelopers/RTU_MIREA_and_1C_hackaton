@@ -20,7 +20,7 @@ export function API_Authenticate(){
   return new Promise((resolve, reject) => {
     axios.get(`${API}/login`, {
       headers: {
-        Authentication: `Bearer ${GET_COOKIE('access_token')}`,
+        'Authentication': `Bearer ${GET_COOKIE('access_token')}`,
       }
     })
     .then(response => {
