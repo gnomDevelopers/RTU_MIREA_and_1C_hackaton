@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center scrollable px-4 lg:px-0">
     <div class="flex flex-col w-full lg:w-10/12 items-center gap-y-4 mb-4">
       <QrcodeStream @detect="onDecode"/>
-      <p>Статус: {{ status }} Расшифровано: {{ decoded[0].rawValue }}</p>
+      <p>Статус: {{ status }} Расшифровано: {{ decoded }}</p>
     </div>
   </div>
 </template>
@@ -14,13 +14,13 @@ export default {
   },
   data(){
     return {
-      decoded: {} as any,
+      decoded: undefined as any,
       status: 'waiting...',
     }
   },
   methods: {
-    async onDecode(decodedString: string){
-      this.decoded = await JSON.parse(decodedString);
+    onDecode(decodedString: string){
+      this.decoded = decodedString;
       this.status = 'decoded';
     },
   }

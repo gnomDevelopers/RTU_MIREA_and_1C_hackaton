@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-row items-stretch flex-nowrap min-h-8 rounded-lg bg-white">
-    <div class="flex flex-row justify-center items-center w-14 rounded-l-lg bg-color-bold">
+    <div class="flex flex-row justify-center flex-shrink-0 items-center w-14 rounded-l-lg bg-color-bold">
       <p class="text-xl text-white">{{ index }}</p>
     </div>
     <div class="flex flex-row items-center px-2 flex-grow">
       <p class="text-xl">{{ data.surname }} {{ data.name }} {{ data.thirdname }}</p>
     </div>
-    <div class="flex flex-row gap-x-1 px-2 py-1">
+    <div class="flex flex-row self-center gap-x-1 px-2 py-1">
       <div 
         @click="setAttendance(0)" 
         class="w-6 flex flex-row justify-center items-center rounded cursor-pointer unselected-attendace"

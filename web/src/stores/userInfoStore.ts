@@ -47,10 +47,10 @@ export const useUserInfoStore = defineStore('userInfo', {
         this.last_name = 'Постников',
         this.father_name = 'Сергеевич';
         this.university_id = 1;
-        this.faculty_id = null;
-        this.department_id = null;
-        this.educationalDirection = null;
-        this.role = 1;
+        this.faculty_id = 1;
+        this.department_id = 3;
+        this.educationalDirection = 'Фуллстек разработка';
+        this.role = 6;
         this.email = 'postnikov_d_s';
       });
     }
