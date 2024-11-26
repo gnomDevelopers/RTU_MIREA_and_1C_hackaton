@@ -103,6 +103,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/audience/type/:type", h.GetByTypeAudience)
 	authGroup.Get("/audience/profile/:profile", h.GetByProfileAudience)
 	authGroup.Get("/audience/capacity/:capacity", h.GetByCapacityAudience)
+	authGroup.Get("/audience/university/:university", h.GetByUniversityAudiences)
 	authGroup.Post("/audience", h.CreateAudiences)
 	authGroup.Put("/audience", h.UpdateAudience)
 	authGroup.Delete("/audience/:id", h.DeleteAudience)

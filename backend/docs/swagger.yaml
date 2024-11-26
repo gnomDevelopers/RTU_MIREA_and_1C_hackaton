@@ -438,6 +438,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create Audiences
       tags:
       - audience
@@ -471,6 +473,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update audience
       tags:
       - audience
@@ -503,6 +507,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete audience
       tags:
       - audience
@@ -535,6 +541,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by name
       tags:
       - audience
@@ -554,7 +562,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Audience'
+            items:
+              $ref: '#/definitions/entities.Audience'
+            type: array
         "400":
           description: Bad Request
           schema:
@@ -567,6 +577,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by capacity
       tags:
       - audience
@@ -599,6 +611,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by id
       tags:
       - audience
@@ -631,6 +645,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by profile
       tags:
       - audience
@@ -663,7 +679,45 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by type
+      tags:
+      - audience
+  /auth/audience/university/{university}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience university
+        in: path
+        name: university
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Audience'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get audience by university
       tags:
       - audience
   /auth/campus:

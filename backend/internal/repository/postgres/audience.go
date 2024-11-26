@@ -187,7 +187,7 @@ func (r *AudienceRepository) GetByUniversity(ctx context.Context, university str
 	}
 
 	var audiences []entities.Audience
-	query := `SELECT * FROM auditory JOIN campus ON auditory.campus = campus.name WHERE campus.university = $1;`
+	query := `SELECT auditory.id, auditory.name, auditory.campus, auditory.type, auditory.profile, auditory.capacity FROM auditory JOIN campus ON auditory.campus = campus.name WHERE campus.university = $1;`
 	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
 		return nil, err

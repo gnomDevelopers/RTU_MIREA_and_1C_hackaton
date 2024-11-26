@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/audience": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -74,6 +79,11 @@ const docTemplate = `{
         },
         "/auth/audience": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -125,6 +135,11 @@ const docTemplate = `{
         },
         "/auth/audience/campus/{name}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -174,6 +189,11 @@ const docTemplate = `{
         },
         "/auth/audience/capacity/{capacity}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -226,6 +246,11 @@ const docTemplate = `{
         },
         "/auth/audience/id/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -275,6 +300,11 @@ const docTemplate = `{
         },
         "/auth/audience/profile/{profile}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -324,6 +354,11 @@ const docTemplate = `{
         },
         "/auth/audience/type/{type}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -373,6 +408,11 @@ const docTemplate = `{
         },
         "/auth/audience/university/{university}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -425,6 +465,11 @@ const docTemplate = `{
         },
         "/auth/audience/{id}": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -3349,7 +3394,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/",
+	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "VUZ+ API",
 	Description:      "",
