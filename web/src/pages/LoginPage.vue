@@ -37,22 +37,26 @@ export default{
     ...mapStores(useStatusWindowStore, useUserInfoStore),
   },
   methods: {
-    sendLogin(){
+    async sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
-        API_Login(data)
-        .then(response => {
+
+        try{
+          const response = await API_Login(data);
           this.statusWindowStore.deteleStatusWindow(stID);
           this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
-          this.$router.push({name: 'MainPage'});
-        })
-        .catch(error => {
+
+          await this.userInfoStore.onAuthorized(response); // процесс авторизации
+
+          this.$router.push({name: 'MainPage'});//редирект
+        }catch (error: any){
           this.statusWindowStore.deteleStatusWindow(stID);
+          
           if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
           else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
-        })
-        return;
+        }
+
       }
 
       if(this.login.value === ''){
