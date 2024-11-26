@@ -181,7 +181,7 @@ func (h *Handler) GetByProfileAudience(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param capacity path string true "audience capacity"
-// @Success 200 {object} entities.Audience
+// @Success 200 {object} []entities.Audience
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -203,6 +203,39 @@ func (h *Handler) GetByCapacityAudience(c *fiber.Ctx) error {
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
 	return c.Status(fiber.StatusOK).JSON(audiences)
+}
+
+// GetByUniversityAudiences
+// @Tags audience
+// @Summary      Get audience by university
+// @Accept       json
+// @Produce      json
+// @Param university path string true "audience university"
+// @Success 200 {object} []entities.Audience
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /auth/audience/university/{university} [get]
+func (h *Handler) GetByUniversityAudiences(c *fiber.Ctx) error {
+	// TODO: добавить проверку на роль проректора
+	name := c.Params("university")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid university name")
+	}
+
+	campuses, err := h.services.CampusService.GetByUniversity(c.Context(), decodedName)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(campuses)
 }
 
 // UpdateAudience
