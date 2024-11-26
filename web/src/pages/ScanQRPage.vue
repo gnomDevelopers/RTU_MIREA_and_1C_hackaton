@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     onDecode(decodedString: string){
-      this.decoded = decodedString;
+      this.decoded = JSON.parse(decodedString);
       this.status = 'decoded';
     },
   }
