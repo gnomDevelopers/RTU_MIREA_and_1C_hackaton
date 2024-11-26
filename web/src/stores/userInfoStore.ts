@@ -24,24 +24,19 @@ export const useUserInfoStore = defineStore('userInfo', {
   actions: {
     async Authenticate(){
       try{
-        const response:any = await API_Authenticate();
+        const response = await API_Authenticate();
         this.onAuthorized(response);
+
       }catch (error){
         this.authorized = false;
         this.userID = null;
       }
     },
     async loadUserData(){
-      console.log('load userinfo, userID: ', this.userID);
-      if(this.userID === null) return;
-      API_UserInfo(this.userID)
-      .then(response => {
+      if(this.userID === null) return; // пользователь не авторизован
+      try{
+        const response = await API_UserInfo(this.userID);
 
-      })
-      .catch(error => {
-
-      })
-      .finally(() => {
         // this.first_name = 'Денис';
         // this.last_name = 'Орлов',
         // this.father_name = 'Сергеевич';
@@ -51,14 +46,18 @@ export const useUserInfoStore = defineStore('userInfo', {
         // this.educationalDirection = 'Фуллстек разработка';
         // this.role = 6;
         // this.email = 'orlov_d_s';
-      });
+      }catch(error){
+
+      }
     },
     async onAuthorized(response: any){
       const universityStore = useUniversityStore();
       this.authorized = true;
       this.userID = response.data.id;
+      
       document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
-      document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 24 * 180}; secure; samesite=strict`;
+      document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=strict`;
+      
       if(this.authorized){
         console.log('authorized');
         await this.loadUserData(); // загрузка данных о пользователе
