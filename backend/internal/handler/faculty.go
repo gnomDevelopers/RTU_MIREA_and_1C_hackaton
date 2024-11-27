@@ -41,7 +41,7 @@ func (h *Handler) GetFacultiesByUniversityName(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        body body entities.CreateFacultyRequest true "Faculty data"
-// @Success      200 {object} entities.CreateFacultyнуResponse "Created faculty details"
+// @Success      200 {object} entities.CreateFacultyResponse "Created faculty details"
 // @Failure      400 {object} map[string]interface{} "Invalid request"
 // @Failure      500 {object} map[string]interface{} "Internal server error"
 // @Router       /auth/faculty [post]
@@ -60,29 +60,29 @@ func (h *Handler) CreateFaculty(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(res)
 }
 
-// GetAllFaculties
-// @Tags         faculties
-// @Summary      Retrieve all faculties
-// @Description  Retrieves a list of all faculties based on optional filters provided in the request body.
-// @Accept       json
-// @Produce      json
-// @Param        body body entities.GetFacultyRequest true "Request parameters for filtering faculties"
-// @Success      200 {array} entities.Faculty "List of all faculties"
-// @Failure      400 {object} map[string]interface{} "Invalid request data"
-// @Failure      500 {object} map[string]interface{} "Internal server error"
-// @Router       /auth/faculties [get]
-// @Security ApiKeyAuth
-func (h *Handler) GetAllFaculties(c *fiber.Ctx) error {
-	var req entities.GetFacultyRequest
-	err := c.BodyParser(&req)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	res, err := h.services.FacultyService.GetAll(c.Context(), &req)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(res)
-}
+//// GetAllFaculties
+//// @Tags         faculties
+//// @Summary      Retrieve all faculties
+//// @Description  Retrieves a list of all faculties based on optional filters provided in the request body.
+//// @Accept       json
+//// @Produce      json
+//// @Param        body body entities.GetFacultyRequest true "Request parameters for filtering faculties"
+//// @Success      200 {array} entities.Faculty "List of all faculties"
+//// @Failure      400 {object} map[string]interface{} "Invalid request data"
+//// @Failure      500 {object} map[string]interface{} "Internal server error"
+//// @Router       /auth/faculties [get]
+//// @Security ApiKeyAuth
+//func (h *Handler) GetAllFaculties(c *fiber.Ctx) error {
+//	var req entities.GetFacultyRequest
+//	err := c.BodyParser(&req)
+//	if err != nil {
+//		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+//	}
+//
+//	res, err := h.services.FacultyService.GetAll(c.Context(), &req)
+//	if err != nil {
+//		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+//	}
+//
+//	return c.Status(fiber.StatusOK).JSON(res)
+//}

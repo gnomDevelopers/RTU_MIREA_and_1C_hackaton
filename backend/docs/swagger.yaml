@@ -289,11 +289,6 @@ definitions:
       university:
         type: string
     type: object
-  entities.GetFacultyRequest:
-    properties:
-      university_name:
-        type: string
-    type: object
   entities.GetGradesBySubject:
     properties:
       grade_class:
@@ -1522,43 +1517,6 @@ paths:
       summary: Get discipline by ed dir and semester
       tags:
       - discipline
-  /auth/faculties:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a list of all faculties based on optional filters provided
-        in the request body.
-      parameters:
-      - description: Request parameters for filtering faculties
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/entities.GetFacultyRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of all faculties
-          schema:
-            items:
-              $ref: '#/definitions/entities.Faculty'
-            type: array
-        "400":
-          description: Invalid request data
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Retrieve all faculties
-      tags:
-      - faculties
   /auth/faculties/university/{university}:
     get:
       consumes:

@@ -1584,62 +1584,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/faculties": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Retrieves a list of all faculties based on optional filters provided in the request body.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "faculties"
-                ],
-                "summary": "Retrieve all faculties",
-                "parameters": [
-                    {
-                        "description": "Request parameters for filtering faculties",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.GetFacultyRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of all faculties",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Faculty"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request data",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/auth/faculties/university/{university}": {
             "get": {
                 "security": [
@@ -3782,14 +3726,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "university": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.GetFacultyRequest": {
-            "type": "object",
-            "properties": {
-                "university_name": {
                     "type": "string"
                 }
             }
