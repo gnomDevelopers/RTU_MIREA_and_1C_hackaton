@@ -140,7 +140,7 @@ export interface IAPI_Audience_Update extends IAPI_Audience_Create{
 export interface IAPI_Campus_Create {
   address: string,
   name: string,
-  university_id: number
+  university: string
 };
 
 export interface IAPI_Campus_Update extends IAPI_Campus_Create {
