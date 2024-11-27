@@ -89,6 +89,7 @@ export interface IUser{
 //userList item interface
 export interface IUserGet extends IUser{
   id: number,
+  group_id: number,
 }
 
 export interface IGroup {

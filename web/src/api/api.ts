@@ -109,7 +109,11 @@ export function API_SendFile(data: FormData){
 //создание аудитории
 export function API_Audience_Create(data: IAPI_Audience_Create[]){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/audience`, data)
+    axios.post(`${API}/auth/audience`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Audiences create success: ', response);
       resolve(response);
@@ -170,7 +174,7 @@ export function API_Audience_Get(universityName: string){
   });
 };
 
-/////// campus ///////
+/////// CAMPUS ///////
 
 //создание кампуса
 export function API_Campus_Create(data: IAPI_Campus_Create){
@@ -252,6 +256,25 @@ export function API_University_Users_Get(universityName: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('Users get  error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение всех групп вуза
+export function API_University_Groups_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/group`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Groups get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Groups get error: ', error);
       reject(error);
     })
   });

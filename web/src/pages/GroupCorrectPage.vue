@@ -100,7 +100,7 @@ export default{
         this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Некорректное фио студента!');
         return;
       }
-      this.universityStore.groupMembersList.push({id: 12, name: input[1], surname: input[0], thirdname: input[2], role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка'});
+      this.universityStore.groupMembersList.push({id: 12, name: input[1], surname: input[0], thirdname: input[2], role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка', group_id: 1});
       this.universityStore.groupMembersList = this.universityStore.sortPeople(this.universityStore.groupMembersList);
       this.inputStudentFIO = '';
     },

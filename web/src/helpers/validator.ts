@@ -6,7 +6,7 @@ export function ValidUserLogin(value: string): IValidAnswer{
   if(value.length < 4) {
     return {value: '', error: 'Слишком короткий логин!'};
   }
-  if(value.length > 20) {
+  if(value.length > 60) {
     return {value: '', error: 'Слишком длинный логин!'};
   }
   if(value.match(/^[a-z_]+@[a-z\.]+\.[a-z]{2,6}$/) === null) {
