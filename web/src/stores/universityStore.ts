@@ -28,7 +28,7 @@ export const useUniversityStore = defineStore('university', {
       studentsList: [] as IUserGet[],
 
       groupsList: [] as IGroup[],
-      facultativesList: [] as IItemList[],
+      facultativesList: [] as IGroup[],
       groupMembersList: [] as IUserGet[],
       groupMembersScores: [] as IGroupScores[],
 
@@ -91,7 +91,7 @@ export const useUniversityStore = defineStore('university', {
 
     },
 
-    
+
     async loadCampus(universityName: string){
       API_Campus_Get_University(universityName)
         .then((response: any) => {

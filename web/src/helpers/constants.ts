@@ -93,7 +93,6 @@ export interface IUserGet extends IUser{
 }
 
 export interface IGroup {
-  id: number,
   name: string,
 }
 

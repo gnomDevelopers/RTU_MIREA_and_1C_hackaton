@@ -69,7 +69,7 @@
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
-import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day } from '@/helpers/constants';
+import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day, type IGroup } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import SearchList from '@/entities/searchList.vue';
@@ -88,8 +88,9 @@ export default {
 
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
-      for(let item of <IUserGet[]>this.universityStore.groupsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      if(this.universityStore.groupsList.length === 0) return arr;
+      for(let item of <IGroup[]>this.universityStore.groupsList){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
       }
       console.log('universityStore.groupsList: ', this.universityStore.groupsList);
       console.log('groupsList: ', arr);
@@ -98,6 +99,7 @@ export default {
 
     teachersSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
+      if(this.universityStore.teachersList.length === 0) return arr;
       for(let item of <IUserGet[]>this.universityStore.teachersList){
         arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
       }
@@ -108,8 +110,9 @@ export default {
 
     facultativesList():ISearchList[]{
       const arr:ISearchList[] = [];
-      for(let item of <IUserGet[]>this.universityStore.facultativesList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      if(this.universityStore.facultativesList.length === 0) return arr;
+      for(let item of <IGroup[]>this.universityStore.facultativesList){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
       }
       console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
       console.log('facultativesList: ', arr);
