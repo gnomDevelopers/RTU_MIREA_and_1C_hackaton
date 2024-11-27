@@ -50,8 +50,8 @@
             :placeholder="getScheduleTargetText"
             :searchList="getScheduleTargetList" 
             :itemComponent="getListItemComponent"
-            class="h-80"
           />
+            <!-- class="h-80" -->
         </Transition>
         
         <div class="flex flex-col items-center gap-y-2">
@@ -89,6 +89,7 @@ export default {
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.universityStore.groupsList.length === 0) return arr;
+      console.log('grouplist before for');
       for(let item of <IGroup[]>this.universityStore.groupsList){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
       }
@@ -100,6 +101,7 @@ export default {
     teachersSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.universityStore.teachersList.length === 0) return arr;
+      console.log('teachersList before for');
       for(let item of <IUserGet[]>this.universityStore.teachersList){
         arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
       }
@@ -111,6 +113,7 @@ export default {
     facultativesList():ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.universityStore.facultativesList.length === 0) return arr;
+      console.log('facultativesList before for');
       for(let item of <IGroup[]>this.universityStore.facultativesList){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
       }
