@@ -44,7 +44,7 @@ func (h *Handler) GetFacultiesByUniversityName(c *fiber.Ctx) error {
 // @Success      200 {object} entities.CreateFacultyResponse "Created faculty details"
 // @Failure      400 {object} map[string]interface{} "Invalid request"
 // @Failure      500 {object} map[string]interface{} "Internal server error"
-// @Router       /auth/faculties [post]
+// @Router       /auth/faculty [post]
 // @Security ApiKeyAuth
 func (h *Handler) CreateFaculty(c *fiber.Ctx) error {
 	var req entities.CreateFacultyRequest
