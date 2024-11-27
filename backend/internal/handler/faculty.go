@@ -19,7 +19,7 @@ import (
 // @Router       /auth/faculties/university/{university} [get]
 // @Security ApiKeyAuth
 func (h *Handler) GetFacultiesByUniversityName(c *fiber.Ctx) error {
-	universityName := c.Params("group")
+	universityName := c.Params("university")
 	decodedUniversityName, err := url.QueryUnescape(universityName)
 	req := entities.GetFacultyRequest{
 		UniversityName: decodedUniversityName,
@@ -41,7 +41,7 @@ func (h *Handler) GetFacultiesByUniversityName(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        body body entities.CreateFacultyRequest true "Faculty data"
-// @Success      200 {object} entities.CreateFacultyResponse "Created faculty details"
+// @Success      200 {object} entities.CreateFacultyнуResponse "Created faculty details"
 // @Failure      400 {object} map[string]interface{} "Invalid request"
 // @Failure      500 {object} map[string]interface{} "Internal server error"
 // @Router       /auth/faculty [post]
