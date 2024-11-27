@@ -60,6 +60,7 @@ type Service struct {
 	ScoreService              *ScoreService
 	FacultyService            *FacultyService
 	AcademicDisciplineService *AcademicDisciplineService
+	DepartmentService         *DepartmentService
 	conf                      *config.Config
 }
 
@@ -76,5 +77,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		ScoreService:              NewScoreService(repositories.Score),
 		FacultyService:            NewFacultyService(repositories.Faculty),
 		AcademicDisciplineService: NewAcademicDisciplineService(repositories.AcademicDiscipline),
+		DepartmentService:         NewDepartmentService(repositories.Department),
 	}
 }

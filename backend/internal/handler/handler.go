@@ -130,5 +130,7 @@ func (h *Handler) Router() *fiber.App {
 
 	authGroup.Get("/gpa/id/:id", h.GetByUserId)
 
+	authGroup.Get("/department/university/:university", h.GetByUniversityDepartments)
+
 	return f
 }

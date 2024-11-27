@@ -111,6 +111,7 @@ type DepartmentRepository interface {
 	GetById(context.Context, int) (*entities.Department, error)
 	GetByName(context.Context, string) (*entities.Department, error)
 	GetAll(context.Context) (*[]entities.Department, error)
+	GetByUniversity(context.Context, string) (*[]entities.Department, error)
 	Update(context.Context, *entities.UpdateDepartmentRequest) error
 	Delete(context.Context, int) error
 }
