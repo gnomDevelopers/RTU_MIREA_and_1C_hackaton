@@ -20,5 +20,6 @@ func NewRepository(db *sql.DB) *repository.Repository {
 		Score:              NewScoreRepository(db),
 		AcademicDiscipline: NewAcademicDisciplineRepository(db),
 		Gpa:                NewGpaRepository(db),
+		Work:               NewWorkRepository(db),
 	}
 }

@@ -141,6 +141,13 @@ type GpaRepository interface {
 	GetByHighestGpa(context.Context, float64) (*[]entities.Gpa, error)
 }
 
+type WorkRepository interface {
+	Exists(context.Context, int) (bool, error)
+	ExistsHR(context.Context, string) (bool, error)
+	Create(context.Context, *entities.WorkUser) error
+	CreateHR(context.Context, *entities.HR) error
+}
+
 type Repository struct {
 	User               UserRepository
 	UserData           UserDataRepository
@@ -156,4 +163,5 @@ type Repository struct {
 	Score              ScoreRepository
 	AcademicDiscipline AcademicDisciplineRepository
 	Gpa                GpaRepository
+	Work               WorkRepository
 }
