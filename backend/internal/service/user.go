@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"server/internal/config"
 	"server/internal/entities"
@@ -15,13 +16,15 @@ import (
 
 type UserService struct {
 	repository repository.UserRepository
+	uniRepo    repository.UniversityRepository
 	timeout    time.Duration
 	conf       *config.Config
 }
 
-func NewUserService(repository repository.UserRepository, conf *config.Config) *UserService {
+func NewUserService(repository repository.UserRepository, uniRepo repository.UniversityRepository, conf *config.Config) *UserService {
 	return &UserService{
 		repository: repository,
+		uniRepo:    uniRepo,
 		timeout:    time.Duration(10) * time.Second,
 		conf:       conf,
 	}
@@ -31,7 +34,17 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	exists, err := s.repository.Exists(ctx, request.Email)
+	group, err := s.uniRepo.GetById(ctx, request.UniversityID)
+	if err != nil {
+		return nil, err
+	}
+	postfix := group.Postfix
+
+	fullName := util.GenerateLogin(fmt.Sprintf("%s %s %s", request.LastName, request.FirstName, request.FatherName))
+
+	email := fmt.Sprintf("%s_%s@vuzplus.ru", fullName, postfix)
+
+	exists, err := s.repository.Exists(ctx, email)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +58,7 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 	}
 
 	u := &entities.User{
-		Email:        request.Email,
+		Email:        email,
 		Password:     hashedPassword,
 		FirstName:    request.FirstName,
 		LastName:     request.LastName,

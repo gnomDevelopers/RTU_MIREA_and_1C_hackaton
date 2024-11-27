@@ -34,7 +34,6 @@ type UserInfo struct {
 
 type CreateUserRequest struct {
 	Password             string `json:"password"`
-	Email                string `json:"email"`
 	LastName             string `json:"last_name"`
 	FirstName            string `json:"first_name"`
 	FatherName           string `json:"father_name"`

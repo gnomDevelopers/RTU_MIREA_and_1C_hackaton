@@ -49,8 +49,6 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/login", h.Login)
 	f.Get("/login", h.CheckAuth)
 
-	f.Post("/user/add", h.CreateUser)
-
 	f.Post("/work", h.LoginWork)
 
 	//f.Get("/user/:id", h.GetUserByID)
@@ -62,6 +60,7 @@ func (h *Handler) Router() *fiber.App {
 
 	authGroup.Get("/user/university/:university", h.GetUsersByUniversity)
 	authGroup.Get("/user/:id", h.GetUserByID)
+	authGroup.Post("/user", h.CreateUser)
 
 	authGroup.Get("/user_schedule", h.GetUserSchedule)
 	authGroup.Post("/user_schedule", h.CreateUserSchedule)
@@ -94,9 +93,9 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Put("/university", h.UpdateUniversity)
 	authGroup.Delete("/university/:id", h.DeleteUniversity)
 
-	authGroup.Post("/auth/faculty", h.CreateFaculty)
-	authGroup.Get("/auth/faculties", h.GetAllFaculties)
-	authGroup.Get("/auth/faculties/university/:university", h.GetFacultiesByUniversityName)
+	authGroup.Post("/faculty", h.CreateFaculty)
+	authGroup.Get("/faculties", h.GetAllFaculties)
+	authGroup.Get("/faculties/university/:university", h.GetFacultiesByUniversityName)
 
 	authGroup.Get("/campus/all", h.GetAllCampuses)
 	authGroup.Get("/campus/id/:id", h.GetByIdCampus)
