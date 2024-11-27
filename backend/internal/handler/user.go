@@ -131,3 +131,16 @@ func (h *Handler) CheckAuth(c *fiber.Ctx) error {
 		"id":           id,
 	})
 }
+
+func (h *Handler) CreateUser(c *fiber.Ctx) error {
+	var user entities.CreateUserRequest
+	if err := c.BodyParser(&user); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	req, err := h.services.UserService.CreateUser(c.Context(), &user)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{})
+	}
+	return c.Status(fiber.StatusOK).JSON(req)
+}

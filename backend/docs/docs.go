@@ -1584,6 +1584,167 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/faculties": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of all faculties based on optional filters provided in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "faculties"
+                ],
+                "summary": "Retrieve all faculties",
+                "parameters": [
+                    {
+                        "description": "Request parameters for filtering faculties",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetFacultyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of all faculties",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Faculty"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new faculty record in the system.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "faculties"
+                ],
+                "summary": "Create a new faculty",
+                "parameters": [
+                    {
+                        "description": "Faculty data",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateFacultyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created faculty details",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateFacultyResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/faculties/university/{university}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Retrieves a list of faculties based on the specified university name provided in the URL parameter.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "faculties"
+                ],
+                "summary": "Retrieve faculties by university name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "University name",
+                        "name": "group",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of faculties for the specified university",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Faculty"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid university name",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/auth/gpa/id/{id}": {
             "get": {
                 "security": [
@@ -1760,6 +1921,11 @@ const docTemplate = `{
         },
         "/auth/group": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -3318,6 +3484,25 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CreateFacultyRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "university": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.CreateFacultyResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.CreateGradeRequest": {
             "type": "object",
             "properties": {
@@ -3415,6 +3600,28 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Faculty": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "university": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.GetFacultyRequest": {
+            "type": "object",
+            "properties": {
+                "university_name": {
                     "type": "string"
                 }
             }

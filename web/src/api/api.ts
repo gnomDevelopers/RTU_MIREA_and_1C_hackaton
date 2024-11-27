@@ -14,15 +14,14 @@ import {
   type IAPI_University_Update 
 } from '../helpers/constants';
 
-const Auth_Header = {
-  Authorization: 'Bearer ' + GET_COOKIE('access_token'),
-};
 
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
     axios.get(`${API}/login`,  {
-      headers: Auth_Header
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
      })
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
@@ -148,6 +147,25 @@ export function API_Audience_Delete(audienceID: number){
   });
 };
 
+//получение всех аудиторий по универу
+export function API_Audience_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/audience/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Audience get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Audience get error: ', error);
+      reject(error);
+    })
+  });
+};
+
 /////// campus ///////
 
 //создание кампуса
@@ -196,15 +214,40 @@ export function API_Campus_Delete(campusID: number){
 };
 
 //получение всех кампусов
-export function API_Campus_Get_University(universityID: number){
+export function API_Campus_Get_University(universityName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/campus/university_id/${universityID}`)
+    axios.get(`${API}/auth/campus/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
-      if(DEVMODE) console.log('Campus get by university success: ', response);
+      if(DEVMODE) console.log('Campus get success: ', response);
       resolve(response);
     })
     .catch(error => {
-      if(DEVMODE) console.log('Campus get by university error: ', error);
+      if(DEVMODE) console.log('Campus get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// university users ///////
+
+//получение всех пользователей вуза
+export function API_University_Users_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/user/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Users get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Users get  error: ', error);
       reject(error);
     })
   });
@@ -328,8 +371,10 @@ export function API_Schedule_Get_ClassName(className: string){
 //получение факультативных занятий
 export function API_Facultatives_Get(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/auth/schedule/search/name/`, {
-      headers: Auth_Header
+    axios.get(`${API}/auth/schedule/search/name`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
     })
     .then(response => {
       if(DEVMODE) console.log('Facultatives get success: ', response);
