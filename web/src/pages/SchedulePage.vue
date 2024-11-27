@@ -83,15 +83,32 @@ export default {
     ScheduleSearchListItem,
     ScheduleClassList,
   },
-  data(){
-    return{
-      groupsSearchList: [] as ISearchList[],
-      teachersSearchList: [] as ISearchList[],
-      facultativeList: [] as ISearchList[],
-    }
-  },
   computed:{
     ...mapStores(useScheduleStore, useUniversityStore),
+
+    groupsSearchList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      for(let item of <IUserGet[]>this.universityStore.groupsList){
+        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
+
+    teachersSearchList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      for(let item of <IUserGet[]>this.universityStore.teachersList){
+        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
+
+    facultativesList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      for(let item of <IUserGet[]>this.universityStore.facultativesList){
+        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
 
     getScheduleTargetText(){
       return SCHEDULE_TARGET_TEXT[this.scheduleStore.scheduleTarget];
@@ -99,7 +116,7 @@ export default {
     getScheduleTargetList(){
       if (this.scheduleStore.scheduleTarget === 0) return this.groupsSearchList;
       else if(this.scheduleStore.scheduleTarget === 1) return this.teachersSearchList;
-      else if(this.scheduleStore.scheduleTarget === 2) return this.facultativeList;
+      else if(this.scheduleStore.scheduleTarget === 2) return this.facultativesList;
       return [] as ISearchList[];
     },
     getListItemComponent(){
@@ -129,43 +146,5 @@ export default {
       }
     }
   },
-  watch: {
-    'universityStore.groupsList' : {
-      handler(val: IUserGet[]){
-        this.groupsSearchList = [];
-        for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-        console.log('universityStore.groupsList: ', this.universityStore.groupsList);
-        console.log('groupsSearchList: ', this.groupsSearchList);
-      },
-      immediate: true,
-      deep: true,
-    },
-    'universityStore.teachersList' : {
-      handler(val: IUserGet[]){
-        this.teachersSearchList = [];
-        for(let item of val){
-          this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-        console.log('universityStore.teachersList: ', this.universityStore.teachersList);
-        console.log('teachersSearchList: ', this.teachersSearchList);
-      },
-      immediate: true,
-      deep: true,
-    },
-    'universityStore.facultativesList' : {
-      handler(val: IUserGet[]){
-        this.facultativeList = [];
-        for(let item of val){
-          this.facultativeList.push({id: item.id, search_field: item.name, data: item});
-        }
-        console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
-        console.log('facultativesSearchList: ', this.facultativeList);
-      },
-      immediate: true,
-      deep: true,
-    },
-  }
 };
 </script>
