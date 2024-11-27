@@ -42,7 +42,7 @@ func (h *Handler) GetByUniversityDepartments(c *fiber.Ctx) error {
 }
 
 // CreateDepartment
-// @Tags         departments
+// @Tags         department
 // @Summary      Create a new department
 // @Description  Creates a new department with the provided details.
 // @Accept       json

@@ -2536,7 +2536,7 @@ paths:
       - ApiKeyAuth: []
       summary: Create a new department
       tags:
-      - departments
+      - department
   /login:
     get:
       consumes:

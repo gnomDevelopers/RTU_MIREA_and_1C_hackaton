@@ -3142,7 +3142,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "departments"
+                    "department"
                 ],
                 "summary": "Create a new department",
                 "parameters": [
