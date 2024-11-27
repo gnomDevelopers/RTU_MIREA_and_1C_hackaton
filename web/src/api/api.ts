@@ -11,7 +11,8 @@ import {
   type IAPI_User_Schedule_Create, 
   type IAPI_User_Schedule_Update, 
   type IAPI_University_Create, 
-  type IAPI_University_Update 
+  type IAPI_University_Update, 
+  type IUser
 } from '../helpers/constants';
 
 
@@ -241,6 +242,25 @@ export function API_Campus_Get_University(universityName: string){
 };
 
 /////// university users ///////
+
+//создание пользователей для вуза
+export function API_University_Users_Create(data: IUser[]){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/auth/user/`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Users create success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Users create  error: ', error);
+      reject(error);
+    })
+  });
+};
 
 //получение всех пользователей вуза
 export function API_University_Users_Get(universityName: string){

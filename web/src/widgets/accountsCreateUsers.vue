@@ -137,6 +137,7 @@ import {
   StatusCodes, 
   type IUser,
 } from '../helpers/constants';
+import { API_University_Users_Create } from '@/api/api';
 
 export default {
   data(){
@@ -220,23 +221,28 @@ export default {
     },
     sendUsersList(){
       if(this.usersList.length === 0) return;
-
-      for(let item of this.usersList){
-        switch(item.role){
-          case 2: this.universityStore.decansList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 3: this.universityStore.educationDepartmentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 4: this.universityStore.zavCafsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 5: this.universityStore.teachersList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 6: this.universityStore.studentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+      API_University_Users_Create(this.usersList)
+      .then((response: any) => {
+        //распределяем пользователей по соответствующим спискам
+        for(let item of this.usersList){
+          switch(item.role){
+            case 2: this.universityStore.decansList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 3: this.universityStore.educationDepartmentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 4: this.universityStore.zavCafsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 5: this.universityStore.teachersList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 6: this.universityStore.studentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+          }
         }
-      }
-      //очистка буфера пользователей
-      this.usersList = [];
-      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-      setTimeout(() => {
+        //очистка буфера пользователей
+        this.usersList = [];
+        this.statusWindowStore.deteleStatusWindow(stID);
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Пользователи добавлены!');
-      }, 460);
-      //api request
+      })
+      .catch(error => {
+        this.statusWindowStore.deteleStatusWindow(stID);
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при добавлении пользователей!');
+      });
     },
     showFaculty(role: number){
       return this.InfoFieldsRole[role]?.includes(this.InfoFields[0]);
