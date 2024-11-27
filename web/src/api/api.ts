@@ -14,15 +14,14 @@ import {
   type IAPI_University_Update 
 } from '../helpers/constants';
 
-const Auth_Header = {
-  Authorization: 'Bearer ' + GET_COOKIE('access_token'),
-};
 
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
     axios.get(`${API}/login`,  {
-      headers: Auth_Header
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
      })
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
@@ -143,6 +142,25 @@ export function API_Audience_Delete(audienceID: number){
     })
     .catch(error => {
       if(DEVMODE) console.log('Audience delete error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение всех аудиторий по универу
+export function API_Audience_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/audience/university/`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Audience get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Audience get error: ', error);
       reject(error);
     })
   });
@@ -329,7 +347,9 @@ export function API_Schedule_Get_ClassName(className: string){
 export function API_Facultatives_Get(){
   return new Promise((resolve, reject) => {
     axios.get(`${API}/auth/schedule/search/name/`, {
-      headers: Auth_Header
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
     })
     .then(response => {
       if(DEVMODE) console.log('Facultatives get success: ', response);
