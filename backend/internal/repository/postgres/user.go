@@ -88,7 +88,7 @@ func (r *UserRepository) GetByUniversity(ctx context.Context, university string)
 
 	var users []entities.User
 
-	query := `SELECT email, last_name, first_name, father_name, university_id, role, group_id, faculty_id, department_id, educational_direction FROM users JOIN university ON users.university_id = university.id WHERE university.name = $1;`
+	query := `SELECT users.id, email, last_name, first_name, father_name, university_id, role, group_id, faculty_id, department_id, educational_direction FROM users JOIN university ON users.university_id = university.id WHERE university.name = $1;`
 	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func (r *UserRepository) GetByUniversity(ctx context.Context, university string)
 
 	for rows.Next() {
 		var user entities.User
-		err = rows.Scan(&user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.GroupID, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
+		err = rows.Scan(&user.ID, &user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.GroupID, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
 		if err != nil {
 			return nil, err
 		}
@@ -123,20 +123,6 @@ func (r *UserRepository) Exists(ctx context.Context, email string) (bool, error)
 	}
 	return false, nil
 }
-
-//createAdmin := &entities.User{
-//		Email:                req.Email,
-//		Password:             req.Password,
-//		FirstName:            req.FirstName,
-//		LastName:             req.LastName,
-//		FatherName:           req.FatherName,
-//		Role:                 "Администратор",
-//		UniversityID:         1,
-//		FacultyID:            1,
-//		GroupID:                1,
-//		DepartmentID:         1,
-//		EducationalDirection: "admin",
-//	}
 
 func (r *UserRepository) CreateUser(ctx context.Context, user *entities.User) (*entities.User, error) {
 	var lastInsertId int
