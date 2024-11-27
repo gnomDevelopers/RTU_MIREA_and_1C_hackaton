@@ -53,19 +53,24 @@ func (s *UserService) CreateUsers(ctx context.Context, requests []entities.Creat
 			return nil, fmt.Errorf("user with email %s already exists", email)
 		}
 
-		hashedPassword, err := util.HashPassword(request.Password)
+		password := util.GenerateTemporaryPassword(15)
+		hashedPassword, err := util.HashPassword(password)
 		if err != nil {
 			return nil, err
 		}
 
 		u := &entities.User{
-			Email:        email,
-			Password:     hashedPassword,
-			FirstName:    request.FirstName,
-			LastName:     request.LastName,
-			FatherName:   request.FatherName,
-			Role:         request.Role,
-			UniversityID: request.UniversityID,
+			Email:                email,
+			Password:             hashedPassword,
+			FirstName:            request.FirstName,
+			LastName:             request.LastName,
+			FatherName:           request.FatherName,
+			Role:                 request.Role,
+			UniversityID:         request.UniversityID,
+			FacultyID:            1,
+			DepartmentID:         1,
+			EducationalDirection: "null",
+			GroupID:              1,
 		}
 
 		switch request.Role {
@@ -94,7 +99,12 @@ func (s *UserService) CreateUsers(ctx context.Context, requests []entities.Creat
 		}
 
 		responses = append(responses, entities.CreateUserResponse{
-			ID: r.ID,
+			ID:         r.ID,
+			FirstName:  r.FirstName,
+			LastName:   r.LastName,
+			FatherName: r.FatherName,
+			Email:      r.Email,
+			Password:   password,
 		})
 	}
 

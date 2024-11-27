@@ -39,10 +39,10 @@ type CreateUserRequest struct {
 	FatherName           string `json:"father_name"`
 	UniversityID         int    `json:"university_id"`
 	Role                 string `json:"role"`
-	FacultyID            int    `json:"faculty_id"`
-	GroupID              int    `json:"group_id"`
-	DepartmentID         int    `json:"department_id"`
-	EducationalDirection string `json:"educational_direction"`
+	FacultyID            int    `json:"faculty_id,omitempty"`
+	GroupID              int    `json:"group_id,omitempty"`
+	DepartmentID         int    `json:"department_id,omitempty"`
+	EducationalDirection string `json:"educational_direction,omitempty"`
 }
 
 type CreateUserResponse struct {
