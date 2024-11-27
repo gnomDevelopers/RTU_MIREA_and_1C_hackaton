@@ -146,7 +146,7 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 }
 
 // GetUserByID
-// @Tags         users
+// @Tags         user
 // @Summary      Retrieve a user by ID
 // @Description  Retrieves the user details based on the specified user ID provided in the URL parameter.
 // @Accept       json
