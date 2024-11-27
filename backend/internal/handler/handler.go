@@ -126,7 +126,8 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Put("/class", h.UpdateClass)
 	authGroup.Delete("/class/:id", h.DeleteClass)
 
-	authGroup.Get("/gpa/id/:id", h.GetByUserId)
+	authGroup.Get("/gpa/id/:id", h.GetGpaByUserId)
+	authGroup.Put("/gpa", h.UpdateGpa)
 
 	authGroup.Get("/department/university/:university", h.GetByUniversityDepartments)
 	authGroup.Post("/department", h.CreateDepartment)
