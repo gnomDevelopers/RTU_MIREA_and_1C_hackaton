@@ -45,6 +45,7 @@ export default{
       return 'РТУ МИРЭА';
     },
     getRoleName(){
+      if(this.userInfoStore.role === null) return 'none';
       return ROLES_NAME[this.userInfoStore.role];
     },
     getFIO(){
