@@ -21,6 +21,7 @@ export default {
     ...mapStores(useUserInfoStore, useUniversityStore),
   },
   async mounted(){
+    console.log('test check');
     await this.userInfoStore.Authenticate();
   },
 };
