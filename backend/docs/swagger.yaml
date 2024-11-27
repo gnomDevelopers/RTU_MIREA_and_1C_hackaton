@@ -2026,6 +2026,40 @@ paths:
       tags:
       - schedule
   /auth/university:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: university data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateUniversityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.CreateUniversityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create university
+      tags:
+      - university
     put:
       consumes:
       - application/json
@@ -2567,41 +2601,6 @@ paths:
       summary: User login
       tags:
       - authentication
-  /university:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: university data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.CreateUniversityRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/entities.CreateUniversityResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Create university
-      tags:
-      - university
   /work:
     post:
       consumes:
