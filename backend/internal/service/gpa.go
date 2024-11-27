@@ -34,3 +34,11 @@ func (s *GpaService) GetById(c context.Context, id int) (*entities.Gpa, error) {
 	gpa, err := s.repository.Get(ctx, id)
 	return gpa, err
 }
+
+func (s *GpaService) GetHighest(c context.Context, value float64) (*[]entities.Gpa, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	gpa, err := s.repository.GetByHighestGpa(ctx, value)
+	return gpa, err
+}

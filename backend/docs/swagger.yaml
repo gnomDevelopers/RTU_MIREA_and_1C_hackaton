@@ -545,7 +545,7 @@ info:
   title: VUZ+ API
   version: "1.0"
 paths:
-  /audience:
+  /auth/audience:
     post:
       consumes:
       - application/json
@@ -584,7 +584,6 @@ paths:
       summary: Create Audiences
       tags:
       - audience
-  /auth/audience:
     put:
       consumes:
       - application/json
@@ -1689,7 +1688,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Class'
+            $ref: '#/definitions/entities.Gpa'
         "400":
           description: Bad Request
           schema:
@@ -1814,6 +1813,40 @@ paths:
       summary: Create a new group
       tags:
       - group
+  /auth/percentile/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Class'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get percentile by user id
+      tags:
+      - gpa
   /auth/schedule/group/{group}:
     get:
       consumes:

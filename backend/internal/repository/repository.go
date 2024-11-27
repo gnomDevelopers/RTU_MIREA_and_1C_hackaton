@@ -138,6 +138,7 @@ type AcademicDisciplineRepository interface {
 type GpaRepository interface {
 	Update(context.Context, int, float64) error
 	Get(context.Context, int) (*entities.Gpa, error)
+	GetByHighestGpa(context.Context, float64) (*[]entities.Gpa, error)
 }
 
 type Repository struct {

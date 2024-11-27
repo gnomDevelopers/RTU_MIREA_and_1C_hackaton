@@ -45,6 +45,26 @@ func (r *GpaRepository) Get(ctx context.Context, id int) (*entities.Gpa, error) 
 	return &gpa, nil
 }
 
+func (r *GpaRepository) GetByHighestGpa(ctx context.Context, value float64) (*[]entities.Gpa, error) {
+	var gpases []entities.Gpa
+	query := `SELECT user_id, value FROM gpa WHERE value > $1`
+	rows, err := r.db.QueryContext(ctx, query, value)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var gpa entities.Gpa
+		err = rows.Scan(&gpa.UserId, &gpa.Value)
+		if err != nil {
+			return nil, err
+		}
+		gpases = append(gpases, gpa)
+	}
+
+	return &gpases, nil
+}
+
 func (r *GpaRepository) Update(ctx context.Context, id int, value float64) error {
 	if check, _ := r.Exists(ctx, id); check != true {
 		err := r.Create(ctx, id)
