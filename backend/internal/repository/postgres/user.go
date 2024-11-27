@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"server/internal/entities"
 )
 
@@ -38,6 +39,35 @@ func (r *UserRepository) GetByEmail(ctx context.Context, login string) (*entitie
 
 	return &user, nil
 
+}
+
+func (r *UserRepository) GetByUniversity(ctx context.Context, university string) (*[]entities.User, error) {
+	if university == "" {
+		return nil, errors.New("university is empty")
+	}
+
+	var users []entities.User
+
+	query := `SELECT email, last_name, first_name, father_name, university_id, role, group_id, faculty_id, department_id, educational_direction FROM users JOIN university ON users.university_id = university.id WHERE university.name = $1;`
+	rows, err := r.db.QueryContext(ctx, query, university)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var user entities.User
+		err = rows.Scan(&user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.GroupID, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if len(users) == 0 {
+		return nil, errors.New("there are no users with such parameters")
+	}
+
+	return &users, nil
 }
 
 func (r *UserRepository) Exists(ctx context.Context, email string) (bool, error) {

@@ -8,6 +8,7 @@ import (
 type UserRepository interface {
 	GetById(context.Context, int) (*entities.User, error)
 	GetByEmail(context.Context, string) (*entities.User, error)
+	GetByUniversity(context.Context, string) (*[]entities.User, error)
 	Exists(context.Context, string) (bool, error)
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
 }

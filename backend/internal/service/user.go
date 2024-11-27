@@ -160,3 +160,14 @@ func (s *UserService) GetEducationalDirection(c context.Context, userID int) (st
 	}
 	return user.EducationalDirection, nil
 }
+
+func (s *UserService) GetByUniversity(c context.Context, university string) (*[]entities.User, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	users, err := s.repository.GetByUniversity(ctx, university)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}

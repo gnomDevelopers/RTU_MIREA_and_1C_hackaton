@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"net/url"
 	"server/internal/entities"
 	"server/internal/log"
 	"strconv"
@@ -109,10 +110,14 @@ func (h *Handler) GetByIdClass(c *fiber.Ctx) error {
 // @Security ApiKeyAuth
 func (h *Handler) GetByAuditoryClass(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
-	auditoryName := c.Params(":name")
+	name := c.Params("name")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid university name")
+	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.GetByAuditory")
-	class, err := h.services.ClassService.GetByAuditory(c.Context(), auditoryName)
+	class, err := h.services.ClassService.GetByAuditory(c.Context(), decodedName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
