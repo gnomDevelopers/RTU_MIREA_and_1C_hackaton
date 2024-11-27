@@ -129,7 +129,11 @@ export function API_Audience_Create(data: IAPI_Audience_Create[]){
 //изменение аудитории
 export function API_Audience_Update(data: IAPI_Audience_Update){
   return new Promise((resolve, reject) => {
-    axios.put(`${API}/audience`, data)
+    axios.put(`${API}/auth/audience`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Audience update success: ', response);
       resolve(response);
@@ -144,7 +148,11 @@ export function API_Audience_Update(data: IAPI_Audience_Update){
 //удаление аудитории
 export function API_Audience_Delete(audienceID: number){
   return new Promise((resolve, reject) => {
-    axios.delete(`${API}/audience/${audienceID}`)
+    axios.delete(`${API}/audience/${audienceID}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Audience delete success: ', response);
       resolve(response);
