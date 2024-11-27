@@ -145,6 +145,71 @@
     background-color: var(--btn-color-normal);
 }
 
+.border-hr-color{
+    border-color: var(--bg-color-bold);
+}
+
+.scrollable{
+    --scroll-bar-width: 8px;
+    --border-radius-scroll-bar: 2px; /*calc(var(--scroll-bar-width) / 2);*/
+    --bg-color-0: var(--bg-color-bold); /*slider color*/
+    --bg-color-1: #c4d3e2; /*track color*/
+    overflow-y: scroll;
+    scrollbar-width:var(--scroll-bar-width);
+}
+.scrollable::-webkit-scrollbar{
+    width: var(--scroll-bar-width);
+}
+.scrollable::-moz-scrollbar {
+    width: var(--scroll-bar-width);
+}
+.scrollable::-webkit-scrollbar-track{
+    background-color: var(--bg-color-1);
+    border-radius: var(--border-radius-scroll-bar);
+    transition: background-color 1s ease-in-out;
+}
+.scrollable::-moz-scrollbar-track {
+    background-color: var(--bg-color-1);
+    border-radius: var(--border-radius-scroll-bar);
+    transition: background-color 1s ease-in-out;
+}
+.scrollable::-webkit-scrollbar-thumb{
+    background-color: transparent;
+    border-radius: var(--border-radius-scroll-bar);
+    transition: background-color 1s ease-in-out;
+}
+.scrollable::-moz-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: var(--border-radius-scroll-bar);
+    transition: background-color 1s ease-in-out;
+}
+.scrollable:hover::-webkit-scrollbar-thumb{
+    background-color: var(--bg-color-0);
+}
+.scrollable:hover::-moz-scrollbar-thumb {
+    background-color: var(--bg-color-0);
+}
+.scrollable:hover::-webkit-scrollbar-track{
+    background-color: var(--bg-color-1);
+}
+.scrollable:hover::-moz-scrollbar-track {
+    background-color: var(--bg-color-1);
+}
+
+.scrollable-table{
+    @apply scrollable;
+    overflow-y: auto;
+    overflow-x: scroll;
+}
+.scrollable-table::-webkit-scrollbar{
+    width: auto;
+    height: 8px;
+}
+.scrollable-table::-moz-scrollbar {
+    width: auto;
+    height: 8px;
+}
+
 @keyframes timeLine{
     from{
       width: 100%;
