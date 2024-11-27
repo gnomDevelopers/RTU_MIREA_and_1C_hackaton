@@ -54,6 +54,12 @@ type Group interface {
 	Create(context.Context, *entities.CreateGroupRequest) (*entities.CreateGroupResponse, error)
 }
 
+type Achievement interface {
+	GetByID(context.Context, int) (*[]entities.Achievement, error)
+	Create(context.Context, *entities.CreateAchievementRequest) (*entities.CreateAchievementResponse, error)
+	Delete(context.Context, int) error
+}
+
 type Service struct {
 	UserService               *UserService
 	UniversityService         *UniversityService
@@ -68,6 +74,7 @@ type Service struct {
 	AcademicDisciplineService *AcademicDisciplineService
 	DepartmentService         *DepartmentService
 	GpaService                *GpaService
+	AchievementService        *AchievementService
 	conf                      *config.Config
 }
 
@@ -86,5 +93,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		AcademicDisciplineService: NewAcademicDisciplineService(repositories.AcademicDiscipline),
 		DepartmentService:         NewDepartmentService(repositories.Department),
 		GpaService:                NewGpaService(repositories.Gpa),
+		AchievementService:        NewAchievementService(repositories.AchievementRepository),
 	}
 }

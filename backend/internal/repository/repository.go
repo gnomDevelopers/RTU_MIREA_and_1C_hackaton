@@ -140,19 +140,26 @@ type GpaRepository interface {
 	Get(context.Context, int) (*entities.Gpa, error)
 }
 
+type AchievementRepository interface {
+	Create(context.Context, *entities.CreateAchievementRequest) (*entities.CreateAchievementResponse, error)
+	GetById(context.Context, int) (*[]entities.Achievement, error)
+	Delete(context.Context, int) error
+}
+
 type Repository struct {
-	User               UserRepository
-	UserData           UserDataRepository
-	University         UniversityRepository
-	Campus             CampusRepository
-	Group              GroupRepository
-	Audience           AudienceRepository
-	Class              ClassRepository
-	Faculty            FacultyRepository
-	Department         DepartmentRepository
-	UserSchedule       UserScheduleRepository
-	Grade              GradeRepository
-	Score              ScoreRepository
-	AcademicDiscipline AcademicDisciplineRepository
-	Gpa                GpaRepository
+	User                  UserRepository
+	UserData              UserDataRepository
+	University            UniversityRepository
+	Campus                CampusRepository
+	Group                 GroupRepository
+	Audience              AudienceRepository
+	AchievementRepository AchievementRepository
+	Class                 ClassRepository
+	Faculty               FacultyRepository
+	Department            DepartmentRepository
+	UserSchedule          UserScheduleRepository
+	Grade                 GradeRepository
+	Score                 ScoreRepository
+	AcademicDiscipline    AcademicDisciplineRepository
+	Gpa                   GpaRepository
 }

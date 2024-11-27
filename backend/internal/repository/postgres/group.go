@@ -56,7 +56,7 @@ func (r *GroupRepository) GetByUserID(ctx context.Context, userID int) (*entitie
 
 func (r *GroupRepository) GetByName(ctx context.Context, name string) (*entities.Group, error) {
 	var group entities.Group
-	query := `SELECT id, name, FROM "group" WHERE name = $1`
+	query := `SELECT id, name FROM "group" WHERE name = $1`
 	row := r.db.QueryRowContext(ctx, query, name)
 	err := row.Scan(&group.ID, &group.Name)
 	if err != nil {
