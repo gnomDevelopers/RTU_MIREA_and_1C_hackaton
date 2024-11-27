@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { API_Authenticate, API_UserInfo } from "@/api/api";
-import { type TMaybeNumber, type TMaybeBoolean, type TMaybeString } from "@/helpers/constants";
+import { type TMaybeNumber, type TMaybeBoolean, type TMaybeString, ROLES_NAME, ROLES, GET_ROLEID_BY_ROLENAME } from "@/helpers/constants";
 import { useUniversityStore } from "./universityStore";
 
 // const universityStore = useUniversityStore();
@@ -17,7 +17,7 @@ export const useUserInfoStore = defineStore('userInfo', {
       faculty_id: null as TMaybeNumber, // id факультета
       department_id: null as TMaybeNumber, // id кафедры
       educationalDirection: null as TMaybeString, // название направления
-      role: 1 as number, // роль
+      role: null as TMaybeNumber, // роль
       email: '',
     }
   },
@@ -35,17 +35,27 @@ export const useUserInfoStore = defineStore('userInfo', {
     async loadUserData(){
       if(this.userID === null) return; // пользователь не авторизован
       try{
-        const response = await API_UserInfo(this.userID);
+        const response:any = await API_UserInfo(this.userID);
 
-        // this.first_name = 'Денис';
-        // this.last_name = 'Орлов',
-        // this.father_name = 'Сергеевич';
-        // this.university_id = 1;
-        // this.faculty_id = 1;
-        // this.department_id = 3;
-        // this.educationalDirection = 'Фуллстек разработка';
-        // this.role = 6;
-        // this.email = 'orlov_d_s';
+        this.first_name = response.data.first_name;
+        this.last_name = response.data.last_name,
+        this.father_name = response.data.father_name;
+        this.university = response.data.university;
+        this.faculty_id = response.data.faculty_id;
+        this.department_id = response.data.department_id;
+        this.educationalDirection = response.data.educational_direction;
+        this.role = GET_ROLEID_BY_ROLENAME(response.data.role);
+        this.email = response.data.email;
+        
+        console.log('firstName: ', this.first_name)
+        console.log('lastName: ', this.last_name)
+        console.log('fatherName: ', this.father_name)
+        console.log('Univer: ', this.university)
+        console.log('Faculty: ', this.faculty_id)
+        console.log('Department: ', this.department_id)
+        console.log('EducDir: ', this.educationalDirection)
+        console.log('Role: ', this.role)
+        console.log('Email: ', this.email)
       }catch(error){
 
       }
@@ -62,6 +72,6 @@ export const useUserInfoStore = defineStore('userInfo', {
         await this.loadUserData(); // загрузка данных о пользователе
         await universityStore.loadUniversityInfo(); // загрузка данных об институте
       }
-    }
+    },
   }
 });
