@@ -72,7 +72,7 @@ func (r *GroupRepository) GetAll(ctx context.Context, university string) (*[]ent
 		JOIN university univ ON u.university_id = univ.id
 		WHERE univ.name = $1
 	`
-	rows, err := r.db.QueryContext(ctx, query)
+	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
 		return nil, err
 	}

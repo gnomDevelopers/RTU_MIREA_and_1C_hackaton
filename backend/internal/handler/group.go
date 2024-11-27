@@ -47,7 +47,6 @@ func (h *Handler) GetAllGroups(c *fiber.Ctx) error {
 	decodedName, err := url.QueryUnescape(name)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-
 	}
 
 	req := &entities.GetGroupRequest{
