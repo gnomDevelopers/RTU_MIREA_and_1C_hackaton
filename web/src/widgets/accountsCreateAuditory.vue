@@ -180,7 +180,7 @@ export default {
 
       API_Audience_Create(this.auditoryList)
       .then(async (resolve:any ) => {
-        await this.universityStore.loadCampus(this.userInfoStore.university!);
+        await this.universityStore.loadAuditories(this.userInfoStore.university!);
 
         //очищаем буфер аудиторий
         this.auditoryList = [];
