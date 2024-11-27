@@ -84,11 +84,8 @@ func (r *DepartmentRepository) GetAll(ctx context.Context) (*[]entities.Departme
 func (r *DepartmentRepository) GetByUniversity(ctx context.Context, university string) (*[]entities.Department, error) {
 	var departments []entities.Department
 	query := `
-		SELECT department.id AS department_id, department.name AS department_name
-		FROM department
-		JOIN users ON department.id = users.department_id
-		JOIN university ON users.university_id = university.id
-		WHERE university.name = $1 AND department_id <> 1;`
+		SELECT department.id AS department_id, department.name FROM department
+		WHERE department.university = $1`
 
 	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
