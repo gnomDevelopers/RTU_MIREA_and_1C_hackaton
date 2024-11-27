@@ -178,7 +178,8 @@ export const useUniversityStore = defineStore('university', {
     async loadFacultatives(){
       API_Facultatives_Get()
       .then((response:any) => {
-        this.facultativesList = response.data;
+        this.facultativesList = [];
+        if(response.data !== null) this.facultativesList = response.data;
       })
       .catch(error => {
         this.facultativesList = [];
@@ -187,7 +188,11 @@ export const useUniversityStore = defineStore('university', {
     async loadAllGroups(){
       API_University_Groups_Get()
       .then((response:any) => {
-        this.groupsList = response.data.groups;
+        this.groupsList = [];
+        if(response.data === null) return;
+        for(let group of response.data){
+          this.groupsList.push({name: group.group});
+        }
       })
       .catch(error => {
         this.groupsList = [];
