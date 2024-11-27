@@ -166,6 +166,18 @@ definitions:
       id:
         type: integer
     type: object
+  entities.CreateFacultyRequest:
+    properties:
+      name:
+        type: string
+      university:
+        type: string
+    type: object
+  entities.CreateFacultyResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   entities.CreateGradeRequest:
     properties:
       class_id:
@@ -221,6 +233,20 @@ definitions:
   entities.ErrorResponse:
     properties:
       error:
+        type: string
+    type: object
+  entities.Faculty:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      university:
+        type: string
+    type: object
+  entities.GetFacultyRequest:
+    properties:
+      university_name:
         type: string
     type: object
   entities.GetGradesBySubject:
@@ -1390,6 +1416,112 @@ paths:
       summary: Get discipline by ed dir and semester
       tags:
       - discipline
+  /auth/faculties:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all faculties based on optional filters provided
+        in the request body.
+      parameters:
+      - description: Request parameters for filtering faculties
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.GetFacultyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all faculties
+          schema:
+            items:
+              $ref: '#/definitions/entities.Faculty'
+            type: array
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve all faculties
+      tags:
+      - faculties
+    post:
+      consumes:
+      - application/json
+      description: Creates a new faculty record in the system.
+      parameters:
+      - description: Faculty data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateFacultyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Created faculty details
+          schema:
+            $ref: '#/definitions/entities.CreateFacultyResponse'
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new faculty
+      tags:
+      - faculties
+  /auth/faculties/university/{university}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of faculties based on the specified university
+        name provided in the URL parameter.
+      parameters:
+      - description: University name
+        in: path
+        name: group
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of faculties for the specified university
+          schema:
+            items:
+              $ref: '#/definitions/entities.Faculty'
+            type: array
+        "400":
+          description: Invalid university name
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve faculties by university name
+      tags:
+      - faculties
   /auth/gpa/id/{id}:
     get:
       consumes:
@@ -1526,6 +1658,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create a new group
       tags:
       - group
