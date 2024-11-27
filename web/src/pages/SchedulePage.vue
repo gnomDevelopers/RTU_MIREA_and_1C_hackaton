@@ -104,7 +104,7 @@ export default {
       if(this.universityStore.teachersList.length === 0) return arr;
       console.log('teachersList before for');
       for(let item of <IUserGet[]>this.universityStore.teachersList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
       console.log('teachersList: ', arr);
       return arr;

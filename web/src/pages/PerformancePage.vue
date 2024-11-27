@@ -42,7 +42,7 @@
           <tbody>
             <tr v-for="(item, index) in getGroupMembersScores" :key="item.user.id">
               <td class="font-semibold h-9">{{ index + 1 }}</td>
-              <td class="max-w-96 h-9 overflow-hidden text-nowrap text-left">{{ item.user.surname }} {{ item.user.name }} {{ item.user.thirdname }}</td>
+              <td class="max-w-96 h-9 overflow-hidden text-nowrap text-left">{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.father_name }}</td>
             </tr>
           </tbody>
         </table>
@@ -103,7 +103,7 @@
           <tbody>
             <tr v-for="(item, index) in getGroupMembersScores">
               <td class="font-semibold">{{ index + 1 }}</td>
-              <td>{{ item.user.surname }} {{ item.user.name }} {{ item.user.thirdname }}</td>
+              <td>{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.father_name }}</td>
               <td v-for="score in item.scores">{{ (score !== 0 ? score : '') }}</td>
               <td class="font-semibold">{{ item.avg.toFixed(2) }}</td>
               <td class="font-semibold">{{ item.gpa.toFixed(2) }}</td>
@@ -201,7 +201,7 @@ export default{
       handler(val: IUserGet[]){
         this.groupsSearchList = [];
         for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+          this.groupsSearchList.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
         }
       },
       immediate: true,

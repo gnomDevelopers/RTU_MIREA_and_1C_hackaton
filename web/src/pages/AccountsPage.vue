@@ -134,62 +134,50 @@ export default {
 
     auditoriesSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('auditoriesList: ', this.universityStore.auditoriesList);
       if(this.universityStore.auditoriesList.length === 0) return arr;
       for(let item of this.universityStore.auditoriesList){
         arr.push({id: item.id, search_field: item.name, data: item});
       }
-      console.log('auditoriesSearchList: ', arr);
       return arr;
     },
     decansSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('decansList: ', this.universityStore.decansList);
       if(this.universityStore.decansList.length === 0) return arr;
       for(let item of this.universityStore.decansList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
-      console.log('decansSearchList: ', arr);
       return arr;
     },
     educationDepartmentsSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('educationDepartmentsList: ', this.universityStore.educationDepartmentsList);
       if(this.universityStore.educationDepartmentsList.length === 0) return arr;
       for(let item of this.universityStore.educationDepartmentsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
-      console.log('educationDepartmentsSearchList: ', arr);
       return arr;
     },
     zavCafsSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('zavCafsList: ', this.universityStore.zavCafsList);
       if(this.universityStore.zavCafsList.length === 0) return arr;
       for(let item of this.universityStore.zavCafsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
-      console.log('zavCafsSearchList: ', arr);
       return arr;
     },
     teachersSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('teachersList: ', this.universityStore.teachersList);
       if(this.universityStore.teachersList.length === 0) return arr;
       for(let item of this.universityStore.teachersList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
-      console.log('teachersSearchList: ', arr);
       return arr;
     },
     studentsSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('studentsList: ', this.universityStore.studentsList);
       if(this.universityStore.studentsList.length === 0) return arr;
       for(let item of this.universityStore.studentsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
-      console.log('studentsSearchList: ', arr);
       return arr;
     },
   },

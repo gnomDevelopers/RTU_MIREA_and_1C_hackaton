@@ -78,7 +78,7 @@
       <div v-for="user in usersList" class="flex flex-row gap-x-2 px-2 py-1 items-center rounded-lg bg-color-light">
         
         <div class="flex flex-row flex-grow justify-start items-center">
-          <p class="text-lg">{{ user.surname }} {{user.name}} {{ user.thirdname }}</p>
+          <p class="text-lg">{{ user.last_name }} {{user.first_name}} {{ user.father_name }}</p>
         </div>
 
         <div class="flex flex-row flex-wrap gap-1 px-2">
@@ -130,6 +130,7 @@
 import { mapStores } from 'pinia';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { useUniversityStore } from '@/stores/universityStore';
+import { useUserInfoStore } from '@/stores/userInfoStore';
 import { 
   ROLES_NAME, 
   INFO_FIELDS, 
@@ -137,6 +138,7 @@ import {
   StatusCodes, 
   type IUser,
 } from '../helpers/constants';
+import { API_University_Users_Create } from '@/api/api';
 
 export default {
   data(){
@@ -156,7 +158,7 @@ export default {
     }
   },
   computed: {
-    ...mapStores(useStatusWindowStore, useUniversityStore),
+    ...mapStores(useStatusWindowStore, useUniversityStore, useUserInfoStore),
 
     getFaculties(){
       return this.universityStore.facultiesList;
@@ -179,13 +181,15 @@ export default {
         (this.showEducationalDirection(this.userRole) ? this.showEducationalDirection(this.userRole) && this.userEducationalDirections !== '' : true)
       ){
         this.usersList.push({
-          name: this.userName, 
-          surname: this.userSurname, 
-          thirdname: this.userThirdname, 
+          first_name: this.userName, 
+          last_name: this.userSurname, 
+          father_name: this.userThirdname, 
           role: this.userRole,
           faculty_id: this.userFaculty,
           department_id: this.userDepartment,
           educational_direction: this.userEducationalDirections,
+          group_id: 2,
+          university_id: this.universityStore.getUniversityID(this.userInfoStore.university!),
         });
 
         this.userName = '';
@@ -220,23 +224,38 @@ export default {
     },
     sendUsersList(){
       if(this.usersList.length === 0) return;
-
-      for(let item of this.usersList){
-        switch(item.role){
-          case 2: this.universityStore.decansList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 3: this.universityStore.educationDepartmentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 4: this.universityStore.zavCafsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 5: this.universityStore.teachersList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
-          case 6: this.universityStore.studentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+      // "department_id": 0,
+      // "educational_direction": "string",
+      // "faculty_id": 0,
+      // "father_name": "string",
+      // "first_name": "string",
+      // "group_id": 0,
+      // "last_name": "string",
+      // "password": "string",
+      // "role": "string",
+      // "university_id": 0
+      API_University_Users_Create(this.usersList)
+      .then((response: any) => {
+        //распределяем пользователей по соответствующим спискам
+        for(let item of this.usersList){
+          switch(item.role){
+            case 2: this.universityStore.decansList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 3: this.universityStore.educationDepartmentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 4: this.universityStore.zavCafsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 5: this.universityStore.teachersList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+            case 6: this.universityStore.studentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
+          }
         }
-      }
-      //очистка буфера пользователей
-      this.usersList = [];
-      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-      setTimeout(() => {
+        //очистка буфера пользователей
+        this.usersList = [];
+        this.statusWindowStore.deteleStatusWindow(stID);
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Пользователи добавлены!');
-      }, 460);
-      //api request
+      })
+      .catch(error => {
+        this.statusWindowStore.deteleStatusWindow(stID);
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при добавлении пользователей!');
+      });
     },
     showFaculty(role: number){
       return this.InfoFieldsRole[role]?.includes(this.InfoFields[0]);

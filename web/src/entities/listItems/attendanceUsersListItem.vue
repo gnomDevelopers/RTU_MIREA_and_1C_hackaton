@@ -4,7 +4,7 @@
       <p class="text-xl text-white">{{ index }}</p>
     </div>
     <div class="flex flex-row items-center px-2 flex-grow">
-      <p class="text-xl">{{ data.surname }} {{ data.name }} {{ data.thirdname }}</p>
+      <p class="text-xl">{{ data.last_name }} {{ data.first_name }} {{ data.father_name }}</p>
     </div>
     <div class="flex flex-row self-center gap-x-1 px-2 py-1">
       <div 
