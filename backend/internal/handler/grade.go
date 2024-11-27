@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"net/url"
 	"server/internal/entities"
@@ -21,7 +20,6 @@ import (
 // @Router       /auth/grade [post]
 // @Security ApiKeyAuth
 func (h *Handler) CreateGrade(c *fiber.Ctx) error {
-	// TODO: добавить проверку на роль
 	var grade entities.Grade
 	err := c.BodyParser(&grade)
 	if err != nil {
@@ -49,6 +47,63 @@ func (h *Handler) CreateGrade(c *fiber.Ctx) error {
 	}
 
 	err = h.services.ScoreService.Update(c.Context(), &entities.Score{UserId: grade.UserId, Sum: grade.Value, Count: 1, SubjectName: class.Name})
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	h.logger.Debug().Msg("call h.services.GroupService.GetByUserID")
+	group, err := h.services.GroupService.GetByUserID(c.Context(), id)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	h.logger.Debug().Msg("call h.services.UserData.GetEducationalDirection")
+	edDir, err := h.services.UserService.GetEducationalDirection(c.Context(), id)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	h.logger.Debug().Msg("call h.services.ClassService.SearchNamesWithGroup")
+	classNames, err := h.services.ClassService.SearchNamesWithGroup(c.Context(), group.Name)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	var disciplines []entities.AcademicDiscipline
+	for _, className := range classNames {
+		discipline, _ := h.services.AcademicDisciplineService.GetByEducationalDirectionAndName(c.Context(), className, edDir)
+
+		if discipline != nil {
+			disciplines = append(disciplines, *discipline)
+		}
+	}
+
+	sumAllWorkHour := 0
+	gpa := 0.0
+	for _, discipline := range disciplines {
+		score, _ := h.services.ScoreService.Get(c.Context(), &entities.Score{UserId: id, SubjectName: discipline.Name})
+		if score != nil {
+			disciplineHour := discipline.IndividualHours + discipline.PracticeHours + discipline.LectureHours + discipline.LabHours
+			sumAllWorkHour += disciplineHour
+			gpa += (float64(score.Sum) / float64(score.Count)) * float64(disciplineHour)
+		}
+	}
+	gpa /= float64(sumAllWorkHour)
+
+	h.logger.Debug().Msg("call h.services.ClassService.SearchNamesWithGroup")
+	err = h.services.GpaService.Update(c.Context(), grade.UserId, gpa)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -103,7 +158,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	fmt.Println("OK")
+
 	for i := range *classes {
 		if (*classes)[i].Grades == nil {
 			(*classes)[i].Grades = []entities.Grade{}

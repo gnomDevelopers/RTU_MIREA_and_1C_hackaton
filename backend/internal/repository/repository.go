@@ -134,6 +134,11 @@ type AcademicDisciplineRepository interface {
 	Delete(context.Context, int) error
 }
 
+type GpaRepository interface {
+	Update(context.Context, int, float64) error
+	Get(context.Context, int) (*entities.Gpa, error)
+}
+
 type Repository struct {
 	User               UserRepository
 	UserData           UserDataRepository
@@ -148,4 +153,5 @@ type Repository struct {
 	Grade              GradeRepository
 	Score              ScoreRepository
 	AcademicDiscipline AcademicDisciplineRepository
+	Gpa                GpaRepository
 }

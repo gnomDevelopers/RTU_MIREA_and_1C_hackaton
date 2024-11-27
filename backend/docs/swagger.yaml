@@ -282,6 +282,13 @@ definitions:
           $ref: '#/definitions/entities.UserSchedule'
         type: array
     type: object
+  entities.Gpa:
+    properties:
+      user_id:
+        type: integer
+      value:
+        type: number
+    type: object
   entities.Grade:
     properties:
       class_id:
@@ -1565,6 +1572,41 @@ paths:
       summary: Retrieve faculties by university name
       tags:
       - faculties
+  /auth/gpa:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Gpa'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UpdateDeleteCampusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update gpa
+      tags:
+      - gpa
   /auth/gpa/id/{id}:
     get:
       consumes:
