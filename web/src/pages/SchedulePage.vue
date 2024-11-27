@@ -136,6 +136,8 @@ export default {
         for(let item of val){
           this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
         }
+        console.log('universityStore.groupsList: ', this.universityStore.groupsList);
+        console.log('groupsSearchList: ', this.groupsSearchList);
       },
       immediate: true,
       deep: true,
@@ -146,6 +148,8 @@ export default {
         for(let item of val){
           this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
         }
+        console.log('universityStore.teachersList: ', this.universityStore.teachersList);
+        console.log('teachersSearchList: ', this.teachersSearchList);
       },
       immediate: true,
       deep: true,
@@ -156,6 +160,8 @@ export default {
         for(let item of val){
           this.facultativeList.push({id: item.id, search_field: item.name, data: item});
         }
+        console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
+        console.log('facultativesSearchList: ', this.facultativeList);
       },
       immediate: true,
       deep: true,

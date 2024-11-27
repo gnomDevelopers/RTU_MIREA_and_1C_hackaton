@@ -90,6 +90,8 @@ export const useUniversityStore = defineStore('university', {
       this.groupMembersScores = this.sortByName(this.groupMembersScores);
 
     },
+
+    
     async loadCampus(universityName: string){
       API_Campus_Get_University(universityName)
         .then((response: any) => {
