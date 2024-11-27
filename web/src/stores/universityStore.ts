@@ -10,7 +10,7 @@ import {
   type IGroupScores,
 } from "@/helpers/constants";
 import { useUserInfoStore } from "./userInfoStore";
-import { API_Facultatives_Get } from "@/api/api";
+import { API_Audience_Get, API_Facultatives_Get } from "@/api/api";
 
 export const useUniversityStore = defineStore('university', {
   state() {
@@ -41,7 +41,7 @@ export const useUniversityStore = defineStore('university', {
   actions: {
     async loadUniversityInfo(){
       const userInfo = useUserInfoStore();
-      
+
       this.campusList = [
         {id: 1, address: 'Малая Пироговская улица, 1', name: 'МП-1', university_id: 1}, 
         {id: 2, address: 'Проспект Вернадского, 78', name: 'В-78', university_id: 1}, 
@@ -103,17 +103,21 @@ export const useUniversityStore = defineStore('university', {
       }
       this.groupMembersScores = this.sortByName(this.groupMembersScores);
         
-      for(let i = 1; i < 10; i++) {
-        const data: IAPI_Audience_Update = {  
-          id: i,
-          campus_id: i % 3 + 1,
-          capacity: Math.ceil(Math.random() * 100) + 20,
-          name: `A-${i}`,
-          profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],
-          type: AUDITORY_TYPE_LIST[i % AUDITORY_TYPE_LIST.length],
-        };
-        this.auditoriesList.push(data);
-      }
+      // for(let i = 1; i < 10; i++) {
+      //   const data: IAPI_Audience_Update = {  
+      //     id: i,
+      //     campus_id: i % 3 + 1,
+      //     capacity: Math.ceil(Math.random() * 100) + 20,
+      //     name: `A-${i}`,
+      //     profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],
+      //     type: AUDITORY_TYPE_LIST[i % AUDITORY_TYPE_LIST.length],
+      //   };
+      //   this.auditoriesList.push(data);
+      // }
+      API_Audience_Get()
+      .then((response:any) => {
+        this.auditoriesList = response.data;
+      })
 
       for(let i = 1; i < 10; i++) {
         const data: IGroup = {id: i, name: `ЭФБО-0${i}-23`};
