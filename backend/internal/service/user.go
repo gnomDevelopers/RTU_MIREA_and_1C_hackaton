@@ -154,7 +154,7 @@ func (s *UserService) CreateAdmin(c context.Context) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	exists, err := s.repository.Exists(ctx, "admin")
+	exists, err := s.repository.Exists(ctx, "admin@vuzplus.ru")
 	if err != nil {
 		return err
 	}
@@ -172,7 +172,7 @@ func (s *UserService) CreateAdmin(c context.Context) error {
 	}
 
 	createAdmin := &entities.User{
-		Email:                "admin",
+		Email:                "admin@vuzplus.ru",
 		Password:             hashedPassword,
 		FirstName:            "Админ",
 		LastName:             "Админов",
