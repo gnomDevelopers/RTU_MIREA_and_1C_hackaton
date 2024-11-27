@@ -2154,7 +2154,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleNames"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleName"
+                            }
                         }
                     },
                     "400": {
@@ -2313,7 +2316,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleGroups"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleGroup"
+                            }
                         }
                     },
                     "400": {
@@ -2358,7 +2364,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleNames"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleName"
+                            }
                         }
                     },
                     "400": {
@@ -2403,7 +2412,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleTeachers"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleTeachers"
+                            }
                         }
                     },
                     "400": {
@@ -4048,36 +4060,27 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.ScheduleGroups": {
+        "entities.ScheduleGroup": {
             "type": "object",
             "properties": {
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "group": {
+                    "type": "string"
                 }
             }
         },
-        "entities.ScheduleNames": {
+        "entities.ScheduleName": {
             "type": "object",
             "properties": {
-                "names": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "name": {
+                    "type": "string"
                 }
             }
         },
         "entities.ScheduleTeachers": {
             "type": "object",
             "properties": {
-                "teachers": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "teacher": {
+                    "type": "string"
                 }
             }
         },

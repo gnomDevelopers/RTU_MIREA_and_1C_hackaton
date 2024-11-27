@@ -40,16 +40,16 @@ type ParseScheduleResponse struct {
 	Message string `json:"message"`
 }
 
-type ScheduleGroups struct {
-	Groups []string `json:"groups"`
+type ScheduleGroup struct {
+	Group string `json:"group"`
 }
 
 type ScheduleTeachers struct {
-	Teachers []string `json:"teachers"`
+	Teacher string `json:"teacher"`
 }
 
-type ScheduleNames struct {
-	Names []string `json:"names"`
+type ScheduleName struct {
+	Name string `json:"name"`
 }
 
 type GetGradesBySubject struct {
