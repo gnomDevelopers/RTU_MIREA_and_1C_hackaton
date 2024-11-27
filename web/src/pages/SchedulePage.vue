@@ -91,6 +91,8 @@ export default {
       for(let item of <IUserGet[]>this.universityStore.groupsList){
         arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
       }
+      console.log('universityStore.groupsList: ', this.universityStore.groupsList);
+      console.log('groupsList: ', arr);
       return arr;
     },
 
@@ -99,6 +101,8 @@ export default {
       for(let item of <IUserGet[]>this.universityStore.teachersList){
         arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
       }
+      console.log('universityStore.teachersList: ', this.universityStore.teachersList);
+      console.log('teachersList: ', arr);
       return arr;
     },
 
@@ -107,6 +111,8 @@ export default {
       for(let item of <IUserGet[]>this.universityStore.facultativesList){
         arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
       }
+      console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
+      console.log('facultativesList: ', arr);
       return arr;
     },
 
