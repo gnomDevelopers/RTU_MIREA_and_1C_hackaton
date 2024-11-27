@@ -50,7 +50,8 @@ func (s *UserService) CreateUsers(ctx context.Context, requests []entities.Creat
 			return nil, err
 		}
 		if exists {
-			return nil, fmt.Errorf("user with email %s already exists", email)
+			log.Printf("user with email %s already exists", email)
+			continue
 		}
 
 		password := util.GenerateTemporaryPassword(15)
