@@ -15,7 +15,61 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/audience": {
+        "/auth/audience": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "audience"
+                ],
+                "summary": "Update audience",
+                "parameters": [
+                    {
+                        "description": "audience data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.Audience"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UpdateDeleteAudienceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -54,62 +108,6 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/entities.CreateAudiencesResponse"
                             }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/audience": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "audience"
-                ],
-                "summary": "Update audience",
-                "parameters": [
-                    {
-                        "description": "audience data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.Audience"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.UpdateDeleteAudienceResponse"
                         }
                     },
                     "400": {
@@ -1232,6 +1230,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/department": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates a new department with the provided details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "department"
+                ],
+                "summary": "Create a new department",
+                "parameters": [
+                    {
+                        "description": "Department creation data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateDepartmentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created department details",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateDepartmentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/auth/department/university/{university}": {
             "get": {
                 "security": [
@@ -1584,14 +1635,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/faculties": {
+        "/auth/faculties/university/{university}": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Retrieves a list of all faculties based on optional filters provided in the request body.",
+                "description": "Retrieves a list of faculties based on the specified university name.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1601,21 +1652,19 @@ const docTemplate = `{
                 "tags": [
                     "faculties"
                 ],
-                "summary": "Retrieve all faculties",
+                "summary": "Get faculties by university name",
                 "parameters": [
                     {
-                        "description": "Request parameters for filtering faculties",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.GetFacultyRequest"
-                        }
+                        "type": "string",
+                        "description": "University name (URL-encoded)",
+                        "name": "university",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of all faculties",
+                        "description": "List of faculties",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -1624,7 +1673,7 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Invalid request data",
+                        "description": "Invalid university name",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -1638,7 +1687,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/auth/faculty": {
             "post": {
                 "security": [
                     {
@@ -1655,7 +1706,7 @@ const docTemplate = `{
                 "tags": [
                     "faculties"
                 ],
-                "summary": "Create a new faculty",
+                "summary": "Creates a new faculty",
                 "parameters": [
                     {
                         "description": "Faculty data",
@@ -1676,60 +1727,6 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Invalid request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/faculties/university/{university}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Retrieves a list of faculties based on the specified university name provided in the URL parameter.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "faculties"
-                ],
-                "summary": "Retrieve faculties by university name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "University name",
-                        "name": "group",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of faculties for the specified university",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.Faculty"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid university name",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -2487,6 +2484,60 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "university"
+                ],
+                "summary": "Create university",
+                "parameters": [
+                    {
+                        "description": "university data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateUniversityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
             }
         },
         "/auth/university/all": {
@@ -2699,6 +2750,65 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/user": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Creates multiple users based on the provided list of user details in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Create multiple users",
+                "parameters": [
+                    {
+                        "description": "List of users to create",
+                        "name": "users",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateUserRequest"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of created user responses",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CreateUserResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/auth/user/university/{university}": {
             "get": {
                 "security": [
@@ -2751,6 +2861,57 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Retrieves the user details based on the specified user ID provided in the URL parameter.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Retrieve a user by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User  ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User  details",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid user ID",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -3171,62 +3332,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/university": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "university"
-                ],
-                "summary": "Create university",
-                "parameters": [
-                    {
-                        "description": "university data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/work": {
             "post": {
                 "security": [
@@ -3540,6 +3645,22 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CreateDepartmentRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.CreateDepartmentResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.CreateFacultyRequest": {
             "type": "object",
             "properties": {
@@ -3616,6 +3737,64 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CreateUserRequest": {
+            "type": "object",
+            "properties": {
+                "department_id": {
+                    "type": "integer"
+                },
+                "educational_direction": {
+                    "type": "string"
+                },
+                "faculty_id": {
+                    "type": "integer"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "university_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.CreateUserResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "entities.CreateUserScheduleRequest": {
             "type": "object",
             "properties": {
@@ -3670,14 +3849,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "university": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.GetFacultyRequest": {
-            "type": "object",
-            "properties": {
-                "university_name": {
                     "type": "string"
                 }
             }
@@ -3977,6 +4148,44 @@ const docTemplate = `{
                 },
                 "university_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "entities.UserInfo": {
+            "type": "object",
+            "properties": {
+                "department_id": {
+                    "type": "integer"
+                },
+                "educational_direction": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "faculty_id": {
+                    "type": "integer"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "university_name": {
+                    "type": "string"
                 }
             }
         },

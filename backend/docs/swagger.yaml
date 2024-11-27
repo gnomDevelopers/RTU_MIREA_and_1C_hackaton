@@ -545,7 +545,7 @@ info:
   title: VUZ+ API
   version: "1.0"
 paths:
-  /audience:
+  /auth/audience:
     post:
       consumes:
       - application/json
@@ -584,7 +584,6 @@ paths:
       summary: Create Audiences
       tags:
       - audience
-  /auth/audience:
     put:
       consumes:
       - application/json
