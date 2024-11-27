@@ -42,15 +42,14 @@ func (s *DepartmentService) Create(c context.Context, req *entities.CreateDepart
 	return res, nil
 }
 
-
-func (s *UserService) GetByID(c context.Context, id int) (*entities.CreateDepartmentResponse, error) {
+func (s *DepartmentService) GetByID(c context.Context, id int) (*entities.CreateDepartmentResponse, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	depID, err := s.repository.(ctx, id)
+	dep, err := s.repository.GetById(ctx, id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &entities.CreateDepartmentResponse{ID: depID}, nil
+	return &entities.CreateDepartmentResponse{ID: dep.ID}, nil
 }

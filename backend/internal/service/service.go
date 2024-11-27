@@ -37,6 +37,12 @@ type Campus interface {
 	Delete(context.Context, int) error
 }
 
+type Department interface {
+	GetByUniversity(c context.Context, university string) (*[]entities.Department, error)
+	Create(c context.Context, req *entities.CreateDepartmentRequest) (*entities.CreateDepartmentResponse, error)
+	GetByID(c context.Context, id int) (*entities.CreateDepartmentResponse, error)
+}
+
 type Faculty interface {
 	Create(c context.Context, req *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
 	GetAll(context.Context, *entities.GetFacultyRequest) (*[]entities.Faculty, error)

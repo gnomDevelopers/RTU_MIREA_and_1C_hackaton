@@ -166,6 +166,16 @@ definitions:
       id:
         type: integer
     type: object
+  entities.CreateDepartmentRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  entities.CreateDepartmentResponse:
+    properties:
+      id:
+        type: integer
+    type: object
   entities.CreateFacultyRequest:
     properties:
       name:
@@ -2493,6 +2503,40 @@ paths:
       summary: Response
       tags:
       - work
+  /department:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new department with the provided details.
+      parameters:
+      - description: Department creation data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateDepartmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Created department details
+          schema:
+            $ref: '#/definitions/entities.CreateDepartmentResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new department
+      tags:
+      - departments
   /login:
     get:
       consumes:
