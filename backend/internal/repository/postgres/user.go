@@ -152,3 +152,12 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *entities.User) (*
 	user.ID = lastInsertId
 	return user, nil
 }
+
+func (r *UserRepository) UpdateRole(ctx context.Context, userID int, newRole string) error {
+	query := `UPDATE users SET role = $1 WHERE id = $2`
+	_, err := r.db.ExecContext(ctx, query, newRole, userID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

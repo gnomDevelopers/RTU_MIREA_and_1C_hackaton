@@ -11,7 +11,8 @@ type UserRepository interface {
 	GetByUniversity(context.Context, string) (*[]entities.User, error)
 	Exists(context.Context, string) (bool, error)
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
-	GetInfoById(ctx context.Context, id int) (*entities.UserInfo, error)
+	GetInfoById(context.Context, int) (*entities.UserInfo, error)
+	UpdateRole(context.Context, int, string) error
 }
 
 //type UserDataRepository interface {

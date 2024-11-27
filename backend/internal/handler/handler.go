@@ -60,6 +60,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/user/university/:university", h.GetUsersByUniversity)
 	authGroup.Get("/user/:id", h.GetUserByID)
 	authGroup.Post("/user", h.CreateUsers)
+	authGroup.Put("/user/:id/promote", h.UpdateUserRole)
 
 	authGroup.Get("/user_schedule", h.GetUserSchedule)
 	authGroup.Post("/user_schedule", h.CreateUserSchedule)

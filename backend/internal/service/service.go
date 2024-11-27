@@ -14,6 +14,7 @@ type User interface {
 	GetEducationalDirection(context.Context, int) (string, error)
 	RefreshToken(int) (string, error)
 	GetByID(context.Context, int) (*entities.UserInfo, error)
+	UpdateRole(context.Context, *entities.UpdateRoleRequest) error
 }
 
 type University interface {

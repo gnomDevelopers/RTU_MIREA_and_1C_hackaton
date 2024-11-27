@@ -233,3 +233,14 @@ func (s *UserService) GetByID(c context.Context, userID int) (*entities.UserInfo
 	}
 	return user, nil
 }
+
+func (s *UserService) UpdateRole(c context.Context, userID int, newRole string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), s.timeout)
+	defer cancel()
+
+	err := s.repository.UpdateRole(ctx, userID, newRole)
+	if err != nil {
+		return err
+	}
+	return nil
+}

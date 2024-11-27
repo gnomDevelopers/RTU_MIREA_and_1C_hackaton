@@ -168,3 +168,35 @@ func (h *Handler) GetUserByID(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(res)
 }
+
+// UpdateUserRole
+// @Tags         users
+// @Summary      Update user role
+// @Description  Updates the role of a user based on the provided user ID.
+// @Accept       json
+// @Produce      json
+// @Param        id   path     int                          true "User ID"
+// @Param        data body     entities.UpdateRoleRequest   true "New role details"
+// @Success      200 {object} map[string]interface{}        "Updated user role"
+// @Failure      400 {object} map[string]interface{}        "Invalid user ID or request body"
+// @Failure      500 {object} map[string]interface{}        "Internal server error"
+// @Router       /user/{id}/promote [put]
+// @Security ApiKeyAuth
+func (h *Handler) UpdateUserRole(c *fiber.Ctx) error {
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	var req entities.UpdateRoleRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	err = h.services.UserService.UpdateRole(c.Context(), id, req.NewRole)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"id": id, "new_role": req.NewRole})
+}
