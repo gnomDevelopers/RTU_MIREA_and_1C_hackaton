@@ -36,6 +36,11 @@ type Campus interface {
 	Delete(context.Context, int) error
 }
 
+type Faculty interface {
+	Create(c context.Context, req *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
+	GetAll(context.Context, *entities.GetFacultyRequest) (*[]entities.Faculty, error)
+}
+
 type Group interface {
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)

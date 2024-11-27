@@ -49,7 +49,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/login", h.Login)
 	f.Get("/login", h.CheckAuth)
 
-	//f.Post("/user/add", h.CreateUser)
+	f.Post("/user/add", h.CreateUser)
 
 	f.Post("/work", h.LoginWork)
 
@@ -89,6 +89,9 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Post("/university", h.CreateUniversity)
 	authGroup.Put("/university", h.UpdateUniversity)
 	authGroup.Delete("/university/:id", h.DeleteUniversity)
+
+	authGroup.Post("/faculty", h.CreateFaculty)
+	authGroup.Get("/faculties", h.GetAllFaculties)
 
 	authGroup.Get("/campus/all", h.GetAllCampuses)
 	authGroup.Get("/campus/id/:id", h.GetByIdCampus)
