@@ -198,3 +198,14 @@ func (s *UserService) GetByUniversity(c context.Context, university string) (*[]
 	}
 	return users, nil
 }
+
+func (s *UserService) GetByID(c context.Context, userID int) (*entities.User, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	user, err := s.repository.GetById(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}

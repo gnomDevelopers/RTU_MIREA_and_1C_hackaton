@@ -13,6 +13,7 @@ type User interface {
 	CreateAdmin(context.Context) error
 	GetEducationalDirection(context.Context, int) (string, error)
 	RefreshToken(int) (string, error)
+	GetByID(context.Context, int) (*entities.User, error)
 }
 
 type University interface {

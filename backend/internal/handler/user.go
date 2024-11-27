@@ -144,3 +144,29 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(req)
 }
+
+// GetUserByID
+// @Tags         users
+// @Summary      Retrieve a user by ID
+// @Description  Retrieves the user details based on the specified user ID provided in the URL parameter.
+// @Accept       json
+// @Produce      json
+// @Param        id path integer true "User  ID"
+// @Success      200 {object} entities.User "User  details"
+// @Failure      400 {object} map[string]interface{} "Invalid user ID"
+// @Failure      500 {object} map[string]interface{} "Internal server error"
+// @Router       /auth/user/{id} [get]
+// @Security ApiKeyAuth
+func (h *Handler) GetUserByID(c *fiber.Ctx) error {
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	res, err := h.services.UserService.GetByID(c.Context(), id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.Status(fiber.StatusOK).JSON(res)
+}

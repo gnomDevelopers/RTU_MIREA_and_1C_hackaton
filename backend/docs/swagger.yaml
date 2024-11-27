@@ -2086,6 +2086,40 @@ paths:
       summary: Get university by name
       tags:
       - university
+  /auth/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the user details based on the specified user ID provided
+        in the URL parameter.
+      parameters:
+      - description: User  ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User  details
+          schema:
+            $ref: '#/definitions/entities.User'
+        "400":
+          description: Invalid user ID
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve a user by ID
+      tags:
+      - users
   /auth/user/university/{university}:
     get:
       consumes:
