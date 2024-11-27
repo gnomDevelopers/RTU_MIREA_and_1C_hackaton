@@ -88,7 +88,7 @@ func (r *DepartmentRepository) GetByUniversity(ctx context.Context, university s
 		FROM department
 		JOIN users ON department.id = users.department_id
 		JOIN university ON users.university_id = university.id
-		WHERE university.name = $1;`
+		WHERE university.name = $1 AND department_id <> 1;`
 
 	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
