@@ -139,6 +139,12 @@ export const useUniversityStore = defineStore('university', {
           case ROLES_NAME[6]: this.studentsList.push(userData); break;
         }
       }
+
+      console.log('decanList: ', this.decansList);
+      console.log('edDepList: ', this.educationDepartmentsList);
+      console.log('zavCafList: ', this.zavCafsList);
+      console.log('TeacherList: ', this.teachersList);
+      console.log('StudentsList: ', this.studentsList);
     },
     findGroupMembers(groupID: number){
       this.groupMembersList = [];
