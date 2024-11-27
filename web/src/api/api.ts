@@ -550,3 +550,22 @@ export function API_Departments_Get(universityName: string){
     })
   });
 };
+
+//получение всех факультетов
+export function API_Faculties_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/faculties/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Faculties get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Faculties get error: ', error);
+      reject(error);
+    })
+  });
+};
