@@ -89,6 +89,7 @@ func (h *Handler) Router() *fiber.App {
 
 	// Перенесено
 	authGroup.Post("/group", h.CreateGroup)
+	authGroup.Get("/groups/university/:university", h.GetAllGroups)
 
 	authGroup.Get("/university/all", h.GetAllUniversities)
 	authGroup.Get("/university/name/:name", h.GetByNameUniversity)

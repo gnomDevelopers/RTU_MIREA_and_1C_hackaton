@@ -76,7 +76,7 @@ type GroupRepository interface {
 	GetById(context.Context, int) (*entities.Group, error)
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetByName(context.Context, string) (*entities.Group, error)
-	GetAll(context.Context) (*[]entities.Group, error)
+	GetAll(context.Context, string) (*[]entities.Group, error)
 	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 }
 
@@ -153,6 +153,12 @@ type AchievementRepository interface {
 	Create(context.Context, *entities.CreateAchievementRequest) (*entities.CreateAchievementResponse, error)
 	GetById(context.Context, int) (*[]entities.Achievement, error)
 	Delete(context.Context, int) error
+}
+
+type VisitingRepository interface {
+	Exist(ctx context.Context, visiting *entities.Visiting) (bool, error)
+	Create(ctx context.Context, visiting *entities.Visiting) (int, error)
+	GetByUserIdAndClassId(ctx context.Context, userID, classID int) (*entities.Visiting, error)
 }
 
 type Repository struct {
