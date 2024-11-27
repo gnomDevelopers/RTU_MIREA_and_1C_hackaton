@@ -30,74 +30,75 @@ func NewUserService(repository repository.UserRepository, uniRepo repository.Uni
 	}
 }
 
-func (s *UserService) CreateUser(c context.Context, request *entities.CreateUserRequest) (*entities.CreateUserResponse, error) {
-	ctx, cancel := context.WithTimeout(c, s.timeout)
+func (s *UserService) CreateUsers(ctx context.Context, requests []entities.CreateUserRequest) ([]entities.CreateUserResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
-	group, err := s.uniRepo.GetById(ctx, request.UniversityID)
-	if err != nil {
-		return nil, err
+	var responses []entities.CreateUserResponse
+	for _, request := range requests {
+		group, err := s.uniRepo.GetById(ctx, request.UniversityID)
+		if err != nil {
+			return nil, err
+		}
+		postfix := group.Postfix
+
+		fullName := util.GenerateLogin(fmt.Sprintf("%s %s %s", request.LastName, request.FirstName, request.FatherName))
+		email := fmt.Sprintf("%s_%s@vuzplus.ru", fullName, postfix)
+
+		exists, err := s.repository.Exists(ctx, email)
+		if err != nil {
+			return nil, err
+		}
+		if exists {
+			return nil, fmt.Errorf("user with email %s already exists", email)
+		}
+
+		hashedPassword, err := util.HashPassword(request.Password)
+		if err != nil {
+			return nil, err
+		}
+
+		u := &entities.User{
+			Email:        email,
+			Password:     hashedPassword,
+			FirstName:    request.FirstName,
+			LastName:     request.LastName,
+			FatherName:   request.FatherName,
+			Role:         request.Role,
+			UniversityID: request.UniversityID,
+		}
+
+		switch request.Role {
+		case "Учебный Отдел", "Декан":
+			u.FacultyID = request.FacultyID
+			u.DepartmentID = 1
+			u.EducationalDirection = "null"
+			u.GroupID = 1
+
+		case "Заведующий кафедрой", "Преподаватель":
+			u.FacultyID = request.FacultyID
+			u.DepartmentID = request.DepartmentID
+			u.EducationalDirection = "null"
+			u.GroupID = 1
+
+		case "Студент":
+			u.FacultyID = request.FacultyID
+			u.DepartmentID = request.DepartmentID
+			u.EducationalDirection = request.EducationalDirection
+			u.GroupID = request.GroupID
+		}
+
+		r, err := s.repository.CreateUser(ctx, u)
+		if err != nil {
+			return nil, err
+		}
+
+		responses = append(responses, entities.CreateUserResponse{
+			ID: r.ID,
+		})
 	}
-	postfix := group.Postfix
 
-	fullName := util.GenerateLogin(fmt.Sprintf("%s %s %s", request.LastName, request.FirstName, request.FatherName))
-
-	email := fmt.Sprintf("%s_%s@vuzplus.ru", fullName, postfix)
-
-	exists, err := s.repository.Exists(ctx, email)
-	if err != nil {
-		return nil, err
-	}
-	if exists {
-		return nil, errors.New("user already exists")
-	}
-
-	hashedPassword, err := util.HashPassword(request.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	u := &entities.User{
-		Email:        email,
-		Password:     hashedPassword,
-		FirstName:    request.FirstName,
-		LastName:     request.LastName,
-		FatherName:   request.FatherName,
-		Role:         request.Role,
-		UniversityID: request.UniversityID,
-	}
-
-	switch request.Role {
-	case "Учебный Отдел", "Декан":
-		u.FacultyID = request.FacultyID
-		u.DepartmentID = 1
-		u.EducationalDirection = "null"
-		u.GroupID = 1
-
-	case "Заведующий кафедрой", "Преподаватель":
-		u.FacultyID = request.FacultyID
-		u.DepartmentID = request.DepartmentID
-		u.EducationalDirection = "null"
-		u.GroupID = 1
-
-	case "Студент":
-		u.FacultyID = request.FacultyID
-		u.DepartmentID = request.DepartmentID
-		u.EducationalDirection = request.EducationalDirection
-		u.GroupID = request.GroupID
-	}
-
-	r, err := s.repository.CreateUser(ctx, u)
-	if err != nil {
-		return nil, err
-	}
-
-	res := &entities.CreateUserResponse{
-		ID: r.ID,
-	}
-
-	return res, nil
-
+	return responses, nil
 }
 
 func (s *UserService) Login(c context.Context, request *entities.LoginUserRequest) (*entities.LoginUserResponse, error) {
