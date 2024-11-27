@@ -14,7 +14,8 @@ import (
 // @Success 200 {object} entities.CreateGroupResponse
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /group [post]
+// @Router       /auth/group [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateGroup(c *fiber.Ctx) error {
 	req := &entities.CreateGroupRequest{}
 	if err := c.BodyParser(&req); err != nil {

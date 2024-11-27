@@ -26,3 +26,14 @@ func (s *FacultyService) GetAll(c context.Context, req *entities.GetFacultyReque
 	}
 	return faculties, nil
 }
+
+func (s *FacultyService) Create(c context.Context, req *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	res, err := s.repositories.Create(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &entities.CreateFacultyResponse{ID: res}, err
+}

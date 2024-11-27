@@ -55,12 +55,12 @@
         </Transition>
         
         <div class="flex flex-col items-center gap-y-2">
-          <CalendarTable :month="10"/>
+          <CalendarTable :month="10" @select-day="selectDay"/>
         </div>
 
       </div>
       <div class="flex flex-col gap-y-4 items-center lg:w-1/2">
-        <ScheduleClassList :canAddFaculties="true"/>
+        <ScheduleClassList v-if="scheduleStore.scheduleType === 0 || (scheduleStore.scheduleType === 1 && scheduleStore.selectedSheduleGroup !== null)" :canAddFaculties="scheduleStore.scheduleType === 0"/>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
-import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet } from '@/helpers/constants';
+import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import SearchList from '@/entities/searchList.vue';
@@ -111,10 +111,22 @@ export default {
   },
   methods:{
     selectScheduleType(type: number){
+      if(type === 0) this.scheduleStore.selectedSheduleGroup = null;
       this.scheduleStore.scheduleType = type;
     },
     selectScheduleTarget(target: number){
+      this.scheduleStore.selectedSheduleGroup = null;
       this.scheduleStore.scheduleTarget = target;
+    },
+    selectDay(day: Day){
+      this.universityStore.selectedDate = `${day.day}.${day.month+1}.${day.year}`;
+      this.scheduleStore.scheduleTableDay = [];
+      for(let item of this.scheduleStore.scheduleData){
+        if(item.date === `${day.day}.${day.month+1}.${day.year}`){
+          this.scheduleStore.scheduleTableDay = item.timeTable;
+          break;
+        }
+      }
     }
   },
   watch: {
@@ -124,6 +136,8 @@ export default {
         for(let item of val){
           this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
         }
+        console.log('universityStore.groupsList: ', this.universityStore.groupsList);
+        console.log('groupsSearchList: ', this.groupsSearchList);
       },
       immediate: true,
       deep: true,
@@ -134,6 +148,8 @@ export default {
         for(let item of val){
           this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
         }
+        console.log('universityStore.teachersList: ', this.universityStore.teachersList);
+        console.log('teachersSearchList: ', this.teachersSearchList);
       },
       immediate: true,
       deep: true,
@@ -144,6 +160,8 @@ export default {
         for(let item of val){
           this.facultativeList.push({id: item.id, search_field: item.name, data: item});
         }
+        console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
+        console.log('facultativesSearchList: ', this.facultativeList);
       },
       immediate: true,
       deep: true,

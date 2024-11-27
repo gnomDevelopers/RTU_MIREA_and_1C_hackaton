@@ -21,13 +21,7 @@ export default {
     ...mapStores(useUserInfoStore, useUniversityStore),
   },
   async mounted(){
-    // await this.userInfoStore.Authenticate();
-    if(this.userInfoStore.authorized) {
-      // this.userInfoStore.loadUserData();
-      // this.universityStore.loadUniversityInfo(); 
-    }
-    // this.userInfoStore.loadUserData(); // тоже
-    this.universityStore.loadUniversityInfo(); // временное решение
+    await this.userInfoStore.Authenticate();
   },
 };
 </script>

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 	"server/internal/entities"
@@ -149,19 +150,18 @@ func (r *ClassRepository) GetByTeacherName(ctx context.Context, teacherName, uni
 	return &classes, nil
 }
 
-func (r *ClassRepository) GetByName(ctx context.Context, name, university string) (*[]entities.Class, error) {
+func (r *ClassRepository) GetOptionals(ctx context.Context, name, university string) (*[]entities.Class, error) {
 	if name == "" {
 		return nil, errors.New("name is empty")
 	}
 
 	var classes []entities.Class
-	dateLimit := "09-08-24"
-	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ' AND date < $2 AND university = $3;`
-	rows, err := r.db.QueryContext(ctx, query, name, dateLimit, university)
+	query := `SELECT * FROM class WHERE $1=name AND type='ФАКУЛЬТАТИВ' AND university = $2;`
+	rows, err := r.db.QueryContext(ctx, query, name, university)
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println(name, university)
 	for rows.Next() {
 		var class entities.Class
 		err = rows.Scan(&class.Id, &class.Name, pq.Array(&class.GroupNames), pq.Array(&class.TeacherNames), &class.Type, &class.Auditory, &class.Date, &class.Weekday, &class.Week, &class.TimeStart, &class.TimeEnd, &class.UniversityStr)

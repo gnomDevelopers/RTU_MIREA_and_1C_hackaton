@@ -1,6 +1,6 @@
 import axios from "axios";
 import { 
-  API, DEVMODE, 
+  API, DEVMODE, GET_COOKIE,
   type IAPI_Login_Request, 
   type IAPI_Audience_Create, 
   type IAPI_Audience_Update, 
@@ -18,7 +18,11 @@ import {
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/login`)
+    axios.get(`${API}/login`,  {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+     })
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
       resolve(response);
@@ -63,7 +67,11 @@ export function API_Logout(){
 //получение данных об аккаунте
 export function API_UserInfo(userID: number){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/user/${userID}`)
+    axios.get(`${API}/auth/user/${userID}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('UserInfo get success: ', response);
       resolve(response);
@@ -101,7 +109,11 @@ export function API_SendFile(data: FormData){
 //создание аудитории
 export function API_Audience_Create(data: IAPI_Audience_Create[]){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/audience`, data)
+    axios.post(`${API}/auth/audience`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Audiences create success: ', response);
       resolve(response);
@@ -143,7 +155,26 @@ export function API_Audience_Delete(audienceID: number){
   });
 };
 
-/////// campus ///////
+//получение всех аудиторий по универу
+export function API_Audience_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/audience/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Audience get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Audience get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// CAMPUS ///////
 
 //создание кампуса
 export function API_Campus_Create(data: IAPI_Campus_Create){
@@ -191,15 +222,59 @@ export function API_Campus_Delete(campusID: number){
 };
 
 //получение всех кампусов
-export function API_Campus_Get_University(universityID: number){
+export function API_Campus_Get_University(universityName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/campus/university_id/${universityID}`)
+    axios.get(`${API}/auth/campus/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
-      if(DEVMODE) console.log('Campus get by university success: ', response);
+      if(DEVMODE) console.log('Campus get success: ', response);
       resolve(response);
     })
     .catch(error => {
-      if(DEVMODE) console.log('Campus get by university error: ', error);
+      if(DEVMODE) console.log('Campus get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// university users ///////
+
+//получение всех пользователей вуза
+export function API_University_Users_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/user/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Users get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Users get  error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение всех групп вуза
+export function API_University_Groups_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/group`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Groups get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Groups get error: ', error);
       reject(error);
     })
   });
@@ -315,6 +390,25 @@ export function API_Schedule_Get_ClassName(className: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('Schedule get by className error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение факультативных занятий
+export function API_Facultatives_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/name`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Facultatives get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Facultatives get error: ', error);
       reject(error);
     })
   });
@@ -454,6 +548,46 @@ export function API_University_Get(universityName: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('University get by universityName error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// education ///////
+
+//получение всех кафедр
+export function API_Departments_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/department/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Departments get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Departments get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение всех факультетов
+export function API_Faculties_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/faculties/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Faculties get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Faculties get error: ', error);
       reject(error);
     })
   });

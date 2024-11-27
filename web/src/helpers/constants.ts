@@ -89,6 +89,7 @@ export interface IUser{
 //userList item interface
 export interface IUserGet extends IUser{
   id: number,
+  group_id: number,
 }
 
 export interface IGroup {
@@ -105,11 +106,17 @@ export interface IGroupScores {
   user: IUserGet,
   scores: number[],
   avg: number,
+  gpa: number,
 }
 
 export interface IGroupAttendance {
   user: IUserGet,
   attendace: number,
+}
+
+export interface ITimeTable{
+  date: string,
+  timeTable: IScheduleItem[],
 }
 
 //api interfaces
@@ -134,7 +141,7 @@ export interface IAPI_Audience_Update extends IAPI_Audience_Create{
 export interface IAPI_Campus_Create {
   address: string,
   name: string,
-  university_id: number
+  university: string
 };
 
 export interface IAPI_Campus_Update extends IAPI_Campus_Create {
@@ -213,3 +220,21 @@ export const INFO_FIELDS_ROLE = [
   ['faculty', 'department'], // 5
   ['faculty', 'department', 'educationDirection'], // 6
 ];
+
+// functions
+
+export function GET_COOKIE(cookieName: string): string{
+  const allCookie = document.cookie.split(';');
+  for(let cookie of allCookie){
+    let [key, value] = cookie.split('=');
+    if(key === cookieName) return value;
+  }
+  return '';
+}
+
+export function GET_ROLEID_BY_ROLENAME(roleName: string): TMaybeNumber{
+  for(let i = 0; i < ROLES.length; i++){
+    if(ROLES_NAME[i] === roleName) return i;
+  }
+  return null;
+}

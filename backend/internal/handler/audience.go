@@ -19,7 +19,8 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience [post]
+// @Router       /auth/audience [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateAudiences(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var audiences []entities.Audience
@@ -56,7 +57,8 @@ func (h *Handler) CreateAudiences(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/id/{id} [get]
+// @Router       /auth/audience/id/{id} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByIdAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")
@@ -86,7 +88,8 @@ func (h *Handler) GetByIdAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/campus/{name} [get]
+// @Router       /auth/audience/campus/{name} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByCampusAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	name := c.Params("name")
@@ -119,7 +122,8 @@ func (h *Handler) GetByCampusAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/type/{type} [get]
+// @Router       /auth/audience/type/{type} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByTypeAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	typeStr := c.Params("type")
@@ -152,7 +156,8 @@ func (h *Handler) GetByTypeAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/profile/{profile} [get]
+// @Router       /auth/audience/profile/{profile} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByProfileAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	profile := c.Params("profile")
@@ -181,11 +186,12 @@ func (h *Handler) GetByProfileAudience(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param capacity path string true "audience capacity"
-// @Success 200 {object} entities.Audience
+// @Success 200 {object} []entities.Audience
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/capacity/{capacity} [get]
+// @Router       /auth/audience/capacity/{capacity} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByCapacityAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	capacityStr := c.Params("capacity")
@@ -205,6 +211,40 @@ func (h *Handler) GetByCapacityAudience(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(audiences)
 }
 
+// GetByUniversityAudiences
+// @Tags audience
+// @Summary      Get audience by university
+// @Accept       json
+// @Produce      json
+// @Param university path string true "audience university"
+// @Success 200 {object} []entities.Audience
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /auth/audience/university/{university} [get]
+// @Security ApiKeyAuth
+func (h *Handler) GetByUniversityAudiences(c *fiber.Ctx) error {
+	// TODO: добавить проверку на роль проректора
+	name := c.Params("university")
+	decodedName, err := url.QueryUnescape(name)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid university name")
+	}
+
+	campuses, err := h.services.AudienceService.GetByUniversity(c.Context(), decodedName)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(campuses)
+}
+
 // UpdateAudience
 // @Tags audience
 // @Summary      Update audience
@@ -215,7 +255,8 @@ func (h *Handler) GetByCapacityAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience [put]
+// @Router       /auth/audience [put]
+// @Security ApiKeyAuth
 func (h *Handler) UpdateAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	var audience entities.Audience
@@ -251,7 +292,8 @@ func (h *Handler) UpdateAudience(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /audience/{id} [delete]
+// @Router      /auth/audience/{id} [delete]
+// @Security ApiKeyAuth
 func (h *Handler) DeleteAudience(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль проректора
 	idStr := c.Params("id")

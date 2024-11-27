@@ -6,18 +6,29 @@ import (
 )
 
 const (
-	letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	digitBytes  = "0123456789"
+	totalBytes  = letterBytes + digitBytes
 )
 
-// GenerateTemporaryPassword генерирует временный пароль заданной длины
 func GenerateTemporaryPassword(length int) string {
+	if length <= 0 {
+		return ""
+	}
+
 	rand.Seed(time.Now().UnixNano())
 
-	// Создаем срез для пароля
 	password := make([]byte, length)
-	for i := 0; i < length; i++ {
-		password[i] = letterBytes[rand.Intn(len(letterBytes))]
+
+	password[0] = digitBytes[rand.Intn(len(digitBytes))]
+
+	for i := 1; i < length; i++ {
+		password[i] = totalBytes[rand.Intn(len(totalBytes))]
 	}
+
+	rand.Shuffle(length, func(i, j int) {
+		password[i], password[j] = password[j], password[i]
+	})
 
 	return string(password)
 }

@@ -19,7 +19,8 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university [post]
+// @Router       /auth/university [post]
+// @Security ApiKeyAuth
 func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var request entities.CreateUniversityRequest
@@ -55,7 +56,8 @@ func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/all [get]
+// @Router       /auth/university/all [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 	h.logger.Debug().Msg("call h.services.UniversityService.GetAll")
 	universities, err := h.services.UniversityService.GetAll(c.Context())
@@ -79,7 +81,8 @@ func (h *Handler) GetAllUniversities(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/name/{name} [get]
+// @Router       /auth/university/name/{name} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	name := c.Params("name")
@@ -113,7 +116,8 @@ func (h *Handler) GetByNameUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/id/{id} [get]
+// @Router       /auth/university/id/{id} [get]
+// @Security ApiKeyAuth
 func (h *Handler) GetByIdUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")
@@ -144,7 +148,8 @@ func (h *Handler) GetByIdUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university [put]
+// @Router       /auth/university [put]
+// @Security ApiKeyAuth
 func (h *Handler) UpdateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	var university entities.University
@@ -181,7 +186,8 @@ func (h *Handler) UpdateUniversity(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university/{id} [delete]
+// @Router       /auth/university/{id} [delete]
+// @Security ApiKeyAuth
 func (h *Handler) DeleteUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа
 	idStr := c.Params("id")

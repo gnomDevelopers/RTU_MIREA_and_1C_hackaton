@@ -8,7 +8,11 @@ import {
   type IGroup, 
   type IItemList,
   type IGroupScores,
+  ROLES_NAME,
+  GET_ROLEID_BY_ROLENAME,
 } from "@/helpers/constants";
+import { useUserInfoStore } from "./userInfoStore";
+import { API_Audience_Get, API_Campus_Get_University, API_Departments_Get, API_Facultatives_Get, API_Faculties_Get, API_University_Groups_Get, API_University_Users_Get } from "@/api/api";
 
 export const useUniversityStore = defineStore('university', {
   state() {
@@ -30,84 +34,47 @@ export const useUniversityStore = defineStore('university', {
 
       facultiesList: [] as IItemList[],
       deparmentsList: [] as IItemList[],
-      educationalDirectionsList: [] as IItemList[],
+
+      tmpuserID: 100,
+      selectedDate: '25.11.2024',
     }
   },
   actions: {
-    loadUniversityInfo(){
-      //API get campuses by universityID
-      //API get audiences by universityID
-      //API get decans by universityID
-      //API get aducationDepartments by universityID
-      //API get zavCafs by universityID
-      //API get teachers by universityID
-      //API get students by universityID
+    async loadUniversityInfo(){
+      const userInfo = useUserInfoStore();
+      if(userInfo.university === null) {
+        //все обнуляем
+        this.campusList = [];
+        this.auditoriesList = [];
+  
+        this.decansList = [];
+        this.educationDepartmentsList = [];
+        this.zavCafsList = [];
+        this.teachersList = [];
+        this.studentsList = [];
+  
+        this.groupsList = [];
+        this.facultativesList = [];
+        this.groupMembersList = [];
+        this.groupMembersScores = [];
+  
+        this.facultiesList = [];
+        this.deparmentsList = [];
+        return;
+      }
 
-      this.campusList = [
-        {id: 1, address: 'Малая Пироговская улица, 1', name: 'МП-1', university_id: 1}, 
-        {id: 2, address: 'Проспект Вернадского, 78', name: 'В-78', university_id: 1}, 
-        {id: 3, address: 'Проспект Вернадского, 86', name: 'В-86', university_id: 1},
-      ];
+      this.loadCampus(userInfo.university);
+      this.loadAuditories(userInfo.university);
+      this.loadFaculties(userInfo.university);
+      this.loadDepartments(userInfo.university);
+      this.loadFacultatives();
+      this.loadAllGroups();
+      await this.loadUsers(userInfo.university);
 
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `Деканов${i}`, name: `Декан${i}`, thirdname: `Деканович${i}`, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',};
-      //   this.decansList.push(data);
-      // }
-      this.decansList = [
-        {id: 1, surname: `Иванова`, name: `Алина`, thirdname: `Сергеевна`, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
-        {id: 1, surname: `Петров`, name: `Дмитрий`, thirdname: `Алексеевич `, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
-      ];  
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `УчОтделов${i}`, name: `УчОтдел${i}`, thirdname: `УчОтделович${i}`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',};
-      //   this.educationDepartmentsList.push(data);
-      // }
-      this.educationDepartmentsList = [
-        {id: 1, surname: `Смирнова`, name: `Елена`, thirdname: `Владимировна`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
-        {id: 1, surname: `Кузнецов`, name: `Сергей`, thirdname: `Николаевич`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
-      ];  
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `ЗавКафов${i}`, name: `ЗавКаф${i}`, thirdname: `ЗавКафович${i}`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',};
-      //   this.zavCafsList.push(data);
-      // }
-      this.zavCafsList = [
-        {id: 1, surname: `Попова`, name: `Ольга`, thirdname: `Павловна`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
-        {id: 1, surname: `Соколов`, name: `Андрей`, thirdname: `Михайлович`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
-      ];    
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `Преподов${i}`, name: `Препод${i}`, thirdname: `Преподович${i}`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',};
-      //   this.teachersList.push(data);
-      // }
-      this.teachersList = [
-        {id: 1, surname: `Морозова`, name: `Наталья`, thirdname: `Юрьевна`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
-        {id: 1, surname: `Васильев`, name: `Алексей`, thirdname: `Иванович`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
-      ];  
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `Студентов${i}`, name: `Студент${i}`, thirdname: `Студентович${i}`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',};
-      //   this.studentsList.push(data);
-      // }
-      this.studentsList = [
-        {id: 1, surname: `Новикова`, name: `Екатерина`, thirdname: `Александровна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 1, surname: `Волков`, name: `Павел`, thirdname: `Дмитриевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-      ];  
-
-      this.groupMembersList = [
-        {id: 1, surname: `Романова`, name: `Анастасия`, thirdname: `Игоревна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 2, surname: `Белов`, name: `Кирилл`, thirdname: `Олегович`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 3, surname: `Крылова`, name: `Ирина`, thirdname: `Викторовна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 4, surname: `Орлов`, name: `Денис`, thirdname: `Сергеевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 5, surname: `Савина`, name: `Светлана`, thirdname: `Николаевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 6, surname: `Богданов`, name: `Евгений`, thirdname: `Александрович`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 7, surname: `Титова`, name: `Мария`, thirdname: `Дмитриевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 8, surname: `Сидоров`, name: `Даниил`, thirdname: `Алексеевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 9, surname: `Волкова`, name: `Юлия`, thirdname: `Андреевна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-        {id: 10, surname: `Лебедев`, name: `Антон`, thirdname: `Валерьевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
-      ];
-
-      this.groupMembersList = this.sortPeople(this.groupMembersList);
 
       this.groupMembersScores = [];
       for(let user of this.groupMembersList){
-        const data = {user: user, scores: [], avg: 0} as IGroupScores;
+        const data = {user: user, scores: [], avg: 0, gpa: 0} as IGroupScores;
         let summ = 0;
         let count = 0;
         for(let i = 0; i < 16; i++) {
@@ -117,48 +84,134 @@ export const useUniversityStore = defineStore('university', {
           data.scores.push(j);
         }
         data.avg = summ / count;
+        data.gpa = data.avg + ((Math.ceil(Math.random() * 10)) > 5 ? 1 : -1) * (Math.random()*0.3);
         this.groupMembersScores.push(data);
       }
+      this.groupMembersScores = this.sortByName(this.groupMembersScores);
 
+    },
 
-        
-      for(let i = 1; i < 10; i++) {
-        const data: IAPI_Audience_Update = {  
-          id: i,
-          campus_id: i % 3,
-          capacity: Math.ceil(Math.random() * 100) + 20,
-          name: `A-${i}`,
-          profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],
-          type: AUDITORY_TYPE_LIST[i % AUDITORY_TYPE_LIST.length],
-        };
-        this.auditoriesList.push(data);
+    
+    async loadCampus(universityName: string){
+      API_Campus_Get_University(universityName)
+        .then((response: any) => {
+          this.campusList = response.data;
+        })
+        .catch(error => {
+          this.campusList = [];
+        })
+    },
+    async loadUsers(universityName: string){
+      let UniversityUsers: any[] = [];
+
+      API_University_Users_Get(universityName)
+      .then((response: any) => {
+        UniversityUsers = response.data;
+      })
+      .catch(error => {
+        UniversityUsers = [];
+      });
+
+      this.decansList = [];
+      this.educationDepartmentsList = [];
+      this.zavCafsList = [];
+      this.teachersList = [];
+      this.studentsList = [];
+
+      for(let user of UniversityUsers){
+        const userData = {
+          id: user.id, 
+          surname: user.last_name, 
+          name: user.first_name, 
+          thirdname: user.father_name, 
+          role: GET_ROLEID_BY_ROLENAME(user.role), 
+          faculty_id: user.faculty_id, 
+          department_id: user.department_id, 
+          educational_direction: user.educational_direction,
+          group_id: user.group_id,
+        } as IUserGet;
+
+        switch(user.role){
+          case ROLES_NAME[2]: this.decansList.push(userData); break;
+          case ROLES_NAME[3]: this.educationDepartmentsList.push(userData); break;
+          case ROLES_NAME[4]: this.zavCafsList.push(userData); break;
+          case ROLES_NAME[5]: this.teachersList.push(userData); break;
+          case ROLES_NAME[6]: this.studentsList.push(userData); break;
+        }
       }
-
-      for(let i = 1; i < 10; i++) {
-        const data: IGroup = {id: i, name: `ЭФБО-0${i}-23`};
-        this.groupsList.push(data);
+    },
+    findGroupMembers(groupID: number){
+      this.groupMembersList = [];
+      for(let user of this.studentsList){
+        this.groupMembersList = [];
+        if(user.group_id === groupID) this.groupMembersList.push(user);
       }
+    },
+    async loadAuditories(universityName: string){
+      API_Audience_Get(universityName)
+      .then((response:any) => {
+        this.auditoriesList = response.data;
+      })
+      .catch(error => {
+        this.auditoriesList = [];
+      });
+    },
+    async loadFaculties(universityName: string){
+      API_Faculties_Get(universityName) // факультеты
+      .then((response:any) => {
+        this.facultiesList = [];
+        for(let item of response.data) this.facultiesList.push({id: item.id, name: item.name});
+      })
+      .catch(error => {
+        this.facultiesList = [];
+      });
+    },
+    async loadDepartments(universityName: string){
+      API_Departments_Get(universityName) // кафедры
+      .then((response:any) => {
+        this.deparmentsList = response.data;
+      })
+      .catch(error => {
+        this.deparmentsList = [];
+      })
+    },
+    async loadFacultatives(){
+      API_Facultatives_Get()
+      .then((response:any) => {
+        this.facultativesList = response.data;
+      })
+      .catch(error => {
+        this.facultativesList = [];
+      });
+    },
+    async loadAllGroups(){
+      API_University_Groups_Get()
+      .then((response:any) => {
+        this.groupsList = response.data.groups;
+      })
+      .catch(error => {
+        this.groupsList = [];
+      });
+    },
 
-      this.facultiesList = [ // факультеты
-        {id: 1, name: 'ИПТИП'},
-        {id: 2, name: 'ИИТ'},
-        {id: 3, name: 'ИКБ'},
-      ];
-      this.deparmentsList = [ // кафедры
-        {id: 1, name: 'Физика'},
-        {id: 2, name: 'Высшая математика'},
-        {id: 3, name: 'Индустриальне программирование'},
-      ];
-      this.educationalDirectionsList = [ // название направления
-        {id: 1, name: 'Фуллстек разработка'},
-        {id: 2, name: 'Программная инженерия'},
-        {id: 3, name: 'Компьютерный дизайн'},
-      ];
-      this.facultativesList = [
-        {id: 1, name: 'Мобильная разработка Kotlin'},
-        {id: 2, name: 'DevOps курсы'},
-        {id: 3, name: 'Автошкола'},
-      ];
+    //вынести в константы!
+    sortByName(people: IGroupScores[]): IGroupScores[] {
+      return [...people].sort((a, b) => {
+        const surnameComparison = a.user.surname.localeCompare(b.user.surname);
+        if (surnameComparison !== 0) {
+          return surnameComparison;
+        }
+
+        const nameComparison = a.user.name.localeCompare(b.user.name);
+        if (nameComparison !== 0) {
+          return nameComparison;
+        }
+
+        return a.user.thirdname.localeCompare(b.user.thirdname);
+      });
+    },
+    sortByGpa(students: IGroupScores[]): IGroupScores[] {
+      return [...students].sort((a, b) => b.gpa - a.gpa);
     },
     sortPeople(people: IUserGet[]): IUserGet[] {
       return [...people].sort((a, b) => {
@@ -174,6 +227,6 @@ export const useUniversityStore = defineStore('university', {
 
         return a.thirdname.localeCompare(b.thirdname);
       });
-    }
+    },
   }
 });

@@ -8,18 +8,12 @@ import (
 )
 
 type User interface {
-	CreateUser(context.Context, *entities.CreateUserRequest) (*entities.CreateUserResponse, error)
+	CreateUsers(ctx context.Context, requests []entities.CreateUserRequest) ([]entities.CreateUserResponse, error)
 	Login(context.Context, *entities.LoginUserRequest) (*entities.LoginUserResponse, error)
-}
-
-type UserData interface {
-	AddStudent(context.Context, *[]entities.AddUserDataRequest) (*[]entities.AddUserDataResponse, error)
-	getOrCreateUniversity(context.Context, string) (int, error)
-	getOrCreateFaculty(context.Context, string) (int, error)
-	getOrCreateDepartment(context.Context, string) (int, error)
-	AddAdmin(context.Context) error
+	CreateAdmin(context.Context) error
 	GetEducationalDirection(context.Context, int) (string, error)
-	GetById(context.Context, int) (*entities.UserData, error)
+	RefreshToken(int) (string, error)
+	GetByID(context.Context, int) (*entities.UserInfo, error)
 }
 
 type University interface {
@@ -43,6 +37,17 @@ type Campus interface {
 	Delete(context.Context, int) error
 }
 
+type Department interface {
+	GetByUniversity(c context.Context, university string) (*[]entities.Department, error)
+	Create(c context.Context, req *entities.CreateDepartmentRequest) (*entities.CreateDepartmentResponse, error)
+	GetByID(c context.Context, id int) (*entities.CreateDepartmentResponse, error)
+}
+
+type Faculty interface {
+	Create(c context.Context, req *entities.CreateFacultyRequest) (*entities.CreateFacultyResponse, error)
+	GetAll(context.Context, *entities.GetFacultyRequest) (*[]entities.Faculty, error)
+}
+
 type Group interface {
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
@@ -51,7 +56,6 @@ type Group interface {
 
 type Service struct {
 	UserService               *UserService
-	UserData                  *UserDataService
 	UniversityService         *UniversityService
 	CampusService             *CampusService
 	GroupService              *GroupService
@@ -62,13 +66,14 @@ type Service struct {
 	ScoreService              *ScoreService
 	FacultyService            *FacultyService
 	AcademicDisciplineService *AcademicDisciplineService
+	DepartmentService         *DepartmentService
+	GpaService                *GpaService
 	conf                      *config.Config
 }
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
-		UserService:               NewUserService(repositories.User, conf),
-		UserData:                  NewUserDataService(repositories.User, repositories.UserData, repositories.Group),
+		UserService:               NewUserService(repositories.User, repositories.University, conf),
 		UniversityService:         NewUniversityService(repositories.University),
 		CampusService:             NewCampusService(repositories.Campus),
 		ClassService:              NewClassService(repositories.Class),
@@ -79,5 +84,7 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		ScoreService:              NewScoreService(repositories.Score),
 		FacultyService:            NewFacultyService(repositories.Faculty),
 		AcademicDisciplineService: NewAcademicDisciplineService(repositories.AcademicDiscipline),
+		DepartmentService:         NewDepartmentService(repositories.Department),
+		GpaService:                NewGpaService(repositories.Gpa),
 	}
 }

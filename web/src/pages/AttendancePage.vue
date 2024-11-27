@@ -8,13 +8,13 @@
 
       <div class="flex flex-col lg:flex-row justify-between flex-nowrap w-full gap-4">
         <div class="flex flex-col gap-y-4 items-center">
-          <SearchList 
+          <!-- <SearchList 
             title="" 
             placeholder="Выберите группу" 
             :search-list="groupsSearchList" 
             :item-component="getListItemComponent"
             class="h-80"
-          />
+          /> -->
           
           <ScheduleClassList v-if="isGroupSelected" :canAddFaculties="false"/>
           
@@ -32,9 +32,9 @@
                 :data="item.user"
               />
             </div>
-            <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
+            <!-- <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
               <p class="text-2xl text-white">Заверить</p>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -95,9 +95,11 @@ export default {
   mounted() {
     this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
 
+    this.attendancePageStore.selectedGroupID = 1; // автовыбор
+
     this.attendancePageStore.attendanceGroupMembers = [];
     for(let item of this.universityStore.groupMembersList){
-      const data: IGroupAttendance = {user: item, attendace: 1};
+      const data: IGroupAttendance = {user: item, attendace: Math.ceil(Math.random()*3)-1}; // 1
       this.attendancePageStore.attendanceGroupMembers.push(data);
     }
   },

@@ -8,8 +8,10 @@ import (
 type UserRepository interface {
 	GetById(context.Context, int) (*entities.User, error)
 	GetByEmail(context.Context, string) (*entities.User, error)
+	GetByUniversity(context.Context, string) (*[]entities.User, error)
 	Exists(context.Context, string) (bool, error)
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
+	GetInfoById(ctx context.Context, id int) (*entities.UserInfo, error)
 }
 
 //type UserDataRepository interface {
@@ -45,6 +47,7 @@ type AudienceRepository interface {
 	GetByCampus(context.Context, string) (*[]entities.Audience, error)
 	GetByProfile(context.Context, string) (*[]entities.Audience, error)
 	GetByCapacity(context.Context, int) (*[]entities.Audience, error)
+	GetByUniversity(context.Context, string) (*[]entities.Audience, error)
 	Update(context.Context, *entities.Audience) error
 	Delete(context.Context, int) error
 }
@@ -53,7 +56,7 @@ type ClassRepository interface {
 	Create(context.Context, *[]entities.Class) ([]int, error)
 	GetById(context.Context, int) (*entities.Class, error)
 	GetByGroupName(context.Context, string) (*[]entities.Class, error)
-	GetByName(context.Context, string, string) (*[]entities.Class, error)
+	GetOptionals(context.Context, string, string) (*[]entities.Class, error)
 	GetByNameAndGroup(context.Context, string, string) (*[]entities.Class, error)
 	GetByNameAndGroupWithoutLk(context.Context, string, string) (*[]entities.Class, error)
 	GetByTeacherName(context.Context, string, string) (*[]entities.Class, error)
@@ -73,6 +76,7 @@ type GroupRepository interface {
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetByName(context.Context, string) (*entities.Group, error)
 	GetAll(context.Context) (*[]entities.Group, error)
+	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 }
 
 type UserScheduleRepository interface {
@@ -108,6 +112,7 @@ type DepartmentRepository interface {
 	GetById(context.Context, int) (*entities.Department, error)
 	GetByName(context.Context, string) (*entities.Department, error)
 	GetAll(context.Context) (*[]entities.Department, error)
+	GetByUniversity(context.Context, string) (*[]entities.Department, error)
 	Update(context.Context, *entities.UpdateDepartmentRequest) error
 	Delete(context.Context, int) error
 }
@@ -130,6 +135,12 @@ type AcademicDisciplineRepository interface {
 	Delete(context.Context, int) error
 }
 
+type GpaRepository interface {
+	Update(context.Context, int, float64) error
+	Get(context.Context, int) (*entities.Gpa, error)
+	GetByHighestGpa(context.Context, float64) (*[]entities.Gpa, error)
+}
+
 type Repository struct {
 	User               UserRepository
 	UserData           UserDataRepository
@@ -144,4 +155,5 @@ type Repository struct {
 	Grade              GradeRepository
 	Score              ScoreRepository
 	AcademicDiscipline AcademicDisciplineRepository
+	Gpa                GpaRepository
 }

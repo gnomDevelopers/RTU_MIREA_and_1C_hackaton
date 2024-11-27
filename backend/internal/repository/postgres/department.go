@@ -81,6 +81,33 @@ func (r *DepartmentRepository) GetAll(ctx context.Context) (*[]entities.Departme
 	return &departments, nil
 }
 
+func (r *DepartmentRepository) GetByUniversity(ctx context.Context, university string) (*[]entities.Department, error) {
+	var id int
+	query := `SELECT id FROM university WHERE name = $1`
+	err := r.db.QueryRowContext(ctx, query, university).Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	var departments []entities.Department
+	query = `SELECT department.id, department.name FROM department JOIN users ON department.id = users.department_id WHERE users.university_id = $1;`
+	rows, err := r.db.QueryContext(ctx, query, id)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var department entities.Department
+		err = rows.Scan(&department.ID, &department.Name)
+		if err != nil {
+			return nil, err
+		}
+		departments = append(departments, department)
+	}
+
+	return &departments, nil
+}
+
 func (r *DepartmentRepository) Update(ctx context.Context, department *entities.UpdateDepartmentRequest) error {
 	query := `UPDATE department SET name = $1 WHERE id = $2`
 	_, err := r.db.ExecContext(ctx, query, department.Name, department.ID)

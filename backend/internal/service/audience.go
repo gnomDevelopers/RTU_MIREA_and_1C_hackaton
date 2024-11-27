@@ -67,6 +67,14 @@ func (s *AudienceService) GetByCapacity(c context.Context, capacity int) (*[]ent
 	return audiences, err
 }
 
+func (s *AudienceService) GetByUniversity(c context.Context, university string) (*[]entities.Audience, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	audiences, err := s.repository.GetByUniversity(ctx, university)
+	return audiences, err
+}
+
 func (s *AudienceService) Update(c context.Context, campus *entities.Audience) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()

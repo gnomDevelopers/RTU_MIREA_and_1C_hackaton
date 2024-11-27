@@ -14,14 +14,15 @@ export default {
   },
   data(){
     return {
-      decoded: '',
-      status: 'not decoded',
+      decoded: undefined as any,
+      status: 'waiting...',
     }
   },
   methods: {
     onDecode(decodedString: string){
+      // this.decoded = JSON.parse(decodedString);
       this.decoded = decodedString;
-      this.status = 'decoded!';
+      this.status = 'decoded';
     },
   }
 };

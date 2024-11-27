@@ -145,6 +145,16 @@ export default {
           type: AUDITORY_TYPE_LIST[this.auditoryType],
           id: this.data.id
         }
+        for(let i = 0; i < this.universityStore.auditoriesList.length; i++){
+          if(this.universityStore.auditoriesList[i].id === this.data.id){
+            this.universityStore.auditoriesList[i].campus_id = this.auditoryCampusID;
+            this.universityStore.auditoriesList[i].capacity = this.auditoryCapacity;
+            this.universityStore.auditoriesList[i].name = this.auditoryName;
+            this.universityStore.auditoriesList[i].profile = AUDITORY_PROFILE_LIST[this.auditoryProfile];
+            this.universityStore.auditoriesList[i].type = AUDITORY_TYPE_LIST[this.auditoryType];
+            break;
+          }
+        }
         setTimeout(() => {
           this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Информация об аудитории обновлена!');
         }, 300)
@@ -170,6 +180,12 @@ export default {
       }
     },
     deleteAuditory() {
+      for(let i = 0; i < this.universityStore.auditoriesList.length; i++){
+          if(this.universityStore.auditoriesList[i].id === this.data.id){
+            this.universityStore.auditoriesList.splice(i, 1);
+            break;
+          }
+        }
       setTimeout(() => {
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитория успешно удалена!');
       }, 300);
