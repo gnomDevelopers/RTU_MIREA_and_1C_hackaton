@@ -66,7 +66,7 @@ type Service struct {
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
-		UserService:               NewUserService(repositories.User, conf),
+		UserService:               NewUserService(repositories.User, repositories.University, conf),
 		UniversityService:         NewUniversityService(repositories.University),
 		CampusService:             NewCampusService(repositories.Campus),
 		ClassService:              NewClassService(repositories.Class),

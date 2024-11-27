@@ -24,7 +24,7 @@ type UserInfo struct {
 	LastName             string `json:"last_name"`
 	FirstName            string `json:"first_name"`
 	FatherName           string `json:"father_name"`
-	UniversityName       int    `json:"university_name"`
+	UniversityName       string `json:"university_name"`
 	Role                 string `json:"role"`
 	FacultyID            int    `json:"faculty_id"`
 	GroupID              int    `json:"group_id"`
