@@ -1304,6 +1304,40 @@ paths:
       summary: Get class by id
       tags:
       - class
+  /auth/department:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new department with the provided details.
+      parameters:
+      - description: Department creation data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateDepartmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Created department details
+          schema:
+            $ref: '#/definitions/entities.CreateDepartmentResponse'
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new department
+      tags:
+      - department
   /auth/department/university/{university}:
     get:
       consumes:
@@ -2503,40 +2537,6 @@ paths:
       summary: Response
       tags:
       - work
-  /department:
-    post:
-      consumes:
-      - application/json
-      description: Creates a new department with the provided details.
-      parameters:
-      - description: Department creation data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.CreateDepartmentRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Created department details
-          schema:
-            $ref: '#/definitions/entities.CreateDepartmentResponse'
-        "400":
-          description: Invalid request body
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Create a new department
-      tags:
-      - department
   /login:
     get:
       consumes:
