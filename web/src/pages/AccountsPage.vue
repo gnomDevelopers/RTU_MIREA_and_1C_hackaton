@@ -122,19 +122,6 @@ export default {
     AccountsCreateUsers,
     AccountsCreateAuditory,
   },
-  data(){
-    return{
-      // списки ресурсов
-      auditoriesSearchList: [] as ISearchList[],
-
-      //списки пользователей
-      decansSearchList: [] as ISearchList[],
-      educationDepartmentsSearchList: [] as ISearchList[],
-      zavCafsSearchList: [] as ISearchList[],
-      teachersSearchList: [] as ISearchList[],
-      studentsSearchList: [] as ISearchList[],
-    }
-  },
   computed: {
     ...mapStores(useStatusWindowStore, useUniversityStore),
     
@@ -144,73 +131,55 @@ export default {
     getAuditoryListItemComponent(){
       return AccountAuditoryListItem;
     },
+
+    auditoriesSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.auditoriesList.length === 0) return arr;
+      for(let item of this.universityStore.auditoriesList){
+        this.auditoriesSearchList.push({id: item.id, search_field: item.name, data: item});
+      }
+      return arr;
+    },
+    decansSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.decansList.length === 0) return arr;
+      for(let item of this.universityStore.decansList){
+        this.auditoriesSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
+    educationDepartmentsSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.educationDepartmentsList.length === 0) return arr;
+      for(let item of this.universityStore.educationDepartmentsList){
+        this.auditoriesSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
+    zavCafsSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.zavCafsList.length === 0) return arr;
+      for(let item of this.universityStore.zavCafsList){
+        this.auditoriesSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
+    teachersSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.teachersList.length === 0) return arr;
+      for(let item of this.universityStore.teachersList){
+        this.auditoriesSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
+    studentsSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.studentsList.length === 0) return arr;
+      for(let item of this.universityStore.studentsList){
+        this.auditoriesSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      return arr;
+    },
   },
-  watch: {
-    'universityStore.auditoriesList' : {
-      handler(val: IAPI_Audience_Update[]){
-        this.auditoriesSearchList = [];
-        for(let item of val){
-          this.auditoriesSearchList.push({id: item.id, search_field: item.name, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-
-    'universityStore.decansList' : {
-      handler(val: IUserGet[]){
-        this.decansSearchList = [];
-        for(let item of val){
-          this.decansSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-
-    'universityStore.educationDepartmentsList' : {
-      handler(val: IUserGet[]){
-        this.educationDepartmentsSearchList = [];
-        for(let item of val){
-          this.educationDepartmentsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-
-    'universityStore.zavCafsList' : {
-      handler(val: IUserGet[]){
-        this.zavCafsSearchList = [];
-        for(let item of val){
-          this.zavCafsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-
-    'universityStore.teachersList' : {
-      handler(val: IUserGet[]){
-        this.teachersSearchList = [];
-        for(let item of val){
-          this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-
-    'universityStore.studentsList' : {
-      handler(val: IUserGet[]){
-        this.studentsSearchList = [];
-        for(let item of val){
-          this.studentsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  }
 };
 </script>
