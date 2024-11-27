@@ -638,7 +638,7 @@ paths:
       summary: Create a new achievement
       tags:
       - achievements
-  /auth/achievements/{id}:
+  /auth/achievements/user/{id}:
     get:
       consumes:
       - application/json

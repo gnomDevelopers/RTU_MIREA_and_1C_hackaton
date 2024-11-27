@@ -120,7 +120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/achievements/{id}": {
+        "/auth/achievements/user/{id}": {
             "get": {
                 "security": [
                     {
