@@ -60,7 +60,7 @@
 
           <p class="font-semibold text-lg cursor-default">
             Кампус: 
-            <span class=" font-normal text-base cursor-pointer text-blue-800">{{ getCampusName(item.campus_id) }}</span>
+            <span class=" font-normal text-base cursor-pointer text-blue-800">{{ item.campus }}</span>
           </p>
 
           <p class="font-semibold text-lg cursor-default">
@@ -90,7 +90,8 @@
 import { mapStores } from 'pinia';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { useUniversityStore } from '@/stores/universityStore';
-import { StatusCodes, type IAPI_Audience_Create, AUDITORY_TYPE_LIST, AUDITORY_PROFILE_LIST } from '../helpers/constants';
+import { useUserInfoStore } from '@/stores/userInfoStore';
+import { StatusCodes, type IAPI_Audience_Create, AUDITORY_TYPE_LIST, AUDITORY_PROFILE_LIST, type IAPI_Audience_Update } from '../helpers/constants';
 import { API_Audience_Create } from '@/api/api';
 
 export default {
@@ -106,7 +107,7 @@ export default {
     }
   },
   computed: {
-    ...mapStores(useStatusWindowStore, useUniversityStore),
+    ...mapStores(useStatusWindowStore, useUniversityStore, useUserInfoStore),
 
     getAuditoryProfileList(){
       return AUDITORY_PROFILE_LIST;
@@ -128,7 +129,7 @@ export default {
         this.auditoryType !== -1
       ){
         this.auditoryList.push({
-          campus_id: this.auditoryCampusID, 
+          campus: this.universityStore.getCampusNameByID(this.auditoryCampusID), 
           capacity: this.auditoryCapacity, 
           name: this.auditoryName, 
           profile: AUDITORY_PROFILE_LIST[this.auditoryProfile], 
@@ -166,7 +167,7 @@ export default {
     },
     deleteAuditory(itemDelete: IAPI_Audience_Create){
       this.auditoryList = this.auditoryList.filter(item => !(
-        item.campus_id === itemDelete.campus_id && 
+        item.campus === itemDelete.campus &&
         item.capacity === itemDelete.capacity &&
         item.name === itemDelete.name &&
         item.profile === itemDelete.profile &&
@@ -175,32 +176,23 @@ export default {
     },
     sendAuditories() {
       if(this.auditoryList.length === 0)return;
-      for(let item of this.auditoryList){
-        this.universityStore.auditoriesList.push({...item, id: this.universityStore.tmpuserID++});
-      }
-      //очищаем буфер аудиторий
-      this.auditoryList = [];
-      setTimeout(() => {
+      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+
+      API_Audience_Create(this.auditoryList)
+      .then(async (resolve:any ) => {
+        await this.universityStore.loadCampus(this.userInfoStore.university!);
+
+        //очищаем буфер аудиторий
+        this.auditoryList = [];
+
+        this.statusWindowStore.deteleStatusWindow(stID);
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитории сохранены!');
-      }, 460);
-      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-      // API_Audience_Create(this.auditoryList)
-      // .then(resolve => {
-      //   this.statusWindowStore.deteleStatusWindow(stID);
-      //   this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитории сохранены!');
-      //   //Добавить в universityStore
-      // })
-      // .catch(error => {
-      //   this.statusWindowStore.deteleStatusWindow(stID);
-      //   this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при сохранении аудиторий!');
-      // });
+      })
+      .catch(error => {
+        this.statusWindowStore.deteleStatusWindow(stID);
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при сохранении аудиторий!');
+      });
     },
-    getCampusName(campusID: number): string{
-      for(let el of this.getCampusList) {
-        if(el.id === campusID) return el.name;
-      }
-      return '';
-    }
   }
 };
 </script>

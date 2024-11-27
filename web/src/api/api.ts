@@ -282,9 +282,9 @@ export function API_University_Users_Get(universityName: string){
 };
 
 //получение всех групп вуза
-export function API_University_Groups_Get(){
+export function API_University_Groups_Get(universityName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/auth/schedule/search/group`, {
+    axios.get(`${API}/auth/groups/university/${universityName}`, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
@@ -546,7 +546,11 @@ export function API_University_Delete(universityID: number){
 //получение всех университетов
 export function API_University_Get_All(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/university/all`)
+    axios.get(`${API}/auth/university/all`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('University get all success: ', response);
       resolve(response);

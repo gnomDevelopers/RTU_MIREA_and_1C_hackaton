@@ -144,7 +144,7 @@ export default {
       const arr:ISearchList[] = [];
       if(this.universityStore.decansList.length === 0) return arr;
       for(let item of this.universityStore.decansList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
       return arr;
     },
@@ -152,7 +152,7 @@ export default {
       const arr:ISearchList[] = [];
       if(this.universityStore.educationDepartmentsList.length === 0) return arr;
       for(let item of this.universityStore.educationDepartmentsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
       return arr;
     },
@@ -160,7 +160,7 @@ export default {
       const arr:ISearchList[] = [];
       if(this.universityStore.zavCafsList.length === 0) return arr;
       for(let item of this.universityStore.zavCafsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
       return arr;
     },
@@ -168,7 +168,7 @@ export default {
       const arr:ISearchList[] = [];
       if(this.universityStore.teachersList.length === 0) return arr;
       for(let item of this.universityStore.teachersList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
       return arr;
     },
@@ -176,7 +176,7 @@ export default {
       const arr:ISearchList[] = [];
       if(this.universityStore.studentsList.length === 0) return arr;
       for(let item of this.universityStore.studentsList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
       return arr;
     },

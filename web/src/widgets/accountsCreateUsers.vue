@@ -78,7 +78,7 @@
       <div v-for="user in usersList" class="flex flex-row gap-x-2 px-2 py-1 items-center rounded-lg bg-color-light">
         
         <div class="flex flex-row flex-grow justify-start items-center">
-          <p class="text-lg">{{ user.surname }} {{user.name}} {{ user.thirdname }}</p>
+          <p class="text-lg">{{ user.last_name }} {{user.first_name}} {{ user.father_name }}</p>
         </div>
 
         <div class="flex flex-row flex-wrap gap-1 px-2">
@@ -130,6 +130,7 @@
 import { mapStores } from 'pinia';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { useUniversityStore } from '@/stores/universityStore';
+import { useUserInfoStore } from '@/stores/userInfoStore';
 import { 
   ROLES_NAME, 
   INFO_FIELDS, 
@@ -157,7 +158,7 @@ export default {
     }
   },
   computed: {
-    ...mapStores(useStatusWindowStore, useUniversityStore),
+    ...mapStores(useStatusWindowStore, useUniversityStore, useUserInfoStore),
 
     getFaculties(){
       return this.universityStore.facultiesList;
@@ -180,13 +181,15 @@ export default {
         (this.showEducationalDirection(this.userRole) ? this.showEducationalDirection(this.userRole) && this.userEducationalDirections !== '' : true)
       ){
         this.usersList.push({
-          name: this.userName, 
-          surname: this.userSurname, 
-          thirdname: this.userThirdname, 
+          first_name: this.userName, 
+          last_name: this.userSurname, 
+          father_name: this.userThirdname, 
           role: this.userRole,
           faculty_id: this.userFaculty,
           department_id: this.userDepartment,
           educational_direction: this.userEducationalDirections,
+          group_id: 2,
+          university_id: this.universityStore.getUniversityID(this.userInfoStore.university!),
         });
 
         this.userName = '';
@@ -222,6 +225,16 @@ export default {
     sendUsersList(){
       if(this.usersList.length === 0) return;
       const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+      // "department_id": 0,
+      // "educational_direction": "string",
+      // "faculty_id": 0,
+      // "father_name": "string",
+      // "first_name": "string",
+      // "group_id": 0,
+      // "last_name": "string",
+      // "password": "string",
+      // "role": "string",
+      // "university_id": 0
       API_University_Users_Create(this.usersList)
       .then((response: any) => {
         //распределяем пользователей по соответствующим спискам

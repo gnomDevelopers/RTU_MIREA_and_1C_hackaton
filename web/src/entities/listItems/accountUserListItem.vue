@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col sm:flex-row items-start sm:items-center p-2 rounded-lg bg-color-light">
     <div class="flex-grow">
-      <p class="text-lg">{{ data.surname }} {{ data.name }} {{ data.thirdname }}</p>
+      <p class="text-lg">{{ data.last_name }} {{ data.first_name }} {{ data.father_name }}</p>
     </div>
     <div class="flex flex-row gap-x-2 items-center flex-shrink-0 ">
       <select 
@@ -30,7 +30,7 @@ import { mapStores } from 'pinia';
 import { useUserInfoStore } from '@/stores/userInfoStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
-import { ROLES_NAME, ROLES_SET_PRORECTOR, ROLES_SET_DECAN_TO_PREPOD, type IUserGet, StatusCodes } from '@/helpers/constants';
+import { ROLES_NAME, type IUserGet, StatusCodes } from '@/helpers/constants';
 import type { PropType } from 'vue';
 export default{
   props:{
@@ -77,14 +77,15 @@ export default{
       //добавляем в новый список
       this.getUserList(this.userRole).push(<IUserGet>{
         id: this.data.id,
-        name: this.data.name,
-        surname: this.data.surname,
-        thirdname: this.data.thirdname,
+        first_name: this.data.first_name,
+        last_name: this.data.last_name,
+        father_name: this.data.father_name,
         role: this.userRole,
         faculty_id: this.data.faculty_id,
         department_id: this.data.department_id,
         educational_direction: this.data.educational_direction,
         group_id: this.data.group_id,
+        university_id: 1,
       });
       this.statusWindowStore.showStatusWindow(StatusCodes.success, `Должность изменена!`);
     },
