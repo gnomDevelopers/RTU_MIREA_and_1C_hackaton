@@ -92,7 +92,7 @@ export default {
       if(this.universityStore.groupsList.length === 0) return arr;
       console.log('grouplist before for');
       for(let item of <IGroup[]>this.universityStore.groupsList){
-        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
+        arr.push({id: item.id, search_field: `${item.name}`, data: item});
       }
       console.log('groupsList: ', arr);
       return arr;
@@ -116,7 +116,7 @@ export default {
       if(this.universityStore.facultativesList.length === 0) return arr;
       console.log('facultativesList before for');
       for(let item of <IGroup[]>this.universityStore.facultativesList){
-        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
+        arr.push({id: item.id, search_field: `${item.name}`, data: item});
       }
       console.log('facultativesList: ', arr);
       return arr;

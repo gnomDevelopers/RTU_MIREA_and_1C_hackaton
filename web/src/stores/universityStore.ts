@@ -179,7 +179,10 @@ export const useUniversityStore = defineStore('university', {
       API_Facultatives_Get()
       .then((response:any) => {
         this.facultativesList = [];
-        if(response.data !== null) this.facultativesList = response.data;
+        if(response.data === null) return;
+        for(let fac of response.data){
+          this.facultativesList.push({id: this.tmpuserID++, name: fac.name});
+        }
       })
       .catch(error => {
         this.facultativesList = [];
@@ -191,7 +194,7 @@ export const useUniversityStore = defineStore('university', {
         this.groupsList = [];
         if(response.data === null) return;
         for(let group of response.data){
-          this.groupsList.push({name: group.group});
+          this.groupsList.push({id: this.tmpuserID++, name: group.group});
         }
       })
       .catch(error => {
