@@ -75,6 +75,7 @@ type Service struct {
 	DepartmentService         *DepartmentService
 	GpaService                *GpaService
 	AchievementService        *AchievementService
+	WorkService               *WorkService
 	conf                      *config.Config
 }
 
@@ -94,5 +95,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		DepartmentService:         NewDepartmentService(repositories.Department),
 		GpaService:                NewGpaService(repositories.Gpa),
 		AchievementService:        NewAchievementService(repositories.AchievementRepository),
+		WorkService:               NewWorkService(repositories.Work),
 	}
 }

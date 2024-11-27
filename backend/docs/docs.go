@@ -1987,7 +1987,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.Class"
+                            "$ref": "#/definitions/entities.Gpa"
                         }
                     },
                     "400": {
@@ -2181,6 +2181,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/percentile/id/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "gpa"
+                ],
+                "summary": "Get percentile by user id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.Class"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/schedule/group/{group}": {
             "get": {
                 "security": [
@@ -2259,7 +2313,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleNames"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleName"
+                            }
                         }
                     },
                     "400": {
@@ -2418,7 +2475,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleGroups"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleGroup"
+                            }
                         }
                     },
                     "400": {
@@ -2463,7 +2523,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleNames"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleName"
+                            }
                         }
                     },
                     "400": {
@@ -2508,7 +2571,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.ScheduleTeachers"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ScheduleTeachers"
+                            }
                         }
                     },
                     "400": {
@@ -4192,36 +4258,27 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.ScheduleGroups": {
+        "entities.ScheduleGroup": {
             "type": "object",
             "properties": {
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "group": {
+                    "type": "string"
                 }
             }
         },
-        "entities.ScheduleNames": {
+        "entities.ScheduleName": {
             "type": "object",
             "properties": {
-                "names": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "name": {
+                    "type": "string"
                 }
             }
         },
         "entities.ScheduleTeachers": {
             "type": "object",
             "properties": {
-                "teachers": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "teacher": {
+                    "type": "string"
                 }
             }
         },

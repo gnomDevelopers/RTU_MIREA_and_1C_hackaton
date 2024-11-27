@@ -42,7 +42,7 @@ export default{
     ...mapStores(useUserInfoStore, useUniversityStore),
 
     getUniversity(){
-      return 'РТУ МИРЭА';
+      return this.userInfoStore.university;
     },
     getRoleName(){
       if(this.userInfoStore.role === null) return 'none';
@@ -58,21 +58,21 @@ export default{
       return this.userInfoStore.email;
     },
     getFaculty(){
-      if(this.userInfoStore.faculty_id === null) return '-';
+      if(this.userInfoStore.faculty_id === null || this.userInfoStore.faculty_id === 1) return '-';
       for(let item of this.universityStore.facultiesList){
         if(item.id === this.userInfoStore.faculty_id) return item.name;
       }
       return '';
     },
     getDepartment(){
-      if(this.userInfoStore.department_id === null) return '-';
+      if(this.userInfoStore.department_id === null || this.userInfoStore.department_id === 1) return '-';
       for(let item of this.universityStore.deparmentsList){
         if(item.id === this.userInfoStore.department_id) return item.name;
       }
       return '';
     },
     getEducationalDirection(){
-      if(this.userInfoStore.educationalDirection === null) return '-';
+      if(this.userInfoStore.educationalDirection === 'null') return '-';
       return this.userInfoStore.educationalDirection;
     },
 

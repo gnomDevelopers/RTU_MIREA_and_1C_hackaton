@@ -14,13 +14,49 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param id path string true "user id"
-// @Success 200 {object} entities.Class
+// @Success 200 {object} entities.Gpa
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/gpa/id/{id} [get]
 // @Security ApiKeyAuth
 func (h *Handler) GetGpaByUserId(c *fiber.Ctx) error {
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusBadRequest})
+		logEvent.Err(err).Msg("invalid request body")
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid request body"})
+	}
+
+	gpa, err := h.services.GpaService.GetById(c.Context(), id)
+	if err != nil {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg(err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
+		Url: c.OriginalURL(), Status: fiber.StatusOK})
+	logEvent.Msg("success")
+	return c.Status(fiber.StatusOK).JSON(gpa)
+}
+
+// GetPercentileByUserId
+// @Tags gpa
+// @Summary      Get percentile by user id
+// @Accept       json
+// @Produce      json
+// @Param id path string true "user id"
+// @Success 200 {object} entities.Class
+// @Failure 400 {object} entities.ErrorResponse
+// @Failure 401 {object} entities.ErrorResponse
+// @Failure 500 {object} entities.ErrorResponse
+// @Router       /auth/percentile/id/{id} [get]
+// @Security ApiKeyAuth
+func (h *Handler) GetPercentileByUserId(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {

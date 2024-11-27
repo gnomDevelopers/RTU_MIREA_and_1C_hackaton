@@ -138,6 +138,14 @@ type AcademicDisciplineRepository interface {
 type GpaRepository interface {
 	Update(context.Context, int, float64) error
 	Get(context.Context, int) (*entities.Gpa, error)
+	GetByHighestGpa(context.Context, float64) (*[]entities.Gpa, error)
+}
+
+type WorkRepository interface {
+	Exists(context.Context, int) (bool, error)
+	ExistsHR(context.Context, string) (bool, error)
+	Create(context.Context, *entities.WorkUser) error
+	CreateHR(context.Context, *entities.HR) error
 }
 
 type AchievementRepository interface {
@@ -162,4 +170,5 @@ type Repository struct {
 	Score                 ScoreRepository
 	AcademicDiscipline    AcademicDisciplineRepository
 	Gpa                   GpaRepository
+	Work                  WorkRepository
 }

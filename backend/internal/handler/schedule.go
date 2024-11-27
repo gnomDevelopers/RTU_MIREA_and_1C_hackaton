@@ -204,7 +204,7 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 // @Summary      Search groups
 // @Accept       json
 // @Produce      json
-// @Success 200 {object} entities.ScheduleGroups
+// @Success 200 {object} []entities.ScheduleGroup
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -233,10 +233,15 @@ func (h *Handler) ScheduleSearchGroup(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	var scheduleGroups []entities.ScheduleGroup
+	for _, group := range groups {
+		scheduleGroups = append(scheduleGroups, entities.ScheduleGroup{Group: group})
+	}
+
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(entities.ScheduleGroups{Groups: groups})
+	return c.Status(fiber.StatusOK).JSON(scheduleGroups)
 }
 
 // ScheduleSearchTeacher
@@ -244,7 +249,7 @@ func (h *Handler) ScheduleSearchGroup(c *fiber.Ctx) error {
 // @Summary      Search teachers
 // @Accept       json
 // @Produce      json
-// @Success 200 {object} entities.ScheduleTeachers
+// @Success 200 {object} []entities.ScheduleTeachers
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -273,10 +278,15 @@ func (h *Handler) ScheduleSearchTeacher(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	var scheduleTeachers []entities.ScheduleTeachers
+	for _, teacher := range teachers {
+		scheduleTeachers = append(scheduleTeachers, entities.ScheduleTeachers{Teacher: teacher})
+	}
+
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(entities.ScheduleTeachers{Teachers: teachers})
+	return c.Status(fiber.StatusOK).JSON(scheduleTeachers)
 }
 
 // ScheduleSearchName
@@ -284,7 +294,7 @@ func (h *Handler) ScheduleSearchTeacher(c *fiber.Ctx) error {
 // @Summary      Search names
 // @Accept       json
 // @Produce      json
-// @Success 200 {object} entities.ScheduleNames
+// @Success 200 {object} []entities.ScheduleName
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -312,11 +322,15 @@ func (h *Handler) ScheduleSearchName(c *fiber.Ctx) error {
 		logEvent.Msg(err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
+	var scheduleNames []entities.ScheduleName
+	for _, name := range names {
+		scheduleNames = append(scheduleNames, entities.ScheduleName{Name: name})
+	}
 
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(entities.ScheduleNames{Names: names})
+	return c.Status(fiber.StatusOK).JSON(scheduleNames)
 }
 
 // GetGroupSubject
@@ -324,7 +338,7 @@ func (h *Handler) ScheduleSearchName(c *fiber.Ctx) error {
 // @Summary      Получение всех предметов группы
 // @Accept       json
 // @Produce      json
-// @Success 200 {object} entities.ScheduleNames
+// @Success 200 {object} []entities.ScheduleName
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -353,8 +367,13 @@ func (h *Handler) GetGroupSubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	var scheduleNames []entities.ScheduleName
+	for _, name := range names {
+		scheduleNames = append(scheduleNames, entities.ScheduleName{Name: name})
+	}
+
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(entities.ScheduleNames{Names: names})
+	return c.Status(fiber.StatusOK).JSON(scheduleNames)
 }

@@ -12,11 +12,11 @@
           <IconAccounts/>
         </MainTableItem>
 
-        <MainTableItem v-if="false" @clicked="$router.push({name: 'AccountsPage'})" title="Создание учетных записей" text="Создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента">
+        <MainTableItem @clicked="$router.push({name: 'AccountsPage'})" title="Создание учетных записей" text="Создать учётную запись для администратора, заведующего кафедрой, преподавателя или студента">
           <IconAccounts/>
         </MainTableItem>
 
-        <MainTableItem v-if="false" @clicked="$router.push({name: 'CreateSchedulePage'})" title="Создание расписания" text="Создать расписание на семестр">
+        <MainTableItem @clicked="$router.push({name: 'CreateSchedulePage'})" title="Создание расписания" text="Создать расписание на семестр">
           <IconShedule/>
         </MainTableItem>
 
@@ -28,7 +28,7 @@
           <IconPerformance/>
         </MainTableItem>
 
-        <MainTableItem v-if="false" @clicked="$router.push({name: 'GroupCorrectPage'})" title="Группы" text="Заполнение учебных групп">
+        <MainTableItem @clicked="$router.push({name: 'GroupCorrectPage'})" title="Группы" text="Заполнение учебных групп">
           <IconGroups/>
         </MainTableItem>
 

@@ -84,6 +84,7 @@ export default{
         faculty_id: this.data.faculty_id,
         department_id: this.data.department_id,
         educational_direction: this.data.educational_direction,
+        group_id: this.data.group_id,
       });
       this.statusWindowStore.showStatusWindow(StatusCodes.success, `Должность изменена!`);
     },

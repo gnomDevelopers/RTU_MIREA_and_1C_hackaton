@@ -10,15 +10,18 @@ export const useUserInfoStore = defineStore('userInfo', {
     return{
       authorized: null as TMaybeBoolean, // проверка авторизованности
       userID: null as TMaybeNumber, // id пользователя
+
+      email: '',
       first_name: '', // имя
       last_name: '', // фамилия
       father_name: '', //отчество
+      role: null as TMaybeNumber, // роль
+      group_id: null as TMaybeNumber,
       university: null as TMaybeString, // id университет
       faculty_id: null as TMaybeNumber, // id факультета
       department_id: null as TMaybeNumber, // id кафедры
       educationalDirection: null as TMaybeString, // название направления
-      role: null as TMaybeNumber, // роль
-      email: '',
+      isPasswordChanged: true, // сменен ли пароль
     }
   },
   actions: {
@@ -46,8 +49,20 @@ export const useUserInfoStore = defineStore('userInfo', {
         this.educationalDirection = response.data.educational_direction;
         this.role = GET_ROLEID_BY_ROLENAME(response.data.role);
         this.email = response.data.email;
+        this.group_id = response.data.group_id;
+        this.isPasswordChanged = response.data.is_password_changed;
       }catch(error){
-
+        this.email = '';
+        this.first_name = '';
+        this.last_name = '';
+        this.father_name = '';
+        this.role = null;
+        this.group_id = null;
+        this.university = null;
+        this.faculty_id = null;
+        this.department_id = null;
+        this.educationalDirection = null;
+        this.isPasswordChanged = true;
       }
     },
     async onAuthorized(response: any){
