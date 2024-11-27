@@ -12,6 +12,7 @@ type User interface {
 	Login(context.Context, *entities.LoginUserRequest) (*entities.LoginUserResponse, error)
 	CreateAdmin(context.Context) error
 	GetEducationalDirection(context.Context, int) (string, error)
+	RefreshToken(int) (string, error)
 }
 
 type University interface {

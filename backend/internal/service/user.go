@@ -55,8 +55,23 @@ func (s *UserService) CreateUser(c context.Context, request *entities.CreateUser
 	}
 
 	switch request.Role {
-	case "З":
+	case "Учебный Отдел", "Декан":
+		u.FacultyID = request.FacultyID
+		u.DepartmentID = 1
+		u.EducationalDirection = "null"
+		u.GroupID = 1
 
+	case "Заведующий кафедрой", "Преподаватель":
+		u.FacultyID = request.FacultyID
+		u.DepartmentID = request.DepartmentID
+		u.EducationalDirection = "null"
+		u.GroupID = 1
+
+	case "Студент":
+		u.FacultyID = request.FacultyID
+		u.DepartmentID = request.DepartmentID
+		u.EducationalDirection = request.EducationalDirection
+		u.GroupID = request.GroupID
 	}
 
 	r, err := s.repository.CreateUser(ctx, u)
@@ -109,6 +124,18 @@ func (s *UserService) Login(c context.Context, request *entities.LoginUserReques
 
 }
 
+func (s *UserService) RefreshToken(userID int) (string, error) {
+	TokenExpiration, err := strconv.Atoi(s.conf.Application.TokenExpiration)
+	if err != nil {
+		return "", errors.New("wrong data")
+	}
+	accessToken, err := pkg.GenerateAccessToken(userID, TokenExpiration, s.conf.Application.SigningKey)
+	if err != nil {
+		return "", errors.New("wrong data")
+	}
+	return accessToken, nil
+}
+
 func (s *UserService) CreateAdmin(c context.Context) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
@@ -141,7 +168,7 @@ func (s *UserService) CreateAdmin(c context.Context) error {
 		FacultyID:            1,
 		GroupID:              1,
 		DepartmentID:         1,
-		EducationalDirection: "admin",
+		EducationalDirection: "null",
 	}
 
 	user, err := s.repository.CreateUser(ctx, createAdmin)

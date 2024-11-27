@@ -44,6 +44,7 @@ export default{
 
         try{
           const response = await API_Login(data);
+          
           this.statusWindowStore.deteleStatusWindow(stID);
           this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
 
