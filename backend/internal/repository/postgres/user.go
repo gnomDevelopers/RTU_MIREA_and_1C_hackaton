@@ -29,6 +29,46 @@ func (r *UserRepository) GetById(ctx context.Context, id int) (*entities.User, e
 
 }
 
+func (r *UserRepository) GetInfoById(ctx context.Context, id int) (*entities.UserInfo, error) {
+	user := entities.UserInfo{}
+
+	query := `
+		SELECT 
+			u.id, 
+			u.email, 
+			u.last_name, 
+			u.first_name, 
+			u.father_name, 
+			un.name AS university_name, 
+			u.role, 
+			u.faculty_id, 
+			u.department_id, 
+			u.educational_direction
+		FROM users u
+		LEFT JOIN university un ON u.university_id = un.id
+		WHERE u.id = $1 AND u.is_deleted = false
+	`
+
+	err := r.db.QueryRowContext(ctx, query, id).Scan(
+		&user.ID,
+		&user.Email,
+		&user.LastName,
+		&user.FirstName,
+		&user.FatherName,
+		&user.UniversityName,
+		&user.Role,
+		&user.FacultyID,
+		&user.DepartmentID,
+		&user.EducationalDirection,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (r *UserRepository) GetByEmail(ctx context.Context, login string) (*entities.User, error) {
 	user := entities.User{}
 	query := "SELECT password, id, email, last_name, first_name, father_name, university_id, role, faculty_id, department_id, educational_direction FROM users WHERE email = $1"

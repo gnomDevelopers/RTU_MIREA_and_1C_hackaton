@@ -2715,7 +2715,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Retrieve a user by ID",
                 "parameters": [
@@ -2731,7 +2731,7 @@ const docTemplate = `{
                     "200": {
                         "description": "User  details",
                         "schema": {
-                            "$ref": "#/definitions/entities.User"
+                            "$ref": "#/definitions/entities.UserInfo"
                         }
                     },
                     "400": {
@@ -3960,6 +3960,44 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "university_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.UserInfo": {
+            "type": "object",
+            "properties": {
+                "department_id": {
+                    "type": "integer"
+                },
+                "educational_direction": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "faculty_id": {
+                    "type": "integer"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "group_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "university_name": {
                     "type": "integer"
                 }
             }

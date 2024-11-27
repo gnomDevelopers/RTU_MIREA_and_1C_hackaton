@@ -152,7 +152,7 @@ func (h *Handler) CreateUser(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id path integer true "User  ID"
-// @Success      200 {object} entities.User "User  details"
+// @Success      200 {object} entities.UserInfo "User  details"
 // @Failure      400 {object} map[string]interface{} "Invalid user ID"
 // @Failure      500 {object} map[string]interface{} "Internal server error"
 // @Router       /auth/user/{id} [get]
