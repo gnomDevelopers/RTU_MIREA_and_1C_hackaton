@@ -118,7 +118,7 @@
                 <div class="mb-4">
                   <label for="resume" class="block text-gray-700 text-lg font-bold mb-2">Резюме:</label>
                   <div>
-                    <div class="shadow flex flex-col items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border rounded" >
+                    <div class="shadow flex flex-col items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border" >
                       <div
                           v-if="filesList.length === 0"
                           @click="$refs.fileInput.click()"
@@ -153,7 +153,7 @@
               <button v-if="currentStep < 3" @click="nextStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
                 Продолжить
               </button>
-              <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-8">
+              <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-6">
                 Назад
               </button>
               <button v-if="currentStep == 3 && !formData.agreed" @click="emptyCheck" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn-badd w-full text-slate-100 ">
@@ -197,6 +197,8 @@ import { ValidUserLogin, ValidUserPassword } from '../helpers/validator';
 import { type IValidAnswer, StatusCodes, type IAPI_Login_Request } from '../helpers/constants';
 import { API_Login } from '@/api/api';
 import FilesList from "@/entities/filesList.vue";
+import { useUserFormStore } from '@/stores/userFormStore';
+import { defineStore } from 'pinia';
 
 export default {
 
@@ -286,6 +288,7 @@ export default {
     },
     handleFilesChange(event: any){
       this.filesList = Array.from(event.target.files!);
+      const selectedFiles = Array.from(event.target.files!);
       const wrongFiles = [] as File[];
       for(let i = 0; i < this.filesList.length; i++){
         if(!this.filesList[i].name.endsWith('.pdf')) {
@@ -293,21 +296,29 @@ export default {
           wrongFiles.push(this.filesList[i]);
         }
       }
+      for (let file of selectedFiles) {
+        if (!file.name.endsWith('.pdf')) {
+          wrongFiles.push(file);
+        } else {
+          this.formData.filesList.push(file);
+        }
+      }
+      if (wrongFiles.length > 0) {
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверное расширение файла!');
+      }
+      console.log('Form Data:', this.formData);
       for(let file of wrongFiles) this.handleDeleteFile(file);
     },
     handleDeleteFile(fileDelete: File){
+      this.formData.filesList = this.formData.filesList.filter((file) => file !== fileDelete);
       this.filesList = this.filesList.filter((file) => file !== fileDelete);
     },
     completeForm() {
-      alert(`Форма завершена! Данные: ${JSON.stringify(this.formData)}`);
+      const userFormStore = useUserFormStore();
+      userFormStore.setFormData(this.formData);
+      this.$router.push({name: 'ProfilePage'});
     },
-    // handleFileUpload(event) {
-    //   const file = event.target.files[0];
-    //   this.formData.resume = file;
-    // },
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
-    },
+
   },
 };
 </script>
