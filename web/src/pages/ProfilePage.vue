@@ -42,7 +42,7 @@ export default{
     ...mapStores(useUserInfoStore, useUniversityStore),
 
     getUniversity(){
-      return 'РТУ МИРЭА';
+      return this.userInfoStore.university;
     },
     getRoleName(){
       if(this.userInfoStore.role === null) return 'none';
@@ -72,7 +72,7 @@ export default{
       return '';
     },
     getEducationalDirection(){
-      if(this.userInfoStore.educationalDirection === null) return '-';
+      if(this.userInfoStore.educationalDirection === 'null') return '-';
       return this.userInfoStore.educationalDirection;
     },
 

@@ -69,7 +69,7 @@
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
-import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day } from '@/helpers/constants';
+import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day, type IGroup } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import SearchList from '@/entities/searchList.vue';
@@ -83,15 +83,41 @@ export default {
     ScheduleSearchListItem,
     ScheduleClassList,
   },
-  data(){
-    return{
-      groupsSearchList: [] as ISearchList[],
-      teachersSearchList: [] as ISearchList[],
-      facultativeList: [] as ISearchList[],
-    }
-  },
   computed:{
     ...mapStores(useScheduleStore, useUniversityStore),
+
+    groupsSearchList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.groupsList.length === 0) return arr;
+      for(let item of <IGroup[]>this.universityStore.groupsList){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
+      }
+      console.log('universityStore.groupsList: ', this.universityStore.groupsList);
+      console.log('groupsList: ', arr);
+      return arr;
+    },
+
+    teachersSearchList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.teachersList.length === 0) return arr;
+      for(let item of <IUserGet[]>this.universityStore.teachersList){
+        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+      }
+      console.log('universityStore.teachersList: ', this.universityStore.teachersList);
+      console.log('teachersList: ', arr);
+      return arr;
+    },
+
+    facultativesList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.facultativesList.length === 0) return arr;
+      for(let item of <IGroup[]>this.universityStore.facultativesList){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
+      }
+      console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
+      console.log('facultativesList: ', arr);
+      return arr;
+    },
 
     getScheduleTargetText(){
       return SCHEDULE_TARGET_TEXT[this.scheduleStore.scheduleTarget];
@@ -99,7 +125,7 @@ export default {
     getScheduleTargetList(){
       if (this.scheduleStore.scheduleTarget === 0) return this.groupsSearchList;
       else if(this.scheduleStore.scheduleTarget === 1) return this.teachersSearchList;
-      else if(this.scheduleStore.scheduleTarget === 2) return this.facultativeList;
+      else if(this.scheduleStore.scheduleTarget === 2) return this.facultativesList;
       return [] as ISearchList[];
     },
     getListItemComponent(){
@@ -129,37 +155,5 @@ export default {
       }
     }
   },
-  watch: {
-    'universityStore.groupsList' : {
-      handler(val: IUserGet[]){
-        this.groupsSearchList = [];
-        for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-    'universityStore.teachersList' : {
-      handler(val: IUserGet[]){
-        this.teachersSearchList = [];
-        for(let item of val){
-          this.teachersSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-    'universityStore.facultativesList' : {
-      handler(val: IUserGet[]){
-        this.facultativeList = [];
-        for(let item of val){
-          this.facultativeList.push({id: item.id, search_field: item.name, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  }
 };
 </script>
