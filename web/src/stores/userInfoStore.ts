@@ -13,7 +13,7 @@ export const useUserInfoStore = defineStore('userInfo', {
       first_name: '', // имя
       last_name: '', // фамилия
       father_name: '', //отчество
-      university_id: null as TMaybeNumber, // id университет
+      university: null as TMaybeString, // id университет
       faculty_id: null as TMaybeNumber, // id факультета
       department_id: null as TMaybeNumber, // id кафедры
       educationalDirection: null as TMaybeString, // название направления
@@ -59,9 +59,7 @@ export const useUserInfoStore = defineStore('userInfo', {
       document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=strict`;
       
       if(this.authorized){
-        console.log('authorized');
         await this.loadUserData(); // загрузка данных о пользователе
-        console.log('userData loaded')
         await universityStore.loadUniversityInfo(); // загрузка данных об институте
       }
     }

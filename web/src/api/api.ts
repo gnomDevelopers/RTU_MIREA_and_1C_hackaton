@@ -14,14 +14,15 @@ import {
   type IAPI_University_Update 
 } from '../helpers/constants';
 
+const Auth_Header = {
+  Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+};
 
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
     axios.get(`${API}/login`,  {
-      headers: {
-        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
-      }
+      headers: Auth_Header
      })
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
@@ -319,6 +320,23 @@ export function API_Schedule_Get_ClassName(className: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('Schedule get by className error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение факультативных занятий
+export function API_Facultatives_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/name/`, {
+      headers: Auth_Header
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Facultatives get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Facultatives get error: ', error);
       reject(error);
     })
   });
