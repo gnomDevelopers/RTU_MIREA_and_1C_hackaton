@@ -288,7 +288,7 @@ export default {
     },
     handleFilesChange(event: any){
       this.filesList = Array.from(event.target.files!);
-      const selectedFiles = Array.from(event.target.files!);
+      const selectedFiles:File[] = Array.from(event.target.files!);
       const wrongFiles = [] as File[];
       for(let i = 0; i < this.filesList.length; i++){
         if(!this.filesList[i].name.endsWith('.pdf')) {
