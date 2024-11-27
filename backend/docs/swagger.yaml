@@ -1559,39 +1559,6 @@ paths:
       summary: Retrieve all faculties
       tags:
       - faculties
-    post:
-      consumes:
-      - application/json
-      description: Creates a new faculty record in the system.
-      parameters:
-      - description: Faculty data
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/entities.CreateFacultyRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Created faculty details
-          schema:
-            $ref: '#/definitions/entities.CreateFacultyResponse'
-        "400":
-          description: Invalid request
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Create a new faculty
-      tags:
-      - faculties
   /auth/faculties/university/{university}:
     get:
       consumes:
@@ -1626,6 +1593,40 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Retrieve faculties by university name
+      tags:
+      - faculties
+  /auth/faculty:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new faculty record in the system.
+      parameters:
+      - description: Faculty data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateFacultyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Created faculty details
+          schema:
+            $ref: '#/definitions/entities.CreateFacultyResponse'
+        "400":
+          description: Invalid request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new faculty
       tags:
       - faculties
   /auth/gpa/id/{id}:

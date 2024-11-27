@@ -36,7 +36,7 @@ func (h *Handler) GetFacultiesByUniversityName(c *fiber.Ctx) error {
 
 // CreateFaculty
 // @Tags         faculties
-// @Summary      Create a new faculty
+// @Summary      Creates a new faculty
 // @Description  Creates a new faculty record in the system.
 // @Accept       json
 // @Produce      json
