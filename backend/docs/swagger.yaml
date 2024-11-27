@@ -1522,18 +1522,18 @@ paths:
       consumes:
       - application/json
       description: Retrieves a list of faculties based on the specified university
-        name provided in the URL parameter.
+        name.
       parameters:
-      - description: University name
+      - description: University name (URL-encoded)
         in: path
-        name: group
+        name: university
         required: true
         type: string
       produces:
       - application/json
       responses:
         "200":
-          description: List of faculties for the specified university
+          description: List of faculties
           schema:
             items:
               $ref: '#/definitions/entities.Faculty'
@@ -1550,7 +1550,7 @@ paths:
             type: object
       security:
       - ApiKeyAuth: []
-      summary: Retrieve faculties by university name
+      summary: Get faculties by university name
       tags:
       - faculties
   /auth/faculty:

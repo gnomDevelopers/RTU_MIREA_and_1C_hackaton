@@ -1591,7 +1591,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Retrieves a list of faculties based on the specified university name provided in the URL parameter.",
+                "description": "Retrieves a list of faculties based on the specified university name.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1601,19 +1601,19 @@ const docTemplate = `{
                 "tags": [
                     "faculties"
                 ],
-                "summary": "Retrieve faculties by university name",
+                "summary": "Get faculties by university name",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "University name",
-                        "name": "group",
+                        "description": "University name (URL-encoded)",
+                        "name": "university",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of faculties for the specified university",
+                        "description": "List of faculties",
                         "schema": {
                             "type": "array",
                             "items": {

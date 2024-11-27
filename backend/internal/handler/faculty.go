@@ -8,12 +8,12 @@ import (
 
 // GetFacultiesByUniversityName
 // @Tags         faculties
-// @Summary      Retrieve faculties by university name
-// @Description  Retrieves a list of faculties based on the specified university name provided in the URL parameter.
+// @Summary      Get faculties by university name
+// @Description  Retrieves a list of faculties based on the specified university name.
 // @Accept       json
 // @Produce      json
-// @Param        group path string true "University name"
-// @Success      200 {array} entities.Faculty "List of faculties for the specified university"
+// @Param        university path string true "University name (URL-encoded)"
+// @Success      200 {object} []entities.Faculty "List of faculties"
 // @Failure      400 {object} map[string]interface{} "Invalid university name"
 // @Failure      500 {object} map[string]interface{} "Internal server error"
 // @Router       /auth/faculties/university/{university} [get]
