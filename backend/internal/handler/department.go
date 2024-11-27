@@ -51,7 +51,7 @@ func (h *Handler) GetByUniversityDepartments(c *fiber.Ctx) error {
 // @Success      200 {object} entities.CreateDepartmentResponse "Created department details"
 // @Failure      400 {object} map[string]interface{} "Invalid request body"
 // @Failure      500 {object} map[string]interface{} "Internal server error"
-// @Router       /department [post]
+// @Router       /auth/department [post]
 // @Security ApiKeyAuth
 func (h *Handler) CreateDepartment(c *fiber.Ctx) error {
 	var req entities.CreateDepartmentRequest
