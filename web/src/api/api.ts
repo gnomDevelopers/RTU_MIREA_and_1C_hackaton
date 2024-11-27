@@ -67,7 +67,11 @@ export function API_Logout(){
 //получение данных об аккаунте
 export function API_UserInfo(userID: number){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/user/${userID}`)
+    axios.get(`${API}/auth/user/${userID}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('UserInfo get success: ', response);
       resolve(response);
@@ -521,6 +525,27 @@ export function API_University_Get(universityName: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('University get by universityName error: ', error);
+      reject(error);
+    })
+  });
+};
+
+/////// education ///////
+
+//получение всех кафедр
+export function API_Departments_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/department/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Departments get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Departments get error: ', error);
       reject(error);
     })
   });

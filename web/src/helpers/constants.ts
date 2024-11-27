@@ -230,3 +230,10 @@ export function GET_COOKIE(cookieName: string): string{
   }
   return '';
 }
+
+export function GET_ROLEID_BY_ROLENAME(roleName: string): TMaybeNumber{
+  for(let i = 0; i < ROLES.length; i++){
+    if(ROLES_NAME[i] === roleName) return i;
+  }
+  return null;
+}
