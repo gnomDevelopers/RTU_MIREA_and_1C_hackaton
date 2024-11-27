@@ -1,6 +1,6 @@
 import axios from "axios";
 import { 
-  API, DEVMODE, GET_COOKIE
+  API, DEVMODE, GET_COOKIE,
   type IAPI_Login_Request, 
   type IAPI_Audience_Create, 
   type IAPI_Audience_Update, 
@@ -18,11 +18,11 @@ import {
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/login`, {
+    axios.get(`${API}/login`,  {
       headers: {
-        'Authorization': `Bearer ${GET_COOKIE('access_token')}`,
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
-    })
+     })
     .then(response => {
       if(DEVMODE) console.log('Authentication success: ', response);
       resolve(response);
@@ -142,6 +142,25 @@ export function API_Audience_Delete(audienceID: number){
     })
     .catch(error => {
       if(DEVMODE) console.log('Audience delete error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение всех аудиторий по универу
+export function API_Audience_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/audience/university/`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Audience get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Audience get error: ', error);
       reject(error);
     })
   });
@@ -319,6 +338,25 @@ export function API_Schedule_Get_ClassName(className: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('Schedule get by className error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение факультативных занятий
+export function API_Facultatives_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/name/`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Facultatives get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Facultatives get error: ', error);
       reject(error);
     })
   });

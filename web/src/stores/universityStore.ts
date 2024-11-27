@@ -9,6 +9,8 @@ import {
   type IItemList,
   type IGroupScores,
 } from "@/helpers/constants";
+import { useUserInfoStore } from "./userInfoStore";
+import { API_Audience_Get, API_Facultatives_Get } from "@/api/api";
 
 export const useUniversityStore = defineStore('university', {
   state() {
@@ -38,13 +40,7 @@ export const useUniversityStore = defineStore('university', {
   },
   actions: {
     async loadUniversityInfo(){
-      //API get campuses by universityID
-      //API get audiences by universityID
-      //API get decans by universityID
-      //API get aducationDepartments by universityID
-      //API get zavCafs by universityID
-      //API get teachers by universityID
-      //API get students by universityID
+      const userInfo = useUserInfoStore();
 
       this.campusList = [
         {id: 1, address: 'Малая Пироговская улица, 1', name: 'МП-1', university_id: 1}, 
@@ -52,42 +48,26 @@ export const useUniversityStore = defineStore('university', {
         {id: 3, address: 'Проспект Вернадского, 86', name: 'В-86', university_id: 1},
       ];
 
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `Деканов${i}`, name: `Декан${i}`, thirdname: `Деканович${i}`, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',};
-      //   this.decansList.push(data);
-      // }
       this.decansList = [
         {id: 1, surname: `Иванова`, name: `Алина`, thirdname: `Сергеевна`, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
         {id: 2, surname: `Петров`, name: `Дмитрий`, thirdname: `Алексеевич `, role: 2, faculty_id: 1, department_id: -1, educational_direction: '',},
       ];  
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `УчОтделов${i}`, name: `УчОтдел${i}`, thirdname: `УчОтделович${i}`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',};
-      //   this.educationDepartmentsList.push(data);
-      // }
+
       this.educationDepartmentsList = [
         {id: 3, surname: `Смирнова`, name: `Елена`, thirdname: `Владимировна`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
         {id: 4, surname: `Кузнецов`, name: `Сергей`, thirdname: `Николаевич`, role: 3, faculty_id: 1, department_id: -1, educational_direction: '',},
       ];  
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `ЗавКафов${i}`, name: `ЗавКаф${i}`, thirdname: `ЗавКафович${i}`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',};
-      //   this.zavCafsList.push(data);
-      // }
+
       this.zavCafsList = [
         {id: 5, surname: `Попова`, name: `Ольга`, thirdname: `Павловна`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
         {id: 6, surname: `Соколов`, name: `Андрей`, thirdname: `Михайлович`, role: 4, faculty_id: 1, department_id: 1, educational_direction: '',},
       ];    
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `Преподов${i}`, name: `Препод${i}`, thirdname: `Преподович${i}`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',};
-      //   this.teachersList.push(data);
-      // }
+
       this.teachersList = [
         {id: 7, surname: `Морозова`, name: `Наталья`, thirdname: `Юрьевна`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
         {id: 8, surname: `Васильев`, name: `Алексей`, thirdname: `Иванович`, role: 5, faculty_id: 1, department_id: 1, educational_direction: '',},
       ];  
-      // for(let i = 1; i < 110; i++) {
-      //   const data: IUserGet = {id: i, surname: `Студентов${i}`, name: `Студент${i}`, thirdname: `Студентович${i}`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',};
-      //   this.studentsList.push(data);
-      // }
+
       this.studentsList = [
         {id: 9, surname: `Новикова`, name: `Екатерина`, thirdname: `Александровна`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
         {id: 10, surname: `Волков`, name: `Павел`, thirdname: `Дмитриевич`, role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка',},
@@ -123,17 +103,21 @@ export const useUniversityStore = defineStore('university', {
       }
       this.groupMembersScores = this.sortByName(this.groupMembersScores);
         
-      for(let i = 1; i < 10; i++) {
-        const data: IAPI_Audience_Update = {  
-          id: i,
-          campus_id: i % 3 + 1,
-          capacity: Math.ceil(Math.random() * 100) + 20,
-          name: `A-${i}`,
-          profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],
-          type: AUDITORY_TYPE_LIST[i % AUDITORY_TYPE_LIST.length],
-        };
-        this.auditoriesList.push(data);
-      }
+      // for(let i = 1; i < 10; i++) {
+      //   const data: IAPI_Audience_Update = {  
+      //     id: i,
+      //     campus_id: i % 3 + 1,
+      //     capacity: Math.ceil(Math.random() * 100) + 20,
+      //     name: `A-${i}`,
+      //     profile: AUDITORY_PROFILE_LIST[i % AUDITORY_PROFILE_LIST.length],
+      //     type: AUDITORY_TYPE_LIST[i % AUDITORY_TYPE_LIST.length],
+      //   };
+      //   this.auditoriesList.push(data);
+      // }
+      API_Audience_Get()
+      .then((response:any) => {
+        this.auditoriesList = response.data;
+      })
 
       for(let i = 1; i < 10; i++) {
         const data: IGroup = {id: i, name: `ЭФБО-0${i}-23`};
@@ -155,11 +139,18 @@ export const useUniversityStore = defineStore('university', {
         {id: 2, name: 'Программная инженерия'},
         {id: 3, name: 'Компьютерный дизайн'},
       ];
-      this.facultativesList = [
-        {id: 1, name: 'Мобильная разработка Kotlin'},
-        {id: 2, name: 'DevOps курсы'},
-        {id: 3, name: 'Автошкола'},
-      ];
+      // this.facultativesList = [
+      //   {id: 1, name: 'Мобильная разработка Kotlin'},
+      //   {id: 2, name: 'DevOps курсы'},
+      //   {id: 3, name: 'Автошкола'},
+      // ];
+      API_Facultatives_Get()
+      .then((response:any) => {
+        if(response.data) this.facultativesList = response.data;
+      })
+      .catch(error => {
+        this.facultativesList = [];
+      })
     },
     sortByName(people: IGroupScores[]): IGroupScores[] {
       return [...people].sort((a, b) => {

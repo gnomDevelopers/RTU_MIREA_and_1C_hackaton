@@ -375,6 +375,39 @@ definitions:
       time_start:
         type: string
     type: object
+  entities.User:
+    properties:
+      created_at:
+        type: string
+      department_id:
+        type: integer
+      educational_direction:
+        type: string
+      email:
+        type: string
+      faculty_id:
+        type: integer
+      father_name:
+        type: string
+      first_name:
+        type: string
+      group_id:
+        type: integer
+      id:
+        type: integer
+      is_deleted:
+        type: boolean
+      is_password_changed:
+        type: boolean
+      last_name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      university_id:
+        type: integer
+    type: object
   entities.UserSchedule:
     properties:
       date:
@@ -438,6 +471,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create Audiences
       tags:
       - audience
@@ -471,6 +506,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update audience
       tags:
       - audience
@@ -503,6 +540,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete audience
       tags:
       - audience
@@ -535,6 +574,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by name
       tags:
       - audience
@@ -554,7 +595,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.Audience'
+            items:
+              $ref: '#/definitions/entities.Audience'
+            type: array
         "400":
           description: Bad Request
           schema:
@@ -567,6 +610,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by capacity
       tags:
       - audience
@@ -599,6 +644,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by id
       tags:
       - audience
@@ -631,6 +678,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by profile
       tags:
       - audience
@@ -663,10 +712,86 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get audience by type
       tags:
       - audience
+  /auth/audience/university/{university}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: audience university
+        in: path
+        name: university
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.Audience'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get audience by university
+      tags:
+      - audience
   /auth/campus:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: campus data
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.CreateCampusesRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.CreateCampusesResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create campuses
+      tags:
+      - campus
     put:
       consumes:
       - application/json
@@ -696,6 +821,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update campus
       tags:
       - campus
@@ -728,6 +855,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete campus
       tags:
       - campus
@@ -760,6 +889,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get campus by address
       tags:
       - campus
@@ -788,6 +919,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get all campuses
       tags:
       - campus
@@ -820,6 +953,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get campus by id
       tags:
       - campus
@@ -852,6 +987,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get campus by name
       tags:
       - campus
@@ -886,10 +1023,50 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get campus by university
       tags:
       - campus
   /auth/class:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: class data
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.CreateClassesRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.CreateClassesResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create classes
+      tags:
+      - class
     put:
       consumes:
       - application/json
@@ -919,6 +1096,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update class
       tags:
       - class
@@ -951,6 +1130,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete class
       tags:
       - class
@@ -983,6 +1164,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get class by auditory
       tags:
       - class
@@ -1015,6 +1198,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get class by id
       tags:
       - class
@@ -1052,6 +1237,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create discipline
       tags:
       - discipline
@@ -1084,6 +1271,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update discipline
       tags:
       - discipline
@@ -1116,6 +1305,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete discipline
       tags:
       - discipline
@@ -1153,6 +1344,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get discipline by ed dir and name
       tags:
       - discipline
@@ -1192,6 +1385,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get discipline by ed dir and semester
       tags:
       - discipline
@@ -1224,6 +1419,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get gpa by user id
       tags:
       - gpa
@@ -1393,17 +1590,17 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Search names
+      summary: Получение всех предметов группы
       tags:
       - schedule
-  /auth/schedule/name/{name}:
+  /auth/schedule/optionals/{optionals}:
     get:
       consumes:
       - application/json
       parameters:
-      - description: schedule name
+      - description: schedule optionals
         in: path
-        name: name
+        name: optionals
         required: true
         type: string
       produces:
@@ -1429,7 +1626,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Get schedule by name
+      summary: Get schedule optionals
       tags:
       - schedule
   /auth/schedule/parse:
@@ -1618,6 +1815,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update university
       tags:
       - university
@@ -1650,6 +1849,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete university
       tags:
       - university
@@ -1678,6 +1879,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get all universities
       tags:
       - university
@@ -1710,6 +1913,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get university by name
       tags:
       - university
@@ -1742,9 +1947,47 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get university by name
       tags:
       - university
+  /auth/user/university/{university}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university
+        in: path
+        name: university
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get users by university
+      tags:
+      - user
   /auth/user_schedule:
     get:
       consumes:
@@ -1905,6 +2148,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Response
       tags:
       - work
@@ -1937,84 +2182,49 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Response
       tags:
       - work
-  /campus:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: campus data
-        in: body
-        name: data
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.CreateCampusesRequest'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.CreateCampusesResponse'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Create campuses
-      tags:
-      - campus
-  /class:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: class data
-        in: body
-        name: data
-        required: true
-        schema:
-          items:
-            $ref: '#/definitions/entities.CreateClassesRequest'
-          type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/entities.CreateClassesResponse'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.ErrorResponse'
-      summary: Create classes
-      tags:
-      - class
   /login:
+    get:
+      consumes:
+      - application/json
+      description: Validates the JWT token from the Authorization header, extracts
+        user ID, and generates a new access token.
+      parameters:
+      - description: Bearer JWT token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New access token and user ID
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Missing auth token
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Invalid auth header or token
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Authorization check
+      tags:
+      - authentication
     post:
       consumes:
       - application/json
@@ -2074,6 +2284,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create university
       tags:
       - university
@@ -2107,6 +2319,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Login in hr
       tags:
       - work
