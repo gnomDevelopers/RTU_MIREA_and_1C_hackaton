@@ -383,6 +383,13 @@ definitions:
       type:
         type: string
     type: object
+  entities.Group:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   entities.GroupMember:
     properties:
       father_name:
@@ -1940,6 +1947,42 @@ paths:
       summary: Create a new group
       tags:
       - group
+  /auth/groups/university/{university}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all groups associated with the specified university
+        name.
+      parameters:
+      - description: University name (URL-encoded)
+        in: path
+        name: university
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of groups
+          schema:
+            items:
+              $ref: '#/definitions/entities.Group'
+            type: array
+        "400":
+          description: Invalid university name
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all groups by university name
+      tags:
+      - groups
   /auth/percentile/id/{id}:
     get:
       consumes:
