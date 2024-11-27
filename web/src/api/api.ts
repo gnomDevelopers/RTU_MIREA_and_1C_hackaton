@@ -228,6 +228,27 @@ export function API_Campus_Get_University(universityID: number){
   });
 };
 
+/////// university users ///////
+
+//полчуние всех пользователей вуза
+export function API_Uiversity_Users_Get(universityName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/user/university/${universityName}`, {
+      headers: {
+        Authorization: 'Bearer' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Users get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Users get  error: ', error);
+      reject(error);
+    })
+  });
+};
+
 /////// classes ///////
 
 //создание занятия
@@ -346,7 +367,7 @@ export function API_Schedule_Get_ClassName(className: string){
 //получение факультативных занятий
 export function API_Facultatives_Get(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/auth/schedule/search/name/`, {
+    axios.get(`${API}/auth/schedule/search/name`, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
