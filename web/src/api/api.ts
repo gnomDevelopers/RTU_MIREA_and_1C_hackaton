@@ -148,7 +148,7 @@ export function API_Audience_Update(data: IAPI_Audience_Update){
 //удаление аудитории
 export function API_Audience_Delete(audienceID: number){
   return new Promise((resolve, reject) => {
-    axios.delete(`${API}/audience/${audienceID}`, {
+    axios.delete(`${API}/auth/audience/${audienceID}`, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
