@@ -10,21 +10,6 @@ import (
 	"strings"
 )
 
-func (h *Handler) SignUp(c *fiber.Ctx) error {
-	var u entities.CreateUserRequest
-	if err := c.BodyParser(&u); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	res, err := h.services.UserService.CreateUser(c.Context(), &u)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	return c.Status(fiber.StatusOK).JSON(res)
-
-}
-
 // Login
 // @Tags         authentication
 // @Summary      User login
@@ -132,15 +117,54 @@ func (h *Handler) CheckAuth(c *fiber.Ctx) error {
 	})
 }
 
-func (h *Handler) CreateUser(c *fiber.Ctx) error {
-	var user entities.CreateUserRequest
-	if err := c.BodyParser(&user); err != nil {
+// CreateUsers
+// @Tags         user
+// @Summary      Create multiple users
+// @Description  Creates multiple users based on the provided list of user details in the request body.
+// @Accept       json
+// @Produce      json
+// @Param        users body []entities.CreateUserRequest true "List of users to create"
+// @Success      200 {array} entities.CreateUserResponse "List of created user responses"
+// @Failure      400 {object} map[string]interface{} "Invalid request body"
+// @Failure      500 {object} map[string]interface{} "Internal server error"
+// @Router       /auth/user [post]
+// @Security ApiKeyAuth
+func (h *Handler) CreateUsers(c *fiber.Ctx) error {
+	var users []entities.CreateUserRequest
+	if err := c.BodyParser(&users); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	req, err := h.services.UserService.CreateUser(c.Context(), &user)
+	reqs, err := h.services.UserService.CreateUsers(c.Context(), users)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{})
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	return c.Status(fiber.StatusOK).JSON(req)
+
+	return c.Status(fiber.StatusOK).JSON(reqs)
+}
+
+// GetUserByID
+// @Tags         user
+// @Summary      Retrieve a user by ID
+// @Description  Retrieves the user details based on the specified user ID provided in the URL parameter.
+// @Accept       json
+// @Produce      json
+// @Param        id path integer true "User  ID"
+// @Success      200 {object} entities.UserInfo "User  details"
+// @Failure      400 {object} map[string]interface{} "Invalid user ID"
+// @Failure      500 {object} map[string]interface{} "Internal server error"
+// @Router       /auth/user/{id} [get]
+// @Security ApiKeyAuth
+func (h *Handler) GetUserByID(c *fiber.Ctx) error {
+	idStr := c.Params("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	res, err := h.services.UserService.GetByID(c.Context(), id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.Status(fiber.StatusOK).JSON(res)
 }

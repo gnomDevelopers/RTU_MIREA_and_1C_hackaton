@@ -25,3 +25,31 @@ func (s *DepartmentService) GetByUniversity(c context.Context, university string
 	departments, err := s.repository.GetByUniversity(ctx, university)
 	return departments, err
 }
+
+func (s *DepartmentService) Create(c context.Context, req *entities.CreateDepartmentRequest) (*entities.CreateDepartmentResponse, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	departmentID, err := s.repository.Create(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &entities.CreateDepartmentResponse{
+		ID: departmentID,
+	}
+
+	return res, nil
+}
+
+func (s *DepartmentService) GetByID(c context.Context, id int) (*entities.CreateDepartmentResponse, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	dep, err := s.repository.GetById(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &entities.CreateDepartmentResponse{ID: dep.ID}, nil
+}

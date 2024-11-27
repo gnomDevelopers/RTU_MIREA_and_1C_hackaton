@@ -19,7 +19,7 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /university [post]
+// @Router       /auth/university [post]
 // @Security ApiKeyAuth
 func (h *Handler) CreateUniversity(c *fiber.Ctx) error {
 	// TODO: добавить проверку на роль админа

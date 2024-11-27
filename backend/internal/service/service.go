@@ -8,11 +8,12 @@ import (
 )
 
 type User interface {
-	CreateUser(context.Context, *entities.CreateUserRequest) (*entities.CreateUserResponse, error)
+	CreateUsers(ctx context.Context, requests []entities.CreateUserRequest) ([]entities.CreateUserResponse, error)
 	Login(context.Context, *entities.LoginUserRequest) (*entities.LoginUserResponse, error)
 	CreateAdmin(context.Context) error
 	GetEducationalDirection(context.Context, int) (string, error)
 	RefreshToken(int) (string, error)
+	GetByID(context.Context, int) (*entities.UserInfo, error)
 }
 
 type University interface {
@@ -34,6 +35,12 @@ type Campus interface {
 	GetAll(context.Context) (*[]entities.Campus, error)
 	Update(context.Context, int, string) error
 	Delete(context.Context, int) error
+}
+
+type Department interface {
+	GetByUniversity(c context.Context, university string) (*[]entities.Department, error)
+	Create(c context.Context, req *entities.CreateDepartmentRequest) (*entities.CreateDepartmentResponse, error)
+	GetByID(c context.Context, id int) (*entities.CreateDepartmentResponse, error)
 }
 
 type Faculty interface {
@@ -66,7 +73,7 @@ type Service struct {
 
 func NewService(repositories *repository.Repository, conf *config.Config) *Service {
 	return &Service{
-		UserService:               NewUserService(repositories.User, conf),
+		UserService:               NewUserService(repositories.User, repositories.University, conf),
 		UniversityService:         NewUniversityService(repositories.University),
 		CampusService:             NewCampusService(repositories.Campus),
 		ClassService:              NewClassService(repositories.Class),
