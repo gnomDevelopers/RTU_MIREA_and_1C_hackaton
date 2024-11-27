@@ -110,41 +110,43 @@ export const useUniversityStore = defineStore('university', {
       })
       .catch(error => {
         UniversityUsers = [];
-      });
+      })
+      .finally(() => {
+        this.decansList = [];
+        this.educationDepartmentsList = [];
+        this.zavCafsList = [];
+        this.teachersList = [];
+        this.studentsList = [];
 
-      this.decansList = [];
-      this.educationDepartmentsList = [];
-      this.zavCafsList = [];
-      this.teachersList = [];
-      this.studentsList = [];
+        for(let user of UniversityUsers){
+          const userData = {
+            id: user.id, 
+            surname: user.last_name, 
+            name: user.first_name, 
+            thirdname: user.father_name, 
+            role: GET_ROLEID_BY_ROLENAME(user.role), 
+            faculty_id: user.faculty_id, 
+            department_id: user.department_id, 
+            educational_direction: user.educational_direction,
+            group_id: user.group_id,
+          } as IUserGet;
 
-      for(let user of UniversityUsers){
-        const userData = {
-          id: user.id, 
-          surname: user.last_name, 
-          name: user.first_name, 
-          thirdname: user.father_name, 
-          role: GET_ROLEID_BY_ROLENAME(user.role), 
-          faculty_id: user.faculty_id, 
-          department_id: user.department_id, 
-          educational_direction: user.educational_direction,
-          group_id: user.group_id,
-        } as IUserGet;
-
-        switch(user.role){
-          case ROLES_NAME[2]: this.decansList.push(userData); break;
-          case ROLES_NAME[3]: this.educationDepartmentsList.push(userData); break;
-          case ROLES_NAME[4]: this.zavCafsList.push(userData); break;
-          case ROLES_NAME[5]: this.teachersList.push(userData); break;
-          case ROLES_NAME[6]: this.studentsList.push(userData); break;
+          switch(user.role){
+            case ROLES_NAME[2]: this.decansList.push(userData); break;
+            case ROLES_NAME[3]: this.educationDepartmentsList.push(userData); break;
+            case ROLES_NAME[4]: this.zavCafsList.push(userData); break;
+            case ROLES_NAME[5]: this.teachersList.push(userData); break;
+            case ROLES_NAME[6]: this.studentsList.push(userData); break;
+          }
         }
-      }
 
-      console.log('decanList: ', this.decansList);
-      console.log('edDepList: ', this.educationDepartmentsList);
-      console.log('zavCafList: ', this.zavCafsList);
-      console.log('TeacherList: ', this.teachersList);
-      console.log('StudentsList: ', this.studentsList);
+        console.log('decanList: ', this.decansList);
+        console.log('edDepList: ', this.educationDepartmentsList);
+        console.log('zavCafList: ', this.zavCafsList);
+        console.log('TeacherList: ', this.teachersList);
+        console.log('StudentsList: ', this.studentsList);
+      })
+
     },
     findGroupMembers(groupID: number){
       this.groupMembersList = [];
