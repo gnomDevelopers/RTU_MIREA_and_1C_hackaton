@@ -8,7 +8,7 @@ import {
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/`,  {
+    axios.get(`${API}/login`,  {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
@@ -27,7 +27,7 @@ export function API_Authenticate(){
 //вход в аккаунт
 export function API_Login(data: IAPI_Login_Request){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/`, data)
+    axios.post(`${API}/login`, data)
     .then(response => {
       if(DEVMODE) console.log('Login post success: ', response);
       resolve(response);
