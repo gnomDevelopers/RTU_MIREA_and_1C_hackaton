@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
+import { type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
 import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
 import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
@@ -39,7 +39,7 @@ export const useScheduleStore = defineStore('schedule', {
         this.scheduleGroups = [];
       }
     },
-    loadScheduleTableByGroupName(groupName: string){
+    async loadScheduleTableByGroupName(groupName: string){
       API_Schedule_Get_GroupName(groupName)
       .then((response: any) => {
         this.scheduleData = [];
@@ -78,6 +78,16 @@ export const useScheduleStore = defineStore('schedule', {
     },
     loadScheduleTableByClassName(className: string){
 
+    },
+    selectScheduleDay(day: string){
+      this.selectedDate = day;
+      this.scheduleTableDay = [];
+      for(let item of this.scheduleData){
+        if(item.date === day){
+          this.scheduleTableDay = item.timeTable;
+          break;
+        }
+      }
     },
     getCurrentDate() {
       const today = new Date();
