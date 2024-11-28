@@ -51,7 +51,7 @@ import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { useUserInfoStore } from '@/stores/userInfoStore';
 import { StatusCodes, type IAPI_Campus_Create } from '../helpers/constants';
-import { API_Audience_Create, API_Campus_Create } from '@/api/api';
+import { API_Campus_Create } from '@/api/api';
 
 export default {
   data(){
@@ -98,7 +98,11 @@ export default {
 
       API_Campus_Create(this.campusList)
       .then(async (response: any) => {
+        //заново подгружаем все кампусы
         await this.universityStore.loadCampus(this.userInfoStore.university!);
+
+        //очищаем буфер кампусов
+        this.campusList = [];
 
         this.statusWindowStore.deteleStatusWindow(stID);
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Кампусы успешно созданы!');

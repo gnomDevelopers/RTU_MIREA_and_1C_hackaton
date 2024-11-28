@@ -78,13 +78,23 @@
       </MainControl>
 
       <MainControl title="Управление ресурсами">
+        <MainControlItem title="Управление кампусами">
+
+          <SearchList 
+            title="Введите название кампуса" 
+            placeholder="Название кампуса"
+            :searchList="campusesSearchList"
+            :itemComponent="getAuditoryListItemComponent"
+          />
+
+        </MainControlItem>
         <MainControlItem title="Управление аудиториями">
 
           <SearchList 
             title="Введите название аудитории" 
             placeholder="Название аудитории"
             :searchList="auditoriesSearchList"
-            :itemComponent="getAuditoryListItemComponent"
+            :itemComponent="getCampusListItemComponent"
           />
 
         </MainControlItem>
@@ -115,6 +125,7 @@ import AccountsCreateUsers from '@/widgets/accountsCreateUsers.vue';
 import AccountsCreateAuditory from '@/widgets/accountsCreateAuditory.vue';
 import AccountAuditoryListItem from '@/entities/listItems/accountAuditoryListItem.vue';
 import AccountsCreateCampus from '@/widgets/accountsCreateCampus.vue';
+import AccountCampusListItem from '../entities/listItems/accountCampusLIstItem.vue';
 
 export default {
   components:{
@@ -124,6 +135,7 @@ export default {
     MainControlItem,
     UserListItem,
     AccountAuditoryListItem,
+    AccountCampusListItem,
     SearchList,
     AccountsCreateUsers,
     AccountsCreateAuditory,
@@ -138,11 +150,22 @@ export default {
     getAuditoryListItemComponent(){
       return AccountAuditoryListItem;
     },
+    getCampusListItemComponent(){
+      return AccountCampusListItem;
+    },
 
     auditoriesSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.universityStore.auditoriesList.length === 0) return arr;
       for(let item of this.universityStore.auditoriesList){
+        arr.push({id: item.id, search_field: item.name, data: item});
+      }
+      return arr;
+    },
+    campusesSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.campusList.length === 0) return arr;
+      for(let item of this.universityStore.campusList){
         arr.push({id: item.id, search_field: item.name, data: item});
       }
       return arr;
