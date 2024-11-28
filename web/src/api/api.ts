@@ -364,7 +364,8 @@ export function API_Schedule_Create(data: FormData){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/auth/schedule/parse`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
     })
     .then(response => {
