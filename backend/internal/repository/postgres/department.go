@@ -44,7 +44,7 @@ func (r *DepartmentRepository) Create(ctx context.Context, department *entities.
 func (r *DepartmentRepository) GetById(ctx context.Context, id int) (*entities.Department, error) {
 	department := &entities.Department{}
 	query := `SELECT id, name, university FROM department WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&department.ID, &department.Name)
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&department.ID, &department.Name, &department.University)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (r *DepartmentRepository) GetById(ctx context.Context, id int) (*entities.D
 func (r *DepartmentRepository) GetByName(ctx context.Context, name string) (*entities.Department, error) {
 	department := &entities.Department{}
 	query := `SELECT id, name, university FROM department WHERE name = $1`
-	err := r.db.QueryRowContext(ctx, query, name).Scan(&department.ID, &department.Name)
+	err := r.db.QueryRowContext(ctx, query, name).Scan(&department.ID, &department.Name, &department.University)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (r *DepartmentRepository) GetAll(ctx context.Context) (*[]entities.Departme
 
 	for rows.Next() {
 		var department entities.Department
-		err = rows.Scan(&department.ID, &department.Name)
+		err = rows.Scan(&department.ID, &department.Name, &department.University)
 		if err != nil {
 			return nil, err
 		}
@@ -94,7 +94,7 @@ func (r *DepartmentRepository) GetByUniversity(ctx context.Context, university s
 
 	for rows.Next() {
 		var department entities.Department
-		err = rows.Scan(&department.ID, &department.Name)
+		err = rows.Scan(&department.ID, &department.Name, &department.University)
 		if err != nil {
 			return nil, err
 		}
