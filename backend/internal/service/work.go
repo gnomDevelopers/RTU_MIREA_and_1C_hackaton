@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"server/internal/config"
 	"server/internal/entities"
 	"server/internal/repository"
 	"time"
@@ -10,12 +11,14 @@ import (
 type WorkService struct {
 	repository repository.WorkRepository
 	timeout    time.Duration
+	conf       *config.Config
 }
 
-func NewWorkService(repository repository.WorkRepository) *WorkService {
+func NewWorkService(repository repository.WorkRepository, conf *config.Config) *WorkService {
 	return &WorkService{
 		repository: repository,
 		timeout:    time.Duration(10) * time.Second,
+		conf:       conf,
 	}
 }
 
