@@ -177,7 +177,7 @@
               <loginInput type="password" text="Пароль:" @input-change="checkPassword"/>
             </div>
 
-            <submitButton value="Войти" class="btn" @click="sendLogin"/>
+            <submitButton value="Войти" class="btn" @click="sendLoginHR"/>
             <button @click="nextPage" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
               Продолжить
             </button>
@@ -198,7 +198,7 @@ import loginInput from '../shared/loginInput.vue';
 import submitButton from '../shared/submitButton.vue';
 import { ValidUserLogin, ValidUserPassword } from '../helpers/validator';
 import { type IValidAnswer, StatusCodes, type IAPI_Login_Request } from '../helpers/constants';
-import { API_Login } from '@/api/api';
+import {API_Login, API_LoginHR} from '@/api/api';
 import FilesList from "@/entities/filesList.vue";
 import { useUserFormStore } from '@/stores/userFormStore';
 import { defineStore } from 'pinia';
@@ -252,6 +252,34 @@ export default {
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
         API_Login(data)
+            .then(response => {
+              this.statusWindowStore.deteleStatusWindow(stID);
+              this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+
+              this.currentStep++;
+            })
+            .catch(error => {
+              this.statusWindowStore.deteleStatusWindow(stID);
+              if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+              else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+            });
+        return;
+      }
+
+      if(this.login.value === ''){
+        if(this.login.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите логин!');
+        else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.login.error);
+      }
+      if(this.password.value === ''){
+        if(this.password.error === '')this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите пароль!');
+        else this.statusWindowStore.showStatusWindow(StatusCodes.error, this.password.error);
+      }
+    },
+    sendLoginHR(){
+      if(this.login.value !== '' && this.password.value !== ''){
+        const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+        const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
+        API_LoginHR(data)
             .then(response => {
               this.statusWindowStore.deteleStatusWindow(stID);
               this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
