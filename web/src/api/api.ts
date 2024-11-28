@@ -12,7 +12,8 @@ import {
   type IAPI_User_Schedule_Update, 
   type IAPI_University_Create, 
   type IAPI_University_Update, 
-  type IUser
+  type IUser,
+  type IUserCreate
 } from '../helpers/constants';
 
 
@@ -186,15 +187,19 @@ export function API_Audience_Get(universityName: string){
 /////// CAMPUS ///////
 
 //создание кампуса
-export function API_Campus_Create(data: IAPI_Campus_Create){
+export function API_Campus_Create(data: IAPI_Campus_Create[]){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/campus`, data)
+    axios.post(`${API}/auth/campus`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
-      if(DEVMODE) console.log('Campus create success: ', response);
+      if(DEVMODE) console.log('Campuses create success: ', response);
       resolve(response);
     })
     .catch(error => {
-      if(DEVMODE) console.log('Campus create error: ', error);
+      if(DEVMODE) console.log('Campuses create error: ', error);
       reject(error);
     })
   });
@@ -252,9 +257,9 @@ export function API_Campus_Get_University(universityName: string){
 /////// university users ///////
 
 //создание пользователей для вуза
-export function API_University_Users_Create(data: IUser[]){
+export function API_University_Users_Create(data: IUserCreate[]){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/auth/user/`, data, {
+    axios.post(`${API}/auth/user`, data, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
@@ -364,7 +369,8 @@ export function API_Schedule_Create(data: FormData){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/auth/schedule/parse`, data, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
     })
     .then(response => {

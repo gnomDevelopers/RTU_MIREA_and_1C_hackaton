@@ -21,17 +21,6 @@ definitions:
       type_of_assessment:
         type: string
     type: object
-  entities.Achievement:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-      result:
-        type: string
-      user_id:
-        type: integer
-    type: object
   entities.Audience:
     properties:
       campus:
@@ -109,20 +98,6 @@ definitions:
         type: string
     type: object
   entities.CreateAcademicDisciplineResponse:
-    properties:
-      id:
-        type: integer
-    type: object
-  entities.CreateAchievementRequest:
-    properties:
-      name:
-        type: string
-      result:
-        type: string
-      user_id:
-        type: integer
-    type: object
-  entities.CreateAchievementResponse:
     properties:
       id:
         type: integer
@@ -383,13 +358,6 @@ definitions:
       type:
         type: string
     type: object
-  entities.Group:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
   entities.GroupMember:
     properties:
       father_name:
@@ -469,11 +437,6 @@ definitions:
   entities.UpdateDeleteUserScheduleResponse:
     properties:
       message:
-        type: string
-    type: object
-  entities.UpdateRoleRequest:
-    properties:
-      new_role:
         type: string
     type: object
   entities.UpdateUserScheduleRequest:
@@ -576,109 +539,6 @@ info:
   title: VUZ+ API
   version: "1.0"
 paths:
-  /achievement/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Deletes an achievement by the specified ID.
-      parameters:
-      - description: Achievement ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Deleted achievement ID
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Invalid achievement ID
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Delete an achievement
-      tags:
-      - achievements
-  /auth/achievement:
-    post:
-      consumes:
-      - application/json
-      description: Creates a new achievement with the provided details.
-      parameters:
-      - description: Achievement creation data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.CreateAchievementRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Created achievement details
-          schema:
-            $ref: '#/definitions/entities.CreateAchievementResponse'
-        "400":
-          description: Invalid request body
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Create a new achievement
-      tags:
-      - achievements
-  /auth/achievements/user/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves an achievement by the specified user ID.
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Achievement details
-          schema:
-            items:
-              $ref: '#/definitions/entities.Achievement'
-            type: array
-        "400":
-          description: Invalid user ID
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Get achievement by user ID
-      tags:
-      - achievements
   /auth/audience:
     post:
       consumes:
@@ -1947,42 +1807,6 @@ paths:
       summary: Create a new group
       tags:
       - group
-  /auth/groups/university/{university}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves a list of all groups associated with the specified university
-        name.
-      parameters:
-      - description: University name (URL-encoded)
-        in: path
-        name: university
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of groups
-          schema:
-            items:
-              $ref: '#/definitions/entities.Group'
-            type: array
-        "400":
-          description: Invalid university name
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Get all groups by university name
-      tags:
-      - groups
   /auth/percentile/id/{id}:
     get:
       consumes:
@@ -2857,47 +2681,7 @@ paths:
       summary: User login
       tags:
       - authentication
-  /user/{id}/promote:
-    put:
-      consumes:
-      - application/json
-      description: Updates the role of a user based on the provided user ID.
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: New role details
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/entities.UpdateRoleRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Updated user role
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Invalid user ID or request body
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: Internal server error
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Update user role
-      tags:
-      - users
-  /work:
+  /work/login:
     post:
       consumes:
       - application/json
@@ -2930,6 +2714,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Login in hr
+      tags:
+      - work
+  /work/login/hr:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and sets access and refresh tokens as cookies.
+      parameters:
+      - description: User login credentials
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.LoginUserResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Hr login
       tags:
       - work
 securityDefinitions:

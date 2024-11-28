@@ -62,6 +62,15 @@
           type="text" 
           v-model="userEducationalDirections"
           placeholder="Направление">
+
+          <select 
+            v-if="InfoFieldsRole[userRole]?.includes(InfoFields[2])"
+            v-model="userGroup" 
+            class="min-w-20 w-full md:w-auto max-w-none px-2 py-1 text-lg outline-none rounded-lg border-2 border-solid border-transparent focus:border-blue-800">
+            
+            <option class="text-lg" :value="-1" disabled>Выберите группу</option>
+            <option v-for="item in getGroups" class="text-lg" :value="item.id">{{ item.name }}</option>
+          </select>
       </div>
       
       <div class="flex flex-row flex-shrink-0 gap-1 items-center">
@@ -118,6 +127,15 @@
             </span>
           </p>
 
+          <p 
+            v-if="showEducationalDirection(user.role)" 
+            class="font-semibold text-lg cursor-default">
+            Группа: 
+            <span class=" font-normal text-base cursor-pointer text-blue-800">
+              {{ getGroupName(user.group_id) }}
+            </span>
+          </p>
+
         </div>
         <div @click="deleteUser(user)" class="w-9 h-9 flex flex-row flex-shrink-0 justify-center items-center rounded-lg cursor-pointer btn">
           <img class="w-6 h-7" src="../assets/icons/icon-delete.svg"/>
@@ -137,6 +155,7 @@ import {
   INFO_FIELDS_ROLE, 
   StatusCodes, 
   type IUser,
+  type IUserCreate,
 } from '../helpers/constants';
 import { API_University_Users_Create } from '@/api/api';
 
@@ -154,7 +173,8 @@ export default {
       userFaculty: -1,
       userDepartment: -1,
       userEducationalDirections: '',
-      usersList: [] as IUser[],
+      userGroup: -1,
+      usersList: [] as IUserCreate[],
     }
   },
   computed: {
@@ -166,6 +186,9 @@ export default {
     getDepartments(){
       return this.universityStore.deparmentsList;
     },
+    getGroups(){
+      return this.universityStore.groupsList;
+    }
   },
   methods:{
     getRolesName(ind: number){
@@ -178,18 +201,20 @@ export default {
         this.userRole !== -1 && 
         (this.showFaculty(this.userRole) ? this.showFaculty(this.userRole) && this.userFaculty !== -1 : true) &&
         (this.showDepartment(this.userRole) ? this.showDepartment(this.userRole) && this.userDepartment!== -1 : true) &&
-        (this.showEducationalDirection(this.userRole) ? this.showEducationalDirection(this.userRole) && this.userEducationalDirections !== '' : true)
+        (this.showEducationalDirection(this.userRole) ? this.userEducationalDirections !== '' : true) &&
+        (this.showEducationalDirection(this.userRole) ? this.userGroup !== -1 : true)
       ){
         this.usersList.push({
           first_name: this.userName, 
           last_name: this.userSurname, 
           father_name: this.userThirdname, 
           role: this.userRole,
-          faculty_id: this.userFaculty,
-          department_id: this.userDepartment,
-          educational_direction: this.userEducationalDirections,
-          group_id: 2,
+          faculty_id: this.userFaculty === -1 ? 1 : this.userFaculty,
+          department_id: this.userDepartment === -1 ? 1 : this.userDepartment,
+          educational_direction: this.userEducationalDirections === '' ? 'null' : this.userEducationalDirections,
+          group_id: this.userGroup === -1 ? 1 : this.userGroup,
           university_id: this.universityStore.getUniversityID(this.userInfoStore.university!),
+          password: '',
         });
 
         this.userName = '';
@@ -198,6 +223,7 @@ export default {
         this.userFaculty = -1;
         this.userDepartment = -1;
         this.userEducationalDirections = '';
+        this.userGroup = -1;
         return;
       }
       if(this.userName === ''){
@@ -218,6 +244,9 @@ export default {
       if(this.showEducationalDirection(this.userRole) && this.userEducationalDirections === ''){
         this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите направление!');
       }
+      if(this.showEducationalDirection(this.userRole) && this.userGroup === -1){
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите группу!');
+      }
     },
     deleteUser(userDelete: IUser){
       this.usersList = this.usersList.filter(user => user !== userDelete);
@@ -225,18 +254,9 @@ export default {
     sendUsersList(){
       if(this.usersList.length === 0) return;
       const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-      // "department_id": 0,
-      // "educational_direction": "string",
-      // "faculty_id": 0,
-      // "father_name": "string",
-      // "first_name": "string",
-      // "group_id": 0,
-      // "last_name": "string",
-      // "password": "string",
-      // "role": "string",
-      // "university_id": 0
       API_University_Users_Create(this.usersList)
       .then((response: any) => {
+
         //распределяем пользователей по соответствующим спискам
         for(let item of this.usersList){
           switch(item.role){
@@ -247,8 +267,10 @@ export default {
             case 6: this.universityStore.studentsList.push({...item, group_id: 1, id: this.universityStore.tmpuserID++}); break;
           }
         }
+
         //очистка буфера пользователей
         this.usersList = [];
+
         this.statusWindowStore.deteleStatusWindow(stID);
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Пользователи добавлены!');
       })
@@ -257,27 +279,34 @@ export default {
         this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при добавлении пользователей!');
       });
     },
-    showFaculty(role: number){
+
+    showFaculty(role: number): boolean{
       return this.InfoFieldsRole[role]?.includes(this.InfoFields[0]);
     },
-    showDepartment(role: number){
+    showDepartment(role: number): boolean{
       return this.InfoFieldsRole[role]?.includes(this.InfoFields[1]);
     },
-    showEducationalDirection(role: number){
+    showEducationalDirection(role: number): boolean{
       return this.InfoFieldsRole[role]?.includes(this.InfoFields[2]);
     },
-    getFacultyName(facultyID: number){
+    getFacultyName(facultyID: number): string{
       for(let item of this.universityStore.facultiesList){
         if(item.id === facultyID) return item.name;
       }
       return '';
     },
-    getDepartmentName(departmentID: number){
+    getDepartmentName(departmentID: number): string{
       for(let item of this.universityStore.deparmentsList){
         if(item.id === departmentID) return item.name;
       }
       return '';
     },
+    getGroupName(groupID: number): string{
+      for(let item of this.universityStore.groupsList){
+        if(item.id === groupID) return item.name;
+      }
+      return '';
+    }
   }
 }; 
 </script>

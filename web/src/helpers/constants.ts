@@ -93,6 +93,11 @@ export interface IUserGet extends IUser{
   id: number,
 }
 
+//user create interface
+export interface IUserCreate extends IUser{
+  password: string,
+}
+
 export interface IGroup {
   id: number,
   name: string,
@@ -148,7 +153,7 @@ export interface IAPI_Audience_Update extends IAPI_Audience_Create{
 export interface IAPI_Campus_Create {
   address: string,
   name: string,
-  university: string
+  university: string,
 };
 
 export interface IAPI_Campus_Update extends IAPI_Campus_Create {
