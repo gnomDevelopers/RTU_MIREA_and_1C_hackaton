@@ -159,6 +159,7 @@ type VisitingRepository interface {
 	Exist(ctx context.Context, visiting *entities.Visiting) (bool, error)
 	Create(ctx context.Context, visiting *entities.Visiting) (int, error)
 	GetByUserIdAndClassId(ctx context.Context, userID, classID int) (*entities.Visiting, error)
+	Update(ctx context.Context, visiting *entities.Visiting) error
 }
 
 type Repository struct {
@@ -178,4 +179,5 @@ type Repository struct {
 	AcademicDiscipline    AcademicDisciplineRepository
 	Gpa                   GpaRepository
 	Work                  WorkRepository
+	Visiting              VisitingRepository
 }
