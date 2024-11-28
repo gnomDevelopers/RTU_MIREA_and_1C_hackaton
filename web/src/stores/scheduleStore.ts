@@ -22,10 +22,13 @@ export const useScheduleStore = defineStore('schedule', {
       scheduleData: [] as ITimeTable[], // расписание на весь семестр
 
       scheduleGroups: [] as string[], // группы для расписания
+
+      selectedDate: '',
     }
   },
   actions: {
     async loadScheduleGroups(){
+      if(this.selectedDate === '') this.selectedDate = this.getCurrentDate();
       try{
         const groups: any = await API_University_Groups_Schedule_Get();
         this.scheduleGroups = [];
@@ -41,8 +44,8 @@ export const useScheduleStore = defineStore('schedule', {
       .then((response: any) => {
         this.scheduleData = [];
         const res: IScheduleItem[] = [];
+
         for(let item of response.data){
-          console.log('item: ', item);
           const data:IScheduleItem = {
             auditory: item.auditory,
             date: item.date,
@@ -59,7 +62,7 @@ export const useScheduleStore = defineStore('schedule', {
           };
           res.push(data);
         }
-        console.log('res: ', res);
+
         this.scheduleData = transformSchedule(res);
 
         console.log('scheduleData: ', this.scheduleData);
@@ -75,5 +78,13 @@ export const useScheduleStore = defineStore('schedule', {
     loadScheduleTableByClassName(className: string){
 
     },
+    getCurrentDate() {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+      const year = String(today.getFullYear() % 100).padStart(2, '0'); //2-digit year
+    
+      return `${day}.${month}.${year}`;
+    }
   }
 });
