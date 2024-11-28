@@ -1,63 +1,70 @@
 <template>
-  <div class="md:m-14 uus:m-5">
+  <div class="scrollable md:p-14 uus:p-5">
     <p class="md:text-3xl uus:text-xl">Ваши отклики на вакансии</p>
-    <div class="flex flex-col">
-      <div class="flex flex-row">
-        <div class="flex flex-row md:w-1/3 border-4 border-hr-color rounded-xl mt-12 m-3 p-6">
-          <img class="max-w-28 max-h-28 mr-4" src="../assets/icons/icon-company.svg">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      <div class="border-4 border-hr-color rounded-xl p-6">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
           <div class="flex flex-col">
-            <p class="font-bold text-2xl">1C</p>
-            <p class="text-xl">Младший разработчик</p>
-            <p class="text-xl font-bold">Статус:</p>
-            <p class="text-xl">В рассмотрении</p>
-
-          </div>
-        </div>
-        <div class="flex flex-row md:w-1/3 border-4 border-hr-color rounded-xl mt-12 m-3 p-6">
-          <img class="max-w-28 max-h-28 mr-4" src="../assets/icons/icon-company.svg">
-          <div class="flex flex-col">
-            <p class="font-bold text-2xl">1C</p>
-            <p class="text-xl">Младший разработчик</p>
-            <p class="text-xl font-bold">Статус:</p>
-            <p class="text-xl">В рассмотрении</p>
-          </div>
-        </div>
-        <div class="flex flex-row md:w-1/3 border-4 border-hr-color rounded-xl mt-12 m-3 p-6">
-          <img class="max-w-28 max-h-28 mr-4" src="../assets/icons/icon-company.svg">
-          <div class="flex flex-col">
-            <p class="font-bold text-2xl">1C</p>
-            <p class="text-xl">Младший разработчик</p>
-            <p class="text-xl font-bold">Статус:</p>
-            <p class="text-xl">В рассмотрении</p>
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <p class="md:text-xl uus:text-base font-bold">Статус:</p>
+            <p class="md:text-xl uus:text-base">В рассмотрении</p>
           </div>
         </div>
       </div>
-      <div class="flex flex-row">
-        <div class="flex flex-row md:w-1/3 border-4 border-hr-color rounded-xl mt-12 m-3 p-6">
-          <img class="max-w-28 max-h-28 mr-4" src="../assets/icons/icon-company.svg">
+      <div class="border-4 border-hr-color rounded-xl p-6">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
           <div class="flex flex-col">
-            <p class="font-bold text-2xl">1C</p>
-            <p class="text-xl">Младший разработчик</p>
-            <p class="text-xl font-bold">Статус:</p>
-            <p class="text-xl">В рассмотрении</p>
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <p class="md:text-xl uus:text-base font-bold">Статус:</p>
+            <p class="md:text-xl uus:text-base">В рассмотрении</p>
           </div>
         </div>
-        <div class="flex flex-row md:w-1/3 border-4 border-hr-color rounded-xl mt-12 m-3 p-6">
-          <img class="max-w-28 max-h-28 mr-4" src="../assets/icons/icon-company.svg">
+      </div>
+      <div class="border-4 border-hr-color rounded-xl p-6">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
           <div class="flex flex-col">
-            <p class="font-bold text-2xl">1C</p>
-            <p class="text-xl">Младший разработчик</p>
-            <p class="text-xl font-bold">Статус:</p>
-            <p class="text-xl">В рассмотрении</p>
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <p class="md:text-xl uus:text-base font-bold">Статус:</p>
+            <p class="md:text-xl uus:text-base">В рассмотрении</p>
           </div>
         </div>
-        <div class="flex flex-row md:w-1/3 border-4 border-hr-color rounded-xl mt-12 m-3 p-6">
-          <img class="max-w-28 max-h-28 mr-4" src="../assets/icons/icon-company.svg">
+      </div>
+      <div class="border-4 border-hr-color rounded-xl p-6">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
           <div class="flex flex-col">
-            <p class="font-bold text-2xl">1C</p>
-            <p class="text-xl">Младший разработчик</p>
-            <p class="text-xl font-bold">Статус:</p>
-            <p class="text-xl">В рассмотрении</p>
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <p class="md:text-xl uus:text-base font-bold">Статус:</p>
+            <p class="md:text-xl uus:text-base">В рассмотрении</p>
+          </div>
+        </div>
+      </div>
+      <div class="border-4 border-hr-color rounded-xl p-6">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
+          <div class="flex flex-col">
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <p class="md:text-xl uus:text-base font-bold">Статус:</p>
+            <p class="md:text-xl uus:text-base">В рассмотрении</p>
+          </div>
+        </div>
+      </div>
+      <div class="border-4 border-hr-color rounded-xl p-6">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
+          <div class="flex flex-col">
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <p class="md:text-xl uus:text-base font-bold">Статус:</p>
+            <p class="md:text-xl uus:text-base">В рассмотрении</p>
           </div>
         </div>
       </div>
