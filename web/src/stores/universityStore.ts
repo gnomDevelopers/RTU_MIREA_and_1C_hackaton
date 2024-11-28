@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
-import { 
-  AUDITORY_PROFILE_LIST, 
-  AUDITORY_TYPE_LIST, 
+import {  
   type IAPI_Audience_Update, 
   type IAPI_Campus_Update, 
   type IUserGet, 
@@ -196,6 +194,7 @@ export const useUniversityStore = defineStore('university', {
       });
     },
     async loadAllGroups(universityName: string){
+      const userStore = useUserInfoStore();
       API_University_Groups_Get(universityName)
       .then((response:any) => {
         this.groupsList = response.data;
@@ -204,9 +203,11 @@ export const useUniversityStore = defineStore('university', {
         // for(let group of response.data){
         //   this.groupsList.push({id: group.id, name: group.group});
         // }
+        userStore.group_name = this.getGroupName(userStore.group_id!);
       })
       .catch(error => {
         this.groupsList = [];
+        userStore.group_name = '';
       });
     },
     async loadAllUniversities(){

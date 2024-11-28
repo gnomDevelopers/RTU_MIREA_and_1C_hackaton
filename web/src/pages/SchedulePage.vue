@@ -138,11 +138,11 @@ export default {
   },
   async mounted(){
     await this.scheduleStore.loadScheduleGroups();
-
-    const groupName = this.universityStore.getGroupName(this.userInfoStore.group_id!);
-
-    if(this.scheduleStore.scheduleGroups.includes(groupName)){
-      this.scheduleStore.loadScheduleTableByGroupName(groupName);
+    console.log('user groupName: ', this.userInfoStore.group_name);
+    console.log('scheduleGroups: ', this.scheduleStore.scheduleGroups);
+    console.log('includes: ', this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name));
+    if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
+      this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
 
     }
     
@@ -151,7 +151,7 @@ export default {
     selectScheduleType(type: number){
       if(type === 0) {
         this.scheduleStore.selectedSheduleGroup = null;
-        this.scheduleStore.loadScheduleTableByGroupName(this.universityStore.getGroupName(this.userInfoStore.group_id!));
+        this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
       }
       this.scheduleStore.scheduleType = type;
     },
