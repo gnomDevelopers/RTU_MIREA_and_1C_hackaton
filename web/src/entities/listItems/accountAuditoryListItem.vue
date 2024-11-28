@@ -12,7 +12,7 @@
         </p>
         <p class="text-lg font-semibold">
           Кампус: 
-          <span class="text-base font-normal">{{ getCampusName(data.campus_id) }}</span>
+          <span class="text-base font-normal">{{ data.campus }}</span>
         </p>
         <p class="text-lg font-semibold">
           Тип: 
@@ -48,13 +48,6 @@
           min="1"
           v-model="auditoryCapacity"
           placeholder="Вместимость аудитории">
-
-        <select 
-          v-model="auditoryCampusID"
-          class="min-w-20 w-full md:w-auto max-w-none px-2 py-1 text-lg outline-none rounded-lg border-2 border-solid border-transparent focus:border-blue-800">
-          
-          <option v-for="item in getCampusList" :key="item.id" class="text-lg" :value="item.id">{{ item.name }}</option>
-        </select>
         
         <select 
           v-model="auditoryType"
@@ -98,7 +91,6 @@ export default {
     return {
       showSettings: false,
 
-      auditoryCampusID: this.data.campus_id,
       auditoryCapacity: this.data.capacity,
       auditoryName: this.data.name,
       auditoryProfile: AUDITORY_PROFILE_LIST.indexOf(this.data.profile),
@@ -115,8 +107,7 @@ export default {
       return AUDITORY_TYPE_LIST;
     },
     isNoChanges(){
-      return this.auditoryCampusID === this.data.campus_id && 
-        this.auditoryCapacity === this.data.capacity && 
+      return this.auditoryCapacity === this.data.capacity && 
         this.auditoryName === this.data.name && 
         this.auditoryProfile === AUDITORY_PROFILE_LIST.indexOf(this.data.profile) && 
         this.auditoryType ===  AUDITORY_TYPE_LIST.indexOf(this.data.type);
@@ -136,37 +127,36 @@ export default {
       if(this.isNoChanges) return;
 
       if(this.auditoryCapacity >= 1 && this.auditoryName !== ''){
-        // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Обновляем информацию об аудитории...', -1);
+        const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Обновляем информацию об аудитории...', -1);
+        
         const body:IAPI_Audience_Update = {
-          campus_id: this.auditoryCampusID,
+          campus: this.data.campus,
           capacity: this.auditoryCapacity,
           name: this.auditoryName,
           profile: AUDITORY_PROFILE_LIST[this.auditoryProfile],
           type: AUDITORY_TYPE_LIST[this.auditoryType],
-          id: this.data.id
+          id: this.data.id,
         }
-        for(let i = 0; i < this.universityStore.auditoriesList.length; i++){
-          if(this.universityStore.auditoriesList[i].id === this.data.id){
-            this.universityStore.auditoriesList[i].campus_id = this.auditoryCampusID;
-            this.universityStore.auditoriesList[i].capacity = this.auditoryCapacity;
-            this.universityStore.auditoriesList[i].name = this.auditoryName;
-            this.universityStore.auditoriesList[i].profile = AUDITORY_PROFILE_LIST[this.auditoryProfile];
-            this.universityStore.auditoriesList[i].type = AUDITORY_TYPE_LIST[this.auditoryType];
-            break;
+
+        API_Audience_Update(body)
+        .then(response => {
+          for(let i = 0; i < this.universityStore.auditoriesList.length; i++){
+            if(this.universityStore.auditoriesList[i].id === this.data.id){
+              this.universityStore.auditoriesList[i].capacity = this.auditoryCapacity;
+              this.universityStore.auditoriesList[i].name = this.auditoryName;
+              this.universityStore.auditoriesList[i].profile = AUDITORY_PROFILE_LIST[this.auditoryProfile];
+              this.universityStore.auditoriesList[i].type = AUDITORY_TYPE_LIST[this.auditoryType];
+              break;
+            }
           }
-        }
-        setTimeout(() => {
+
+          this.statusWindowStore.deteleStatusWindow(stID);
           this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Информация об аудитории обновлена!');
-        }, 300)
-        // API_Audience_Update(body)
-        // .then(response => {
-        //   this.statusWindowStore.deteleStatusWindow(stID);
-        //   this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Информация об аудитории обновлена!');
-        // })
-        // .catch(error => {
-        //   this.statusWindowStore.deteleStatusWindow(stID);
-        //   this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при обновлении аудиториии!');
-        // })
+        })
+        .catch(error => {
+          this.statusWindowStore.deteleStatusWindow(stID);
+          this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при обновлении аудиториии!');
+        });
       }
 
       //ошибка вместимости аудитории
@@ -180,25 +170,22 @@ export default {
       }
     },
     deleteAuditory() {
-      for(let i = 0; i < this.universityStore.auditoriesList.length; i++){
+      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Удаляем аудиторию...', -1);
+      API_Audience_Delete(this.data.id)
+      .then((response: any) => {
+        for(let i = 0; i < this.universityStore.auditoriesList.length; i++){
           if(this.universityStore.auditoriesList[i].id === this.data.id){
             this.universityStore.auditoriesList.splice(i, 1);
             break;
           }
         }
-      setTimeout(() => {
+        this.statusWindowStore.deteleStatusWindow(stID);
         this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитория успешно удалена!');
-      }, 300);
-      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Удаляем аудиторию...', -1);
-      // API_Audience_Delete(this.data.id)
-      // .then(response => {
-      //   this.statusWindowStore.deteleStatusWindow(stID);
-      //   this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Аудитория успешно удалена!');
-      // })
-      // .catch(error => {
-      //   this.statusWindowStore.deteleStatusWindow(stID);
-      //   this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при удалении аудиториии!');
-      // })
+      })
+      .catch(error => {
+        this.statusWindowStore.deteleStatusWindow(stID);
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при удалении аудиториии!');
+      });
     }
   }
 };

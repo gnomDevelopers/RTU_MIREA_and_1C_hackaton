@@ -66,3 +66,14 @@ func (s *GroupService) Create(c context.Context, req *entities.CreateGroupReques
 
 	return res, err
 }
+
+func (s *GroupService) GetAll(c context.Context, req *entities.GetGroupRequest) (*[]entities.Group, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	res, err := s.repository.GetAll(ctx, req.Name)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
