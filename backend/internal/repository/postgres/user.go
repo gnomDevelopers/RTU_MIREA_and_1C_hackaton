@@ -43,7 +43,8 @@ func (r *UserRepository) GetInfoById(ctx context.Context, id int) (*entities.Use
 			u.role, 
 			u.faculty_id, 
 			u.department_id, 
-			u.educational_direction
+			u.educational_direction,
+			u.group_id
 		FROM users u
 		LEFT JOIN university un ON u.university_id = un.id
 		WHERE u.id = $1 AND u.is_deleted = false
@@ -60,6 +61,7 @@ func (r *UserRepository) GetInfoById(ctx context.Context, id int) (*entities.Use
 		&user.FacultyID,
 		&user.DepartmentID,
 		&user.EducationalDirection,
+		&user.GroupID,
 	)
 
 	if err != nil {
