@@ -15,6 +15,13 @@
       </div>
       
     </div>
+    <div v-else class="flex flex-col justify-center items-center w-[500px] h-[350px]">
+      <div class="flex flex-row gap-x-1 items-center">
+        <img class="w-8 h-8" src="../../assets/icons/icon-fire.svg"/>
+        <p class="text-xl">В этот день нет пар!</p>
+        <img class="w-8 h-8" src="../../assets/icons/icon-fire.svg"/>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">

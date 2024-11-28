@@ -141,11 +141,14 @@ export default {
     //устанавливаем текущую дату
     const today = new Date();
     this.scheduleStore.selectedDate = GET_CORRECT_DATE(today.getDate(), today.getMonth() + 1, today.getFullYear());
+    console.log('сегодня: ', this.scheduleStore.selectedDate);
     //если группа пользователя есть в списке групп с расписанием
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
       // загружаем расписание группы студента
+      console.log('загружаем расписание группы')
       await this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
       // загружаем сегодняшнее расписание
+      console.log('выбираем сегодняшнее расписание');
       this.scheduleStore.selectScheduleDay(this.scheduleStore.selectedDate);
     }
     
