@@ -84,7 +84,7 @@
             title="Введите название кампуса" 
             placeholder="Название кампуса"
             :searchList="campusesSearchList"
-            :itemComponent="getAuditoryListItemComponent"
+            :itemComponent="getCampusListItemComponent"
           />
 
         </MainControlItem>
@@ -94,7 +94,7 @@
             title="Введите название аудитории" 
             placeholder="Название аудитории"
             :searchList="auditoriesSearchList"
-            :itemComponent="getCampusListItemComponent"
+            :itemComponent="getAuditoryListItemComponent"
           />
 
         </MainControlItem>
