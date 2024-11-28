@@ -30,20 +30,6 @@
             </div>
           </div>
         </div>
-        <div class="flex flex-row items-stretch gap-x-4 w-full">
-          <div class="flex flex-row justify-center items-center">
-            <svg @click="addStudent" class="w-7 h-7 cursor-pointer" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 9V19M9 14H19M26.5 14C26.5 20.9036 20.9036 26.5 14 26.5C7.09644 26.5 1.5 20.9036 1.5 14C1.5 7.09644 7.09644 1.5 14 1.5C20.9036 1.5 26.5 7.09644 26.5 14Z" stroke="#063C73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="flex flex-grow">
-            <input 
-              type="text"
-              v-model="inputStudentFIO" 
-              class="w-full px-2 py-1 min-w-20 max-w-none outline-none rounded-lg text-lg font-medium header-shadow" 
-              placeholder="Введите ФИО студента">
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -69,8 +55,6 @@ export default{
   },
   data(){
     return{
-      groupsSearchList: [] as ISearchList[],
-
       inputStudentFIO: '',
     }
   },
@@ -86,54 +70,32 @@ export default{
     },
 
     getGroupMembers(){
-      return this.universityStore.groupMembersList;
+      const arr:IUserGet[] = [];
+      for(let student of this.universityStore.groupMembersList){
+        if(student.group_id === this.groupCorrectPageStore.selectedGroupID){
+          arr.push(student);
+        }
+      }
+      return arr;
+    },
+
+    groupsSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.groupsList.length === 0) return arr;
+      for(let item of this.universityStore.groupsList){
+        arr.push({id: item.id, search_field: item.name, data: item});
+      }
+      return arr;
     }
   },
   methods: {
-    addStudent(){
-      if(this.inputStudentFIO === ''){
-        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Введите фио студента!');
-        return;
-      }
-      const input = this.inputStudentFIO.split(' ');
-      if(input.length !== 3){
-        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Некорректное фио студента!');
-        return;
-      }
-      this.universityStore.groupMembersList.push({
-        id: 12, 
-        first_name: input[1], 
-        last_name: input[0], 
-        father_name: input[2], 
-        role: 6, 
-        faculty_id: 1, 
-        department_id: 1, 
-        educational_direction: 'Фуллстек разработка', 
-        group_id: 1,
-        university_id: 1,
-      });
-      this.universityStore.groupMembersList = this.universityStore.sortPeople(this.universityStore.groupMembersList);
-      this.inputStudentFIO = '';
-    },
     deleteStudent(studentDelete: IUserGet){
-      for(let i = 0; i < this.universityStore.groupMembersList.length; i++){
-        if(this.universityStore.groupMembersList[i].id === studentDelete.id){
-          this.universityStore.groupMembersList.splice(i, 1);
+      for(let i = 0; i < this.universityStore.studentsList.length; i++){
+        if(this.universityStore.studentsList[i].id === studentDelete.id){
+          this.universityStore.studentsList.splice(i, 1);
         }
       }
     }
   },
-  watch: {
-    'universityStore.groupsList' : {
-      handler(val: IUserGet[]){
-        this.groupsSearchList = [];
-        for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  }
 };
 </script>
