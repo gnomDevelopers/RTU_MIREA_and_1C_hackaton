@@ -32,9 +32,9 @@ func (r *DepartmentRepository) Create(ctx context.Context, department *entities.
 		return 0, errors.New("")
 	}
 	var id int
-	query := `INSERT INTO department (name, university) VALUES ($1) RETURNING id`
+	query := `INSERT INTO department (name, university) VALUES ($1, $2) RETURNING id`
 
-	err := r.db.QueryRowContext(ctx, query, department.Name).Scan(&id)
+	err := r.db.QueryRowContext(ctx, query, department.Name, department.University).Scan(&id)
 	if err != nil {
 		return 0, err
 	}
