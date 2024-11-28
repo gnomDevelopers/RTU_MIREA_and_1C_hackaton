@@ -40,8 +40,8 @@ export const useScheduleStore = defineStore('schedule', {
       }
     },
     async loadScheduleTableByGroupName(groupName: string){
-      API_Schedule_Get_GroupName(groupName)
-      .then((response: any) => {
+      try{
+        const response:any = await API_Schedule_Get_GroupName(groupName);
         this.scheduleData = [];
         const res: IScheduleItem[] = [];
 
@@ -66,11 +66,9 @@ export const useScheduleStore = defineStore('schedule', {
         this.scheduleData = extendTimetable(transformSchedule(res));
         
         console.log('scheduleData: ', this.scheduleData);
-      })
-      .catch(error => {
+      }catch(error){
         this.scheduleData = [];
-      });
-
+      }
     },
     loadScheduleTableByTeacherName(teacherName: string){
 
