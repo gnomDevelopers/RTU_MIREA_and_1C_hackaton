@@ -96,7 +96,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		DepartmentService:         NewDepartmentService(repositories.Department),
 		GpaService:                NewGpaService(repositories.Gpa),
 		AchievementService:        NewAchievementService(repositories.AchievementRepository),
-		WorkService:               NewWorkService(repositories.Work),
 		WorkService:               NewWorkService(repositories.Work, conf),
 	}
 }
