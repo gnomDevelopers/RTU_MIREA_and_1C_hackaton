@@ -3475,11 +3475,11 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Update profile",
+                "summary": "Get profile",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "university id",
+                        "description": "user id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -3489,7 +3489,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.WorkUser"
+                            "$ref": "#/definitions/entities.FullWorkUser"
                         }
                     },
                     "400": {
@@ -3585,7 +3585,7 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Response",
+                "summary": "Получение всех отликов студента",
                 "parameters": [
                     {
                         "type": "string",
@@ -3639,7 +3639,7 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Response",
+                "summary": "Получение всех откликов hr` + "`" + `а",
                 "parameters": [
                     {
                         "type": "string",
@@ -3654,6 +3654,54 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/entities.CreateUniversityResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/work/work_user/all": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "work"
+                ],
+                "summary": "Получение всех студентов",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.FullWorkUser"
+                            }
                         }
                     },
                     "400": {
@@ -3837,7 +3885,7 @@ const docTemplate = `{
             }
         },
         "/work/exists/id/{id}": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -3852,11 +3900,11 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Login in hr",
+                "summary": "Проверка на сущестование аккаунта студента",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "university id",
+                        "description": "candidate id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -4237,6 +4285,9 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "university": {
+                    "type": "string"
                 }
             }
         },
@@ -4426,6 +4477,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "university": {
+                    "type": "string"
                 }
             }
         },
@@ -4455,6 +4509,59 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "university": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.FullWorkUser": {
+            "type": "object",
+            "properties": {
+                "additional_experience": {
+                    "type": "string"
+                },
+                "cv_path": {
+                    "type": "string"
+                },
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gpa": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "speciality": {
+                    "type": "string"
+                },
+                "telegram": {
+                    "type": "string"
+                },
+                "university": {
+                    "type": "string"
+                },
+                "useful_links": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "work_experience": {
                     "type": "string"
                 }
             }
@@ -4842,36 +4949,10 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.WorkUser": {
-            "type": "object",
-            "properties": {
-                "cv_path": {
-                    "type": "string"
-                },
-                "hide_profile": {
-                    "type": "boolean"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "phone_number": {
-                    "type": "string"
-                },
-                "skills": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "telegram": {
-                    "type": "string"
-                }
-            }
-        },
         "entities.WorkUserUpdateRequest": {
             "type": "object",
             "properties": {
-                "cv_path": {
+                "additional_experience": {
                     "type": "string"
                 },
                 "id": {
@@ -4886,7 +4967,19 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
+                "speciality": {
+                    "type": "string"
+                },
                 "telegram": {
+                    "type": "string"
+                },
+                "useful_links": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "work_experience": {
                     "type": "string"
                 }
             }

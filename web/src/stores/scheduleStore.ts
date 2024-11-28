@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
+import { WEEK_DAYS, type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
 import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
 import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
@@ -24,11 +24,11 @@ export const useScheduleStore = defineStore('schedule', {
       scheduleGroups: [] as string[], // группы для расписания
 
       selectedDate: '',
+      startDate: '02.09.2024',
     }
   },
   actions: {
     async loadScheduleGroups(){
-      if(this.selectedDate === '') this.selectedDate = this.getCurrentDate();
       try{
         const groups: any = await API_University_Groups_Schedule_Get();
         this.scheduleGroups = [];
@@ -39,9 +39,9 @@ export const useScheduleStore = defineStore('schedule', {
         this.scheduleGroups = [];
       }
     },
-    loadScheduleTableByGroupName(groupName: string){
-      API_Schedule_Get_GroupName(groupName)
-      .then((response: any) => {
+    async loadScheduleTableByGroupName(groupName: string){
+      try{
+        const response:any = await API_Schedule_Get_GroupName(groupName);
         this.scheduleData = [];
         const res: IScheduleItem[] = [];
 
@@ -62,16 +62,13 @@ export const useScheduleStore = defineStore('schedule', {
           };
           res.push(data);
         }
-
-        this.scheduleData = transformSchedule(res);
+        // фильтруем, сортируем и растягиваем расписание на весь семестр
+        this.scheduleData = extendTimetable(transformSchedule(res));
+        
         console.log('scheduleData: ', this.scheduleData);
-        this.scheduleData = extendTimetable(this.scheduleData);
-        console.log('scheduleDataFull: ', this.scheduleData);
-      })
-      .catch(error => {
+      }catch(error){
         this.scheduleData = [];
-      });
-
+      }
     },
     loadScheduleTableByTeacherName(teacherName: string){
 
@@ -79,13 +76,15 @@ export const useScheduleStore = defineStore('schedule', {
     loadScheduleTableByClassName(className: string){
 
     },
-    getCurrentDate() {
-      const today = new Date();
-      const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-      const year = String(today.getFullYear() % 100).padStart(2, '0'); //2-digit year
-    
-      return `${day}.${month}.${year}`;
-    }
+    selectScheduleDay(day: string){
+      this.selectedDate = day;
+      this.scheduleTableDay = [];
+      for(let item of this.scheduleData){
+        if(item.date === day){
+          this.scheduleTableDay = item.timeTable;
+          break;
+        }
+      }
+    },
   }
 });

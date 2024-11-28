@@ -5,7 +5,7 @@
       
       <div class="flex flex-col flex-grow items-start gap-y-1">
         <p class="flex flex-row flex-wrap gap-x-1 text-lg">
-          <span class="font-bold">{{ data.time_start }}-{{ data.time_end }}</span>
+          <span class="font-bold">{{ data.time_start.replace('-', '.') }}-{{ data.time_end.replace('-', '.') }}</span>
           {{ data.name }}
         </p>
         <div v-if="showAddMySchedule" class="flex flex-row gap-x-1 w-full">

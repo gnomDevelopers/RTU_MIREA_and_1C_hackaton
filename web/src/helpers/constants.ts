@@ -17,6 +17,8 @@ export enum StatusCodes {
 
 export const MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
+export const WEEK_DAYS = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+
 export const SCHEDULE_TARGET_TEXT = ['Выберите группу для просмотра', 'Выберите преподавателя для просмотра', 'Выберите факультет для просмотра'];
 
 //types
@@ -257,4 +259,53 @@ export function GET_ROLEID_BY_ROLENAME(roleName: string): TMaybeNumber{
     if(ROLES_NAME[i] === roleName) return i;
   }
   return null;
+}
+
+export function GET_CORRECT_DATE(day: number, month: number, year: number) {
+  const Day = String(day).padStart(2, '0');
+  const Month = String(month).padStart(2, '0');
+  const Year = String(year).padStart(2, '0');
+
+  return `${Day}.${Month}.${Year}`;
+}
+
+export function GET_DAY_OF_WEEK(dateString: string): string {
+  const [day, month, year] = dateString.split('.').map(Number);
+
+  const date = new Date(year, month - 1, day);
+  const dayIndex = date.getDay();
+
+  const adjustedDayIndex = (dayIndex === 0) ? 6 : dayIndex -1 ;
+  return WEEK_DAYS[adjustedDayIndex];
+}
+
+export function GET_WEEK_NUMBER(date: Date | string): number {
+  if(typeof date === 'string') date = GET_DATE_FROM_STRING(date);
+  // Copy date so don't modify original
+  date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  // Get first day of year
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  // Calculate full weeks
+  return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + yearStart.getDay() + 1) / 7);
+}
+
+export function GET_DATE_FROM_STRING(dateString: string): Date {
+  const [day, month, year] = dateString.split('.').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+export function GET_WEEK_DIFFERENCE(startDate: Date, targetDate: Date): number {
+  // Ensure both dates are at 00:00:00 hours to avoid time-related discrepancies
+  startDate.setHours(0, 0, 0, 0);
+  targetDate.setHours(0, 0, 0, 0);
+
+  // Calculate the difference in milliseconds
+  const diffInMilliseconds = targetDate.getTime() - startDate.getTime();
+
+  // Calculate the difference in days
+  const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+  //Calculate the week number
+  //This assumes weeks start on Monday and end on Sunday
+  return Math.floor(diffInDays / 7) + 1;
 }

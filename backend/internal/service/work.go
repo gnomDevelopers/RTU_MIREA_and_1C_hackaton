@@ -117,7 +117,7 @@ func (s *WorkService) Login(c context.Context, request *entities.LoginUserReques
 	}, nil
 }
 
-func (s *WorkService) GetByIdWorkUser(c context.Context, id int) (*entities.WorkUser, error) {
+func (s *WorkService) GetByIdWorkUser(c context.Context, id int) (*entities.FullWorkUser, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -138,6 +138,14 @@ func (s *WorkService) UpdateWorkUser(c context.Context, workUser *entities.WorkU
 	defer cancel()
 
 	err := s.repository.UpdateWorkUser(ctx, workUser)
+	return err
+}
+
+func (s *WorkService) UpdateCVPath(c context.Context, workUser *entities.UpdateCV) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	err := s.repository.UpdateCVPath(ctx, workUser)
 	return err
 }
 

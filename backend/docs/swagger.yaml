@@ -195,6 +195,8 @@ definitions:
     properties:
       name:
         type: string
+      university:
+        type: string
     type: object
   entities.CreateDepartmentResponse:
     properties:
@@ -316,6 +318,8 @@ definitions:
         type: integer
       name:
         type: string
+      university:
+        type: string
     type: object
   entities.ErrorResponse:
     properties:
@@ -334,6 +338,41 @@ definitions:
       name:
         type: string
       university:
+        type: string
+    type: object
+  entities.FullWorkUser:
+    properties:
+      additional_experience:
+        type: string
+      cv_path:
+        type: string
+      father_name:
+        type: string
+      first_name:
+        type: string
+      gpa:
+        type: number
+      id:
+        type: integer
+      last_name:
+        type: string
+      phone_number:
+        type: string
+      skills:
+        items:
+          type: string
+        type: array
+      speciality:
+        type: string
+      telegram:
+        type: string
+      university:
+        type: string
+      useful_links:
+        items:
+          type: string
+        type: array
+      work_experience:
         type: string
     type: object
   entities.GetGradesBySubject:
@@ -583,26 +622,9 @@ definitions:
       user_id:
         type: integer
     type: object
-  entities.WorkUser:
-    properties:
-      cv_path:
-        type: string
-      hide_profile:
-        type: boolean
-      id:
-        type: integer
-      phone_number:
-        type: string
-      skills:
-        items:
-          type: string
-        type: array
-      telegram:
-        type: string
-    type: object
   entities.WorkUserUpdateRequest:
     properties:
-      cv_path:
+      additional_experience:
         type: string
       id:
         type: integer
@@ -612,7 +634,15 @@ definitions:
         items:
           type: string
         type: array
+      speciality:
+        type: string
       telegram:
+        type: string
+      useful_links:
+        items:
+          type: string
+        type: array
+      work_experience:
         type: string
     type: object
   entities.WorkUserUpdateResponse:
@@ -2810,7 +2840,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: university id
+      - description: user id
         in: path
         name: id
         required: true
@@ -2821,7 +2851,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.WorkUser'
+            $ref: '#/definitions/entities.FullWorkUser'
         "400":
           description: Bad Request
           schema:
@@ -2836,7 +2866,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Update profile
+      summary: Get profile
       tags:
       - work
   /auth/work/response:
@@ -2905,7 +2935,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Response
+      summary: Получение всех отликов студента
       tags:
       - work
   /auth/work/response/hr/{id}:
@@ -2939,7 +2969,37 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Response
+      summary: Получение всех откликов hr`а
+      tags:
+      - work
+  /auth/work/work_user/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/entities.FullWorkUser'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Получение всех студентов
       tags:
       - work
   /login:
@@ -3050,11 +3110,11 @@ paths:
       tags:
       - users
   /work/exists/id/{id}:
-    post:
+    get:
       consumes:
       - application/json
       parameters:
-      - description: university id
+      - description: candidate id
         in: path
         name: id
         required: true
@@ -3080,7 +3140,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Login in hr
+      summary: Проверка на сущестование аккаунта студента
       tags:
       - work
   /work/login/hr:
