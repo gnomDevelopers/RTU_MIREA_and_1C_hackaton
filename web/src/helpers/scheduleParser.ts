@@ -37,8 +37,8 @@ export function extendTimetable(timetable: ITimeTable[]): ITimeTable[] {
       date.setDate(date.getDate() + numDays);
       const newDay = String(date.getDate()).padStart(2, '0');
       const newMonth = String(date.getMonth() + 1).padStart(2, '0');
-      const newYear = String(date.getFullYear() % 100).padStart(2, '0');
-      return `${newMonth}-${newDay}-${newYear}`;
+      const newYear = String(date.getFullYear()).padStart(2, '0');
+      return `${newDay}.${newMonth}.${newYear}`;
   };
 
   for (let i = 0; i < numWeeks; i++) {

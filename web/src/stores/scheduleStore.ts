@@ -66,7 +66,7 @@ export const useScheduleStore = defineStore('schedule', {
         this.scheduleData = transformSchedule(res);
         console.log('scheduleData: ', this.scheduleData);
         this.scheduleData = extendTimetable(this.scheduleData);
-        console.log('scheduleDataFull: ', this.scheduleData);
+        console.log('scheduleData: ', this.scheduleData);
       })
       .catch(error => {
         this.scheduleData = [];
