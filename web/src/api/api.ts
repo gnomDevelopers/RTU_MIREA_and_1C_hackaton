@@ -254,7 +254,7 @@ export function API_Campus_Get_University(universityName: string){
 //создание пользователей для вуза
 export function API_University_Users_Create(data: IUser[]){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/auth/user/`, data, {
+    axios.post(`${API}/auth/user`, data, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
