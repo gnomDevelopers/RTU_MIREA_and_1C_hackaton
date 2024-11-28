@@ -66,14 +66,21 @@ export interface Day{
   day: number,
 };
 
-// schedule item interface
-export interface IScheduleItem{
-  time: string,
+// schedule get interface
+export interface IScheduleItem {
+  auditory: string,
+  date: string,
+  group_names: string[],
+  id: number,
+  name: string,
+  teacher_names: string[],
+  time_end: string,
+  time_start: string,
   type: string,
-  title: string,
-  place: string,
-  groups: string[],
-};
+  university: string,
+  week: number,
+  weekday: number,
+}
 
 // user interface
 export interface IUser{

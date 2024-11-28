@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
-import { type IScheduleItem, type ITimeTable, StatusCodes, type TMaybeNumber } from "@/helpers/constants";
-// import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName } from "@/api/api";
-// import { useStatusWindowStore } from "./statusWindowStore";
+import { type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
+import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
+import { transformSchedule } from "@/helpers/scheduleParser";
 
-// const statusWindow = useStatusWindowStore();
 
 export const useScheduleStore = defineStore('schedule', {
   state() {
@@ -21,146 +20,60 @@ export const useScheduleStore = defineStore('schedule', {
       selectedClass: null as TMaybeNumber,
 
       scheduleData: [] as ITimeTable[], // расписание на весь семестр
+
+      scheduleGroups: [] as string[], // группы для расписания
     }
   },
   actions: {
+    async loadScheduleGroups(){
+      try{
+        const groups: any = await API_University_Groups_Schedule_Get();
+        this.scheduleGroups = [];
+        for(let group of groups.data){
+          this.scheduleGroups.push(group.group);
+        }
+      } catch(error) {
+        this.scheduleGroups = [];
+      }
+    },
     loadScheduleTableByGroupName(groupName: string){
-      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      // API_Schedule_Get_GroupName(groupName)
-      // .then(response => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание группы получено!');
-      // })
-      // .catch(error => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      // });
+      API_Schedule_Get_GroupName(groupName)
+      .then((response: any) => {
+        this.scheduleData = [];
+        const res: IScheduleItem[] = [];
+        for(let item of response.data){
+          console.log('item: ', item);
+          const data:IScheduleItem = {
+            auditory: item.auditory,
+            date: item.date,
+            group_names: item.group_names,
+            id: item.id,
+            name: item.name,
+            teacher_names: item.teacher_names,
+            time_end: item.time_end,
+            time_start: item.time_start,
+            type: item.type,
+            university: item.university,
+            week: item.week,
+            weekday: item.weekday,
+          };
+          res.push(data);
+        }
+        console.log('res: ', res);
+        this.scheduleData = transformSchedule(res);
 
-      this.scheduleTableDay = [
-        { time: '9.00-10:30',   type: 'ПР', title: 'Иностранный язык', place: 'И-320 (В-78)', groups: ['ЭФБО-01-23'] },
-        { time: '10.40-12.10',  type: 'ЛК', title: 'Технологии индустриального программирования', place: 'А-10 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-        { time: '12.40-14.10',  type: 'ЛК', title: 'Создание программного обеспечения', place: 'А-15 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-        { time: '14.20-15.50',  type: 'ПР', title: 'Физическая культура и спорт', place: 'ФОК-9 (В-78)', groups: ['ЭФБО-01-23'] },
-        { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-        { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-      ];
-
-      this.scheduleData = [
-        {
-          date: '25.11.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: 'ПР', title: 'Иностранный язык', place: 'И-320 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '10.40-12.10',  type: 'ЛК', title: 'Технологии индустриального программирования', place: 'А-10 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-            { time: '12.40-14.10',  type: 'ЛК', title: 'Создание программного обеспечения', place: 'А-15 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-            { time: '14.20-15.50',  type: 'ПР', title: 'Физическая культура и спорт', place: 'ФОК-9 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-          ]
-        },
-        {
-          date: '26.11.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },
-            { time: '10.40-12.10',  type: '',   title: '', place: '', groups: [''] },
-            { time: '12.40-14.10',  type: 'ПР', title: 'Системы искусственного интеллекта', place: 'Б-412 (МП-1)', groups: ['ЭФБО-01-23'] },
-            { time: '14.20-15.50',  type: 'ПР', title: 'Системы искусственного интеллекта', place: 'Б-412 (МП-1)', groups: ['ЭФБО-01-23'] },
-            { time: '16.20-17.50',  type: 'ЛК', title: 'Социальная психология и педагогика', place: 'A-61 (МП-1)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-            { time: '18.00-19.30',  type: 'ЛК', title: 'Системы искусственного интеллекта', place: 'А-61 (МП-1)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-          ]
-        },
-        {
-          date: '27.11.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: 'ПР', title: 'Создание программного обеспечения', place: 'В-408 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '10.40-12.10',  type: 'ПР', title: 'Создание программного обеспечения', place: 'В-408 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '12.40-14.10',  type: 'ПР', title: 'Технологии индустриального программирования', place: 'В-317 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '14.20-15.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-          ]
-        },
-        {
-          date: '28.11.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: 'ПР', title: 'Математический анализ', place: 'А-403 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '10.40-12.10',  type: 'ПР', title: 'Программирование компоративных систем', place: 'В-401-2 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '12.40-14.10',  type: '',   title: '', place: '', groups: [''] },
-            { time: '14.20-15.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-          ]
-        },
-        {
-          date: '29.11.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: 'ПР', title: 'Фронтенд и бэкенд разработка', place: 'В-415 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '10.40-12.10',  type: 'ПР', title: 'Дискретная математика', place: 'В-218 (В-78)', groups: ['ЭФБО-01-23'] },
-            { time: '12.40-14.10',  type: 'ЛК', title: 'Дискретная математика', place: 'А-18 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-            { time: '14.20-15.50',  type: 'ЛК', title: 'Математический анализ', place: 'А-18 (В-78)', groups: ['ЭФБО-01-23', 'ЭФБО-02-23', 'ЭФБО-03-23', 'ЭФБО-04-23', 'ЭФБО-05-23'] },
-            { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-          ]
-        },
-        {
-          date: '30.11.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },
-            { time: '10.40-12.10',  type: '',   title: '', place: '', groups: [''] },
-            { time: '12.40-14.10',  type: '',   title: '', place: '', groups: [''] },
-            { time: '14.20-15.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-          ]
-        },
-        {
-          date: '1.12.2024', 
-          timeTable: [
-            { time: '9.00-10:30',   type: '',   title: '', place: '', groups: [''] },
-            { time: '10.40-12.10',  type: '',   title: '', place: '', groups: [''] },
-            { time: '12.40-14.10',  type: '',   title: '', place: '', groups: [''] },
-            { time: '14.20-15.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '16.20-17.50',  type: '',   title: '', place: '', groups: [''] },
-            { time: '18.00-19.30',  type: '',   title: '', place: '', groups: [''] },
-          ]
-        },
-      ];
+        console.log('scheduleData: ', this.scheduleData);
+      })
+      .catch(error => {
+        this.scheduleData = [];
+      });
 
     },
     loadScheduleTableByTeacherName(teacherName: string){
-      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      // API_Schedule_Get_TeacherName(teacherName)
-      // .then(response => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание преподавателя получено!');
-      // })
-      // .catch(error => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      // })
+
     },
     loadScheduleTableByClassName(className: string){
-      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      // API_Schedule_Get_ClassName(className)
-      // .then(response => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание предмета получено!');
-      // })
-      // .catch(error => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      // })
+
     },
-    loadGroups(){
-      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные о группах...', -1);
-      // API_Schedule_Get_ClassName(className)
-      // .then(response => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание предмета получено!');
-      // })
-      // .catch(error => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      // })
-    }
   }
 });

@@ -4256,6 +4256,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "university": {
+                    "type": "string"
                 }
             }
         },

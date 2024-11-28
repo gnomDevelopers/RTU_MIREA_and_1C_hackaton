@@ -312,6 +312,7 @@ export function API_University_Groups_Schedule_Get(){
     })
   });
 };
+
 //получение всех групп вуза
 export function API_University_Groups_Get(universityName: string){
   return new Promise((resolve, reject) => {
@@ -405,7 +406,11 @@ export function API_Schedule_Create(data: FormData){
 //получение расписания по названию группы
 export function API_Schedule_Get_GroupName(groupName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/schedule/group/${groupName}`)
+    axios.get(`${API}/auth/schedule/group/${groupName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Schedule get by groupName success: ', response);
       resolve(response);
