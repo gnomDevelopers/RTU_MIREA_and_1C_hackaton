@@ -294,6 +294,24 @@ export function API_University_Users_Get(universityName: string){
   });
 };
 
+//получение групп из расписания вуза
+export function API_University_Groups_Schedule_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/group`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Groups for schedule get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Groups for schedule get error: ', error);
+      reject(error);
+    })
+  });
+};
 //получение всех групп вуза
 export function API_University_Groups_Get(universityName: string){
   return new Promise((resolve, reject) => {
