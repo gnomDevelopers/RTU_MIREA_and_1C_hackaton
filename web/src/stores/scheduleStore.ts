@@ -45,7 +45,7 @@ export const useScheduleStore = defineStore('schedule', {
           console.log('item: ', item);
           const data:IScheduleItem = {
             auditory: item.auditory,
-            date: item.data,
+            date: item.date,
             group_names: item.group_names,
             id: item.id,
             name: item.name,
