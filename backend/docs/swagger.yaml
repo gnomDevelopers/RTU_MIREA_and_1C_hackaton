@@ -195,8 +195,6 @@ definitions:
     properties:
       name:
         type: string
-      university:
-        type: string
     type: object
   entities.CreateDepartmentResponse:
     properties:
@@ -237,6 +235,13 @@ definitions:
   entities.CreateGroupResponse:
     properties:
       id:
+        type: integer
+    type: object
+  entities.CreateResponse:
+    properties:
+      hr_id:
+        type: integer
+      work_user_id:
         type: integer
     type: object
   entities.CreateUniversityRequest:
@@ -311,13 +316,16 @@ definitions:
         type: integer
       name:
         type: string
-      university:
-        type: string
     type: object
   entities.ErrorResponse:
     properties:
       error:
         type: string
+    type: object
+  entities.ExistsResponse:
+    properties:
+      exists:
+        type: boolean
     type: object
   entities.Faculty:
     properties:
@@ -574,6 +582,43 @@ definitions:
         type: integer
       user_id:
         type: integer
+    type: object
+  entities.WorkUser:
+    properties:
+      cv_path:
+        type: string
+      hide_profile:
+        type: boolean
+      id:
+        type: integer
+      phone_number:
+        type: string
+      skills:
+        items:
+          type: string
+        type: array
+      telegram:
+        type: string
+    type: object
+  entities.WorkUserUpdateRequest:
+    properties:
+      cv_path:
+        type: string
+      id:
+        type: integer
+      phone_number:
+        type: string
+      skills:
+        items:
+          type: string
+        type: array
+      telegram:
+        type: string
+    type: object
+  entities.WorkUserUpdateResponse:
+    properties:
+      message:
+        type: string
     type: object
 info:
   contact: {}
@@ -2725,17 +2770,120 @@ paths:
       summary: Delete users schedule
       tags:
       - user schedule
-  /auth/work/response:
-    get:
+  /auth/work/profile:
+    put:
       consumes:
       - application/json
       parameters:
-      - description: university data
+      - description: profile data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/entities.CreateUniversityRequest'
+          $ref: '#/definitions/entities.WorkUserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.WorkUserUpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update profile
+      tags:
+      - work
+  /auth/work/profile/id/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: university id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.WorkUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update profile
+      tags:
+      - work
+  /auth/work/response:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: response data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CreateResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.WorkUserUpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Response
+      tags:
+      - work
+  /auth/work/response/candidate/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: candidate id
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -2760,16 +2908,16 @@ paths:
       summary: Response
       tags:
       - work
-    post:
+  /auth/work/response/hr/{id}:
+    get:
       consumes:
       - application/json
       parameters:
-      - description: university data
-        in: body
-        name: data
+      - description: candidate id
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/entities.CreateUniversityRequest'
+        type: string
       produces:
       - application/json
       responses:
@@ -2901,24 +3049,23 @@ paths:
       summary: Update user role
       tags:
       - users
-  /work/login:
+  /work/exists/id/{id}:
     post:
       consumes:
       - application/json
       parameters:
-      - description: university data
-        in: body
-        name: data
+      - description: university id
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/entities.CreateUniversityRequest'
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.CreateUniversityResponse'
+            $ref: '#/definitions/entities.ExistsResponse'
         "400":
           description: Bad Request
           schema:

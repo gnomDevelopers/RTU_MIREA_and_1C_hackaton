@@ -86,7 +86,7 @@ func (s *WorkService) Login(c context.Context, request *entities.LoginUserReques
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	u, err := s.repository.GetByEmail(ctx, request.Email)
+	u, err := s.repository.GetByEmailHR(ctx, request.Email)
 	if err != nil {
 		return &entities.LoginUserResponse{}, errors.New("wrong data")
 	}
@@ -115,4 +115,60 @@ func (s *WorkService) Login(c context.Context, request *entities.LoginUserReques
 		RefreshToken: refreshToken,
 		ID:           u.Id,
 	}, nil
+}
+
+func (s *WorkService) GetByIdWorkUser(c context.Context, id int) (*entities.WorkUser, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	workUser, err := s.repository.GetByIdWorkUser(ctx, id)
+	return workUser, err
+}
+
+func (s *WorkService) Exists(c context.Context, id int) (bool, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	flag, err := s.repository.Exists(ctx, id)
+	return flag, err
+}
+
+func (s *WorkService) UpdateWorkUser(c context.Context, workUser *entities.WorkUserUpdateRequest) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	err := s.repository.UpdateWorkUser(ctx, workUser)
+	return err
+}
+
+func (s *WorkService) CreateResponse(c context.Context, response *entities.Response) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	err := s.repository.CreateResponse(ctx, response)
+	return err
+}
+
+func (s *WorkService) GetWorkUserResponses(c context.Context, workUserId int) (*[]entities.Response, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	responses, err := s.repository.GetWorkUserResponses(ctx, workUserId)
+	return responses, err
+}
+
+func (s *WorkService) GetHRResponses(c context.Context, hrId int) (*[]entities.Response, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	responses, err := s.repository.GetHRResponses(ctx, hrId)
+	return responses, err
+}
+
+func (s *WorkService) GetAllWorkUserId(c context.Context) (*[]entities.FullWorkUser, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	fullWorkUsers, err := s.repository.GetAllWorkUserId(ctx)
+	return fullWorkUsers, err
 }

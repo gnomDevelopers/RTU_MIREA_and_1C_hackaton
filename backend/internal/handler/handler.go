@@ -48,9 +48,8 @@ func (h *Handler) Router() *fiber.App {
 	f.Post("/login", h.Login)
 	f.Get("/login", h.CheckAuth)
 
-	f.Post("/work", h.LoginWork)
 	f.Post("/work/login/hr", h.LoginHR)
-
+	f.Get("/work/exists/id/:id", h.ExistsWorkUser)
 	//f.Get("/user/:id", h.GetUserByID)
 
 	authGroup := f.Group("/auth")
@@ -85,8 +84,8 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/schedule/search/name", h.ScheduleSearchName)
 	authGroup.Get("/schedule/search/group", h.ScheduleSearchGroup)
 
-	authGroup.Post("/auth/work/response", h.ResponseCandidate)
-	authGroup.Get("/auth/work/response", h.GetResponseCandidate)
+	authGroup.Post("/work/response", h.ResponseCandidate)
+	authGroup.Get("/work/response/candidate/:id", h.GetCandidateResponses)
 
 	// Перенесено
 	authGroup.Post("/group", h.CreateGroup)

@@ -98,6 +98,7 @@ export interface IUser{
 //userList item interface
 export interface IUserGet extends IUser{
   id: number,
+  // role: string,
 }
 
 //user create interface

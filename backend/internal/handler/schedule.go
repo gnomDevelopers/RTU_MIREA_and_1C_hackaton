@@ -176,6 +176,12 @@ func (h *Handler) ParseSchedule(c *fiber.Ctx) error {
 	}
 
 	files := form.File["file"]
+	if len(files) == 0 {
+		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
+			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
+		logEvent.Msg("empty file")
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "empty file"})
+	}
 	for _, file := range files {
 		if file.Header["Content-Type"][0] != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "unsupported file extension"})

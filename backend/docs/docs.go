@@ -3403,7 +3403,173 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/work/profile": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "work"
+                ],
+                "summary": "Update profile",
+                "parameters": [
+                    {
+                        "description": "profile data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.WorkUserUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.WorkUserUpdateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/work/profile/id/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "work"
+                ],
+                "summary": "Update profile",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "university id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.WorkUser"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/work/response": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "work"
+                ],
+                "summary": "Response",
+                "parameters": [
+                    {
+                        "description": "response data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CreateResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.WorkUserUpdateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/work/response/candidate/{id}": {
             "get": {
                 "security": [
                     {
@@ -3422,13 +3588,11 @@ const docTemplate = `{
                 "summary": "Response",
                 "parameters": [
                     {
-                        "description": "university data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityRequest"
-                        }
+                        "type": "string",
+                        "description": "candidate id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -3457,8 +3621,10 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "post": {
+            }
+        },
+        "/auth/work/response/hr/{id}": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -3476,13 +3642,11 @@ const docTemplate = `{
                 "summary": "Response",
                 "parameters": [
                     {
-                        "description": "university data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityRequest"
-                        }
+                        "type": "string",
+                        "description": "candidate id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -3672,7 +3836,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/work/login": {
+        "/work/exists/id/{id}": {
             "post": {
                 "security": [
                     {
@@ -3691,20 +3855,18 @@ const docTemplate = `{
                 "summary": "Login in hr",
                 "parameters": [
                     {
-                        "description": "university data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityRequest"
-                        }
+                        "type": "string",
+                        "description": "university id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityResponse"
+                            "$ref": "#/definitions/entities.ExistsResponse"
                         }
                     },
                     "400": {
@@ -4075,9 +4237,6 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
-                },
-                "university": {
-                    "type": "string"
                 }
             }
         },
@@ -4142,6 +4301,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.CreateResponse": {
+            "type": "object",
+            "properties": {
+                "hr_id": {
+                    "type": "integer"
+                },
+                "work_user_id": {
                     "type": "integer"
                 }
             }
@@ -4256,9 +4426,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                },
-                "university": {
-                    "type": "string"
                 }
             }
         },
@@ -4267,6 +4434,14 @@ const docTemplate = `{
             "properties": {
                 "error": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.ExistsResponse": {
+            "type": "object",
+            "properties": {
+                "exists": {
+                    "type": "boolean"
                 }
             }
         },
@@ -4664,6 +4839,63 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "entities.WorkUser": {
+            "type": "object",
+            "properties": {
+                "cv_path": {
+                    "type": "string"
+                },
+                "hide_profile": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "telegram": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.WorkUserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "cv_path": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "telegram": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.WorkUserUpdateResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         }

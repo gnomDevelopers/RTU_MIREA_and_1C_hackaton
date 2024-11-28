@@ -19,7 +19,7 @@ type ClassService struct {
 func NewClassService(repository repository.ClassRepository) *ClassService {
 	return &ClassService{
 		repository: repository,
-		timeout:    time.Duration(10) * time.Second,
+		timeout:    time.Duration(300) * time.Second,
 	}
 }
 
