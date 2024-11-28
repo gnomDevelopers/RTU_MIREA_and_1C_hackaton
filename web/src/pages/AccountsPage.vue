@@ -17,6 +17,11 @@
           <AccountsCreateAuditory class="flex flex-col gap-y-4 items-stretch"/>
 
         </MainControlItem>
+        <MainControlItem title="Создание кампусов">
+
+          <AccountsCreateCampus class="flex flex-col gap-y-4 items-stretch"/>
+
+        </MainControlItem>
       </MainControl>
 
       <MainControl title="Управление вузом">
@@ -73,6 +78,16 @@
       </MainControl>
 
       <MainControl title="Управление ресурсами">
+        <MainControlItem title="Управление кампусами">
+
+          <SearchList 
+            title="Введите название кампуса" 
+            placeholder="Название кампуса"
+            :searchList="campusesSearchList"
+            :itemComponent="getCampusListItemComponent"
+          />
+
+        </MainControlItem>
         <MainControlItem title="Управление аудиториями">
 
           <SearchList 
@@ -109,6 +124,8 @@ import PageTitle from '@/shared/pageTitle.vue';
 import AccountsCreateUsers from '@/widgets/accountsCreateUsers.vue';
 import AccountsCreateAuditory from '@/widgets/accountsCreateAuditory.vue';
 import AccountAuditoryListItem from '@/entities/listItems/accountAuditoryListItem.vue';
+import AccountsCreateCampus from '@/widgets/accountsCreateCampus.vue';
+import AccountCampusListItem from '../entities/listItems/accountCampusLIstItem.vue';
 
 export default {
   components:{
@@ -118,9 +135,11 @@ export default {
     MainControlItem,
     UserListItem,
     AccountAuditoryListItem,
+    AccountCampusListItem,
     SearchList,
     AccountsCreateUsers,
     AccountsCreateAuditory,
+    AccountsCreateCampus,
   },
   computed: {
     ...mapStores(useStatusWindowStore, useUniversityStore),
@@ -131,11 +150,22 @@ export default {
     getAuditoryListItemComponent(){
       return AccountAuditoryListItem;
     },
+    getCampusListItemComponent(){
+      return AccountCampusListItem;
+    },
 
     auditoriesSearchList(): ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.universityStore.auditoriesList.length === 0) return arr;
       for(let item of this.universityStore.auditoriesList){
+        arr.push({id: item.id, search_field: item.name, data: item});
+      }
+      return arr;
+    },
+    campusesSearchList(): ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.universityStore.campusList.length === 0) return arr;
+      for(let item of this.universityStore.campusList){
         arr.push({id: item.id, search_field: item.name, data: item});
       }
       return arr;

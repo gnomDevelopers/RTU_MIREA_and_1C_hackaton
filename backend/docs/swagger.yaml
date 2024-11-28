@@ -195,6 +195,8 @@ definitions:
     properties:
       name:
         type: string
+      university:
+        type: string
     type: object
   entities.CreateDepartmentResponse:
     properties:
@@ -2897,7 +2899,7 @@ paths:
       summary: Update user role
       tags:
       - users
-  /work:
+  /work/login:
     post:
       consumes:
       - application/json
@@ -2930,6 +2932,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Login in hr
+      tags:
+      - work
+  /work/login/hr:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user and sets access and refresh tokens as cookies.
+      parameters:
+      - description: User login credentials
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.LoginUserResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Hr login
       tags:
       - work
 securityDefinitions:

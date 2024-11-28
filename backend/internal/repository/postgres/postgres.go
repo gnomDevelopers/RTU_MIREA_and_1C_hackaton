@@ -22,5 +22,6 @@ func NewRepository(db *sql.DB) *repository.Repository {
 		Gpa:                   NewGpaRepository(db),
 		AchievementRepository: NewAchievementRepository(db),
 		Work:                  NewWorkRepository(db),
+		Visiting:              NewVisitingRepository(db),
 	}
 }
