@@ -37,7 +37,6 @@ export const useUniversityStore = defineStore('university', {
       deparmentsList: [] as IItemList[],
 
       tmpuserID: 100,
-      selectedDate: '25.11.2024',
     }
   },
   actions: {

@@ -42,11 +42,11 @@ export default {
     },
 
     getCurrentDate(){
-      return this.universityStore.selectedDate;
+      return this.scheduleStore.selectedDate;
     },
 
     getCurrentWeekDay(){
-      switch (this.universityStore.selectedDate){
+      switch (this.scheduleStore.selectedDate){
         case '25.11.2024': return 'Понедельник';
         case '26.11.2024': return 'Вторник';
         case '27.11.2024': return 'Среда';

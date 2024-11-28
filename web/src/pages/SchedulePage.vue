@@ -143,7 +143,7 @@ export default {
     console.log('includes: ', this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name));
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
       this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
-      
+
     }
     
   },
@@ -160,7 +160,7 @@ export default {
       this.scheduleStore.scheduleTarget = target;
     },
     selectDay(day: Day){
-      this.universityStore.selectedDate = `${day.day}.${day.month+1}.${day.year}`;
+      this.scheduleStore.selectedDate = `${day.day}.${day.month+1}.${day.year}`;
       this.scheduleStore.scheduleTableDay = [];
       for(let item of this.scheduleStore.scheduleData){
         if(item.date === `${day.day}.${day.month+1}.${day.year}`){
