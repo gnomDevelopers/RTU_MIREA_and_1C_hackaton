@@ -69,6 +69,7 @@
 import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
+import { useUserInfoStore } from '@/stores/userInfoStore';
 import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day, type IGroup } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
@@ -84,7 +85,7 @@ export default {
     ScheduleClassList,
   },
   computed:{
-    ...mapStores(useScheduleStore, useUniversityStore),
+    ...mapStores(useScheduleStore, useUniversityStore, useUserInfoStore),
 
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
@@ -135,12 +136,23 @@ export default {
       return ScheduleSearchListItem;
     }
   },
-  mounted(){
-    this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
+  async mounted(){
+    await this.scheduleStore.loadScheduleGroups();
+
+    const groupName = this.universityStore.getGroupName(this.userInfoStore.group_id!);
+
+    if(this.scheduleStore.scheduleGroups.includes(groupName)){
+      this.scheduleStore.loadScheduleTableByGroupName(groupName);
+
+    }
+    
   },
   methods:{
     selectScheduleType(type: number){
-      if(type === 0) this.scheduleStore.selectedSheduleGroup = null;
+      if(type === 0) {
+        this.scheduleStore.selectedSheduleGroup = null;
+        this.scheduleStore.loadScheduleTableByGroupName(this.universityStore.getGroupName(this.userInfoStore.group_id!));
+      }
       this.scheduleStore.scheduleType = type;
     },
     selectScheduleTarget(target: number){

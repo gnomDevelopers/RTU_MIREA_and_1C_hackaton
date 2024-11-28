@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
-import { type IScheduleItem, type ITimeTable, StatusCodes, type TMaybeNumber } from "@/helpers/constants";
-// import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName } from "@/api/api";
-// import { useStatusWindowStore } from "./statusWindowStore";
+import { type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
+import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
 
-// const statusWindow = useStatusWindowStore();
 
 export const useScheduleStore = defineStore('schedule', {
   state() {
@@ -21,20 +19,30 @@ export const useScheduleStore = defineStore('schedule', {
       selectedClass: null as TMaybeNumber,
 
       scheduleData: [] as ITimeTable[], // расписание на весь семестр
+
+      scheduleGroups: [] as string[], // группы для расписания
     }
   },
   actions: {
+    async loadScheduleGroups(){
+      try{
+        const groups: any = await API_University_Groups_Schedule_Get();
+        this.scheduleGroups = [];
+        for(let group of groups.data){
+          this.scheduleGroups.push(group.group);
+        }
+      } catch(error) {
+        this.scheduleGroups = [];
+      }
+    },
     loadScheduleTableByGroupName(groupName: string){
-      // let stID = statusWindow.showStatusWindow(StatusCodes.loading, 'Получаем данные расписания...', -1);
-      // API_Schedule_Get_GroupName(groupName)
-      // .then(response => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.success, 'Расписание группы получено!');
-      // })
-      // .catch(error => {
-      //   statusWindow.deteleStatusWindow(stID);
-      //   statusWindow.showStatusWindow(StatusCodes.error, 'Неудалось получить данные расписания!');
-      // });
+      API_Schedule_Get_GroupName(groupName)
+      .then((response: any) => {
+        
+      })
+      .catch(error => {
+
+      });
 
       this.scheduleTableDay = [
         { time: '9.00-10:30',   type: 'ПР', title: 'Иностранный язык', place: 'И-320 (В-78)', groups: ['ЭФБО-01-23'] },

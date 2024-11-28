@@ -270,6 +270,12 @@ export const useUniversityStore = defineStore('university', {
         if(campus.name === campusName) return campus.id;
       }
       return -1;
+    },
+    getGroupName(groupID: number): string{
+      for(let group of this.groupsList){
+        if(group.id === groupID) return group.name;
+      }
+      return '';
     }
   }
 });
