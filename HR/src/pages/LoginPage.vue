@@ -114,7 +114,7 @@
                       placeholder="Добавьте ссылки, которые могут быть полезны"
                   />
                 </div>
-<!--                Хз оно сохраняет этот файл куда-то?????-->
+
                 <div class="mb-4">
                   <label for="resume" class="block text-gray-700 text-lg font-bold mb-2">Резюме:</label>
                   <div>
@@ -178,6 +178,9 @@
             </div>
 
             <submitButton value="Войти" class="btn" @click="sendLogin"/>
+            <button @click="nextPage" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
+              Продолжить
+            </button>
           </div>
         </div>
       </div>
@@ -199,6 +202,7 @@ import { API_Login } from '@/api/api';
 import FilesList from "@/entities/filesList.vue";
 import { useUserFormStore } from '@/stores/userFormStore';
 import { defineStore } from 'pinia';
+import CandidatesSearchPage from "@/pages/CandidatesSearchPage.vue";
 
 export default {
 
@@ -229,6 +233,9 @@ export default {
     }
   },
   computed:{
+    CandidatesSearchPage() {
+      return CandidatesSearchPage
+    },
     ...mapStores(useStatusWindowStore, useUserInfoStore),
     getFilesList(){
       return this.filesList;
@@ -319,6 +326,9 @@ export default {
       userFormStore.setFormData(this.formData);
       this.$router.push({name: 'ProfilePage'});
     },
+    nextPage() {
+      this.$router.push({name: 'CandidatesSearchPage'});
+    }
 
   },
 };

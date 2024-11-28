@@ -61,6 +61,12 @@ type Achievement interface {
 	Delete(context.Context, int) error
 }
 
+type Visiting interface {
+	Create(c context.Context, visiting *entities.Visiting) (int, error)
+	GetByUserIdAndClassId(c context.Context, userID, classID int) (*entities.Visiting, error)
+	Update(c context.Context, visiting *entities.Visiting) error
+}
+
 type Service struct {
 	UserService               *UserService
 	UniversityService         *UniversityService
@@ -77,6 +83,7 @@ type Service struct {
 	GpaService                *GpaService
 	AchievementService        *AchievementService
 	WorkService               *WorkService
+	VisitingService           *VisitingService
 	conf                      *config.Config
 }
 
@@ -97,5 +104,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		GpaService:                NewGpaService(repositories.Gpa),
 		AchievementService:        NewAchievementService(repositories.AchievementRepository),
 		WorkService:               NewWorkService(repositories.Work, conf),
+		VisitingService:           NewVisitingService(repositories.Visiting),
 	}
 }

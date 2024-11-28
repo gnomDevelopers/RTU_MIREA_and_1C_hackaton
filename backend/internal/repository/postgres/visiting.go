@@ -50,3 +50,24 @@ func (r *VisitingRepository) GetByUserIdAndClassId(ctx context.Context, userID, 
 	}
 	return &visiting, nil
 }
+
+func (r *VisitingRepository) Update(ctx context.Context, visiting *entities.Visiting) error {
+	query := `
+		UPDATE VISITING SET type = $1 WHERE user_id = $2 AND class_id = $3
+	`
+	_, err := r.db.ExecContext(ctx, query, visiting.Type, visiting.UserID, visiting.ClassID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//func GetGroupVisiting(ctx context.Context, classID, groupID int) (*[]entities.Visiting, error) {
+//	query := `
+//		SELECT u.id AS user_id, u.last_name, u.first_name,u.father_name,v.type AS visit_status
+//		FROM visiting v
+//		JOIN users u ON v.user_id = u.id
+//		WHERE v.class_id = $1;
+//	`
+//
+//}

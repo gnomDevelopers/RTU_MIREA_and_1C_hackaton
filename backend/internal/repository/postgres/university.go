@@ -45,7 +45,7 @@ func (r *UniversityRepository) Create(ctx context.Context, university *entities.
 func (r *UniversityRepository) GetById(ctx context.Context, id int) (*entities.University, error) {
 	var university entities.University
 
-	query := `SELECT * FROM university WHERE id = $1`
+	query := `SELECT id, name, postfix FROM university WHERE id = $1`
 	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name, &university.Postfix)
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (r *UniversityRepository) GetByName(ctx context.Context, name string) (*ent
 
 func (r *UniversityRepository) GetAll(ctx context.Context) (*[]entities.University, error) {
 	var universities []entities.University
-	query := `SELECT id, name FROM university`
+	query := `SELECT id, name, postfix FROM university`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func (r *UniversityRepository) GetAll(ctx context.Context) (*[]entities.Universi
 
 	for rows.Next() {
 		var university entities.University
-		err = rows.Scan(&university.Id, &university.Name)
+		err = rows.Scan(&university.Id, &university.Name, &university.Postfix)
 		if err != nil {
 			return nil, err
 		}

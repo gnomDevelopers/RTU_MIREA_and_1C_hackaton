@@ -66,14 +66,21 @@ export interface Day{
   day: number,
 };
 
-// schedule item interface
-export interface IScheduleItem{
-  time: string,
+// schedule get interface
+export interface IScheduleItem {
+  auditory: string,
+  date: string,
+  group_names: string[],
+  id: number,
+  name: string,
+  teacher_names: string[],
+  time_end: string,
+  time_start: string,
   type: string,
-  title: string,
-  place: string,
-  groups: string[],
-};
+  university: string,
+  week: number,
+  weekday: number,
+}
 
 // user interface
 export interface IUser{
@@ -91,6 +98,11 @@ export interface IUser{
 //userList item interface
 export interface IUserGet extends IUser{
   id: number,
+}
+
+//user create interface
+export interface IUserCreate extends IUser{
+  password: string,
 }
 
 export interface IGroup {
@@ -148,7 +160,7 @@ export interface IAPI_Audience_Update extends IAPI_Audience_Create{
 export interface IAPI_Campus_Create {
   address: string,
   name: string,
-  university: string
+  university: string,
 };
 
 export interface IAPI_Campus_Update extends IAPI_Campus_Create {

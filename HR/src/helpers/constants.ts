@@ -72,4 +72,15 @@ export interface IAPI_Login_Request{
   password: string,
 };
 
+// functions
+
+export function GET_COOKIE(cookieName: string): string{
+  const allCookie = document.cookie.split(';');
+  for(let cookie of allCookie){
+    let [key, value] = cookie.split('=');
+    if(key === cookieName) return value;
+  }
+  return '';
+}
+
 
