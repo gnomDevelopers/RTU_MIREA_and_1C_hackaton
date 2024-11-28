@@ -187,15 +187,19 @@ export function API_Audience_Get(universityName: string){
 /////// CAMPUS ///////
 
 //создание кампуса
-export function API_Campus_Create(data: IAPI_Campus_Create){
+export function API_Campus_Create(data: IAPI_Campus_Create[]){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/campus`, data)
+    axios.post(`${API}/auth/campus`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
-      if(DEVMODE) console.log('Campus create success: ', response);
+      if(DEVMODE) console.log('Campuses create success: ', response);
       resolve(response);
     })
     .catch(error => {
-      if(DEVMODE) console.log('Campus create error: ', error);
+      if(DEVMODE) console.log('Campuses create error: ', error);
       reject(error);
     })
   });

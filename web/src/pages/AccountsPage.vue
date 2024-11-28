@@ -17,6 +17,11 @@
           <AccountsCreateAuditory class="flex flex-col gap-y-4 items-stretch"/>
 
         </MainControlItem>
+        <MainControlItem title="Создание кампусов">
+
+          <AccountsCreateCampus class="flex flex-col gap-y-4 items-stretch"/>
+
+        </MainControlItem>
       </MainControl>
 
       <MainControl title="Управление вузом">
@@ -109,6 +114,7 @@ import PageTitle from '@/shared/pageTitle.vue';
 import AccountsCreateUsers from '@/widgets/accountsCreateUsers.vue';
 import AccountsCreateAuditory from '@/widgets/accountsCreateAuditory.vue';
 import AccountAuditoryListItem from '@/entities/listItems/accountAuditoryListItem.vue';
+import AccountsCreateCampus from '@/widgets/accountsCreateCampus.vue';
 
 export default {
   components:{
@@ -121,6 +127,7 @@ export default {
     SearchList,
     AccountsCreateUsers,
     AccountsCreateAuditory,
+    AccountsCreateCampus,
   },
   computed: {
     ...mapStores(useStatusWindowStore, useUniversityStore),
