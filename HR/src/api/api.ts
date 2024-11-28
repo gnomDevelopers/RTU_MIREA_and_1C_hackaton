@@ -8,7 +8,7 @@ import {
 //проверка аутентификации пользователя
 export function API_Authenticate(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/login`,  {
+    axios.get(`${API}/`,  {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
