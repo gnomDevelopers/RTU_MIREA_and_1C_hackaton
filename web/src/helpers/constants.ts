@@ -289,7 +289,23 @@ export function GET_WEEK_NUMBER(date: Date | string): number {
   return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + yearStart.getDay() + 1) / 7);
 }
 
-function GET_DATE_FROM_STRING(dateString: string): Date {
+export function GET_DATE_FROM_STRING(dateString: string): Date {
   const [day, month, year] = dateString.split('.').map(Number);
   return new Date(year, month - 1, day);
+}
+
+export function GET_WEEK_DIFFERENCE(startDate: Date, targetDate: Date): number {
+  // Ensure both dates are at 00:00:00 hours to avoid time-related discrepancies
+  startDate.setHours(0, 0, 0, 0);
+  targetDate.setHours(0, 0, 0, 0);
+
+  // Calculate the difference in milliseconds
+  const diffInMilliseconds = targetDate.getTime() - startDate.getTime();
+
+  // Calculate the difference in days
+  const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+  //Calculate the week number
+  //This assumes weeks start on Monday and end on Sunday
+  return Math.floor(diffInDays / 7) + 1;
 }

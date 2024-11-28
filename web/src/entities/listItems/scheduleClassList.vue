@@ -22,7 +22,7 @@ import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import ScheduleClassListItem from '@/shared/scheduleClassListItem.vue';
-import { GET_DAY_OF_WEEK, GET_WEEK_NUMBER } from '@/helpers/constants';
+import { GET_DATE_FROM_STRING, GET_DAY_OF_WEEK, GET_WEEK_DIFFERENCE, GET_WEEK_NUMBER } from '@/helpers/constants';
 
 export default {
   props:{
@@ -51,7 +51,7 @@ export default {
     },
 
     getWeekNumber(){
-      return GET_WEEK_NUMBER(this.scheduleStore.selectedDate);
+      return GET_WEEK_DIFFERENCE( GET_DATE_FROM_STRING(this.scheduleStore.startDate), GET_DATE_FROM_STRING(this.scheduleStore.selectedDate));
     }
   },
 };

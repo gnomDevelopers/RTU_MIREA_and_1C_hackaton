@@ -24,6 +24,7 @@ export const useScheduleStore = defineStore('schedule', {
       scheduleGroups: [] as string[], // группы для расписания
 
       selectedDate: '',
+      startDate: '02.09.2024',
     }
   },
   actions: {
@@ -63,6 +64,7 @@ export const useScheduleStore = defineStore('schedule', {
         }
         // фильтруем, сортируем и растягиваем расписание на весь семестр
         this.scheduleData = extendTimetable(transformSchedule(res));
+        
         console.log('scheduleData: ', this.scheduleData);
       })
       .catch(error => {
