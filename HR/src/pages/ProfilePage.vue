@@ -50,10 +50,6 @@
           <div >
             <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">4.6</p>
           </div>
-          <p style="font-weight: bold" class="md:text-2xl uus:text-xl">Посещаемость</p>
-          <div>
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">87%</p>
-          </div>
           <p style="font-weight: bold; " class="md:text-2xl uus:text-xl">Успеваемость</p>
           <div>
             <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">4.7</p>
