@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
 import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
-import { transformSchedule } from "@/helpers/scheduleParser";
+import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
 
 export const useScheduleStore = defineStore('schedule', {
@@ -64,8 +64,9 @@ export const useScheduleStore = defineStore('schedule', {
         }
 
         this.scheduleData = transformSchedule(res);
-
         console.log('scheduleData: ', this.scheduleData);
+        this.scheduleData = extendTimetable(this.scheduleData);
+        console.log('scheduleDataFull: ', this.scheduleData);
       })
       .catch(error => {
         this.scheduleData = [];
