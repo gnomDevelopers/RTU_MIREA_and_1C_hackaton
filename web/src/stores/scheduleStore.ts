@@ -82,10 +82,17 @@ export const useScheduleStore = defineStore('schedule', {
     getCurrentDate() {
       const today = new Date();
       const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-      const year = String(today.getFullYear() % 100).padStart(2, '0'); //2-digit year
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = String(today.getFullYear()).padStart(2, '0');
     
       return `${day}.${month}.${year}`;
+    },
+    getCorrectDate(day: number, month: number, year: number) {
+      const Day = String(day).padStart(2, '0');
+      const Month = String(month).padStart(2, '0');
+      const Year = String(year).padStart(2, '0');
+    
+      return `${Day}.${Month}.${Year}`;
     }
   }
 });

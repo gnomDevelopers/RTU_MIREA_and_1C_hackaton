@@ -160,7 +160,7 @@ export default {
       this.scheduleStore.scheduleTarget = target;
     },
     selectDay(day: Day){
-      this.scheduleStore.selectedDate = `${day.day}.${day.month+1}.${day.year}`;
+      this.scheduleStore.selectedDate = this.scheduleStore.getCorrectDate(day.day, day.month, day.year);
       this.scheduleStore.scheduleTableDay = [];
       for(let item of this.scheduleStore.scheduleData){
         if(item.date === `${day.day}.${day.month+1}.${day.year}`){
