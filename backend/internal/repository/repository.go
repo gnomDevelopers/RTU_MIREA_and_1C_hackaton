@@ -147,7 +147,14 @@ type WorkRepository interface {
 	ExistsHR(context.Context, string) (bool, error)
 	Create(context.Context, *entities.WorkUser) error
 	CreateHR(context.Context, *entities.HR) error
-	GetByEmail(context.Context, string) (*entities.HR, error)
+	GetByIdWorkUser(context.Context, int) (*entities.WorkUser, error)
+	GetByIdWorkUserCVPath(context.Context, int) (string, error)
+	GetByEmailHR(context.Context, string) (*entities.HR, error)
+	UpdateWorkUser(context.Context, *entities.WorkUserUpdateRequest) error
+	CreateResponse(context.Context, *entities.Response) error
+	GetWorkUserResponses(context.Context, int) (*[]entities.Response, error)
+	GetHRResponses(context.Context, int) (*[]entities.Response, error)
+	GetAllWorkUserId(context.Context) (*[]entities.FullWorkUser, error)
 }
 
 type AchievementRepository interface {

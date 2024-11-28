@@ -58,25 +58,131 @@ func (r *WorkRepository) CreateHR(ctx context.Context, hr *entities.HR) error {
 	return nil
 }
 
-func (r *WorkRepository) GetById(ctx context.Context, id int) (*entities.University, error) {
-	var university entities.University
-
-	query := `SELECT * FROM university WHERE id = $1`
-	err := r.db.QueryRowContext(ctx, query, id).Scan(&university.Id, &university.Name, &university.Postfix)
+func (r *WorkRepository) GetByIdWorkUser(ctx context.Context, id int) (*entities.WorkUser, error) {
+	var workUser entities.WorkUser
+	query := `SELECT id, phone_number, telegram, skills FROM work_user WHERE id = $1`
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&workUser.Id, &workUser.PhoneNumber, &workUser.Telegram, &workUser.Skills)
 	if err != nil {
 		return nil, err
 	}
-	return &university, nil
+	return &workUser, nil
 }
 
-func (r *WorkRepository) GetByEmail(ctx context.Context, email string) (*entities.HR, error) {
+func (r *WorkRepository) GetByIdWorkUserCVPath(ctx context.Context, id int) (string, error) {
+	var cvPath string
+	query := `SELECT cv_path FROM work_user WHERE id = $1`
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&cvPath)
+	if err != nil {
+		return "", err
+	}
+	return cvPath, nil
+}
+
+func (r *WorkRepository) GetByEmailHR(ctx context.Context, email string) (*entities.HR, error) {
 	var hr entities.HR
 	query := "SELECT id, email, password, last_name, first_name, father_name, company, image_link FROM hr WHERE email = $1"
 	err := r.db.QueryRowContext(ctx, query, email).Scan(&hr.Id, &hr.Email, &hr.Password, &hr.LastName, &hr.FirstName, &hr.FatherName, &hr.Company, &hr.ImageLink)
 	if err != nil {
 		return nil, err
 	}
-
 	return &hr, nil
+}
 
+func (r *WorkRepository) UpdateWorkUser(ctx context.Context, workUser *entities.WorkUserUpdateRequest) error {
+	query := `UPDATE work_user SET phone_number = $1 AND telegram = $2 AND skills = $3 WHERE id = $4`
+	_, err := r.db.ExecContext(ctx, query, workUser.PhoneNumber, workUser.Telegram, workUser.Skills, workUser.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *WorkRepository) UpdateCVPath(ctx context.Context, workUser *entities.WorkUserUpdateRequest) error {
+	query := `UPDATE work_user SET cv_path = $1 WHERE id = $2`
+	_, err := r.db.ExecContext(ctx, query, workUser.CVPath, workUser.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *WorkRepository) ExistsResponse(ctx context.Context, response *entities.Response) (bool, error) {
+	var exists int
+	query := `SELECT 1 FROM response WHERE hr_id = $1 AND response.work_user_id = $2`
+	err := r.db.QueryRowContext(ctx, query, response.HRId, response.WorkUserId).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+	return exists > 0, nil
+}
+
+func (r *WorkRepository) CreateResponse(ctx context.Context, response *entities.Response) error {
+	if check, _ := r.ExistsResponse(ctx, response); check != true {
+		query := `INSERT INTO response (hr_id, work_user_id) VALUES ($1, $2)`
+		_, err := r.db.ExecContext(ctx, query, response.HRId, response.WorkUserId)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (r *WorkRepository) GetWorkUserResponses(ctx context.Context, workUserId int) (*[]entities.Response, error) {
+	var responses []entities.Response
+	query := `SELECT id, hr_id, work_user_id FROM response WHERE work_user_id = $1`
+	rows, err := r.db.QueryContext(ctx, query, workUserId)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var response entities.Response
+		err = rows.Scan(&response.Id, &response.HRId, &response.WorkUserId)
+		if err != nil {
+			return nil, err
+		}
+		responses = append(responses, response)
+	}
+
+	return &responses, nil
+}
+
+func (r *WorkRepository) GetHRResponses(ctx context.Context, hrId int) (*[]entities.Response, error) {
+	var responses []entities.Response
+	query := `SELECT id, hr_id, work_user_id FROM response WHERE hr_id = $1`
+	rows, err := r.db.QueryContext(ctx, query, hrId)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var response entities.Response
+		err = rows.Scan(&response.Id, &response.HRId, &response.WorkUserId)
+		if err != nil {
+			return nil, err
+		}
+		responses = append(responses, response)
+	}
+
+	return &responses, nil
+}
+
+func (r *WorkRepository) GetAllWorkUserId(ctx context.Context) (*[]entities.FullWorkUser, error) {
+	var fullWorkUsers []entities.FullWorkUser
+	query := `SELECT work_user.id, phone_number, telegram, skills, last_name, first_name, father_name, university.name FROM work_user JOIN users ON work_user.id = users.id JOIN university ON users.university_id = university.id;`
+	rows, err := r.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var fullWorkUser entities.FullWorkUser
+		err = rows.Scan(&fullWorkUser.Id, &fullWorkUser.PhoneNumber, &fullWorkUser.Telegram, &fullWorkUser.Skills, &fullWorkUser.LastName, &fullWorkUser.FirstName, &fullWorkUser.FatherName, &fullWorkUser.University)
+		if err != nil {
+			return nil, err
+		}
+		fullWorkUsers = append(fullWorkUsers, fullWorkUser)
+	}
+
+	return &fullWorkUsers, nil
 }
