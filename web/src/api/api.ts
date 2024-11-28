@@ -390,7 +390,12 @@ export function API_Schedule_Create(data: FormData){
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
-      }
+      },
+      onUploadProgress: (progressEvent: any) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        //Update progress bar or display progress to the user
+        console.log(`${percentCompleted}%`); //Example
+      },
     })
     .then(response => {
       if(DEVMODE) console.log('Schedule create success: ', response);

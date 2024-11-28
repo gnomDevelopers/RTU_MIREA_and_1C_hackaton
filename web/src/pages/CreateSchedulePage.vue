@@ -102,7 +102,7 @@ export default {
       if(this.filesList.length !== 1) return;
       const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
       const formData = new FormData();
-      formData.append('files', this.filesList[0], this.filesList[0].name);
+      formData.append('file', this.filesList[0], this.filesList[0].name);
 
       API_Schedule_Create(formData)
       .then(response => {
