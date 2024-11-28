@@ -260,3 +260,36 @@ export function GET_ROLEID_BY_ROLENAME(roleName: string): TMaybeNumber{
   }
   return null;
 }
+
+export function GET_CORRECT_DATE(day: number, month: number, year: number) {
+  const Day = String(day).padStart(2, '0');
+  const Month = String(month).padStart(2, '0');
+  const Year = String(year).padStart(2, '0');
+
+  return `${Day}.${Month}.${Year}`;
+}
+
+export function GET_DAY_OF_WEEK(dateString: string): string {
+  const [day, month, year] = dateString.split('.').map(Number);
+
+  const date = new Date(year, month - 1, day);
+  const dayIndex = date.getDay();
+
+  const adjustedDayIndex = (dayIndex === 0) ? 6 : dayIndex -1 ;
+  return WEEK_DAYS[adjustedDayIndex];
+}
+
+export function GET_WEEK_NUMBER(date: Date | string): number {
+  if(typeof date === 'string') date = GET_DATE_FROM_STRING(date);
+  // Copy date so don't modify original
+  date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  // Get first day of year
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  // Calculate full weeks
+  return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + yearStart.getDay() + 1) / 7);
+}
+
+function GET_DATE_FROM_STRING(dateString: string): Date {
+  const [day, month, year] = dateString.split('.').map(Number);
+  return new Date(year, month - 1, day);
+}

@@ -69,7 +69,7 @@ import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { useUserInfoStore } from '@/stores/userInfoStore';
-import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day, type IGroup } from '@/helpers/constants';
+import { SCHEDULE_TARGET_TEXT, type ISearchList, type IItemList, type IUserGet, type Day, type IGroup, GET_CORRECT_DATE } from '@/helpers/constants';
 
 import CalendarTable from '@/entities/calendarTable.vue';
 import SearchList from '@/entities/searchList.vue';
@@ -138,6 +138,9 @@ export default {
   async mounted(){
     //загружаем все группы с расписанием
     await this.scheduleStore.loadScheduleGroups();
+    //устанавливаем текущую дату
+    const today = new Date();
+    this.scheduleStore.selectedDate = GET_CORRECT_DATE(today.getDate(), today.getMonth() + 1, today.getFullYear());
     //если группа пользователя есть в списке групп с расписанием
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
       // загружаем расписание группы студента
@@ -160,7 +163,7 @@ export default {
       this.scheduleStore.scheduleTarget = target;
     },
     selectDay(day: Day){
-      this.scheduleStore.selectScheduleDay(this.scheduleStore.getCorrectDate(day.day, day.month+1, day.year));
+      this.scheduleStore.selectScheduleDay(GET_CORRECT_DATE(day.day, day.month+1, day.year));
     }
   },
 };

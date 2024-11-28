@@ -58,10 +58,6 @@ export function extendTimetable(timetable: ITimeTable[]): ITimeTable[] {
       const newDate = addDays(entry.date, (i - (i % 2)) * 7);
       const newTableDay:ITimeTable = {date: newDate, timeTable: [] as IScheduleItem[]};
       
-      // for(let item of entry.timeTable){
-      //   newTableDay.timeTable.push({...item, date: newDate, weekday: item.weekday + i * 7});
-      // }
-      
       for (const slot of timeSlots) {
         const matchingEntry = entry.timeTable.find(item => item.time_start === slot.time_start);
         newTableDay.timeTable.push(matchingEntry || {

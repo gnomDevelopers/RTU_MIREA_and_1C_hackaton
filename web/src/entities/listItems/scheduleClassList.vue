@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center w-full mb:w-auto gap-y-4 bg-color-light rounded-xl p-4">
     <div class="flex flex-col gap-y-1 w-full items-stretch">
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">{{ getCurrentDate }}, {{ getCurrentWeekDay }}</div>
-      <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">13 неделя</div>
+      <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">{{ getWeekNumber }} неделя</div>
     </div>
     <div v-if="getScheduleTable.length !== 0" class="flex flex-col gap-y-1 w-full items-stretch">
       
@@ -22,6 +22,7 @@ import { mapStores } from 'pinia';
 import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import ScheduleClassListItem from '@/shared/scheduleClassListItem.vue';
+import { GET_DAY_OF_WEEK, GET_WEEK_NUMBER } from '@/helpers/constants';
 
 export default {
   props:{
@@ -46,16 +47,11 @@ export default {
     },
 
     getCurrentWeekDay(){
-      switch (this.scheduleStore.selectedDate){
-        case '25.11.2024': return 'Понедельник';
-        case '26.11.2024': return 'Вторник';
-        case '27.11.2024': return 'Среда';
-        case '28.11.2024': return 'Четверг';
-        case '29.11.2024': return 'Пятница';
-        case '30.11.2024': return 'Суббота';
-        case '01.12.2024': return 'Воскресенье';
-      }
-      return 'Понедельник';
+      return GET_DAY_OF_WEEK(this.scheduleStore.selectedDate);
+    },
+
+    getWeekNumber(){
+      return GET_WEEK_NUMBER(this.scheduleStore.selectedDate);
     }
   },
 };

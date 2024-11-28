@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
+import { WEEK_DAYS, type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
 import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
 import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
@@ -28,7 +28,6 @@ export const useScheduleStore = defineStore('schedule', {
   },
   actions: {
     async loadScheduleGroups(){
-      if(this.selectedDate === '') this.selectedDate = this.getCurrentDate();
       try{
         const groups: any = await API_University_Groups_Schedule_Get();
         this.scheduleGroups = [];
@@ -62,10 +61,8 @@ export const useScheduleStore = defineStore('schedule', {
           };
           res.push(data);
         }
-
-        this.scheduleData = transformSchedule(res);
-        console.log('scheduleData: ', this.scheduleData);
-        this.scheduleData = extendTimetable(this.scheduleData);
+        // фильтруем, сортируем и растягиваем расписание на весь семестр
+        this.scheduleData = extendTimetable(transformSchedule(res));
         console.log('scheduleData: ', this.scheduleData);
       })
       .catch(error => {
@@ -89,20 +86,5 @@ export const useScheduleStore = defineStore('schedule', {
         }
       }
     },
-    getCurrentDate() {
-      const today = new Date();
-      const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const year = String(today.getFullYear()).padStart(2, '0');
-    
-      return `${day}.${month}.${year}`;
-    },
-    getCorrectDate(day: number, month: number, year: number) {
-      const Day = String(day).padStart(2, '0');
-      const Month = String(month).padStart(2, '0');
-      const Year = String(year).padStart(2, '0');
-    
-      return `${Day}.${Month}.${Year}`;
-    }
   }
 });
