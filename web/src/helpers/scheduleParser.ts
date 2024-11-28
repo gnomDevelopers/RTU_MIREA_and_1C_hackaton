@@ -3,14 +3,16 @@ import { type IScheduleItem, type ITimeTable } from "./constants";
 
 export function transformSchedule(schedule: IScheduleItem[]): ITimeTable[] {
   console.log('start transform');
+  const scheduleByDate: { [date: string]: IScheduleItem[] } = {};
   // Group entries by date
-  const scheduleByDate = schedule.reduce((acc, entry) => {
+  for (const entry of schedule) {
     const date = entry.date;
-    acc[date] = acc[date] || [];
-    acc[date].push(entry);
-    return acc;
-  }, {} as { [date: string]: IScheduleItem[] });
-
+    if (!scheduleByDate[date]) {
+      scheduleByDate[date] = [];
+    }
+    scheduleByDate[date].push(entry);
+  }
+  console.log('sheduleByDate: ', scheduleByDate);
   // Transform and sort
   const result: ITimeTable[] = [];
   for (const date in scheduleByDate) {
