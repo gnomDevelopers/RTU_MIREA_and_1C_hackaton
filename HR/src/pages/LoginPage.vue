@@ -223,6 +223,7 @@ export default {
         links: '',
         filesList: [] as File[],
         agreed: false,
+        isClosed: false,
       },
       filesList: [] as File[]
     }
