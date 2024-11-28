@@ -40,7 +40,27 @@ export const useScheduleStore = defineStore('schedule', {
       API_Schedule_Get_GroupName(groupName)
       .then((response: any) => {
         this.scheduleData = [];
-        this.scheduleData = transformSchedule(response.date);
+        const res: IScheduleItem[] = [];
+        for(let item of response.data){
+          console.log('item: ', item);
+          const data:IScheduleItem = {
+            auditory: item.auditory,
+            date: item.data,
+            group_names: item.group_names,
+            id: item.id,
+            name: item.name,
+            teacher_names: item.teacher_names,
+            time_end: item.time_end,
+            time_start: item.time_start,
+            type: item.type,
+            university: item.university,
+            week: item.week,
+            weekday: item.weekday,
+          };
+          res.push(data);
+        }
+        console.log('res: ', res);
+        this.scheduleData = transformSchedule(res);
 
         console.log('scheduleData: ', this.scheduleData);
       })
