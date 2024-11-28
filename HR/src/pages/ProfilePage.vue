@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="md:w-1/2 uus:w-full h-auto md:m-10 uus:mt-5">
-      <p style="margin-left: 30px; color: #8F0101;" class="md:text-3xl uus:text-xl">Процесс обучения студента (данные с VUZ+)</p> <!--Надо брать данные с вуз+ хз-->
+      <p style="margin-left: 30px; color: #8F0101;" class="md:text-3xl uus:text-xl">Учёба студента (данные с VUZ+)</p> <!--Надо брать данные с вуз+ хз-->
       <div class="w-full h-auto border-4 rounded-xl border-hr-color">
         <div class="md:mt-4 md:ml-10 md:mr-10 md:mb-4 uus:mt-1 uus:ml-3 uus:mr-3 uus:mb-1">
           <p style="font-weight: bold" class="md:text-2xl uus:text-xl">Образование</p>
@@ -61,8 +61,11 @@
         </div>
       </div>
       <div class="flex justify-center">
-        <button class= "mt-16 w-1/2 cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn  text-slate-100 ">
+        <button v-if="!formData.isClosed" @click="hideProfile" class= "mt-16 w-1/2 cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn  text-slate-100 mb-8">
           Скрыть профиль
+        </button>
+        <button v-if="formData.isClosed" @click="hideProfile" class= "mt-16 w-1/2 cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold bg-gray-300 text-black mb-8">
+          Открыть профиль
         </button>
       </div>
 
@@ -88,6 +91,14 @@ export default {
       }
       return '';
     },
+  },
+  methods: {
+    hideProfile() {
+      if (!this.formData.isClosed) {
+        this.formData.isClosed = true;
+      }
+      else this.formData.isClosed = false;
+    }
   }
 };
 </script>

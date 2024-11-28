@@ -56,7 +56,7 @@ func (r *GroupRepository) GetByUserID(ctx context.Context, userID int) (*entitie
 
 func (r *GroupRepository) GetByName(ctx context.Context, name string) (*entities.Group, error) {
 	var group entities.Group
-	query := `SELECT id, name, FROM "group" WHERE name = $1`
+	query := `SELECT id, name FROM "group" WHERE name = $1`
 	row := r.db.QueryRowContext(ctx, query, name)
 	err := row.Scan(&group.ID, &group.Name)
 	if err != nil {
@@ -65,9 +65,14 @@ func (r *GroupRepository) GetByName(ctx context.Context, name string) (*entities
 	return &group, nil
 }
 
-func (r *GroupRepository) GetAll(ctx context.Context) (*[]entities.Group, error) {
-	query := `SELECT id, name FROM "group"`
-	rows, err := r.db.QueryContext(ctx, query)
+func (r *GroupRepository) GetAll(ctx context.Context, university string) (*[]entities.Group, error) {
+	query := `
+		SELECT g.id AS group_id, g.name AS group_name FROM "group" g
+		JOIN users u ON g.id = u.group_id
+		JOIN university univ ON u.university_id = univ.id
+		WHERE univ.name = $1
+	`
+	rows, err := r.db.QueryContext(ctx, query, university)
 	if err != nil {
 		return nil, err
 	}

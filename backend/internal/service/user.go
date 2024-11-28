@@ -50,7 +50,8 @@ func (s *UserService) CreateUsers(ctx context.Context, requests []entities.Creat
 			return nil, err
 		}
 		if exists {
-			return nil, fmt.Errorf("user with email %s already exists", email)
+			log.Printf("user with email %s already exists", email)
+			continue
 		}
 
 		password := util.GenerateTemporaryPassword(15)
@@ -232,4 +233,15 @@ func (s *UserService) GetByID(c context.Context, userID int) (*entities.UserInfo
 		return nil, err
 	}
 	return user, nil
+}
+
+func (s *UserService) UpdateRole(c context.Context, userID int, newRole string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), s.timeout)
+	defer cancel()
+
+	err := s.repository.UpdateRole(ctx, userID, newRole)
+	if err != nil {
+		return err
+	}
+	return nil
 }

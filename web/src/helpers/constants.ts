@@ -77,22 +77,24 @@ export interface IScheduleItem{
 
 // user interface
 export interface IUser{
-  name: string,
-  surname: string,
-  thirdname: string,
-  role: number,
-  faculty_id: number,
   department_id: number,
   educational_direction: string,
+  faculty_id: number,
+  father_name: string,
+  first_name: string,
+  group_id: number,
+  last_name: string,
+  role: number,
+  university_id: number,
 }
 
 //userList item interface
 export interface IUserGet extends IUser{
   id: number,
-  group_id: number,
 }
 
 export interface IGroup {
+  id: number,
   name: string,
 }
 
@@ -118,6 +120,12 @@ export interface ITimeTable{
   timeTable: IScheduleItem[],
 }
 
+export interface IUniversity{
+  id: number,
+  name: string,
+  postfix: string,
+}
+
 //api interfaces
 
 export interface IAPI_Login_Request{
@@ -126,7 +134,7 @@ export interface IAPI_Login_Request{
 };
 
 export interface IAPI_Audience_Create{
-  campus_id: number,
+  campus: string,
   capacity: number,
   name: string,
   profile: string,

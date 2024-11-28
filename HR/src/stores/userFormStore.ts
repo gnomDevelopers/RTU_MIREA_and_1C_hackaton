@@ -10,6 +10,7 @@ export const useUserFormStore = defineStore('userForm', {
             links: '',
             filesList: [] as File[],
             agreed: false,
+            isClosed: false,
         },
     }),
     actions: {

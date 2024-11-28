@@ -21,7 +21,7 @@
               <p class="text-white text-xl">{{ index + 1 }}</p>
             </div>
             <div class="flex flex-row flex-grow justify-start items-center px-2">
-              <p class="text-xl">{{ item.surname }} {{ item.name }} {{ item.thirdname }}</p>
+              <p class="text-xl">{{ item.last_name }} {{ item.first_name }} {{ item.father_name }}</p>
             </div>
             <div class="flex flex-row justify-center items-center px-2">
               <svg @click="deleteStudent(item)" class="w-5 h-5 cursor-pointer" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +100,18 @@ export default{
         this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Некорректное фио студента!');
         return;
       }
-      this.universityStore.groupMembersList.push({id: 12, name: input[1], surname: input[0], thirdname: input[2], role: 6, faculty_id: 1, department_id: 1, educational_direction: 'Фуллстек разработка', group_id: 1});
+      this.universityStore.groupMembersList.push({
+        id: 12, 
+        first_name: input[1], 
+        last_name: input[0], 
+        father_name: input[2], 
+        role: 6, 
+        faculty_id: 1, 
+        department_id: 1, 
+        educational_direction: 'Фуллстек разработка', 
+        group_id: 1,
+        university_id: 1,
+      });
       this.universityStore.groupMembersList = this.universityStore.sortPeople(this.universityStore.groupMembersList);
       this.inputStudentFIO = '';
     },
@@ -117,7 +128,7 @@ export default{
       handler(val: IUserGet[]){
         this.groupsSearchList = [];
         for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+          this.groupsSearchList.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
         }
       },
       immediate: true,

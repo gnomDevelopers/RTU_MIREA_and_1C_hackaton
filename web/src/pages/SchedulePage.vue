@@ -88,36 +88,36 @@ export default {
 
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
+      console.log('universityStore.groupsList: ', this.universityStore.groupsList);
       if(this.universityStore.groupsList.length === 0) return arr;
       console.log('grouplist before for');
       for(let item of <IGroup[]>this.universityStore.groupsList){
-        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
+        arr.push({id: item.id, search_field: `${item.name}`, data: item});
       }
-      console.log('universityStore.groupsList: ', this.universityStore.groupsList);
       console.log('groupsList: ', arr);
       return arr;
     },
 
     teachersSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
+      console.log('universityStore.teachersList: ', this.universityStore.teachersList);
       if(this.universityStore.teachersList.length === 0) return arr;
       console.log('teachersList before for');
       for(let item of <IUserGet[]>this.universityStore.teachersList){
-        arr.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
       }
-      console.log('universityStore.teachersList: ', this.universityStore.teachersList);
       console.log('teachersList: ', arr);
       return arr;
     },
 
     facultativesList():ISearchList[]{
       const arr:ISearchList[] = [];
+      console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
       if(this.universityStore.facultativesList.length === 0) return arr;
       console.log('facultativesList before for');
       for(let item of <IGroup[]>this.universityStore.facultativesList){
-        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item.name}`, data: item});
+        arr.push({id: item.id, search_field: `${item.name}`, data: item});
       }
-      console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
       console.log('facultativesList: ', arr);
       return arr;
     },

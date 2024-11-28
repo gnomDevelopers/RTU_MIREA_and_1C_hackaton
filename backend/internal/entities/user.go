@@ -71,3 +71,7 @@ type GroupMember struct {
 	FirstName  string `json:"first_name"`
 	FatherName string `json:"father_name"`
 }
+
+type UpdateRoleRequest struct {
+	NewRole string `json:"new_role"`
+}

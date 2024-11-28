@@ -11,7 +11,8 @@ type UserRepository interface {
 	GetByUniversity(context.Context, string) (*[]entities.User, error)
 	Exists(context.Context, string) (bool, error)
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
-	GetInfoById(ctx context.Context, id int) (*entities.UserInfo, error)
+	GetInfoById(context.Context, int) (*entities.UserInfo, error)
+	UpdateRole(context.Context, int, string) error
 }
 
 //type UserDataRepository interface {
@@ -75,7 +76,7 @@ type GroupRepository interface {
 	GetById(context.Context, int) (*entities.Group, error)
 	GetByUserID(context.Context, int) (*entities.Group, error)
 	GetByName(context.Context, string) (*entities.Group, error)
-	GetAll(context.Context) (*[]entities.Group, error)
+	GetAll(context.Context, string) (*[]entities.Group, error)
 	GetGroupMembers(context.Context, string) (*[]entities.GroupMember, error)
 }
 
@@ -149,20 +150,33 @@ type WorkRepository interface {
 	GetByEmail(context.Context, string) (*entities.HR, error)
 }
 
+type AchievementRepository interface {
+	Create(context.Context, *entities.CreateAchievementRequest) (*entities.CreateAchievementResponse, error)
+	GetById(context.Context, int) (*[]entities.Achievement, error)
+	Delete(context.Context, int) error
+}
+
+type VisitingRepository interface {
+	Exist(ctx context.Context, visiting *entities.Visiting) (bool, error)
+	Create(ctx context.Context, visiting *entities.Visiting) (int, error)
+	GetByUserIdAndClassId(ctx context.Context, userID, classID int) (*entities.Visiting, error)
+}
+
 type Repository struct {
-	User               UserRepository
-	UserData           UserDataRepository
-	University         UniversityRepository
-	Campus             CampusRepository
-	Group              GroupRepository
-	Audience           AudienceRepository
-	Class              ClassRepository
-	Faculty            FacultyRepository
-	Department         DepartmentRepository
-	UserSchedule       UserScheduleRepository
-	Grade              GradeRepository
-	Score              ScoreRepository
-	AcademicDiscipline AcademicDisciplineRepository
-	Gpa                GpaRepository
-	Work               WorkRepository
+	User                  UserRepository
+	UserData              UserDataRepository
+	University            UniversityRepository
+	Campus                CampusRepository
+	Group                 GroupRepository
+	Audience              AudienceRepository
+	AchievementRepository AchievementRepository
+	Class                 ClassRepository
+	Faculty               FacultyRepository
+	Department            DepartmentRepository
+	UserSchedule          UserScheduleRepository
+	Grade                 GradeRepository
+	Score                 ScoreRepository
+	AcademicDiscipline    AcademicDisciplineRepository
+	Gpa                   GpaRepository
+	Work                  WorkRepository
 }

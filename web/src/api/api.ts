@@ -11,7 +11,8 @@ import {
   type IAPI_User_Schedule_Create, 
   type IAPI_User_Schedule_Update, 
   type IAPI_University_Create, 
-  type IAPI_University_Update 
+  type IAPI_University_Update, 
+  type IUser
 } from '../helpers/constants';
 
 
@@ -128,7 +129,11 @@ export function API_Audience_Create(data: IAPI_Audience_Create[]){
 //изменение аудитории
 export function API_Audience_Update(data: IAPI_Audience_Update){
   return new Promise((resolve, reject) => {
-    axios.put(`${API}/audience`, data)
+    axios.put(`${API}/auth/audience`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Audience update success: ', response);
       resolve(response);
@@ -143,7 +148,11 @@ export function API_Audience_Update(data: IAPI_Audience_Update){
 //удаление аудитории
 export function API_Audience_Delete(audienceID: number){
   return new Promise((resolve, reject) => {
-    axios.delete(`${API}/audience/${audienceID}`)
+    axios.delete(`${API}/auth/audience/${audienceID}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Audience delete success: ', response);
       resolve(response);
@@ -242,6 +251,25 @@ export function API_Campus_Get_University(universityName: string){
 
 /////// university users ///////
 
+//создание пользователей для вуза
+export function API_University_Users_Create(data: IUser[]){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/auth/user/`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Users create success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Users create  error: ', error);
+      reject(error);
+    })
+  });
+};
+
 //получение всех пользователей вуза
 export function API_University_Users_Get(universityName: string){
   return new Promise((resolve, reject) => {
@@ -262,9 +290,9 @@ export function API_University_Users_Get(universityName: string){
 };
 
 //получение всех групп вуза
-export function API_University_Groups_Get(){
+export function API_University_Groups_Get(universityName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/auth/schedule/search/group`, {
+    axios.get(`${API}/auth/groups/university/${universityName}`, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
@@ -526,7 +554,11 @@ export function API_University_Delete(universityID: number){
 //получение всех университетов
 export function API_University_Get_All(){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/university/all`)
+    axios.get(`${API}/auth/university/all`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('University get all success: ', response);
       resolve(response);

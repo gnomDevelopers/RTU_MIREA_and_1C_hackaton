@@ -61,6 +61,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/user/university/:university", h.GetUsersByUniversity)
 	authGroup.Get("/user/:id", h.GetUserByID)
 	authGroup.Post("/user", h.CreateUsers)
+	authGroup.Put("/user/:id/promote", h.UpdateUserRole)
 
 	authGroup.Get("/user_schedule", h.GetUserSchedule)
 	authGroup.Post("/user_schedule", h.CreateUserSchedule)
@@ -72,6 +73,10 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
 	authGroup.Get("/schedule/optionals/:optionals", h.GetScheduleOptionals)
 	authGroup.Get("/schedule/group_subjects", h.GetGroupSubject)
+
+	authGroup.Delete("/achievement/:id", h.DeleteAchievement)
+	authGroup.Post("/achievement", h.CreateAchievement)
+	authGroup.Get("/achievement/user/:id", h.GetAchievementByUserID)
 
 	authGroup.Post("/grade", h.CreateGrade)
 	authGroup.Get("/grade/:group/:name", h.GetGradesBySubject)
@@ -85,6 +90,7 @@ func (h *Handler) Router() *fiber.App {
 
 	// Перенесено
 	authGroup.Post("/group", h.CreateGroup)
+	authGroup.Get("/groups/university/:university", h.GetAllGroups)
 
 	authGroup.Get("/university/all", h.GetAllUniversities)
 	authGroup.Get("/university/name/:name", h.GetByNameUniversity)

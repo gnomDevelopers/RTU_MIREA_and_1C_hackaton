@@ -145,6 +145,10 @@
     background-color: var(--btn-color-normal);
 }
 
+.sml-btn{
+    @apply flex justify-center items-center px-3 mb:px-4 text-xs mb:text-base uus:text-base border-2 border-hr-color rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300;
+}
+
 .border-hr-color{
     border-color: var(--bg-color-bold);
 }

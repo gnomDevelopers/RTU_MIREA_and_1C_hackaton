@@ -117,7 +117,7 @@ export default {
       handler(val: IUserGet[]){
         this.groupsSearchList = [];
         for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.surname} ${item.name} ${item.thirdname}`, data: item});
+          this.groupsSearchList.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
         }
       },
       immediate: true,
