@@ -143,7 +143,7 @@ export default {
     console.log('includes: ', this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name));
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
       this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
-
+      
     }
     
   },
