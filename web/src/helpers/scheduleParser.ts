@@ -47,7 +47,7 @@ export function extendTimetable(timetable: ITimeTable[]): ITimeTable[] {
     const weekSchedule = isOddWeek ? firstWeek : secondWeek;
 
     for (const entry of weekSchedule) {
-      const newDate = addDays(entry.date, i * 7);
+      const newDate = addDays(entry.date, (i - (i % 2)) * 7);
       const newTableDay:ITimeTable = {date: newDate, timeTable: [] as IScheduleItem[]};
       for(let item of entry.timeTable){
         newTableDay.timeTable.push({...item, date: newDate, weekday: item.weekday + i * 7});
