@@ -27,7 +27,7 @@ export function API_Authenticate(){
 //вход в аккаунт
 export function API_Login(data: IAPI_Login_Request){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/login`, data)
+    axios.post(`${API}/`, data)
     .then(response => {
       if(DEVMODE) console.log('Login post success: ', response);
       resolve(response);
