@@ -3,7 +3,7 @@
 //contants
 
 //api
-export const API = '/api';
+export const API = '/hr.gnomedeployer.ru/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
 
