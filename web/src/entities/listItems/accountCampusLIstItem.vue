@@ -32,8 +32,7 @@
         
         <input 
           class="min-w-20 w-full md:w-40 max-w-none px-2 py-1 text-lg outline-none rounded-lg border-2 border-solid border-transparent focus:border-blue-800" 
-          type="number" 
-          min="1"
+          type="text" 
           v-model="campusAddress"
           placeholder="Адрес кампуса">
         

@@ -26,15 +26,15 @@
     </div>
   </div>
 <!--  это для телефона и вкладки для студентоффф-->
-  <div v-if="isSmallScreen && isProfilePage" class="flex flex-row justify-center gap-4 mt-2">
+  <div v-if="isSmallScreen && isProfilePage" class="flex flex-row justify-center gap-4 mt-2 pb-2 border-b-2">
     <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'MyResponsesPage'})">Мои отклики</button>
     <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'IncomingOffersPage'})">Входящие предложения</button>
   </div>
-  <div v-if="isSmallScreen && isMyResponsesPage" class="flex flex-row justify-center gap-4 mt-2">
+  <div v-if="isSmallScreen && isMyResponsesPage" class="flex flex-row justify-center gap-4 mt-2 pb-2 border-b-2">
     <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-hr-color rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'MyResponsesPage'})">Мои отклики</button>
     <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'IncomingOffersPage'})">Входящие предложения</button>
   </div>
-  <div v-if="isSmallScreen && isIncomingOffersPage" class="flex flex-row justify-center gap-4 mt-2">
+  <div v-if="isSmallScreen && isIncomingOffersPage" class="flex flex-row justify-center gap-4 mt-2 pb-2 border-b-2">
     <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'MyResponsesPage'})">Мои отклики</button>
     <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-hr-color rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'IncomingOffersPage'})">Входящие предложения</button>
   </div>

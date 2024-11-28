@@ -22,6 +22,8 @@ export const useUserInfoStore = defineStore('userInfo', {
       department_id: null as TMaybeNumber, // id кафедры
       educationalDirection: null as TMaybeString, // название направления
       isPasswordChanged: true, // сменен ли пароль
+
+      group_name: '',
     }
   },
   actions: {
