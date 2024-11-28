@@ -68,3 +68,15 @@ func (r *WorkRepository) GetById(ctx context.Context, id int) (*entities.Univers
 	}
 	return &university, nil
 }
+
+func (r *WorkRepository) GetByEmail(ctx context.Context, email string) (*entities.HR, error) {
+	var hr entities.HR
+	query := "SELECT id, email, password, last_name, first_name, father_name, company, image_link FROM hr WHERE email = $1"
+	err := r.db.QueryRowContext(ctx, query, email).Scan(&hr.Id, &hr.Email, &hr.Password, &hr.LastName, &hr.FirstName, &hr.FatherName, &hr.Company, &hr.ImageLink)
+	if err != nil {
+		return nil, err
+	}
+
+	return &hr, nil
+
+}

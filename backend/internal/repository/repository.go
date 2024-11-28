@@ -146,6 +146,7 @@ type WorkRepository interface {
 	ExistsHR(context.Context, string) (bool, error)
 	Create(context.Context, *entities.WorkUser) error
 	CreateHR(context.Context, *entities.HR) error
+	GetByEmail(context.Context, string) (*entities.HR, error)
 }
 
 type Repository struct {

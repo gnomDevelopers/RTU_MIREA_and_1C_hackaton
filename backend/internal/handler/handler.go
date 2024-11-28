@@ -49,6 +49,7 @@ func (h *Handler) Router() *fiber.App {
 	f.Get("/login", h.CheckAuth)
 
 	f.Post("/work", h.LoginWork)
+	f.Post("/work/login/hr", h.LoginHR)
 
 	//f.Get("/user/:id", h.GetUserByID)
 

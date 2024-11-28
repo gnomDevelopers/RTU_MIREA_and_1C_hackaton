@@ -87,6 +87,6 @@ func NewService(repositories *repository.Repository, conf *config.Config) *Servi
 		AcademicDisciplineService: NewAcademicDisciplineService(repositories.AcademicDiscipline),
 		DepartmentService:         NewDepartmentService(repositories.Department),
 		GpaService:                NewGpaService(repositories.Gpa),
-		WorkService:               NewWorkService(repositories.Work),
+		WorkService:               NewWorkService(repositories.Work, conf),
 	}
 }
