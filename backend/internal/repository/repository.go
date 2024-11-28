@@ -147,10 +147,11 @@ type WorkRepository interface {
 	ExistsHR(context.Context, string) (bool, error)
 	Create(context.Context, *entities.WorkUser) error
 	CreateHR(context.Context, *entities.HR) error
-	GetByIdWorkUser(context.Context, int) (*entities.WorkUser, error)
+	GetByIdWorkUser(context.Context, int) (*entities.FullWorkUser, error)
 	GetByIdWorkUserCVPath(context.Context, int) (string, error)
 	GetByEmailHR(context.Context, string) (*entities.HR, error)
 	UpdateWorkUser(context.Context, *entities.WorkUserUpdateRequest) error
+	UpdateCVPath(context.Context, *entities.UpdateCV) error
 	CreateResponse(context.Context, *entities.Response) error
 	GetWorkUserResponses(context.Context, int) (*[]entities.Response, error)
 	GetHRResponses(context.Context, int) (*[]entities.Response, error)

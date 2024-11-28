@@ -1,20 +1,27 @@
 package entities
 
 type WorkUser struct {
-	Id          int      `json:"id"`
-	PhoneNumber string   `json:"phone_number"`
-	Telegram    string   `json:"telegram"`
-	Skills      []string `json:"skills"`
-	CVPath      string   `json:"cv_path"`
-	HideProfile bool     `json:"hide_profile"`
+	Id                   int      `json:"id"`
+	Speciality           string   `json:"speciality"`
+	WorkExperience       string   `json:"work_experience"`
+	AdditionalExperience string   `json:"additional_experience"`
+	UsefulLinks          []string `json:"useful_links"`
+	PhoneNumber          string   `json:"phone_number"`
+	Telegram             string   `json:"telegram"`
+	Skills               []string `json:"skills"`
+	CVPath               string   `json:"cv_path"`
+	HideProfile          bool     `json:"hide_profile"`
 }
 
 type WorkUserUpdateRequest struct {
-	Id          int      `json:"id"`
-	PhoneNumber string   `json:"phone_number"`
-	Telegram    string   `json:"telegram"`
-	Skills      []string `json:"skills"`
-	CVPath      string   `json:"cv_path"`
+	Id                   int      `json:"id"`
+	Speciality           string   `json:"speciality"`
+	WorkExperience       string   `json:"work_experience"`
+	AdditionalExperience string   `json:"additional_experience"`
+	UsefulLinks          []string `json:"useful_links"`
+	PhoneNumber          string   `json:"phone_number"`
+	Telegram             string   `json:"telegram"`
+	Skills               []string `json:"skills"`
 }
 
 type WorkUserUpdateResponse struct {
@@ -54,14 +61,23 @@ type ExistsResponse struct {
 }
 
 type FullWorkUser struct {
-	Id          int      `json:"id"`
-	LastName    string   `json:"last_name"`
-	FirstName   string   `json:"first_name"`
-	FatherName  string   `json:"father_name"`
-	University  string   `json:"university"`
-	Gpa         float64  `json:"gpa"`
-	PhoneNumber string   `json:"phone_number"`
-	Telegram    string   `json:"telegram"`
-	Skills      []string `json:"skills"`
-	CVPath      string   `json:"cv_path"`
+	Id                   int      `json:"id"`
+	LastName             string   `json:"last_name"`
+	FirstName            string   `json:"first_name"`
+	FatherName           string   `json:"father_name"`
+	University           string   `json:"university"`
+	Gpa                  float64  `json:"gpa"`
+	Speciality           string   `json:"speciality"`
+	WorkExperience       string   `json:"work_experience"`
+	AdditionalExperience string   `json:"additional_experience"`
+	UsefulLinks          []string `json:"useful_links"`
+	PhoneNumber          string   `json:"phone_number"`
+	Telegram             string   `json:"telegram"`
+	Skills               []string `json:"skills"`
+	CVPath               string   `json:"cv_path"`
+}
+
+type UpdateCV struct {
+	Id     int    `json:"id"`
+	CVPath string `json:"cv_path"`
 }

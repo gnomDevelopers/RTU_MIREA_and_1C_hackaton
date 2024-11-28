@@ -18,7 +18,7 @@ import (
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /work/exists/id/{id} [post]
+// @Router       /work/exists/id/{id} [get]
 // @Security ApiKeyAuth
 func (h *Handler) ExistsWorkUser(c *fiber.Ctx) error {
 	idStr := c.Params("id")
@@ -67,11 +67,11 @@ func (h *Handler) LoginHR(c *fiber.Ctx) error {
 
 // GetByIdWorkUserProfile
 // @Tags work
-// @Summary      Update profile
+// @Summary      Get profile
 // @Accept       json
 // @Produce      json
-// @Param id path string true "university id"
-// @Success 200 {object} entities.WorkUser
+// @Param id path string true "user id"
+// @Success 200 {object} entities.FullWorkUser
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -81,7 +81,7 @@ func (h *Handler) GetByIdWorkUserProfile(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := strconv.Atoi(idStr)
 
-	h.logger.Debug().Msg("call h.services.WorkService.UpdateWorkUser")
+	h.logger.Debug().Msg("call h.services.WorkService.GetByIdWorkUser")
 	workUser, err := h.services.WorkService.GetByIdWorkUser(c.Context(), id)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -238,18 +238,15 @@ func (h *Handler) GetHRResponses(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param id path string true "candidate id"
-// @Success 200 {object} entities.CreateUniversityResponse
+// @Success 200 {object} []entities.FullWorkUser
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /auth/work/response/hr/{id} [get]
+// @Router       /auth/work/work_user/all [get]
 // @Security ApiKeyAuth
 func (h *Handler) GetAllWorkUserId(c *fiber.Ctx) error {
-	idStr := c.Params("id")
-	id, err := strconv.Atoi(idStr)
-
 	h.logger.Debug().Msg("call h.services.WorkService.GetHRResponses")
-	university, err := h.services.WorkService.GetHRResponses(c.Context(), id)
+	workUsers, err := h.services.WorkService.GetAllWorkUserId(c.Context())
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
@@ -260,5 +257,5 @@ func (h *Handler) GetAllWorkUserId(c *fiber.Ctx) error {
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(university)
+	return c.Status(fiber.StatusOK).JSON(workUsers)
 }
