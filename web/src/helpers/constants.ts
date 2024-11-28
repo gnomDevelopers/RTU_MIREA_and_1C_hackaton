@@ -93,6 +93,11 @@ export interface IUserGet extends IUser{
   id: number,
 }
 
+//user create interface
+export interface IUserCreate extends IUser{
+  password: string,
+}
+
 export interface IGroup {
   id: number,
   name: string,

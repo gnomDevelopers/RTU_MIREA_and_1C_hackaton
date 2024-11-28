@@ -155,6 +155,7 @@ import {
   INFO_FIELDS_ROLE, 
   StatusCodes, 
   type IUser,
+  type IUserCreate,
 } from '../helpers/constants';
 import { API_University_Users_Create } from '@/api/api';
 
@@ -173,7 +174,7 @@ export default {
       userDepartment: -1,
       userEducationalDirections: '',
       userGroup: -1,
-      usersList: [] as IUser[],
+      usersList: [] as IUserCreate[],
     }
   },
   computed: {
@@ -213,6 +214,7 @@ export default {
           educational_direction: this.userEducationalDirections === '' ? 'null' : this.userEducationalDirections,
           group_id: this.userGroup === -1 ? 1 : this.userGroup,
           university_id: this.universityStore.getUniversityID(this.userInfoStore.university!),
+          password: '',
         });
 
         this.userName = '';

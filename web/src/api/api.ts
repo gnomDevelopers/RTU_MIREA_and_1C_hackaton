@@ -12,7 +12,8 @@ import {
   type IAPI_User_Schedule_Update, 
   type IAPI_University_Create, 
   type IAPI_University_Update, 
-  type IUser
+  type IUser,
+  type IUserCreate
 } from '../helpers/constants';
 
 
@@ -252,7 +253,7 @@ export function API_Campus_Get_University(universityName: string){
 /////// university users ///////
 
 //создание пользователей для вуза
-export function API_University_Users_Create(data: IUser[]){
+export function API_University_Users_Create(data: IUserCreate[]){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/auth/user`, data, {
       headers: {
