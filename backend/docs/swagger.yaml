@@ -2935,7 +2935,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Response
+      summary: Получение всех отликов студента
       tags:
       - work
   /auth/work/response/hr/{id}:
@@ -2969,19 +2969,13 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Response
+      summary: Получение всех откликов hr`а
       tags:
       - work
   /auth/work/work_user/all:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: candidate id
-        in: path
-        name: id
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -3005,7 +2999,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Response
+      summary: Получение всех студентов
       tags:
       - work
   /login:
@@ -3120,7 +3114,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: university id
+      - description: candidate id
         in: path
         name: id
         required: true
@@ -3146,7 +3140,7 @@ paths:
             $ref: '#/definitions/entities.ErrorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Login in hr
+      summary: Проверка на сущестование аккаунта студента
       tags:
       - work
   /work/login/hr:

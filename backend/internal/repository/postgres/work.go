@@ -21,7 +21,7 @@ func (r *WorkRepository) Exists(ctx context.Context, id int) (bool, error) {
 	var exists int
 	query := `SELECT 1 FROM work_user WHERE id = $1`
 	err := r.db.QueryRowContext(ctx, query, id).Scan(&exists)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return false, err
 	}
 	return exists > 0, nil
@@ -31,7 +31,7 @@ func (r *WorkRepository) ExistsHR(ctx context.Context, university string) (bool,
 	var exists int
 	query := `SELECT 1 FROM hr WHERE email = $1`
 	err := r.db.QueryRowContext(ctx, query, university).Scan(&exists)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		return false, err
 	}
 	return exists > 0, nil
@@ -62,7 +62,7 @@ func (r *WorkRepository) CreateHR(ctx context.Context, hr *entities.HR) error {
 
 func (r *WorkRepository) GetByIdWorkUser(ctx context.Context, id int) (*entities.FullWorkUser, error) {
 	var fullWorkUser entities.FullWorkUser
-	query := `SELECT work_user.id, speciality, work_experience, additional_experience, useful_links, phone_number, telegram, skills, last_name, first_name, father_name, university.name FROM work_user JOIN users ON work_user.id = users.id JOIN university ON users.university_id = university.id WHERE work_user.id = $1;`
+	query := `SELECT work_user.id, speciality, work_experience, additional_experience, useful_links, phone_number, telegram, skills, last_name, first_name, father_name, university.name, gpa.value FROM work_user JOIN users ON work_user.id = users.id JOIN university ON users.university_id = university.id JOIN gpa ON users.id = gpa.user_id WHERE work_user.id = $1;`
 	err := r.db.QueryRowContext(ctx, query, id).Scan(&fullWorkUser.Id, &fullWorkUser.Speciality, &fullWorkUser.WorkExperience, &fullWorkUser.AdditionalExperience, pq.Array(&fullWorkUser.UsefulLinks), &fullWorkUser.PhoneNumber, &fullWorkUser.Telegram, pq.Array(&fullWorkUser.Skills), &fullWorkUser.LastName, &fullWorkUser.FirstName, &fullWorkUser.FatherName, &fullWorkUser.University)
 	if err != nil {
 		return nil, err
@@ -91,8 +91,13 @@ func (r *WorkRepository) GetByEmailHR(ctx context.Context, email string) (*entit
 }
 
 func (r *WorkRepository) UpdateWorkUser(ctx context.Context, workUser *entities.WorkUserUpdateRequest) error {
-	query := `UPDATE work_user SET phone_number = $1 AND telegram = $2 AND skills = $3 AND speciality = $4 AND work_experience = $5 AND additional_experience = $6 AND useful_links = $7 WHERE id = $8`
-	_, err := r.db.ExecContext(ctx, query, workUser.PhoneNumber, workUser.Telegram, pq.Array(workUser.Skills), workUser.Speciality, workUser.WorkExperience, workUser.AdditionalExperience, pq.Array(workUser.UsefulLinks), workUser.Id)
+	err := r.Create(ctx, &entities.WorkUser{Id: workUser.Id, Speciality: workUser.Speciality, WorkExperience: workUser.WorkExperience, AdditionalExperience: workUser.AdditionalExperience, UsefulLinks: workUser.UsefulLinks, PhoneNumber: workUser.PhoneNumber, Telegram: workUser.Telegram, Skills: workUser.Skills})
+	if err != nil {
+		return err
+	}
+
+	query := `UPDATE work_user SET phone_number = $1, telegram = $2, skills = $3, speciality = $4, work_experience = $5, additional_experience = $6, useful_links = $7 WHERE id = $8`
+	_, err = r.db.ExecContext(ctx, query, workUser.PhoneNumber, workUser.Telegram, pq.Array(workUser.Skills), workUser.Speciality, workUser.WorkExperience, workUser.AdditionalExperience, pq.Array(workUser.UsefulLinks), workUser.Id)
 	if err != nil {
 		return err
 	}
@@ -171,7 +176,7 @@ func (r *WorkRepository) GetHRResponses(ctx context.Context, hrId int) (*[]entit
 
 func (r *WorkRepository) GetAllWorkUserId(ctx context.Context) (*[]entities.FullWorkUser, error) {
 	var fullWorkUsers []entities.FullWorkUser
-	query := `SELECT work_user.id, speciality, work_experience, additional_experience, useful_links, phone_number, telegram, skills, last_name, first_name, father_name, university.name FROM work_user JOIN users ON work_user.id = users.id JOIN university ON users.university_id = university.id;`
+	query := `SELECT work_user.id, speciality, work_experience, additional_experience, useful_links, phone_number, telegram, skills, last_name, first_name, father_name, university.name, gpa.value FROM work_user JOIN users ON work_user.id = users.id JOIN university ON users.university_id = university.id JOIN gpa ON users.id = gpa.user_id;`
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -179,7 +184,7 @@ func (r *WorkRepository) GetAllWorkUserId(ctx context.Context) (*[]entities.Full
 
 	for rows.Next() {
 		var fullWorkUser entities.FullWorkUser
-		err = rows.Scan(&fullWorkUser.Id, &fullWorkUser.Speciality, &fullWorkUser.WorkExperience, &fullWorkUser.AdditionalExperience, pq.Array(&fullWorkUser.UsefulLinks), &fullWorkUser.PhoneNumber, &fullWorkUser.Telegram, pq.Array(&fullWorkUser.Skills), &fullWorkUser.LastName, &fullWorkUser.FirstName, &fullWorkUser.FatherName, &fullWorkUser.University)
+		err = rows.Scan(&fullWorkUser.Id, &fullWorkUser.Speciality, &fullWorkUser.WorkExperience, &fullWorkUser.AdditionalExperience, pq.Array(&fullWorkUser.UsefulLinks), &fullWorkUser.PhoneNumber, &fullWorkUser.Telegram, pq.Array(&fullWorkUser.Skills), &fullWorkUser.LastName, &fullWorkUser.FirstName, &fullWorkUser.FatherName, &fullWorkUser.University, &fullWorkUser.Gpa)
 		if err != nil {
 			return nil, err
 		}

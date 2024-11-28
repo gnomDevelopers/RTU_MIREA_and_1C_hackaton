@@ -3585,7 +3585,7 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Response",
+                "summary": "Получение всех отликов студента",
                 "parameters": [
                     {
                         "type": "string",
@@ -3639,7 +3639,7 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Response",
+                "summary": "Получение всех откликов hr` + "`" + `а",
                 "parameters": [
                     {
                         "type": "string",
@@ -3693,16 +3693,7 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Response",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "candidate id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "Получение всех студентов",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3909,11 +3900,11 @@ const docTemplate = `{
                 "tags": [
                     "work"
                 ],
-                "summary": "Login in hr",
+                "summary": "Проверка на сущестование аккаунта студента",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "university id",
+                        "description": "candidate id",
                         "name": "id",
                         "in": "path",
                         "required": true

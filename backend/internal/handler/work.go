@@ -10,10 +10,10 @@ import (
 
 // ExistsWorkUser
 // @Tags work
-// @Summary      Login in hr
+// @Summary      Проверка на сущестование аккаунта студента
 // @Accept       json
 // @Produce      json
-// @Param id path string true "university id"
+// @Param id path string true "candidate id"
 // @Success 200 {object} entities.ExistsResponse
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
@@ -130,7 +130,7 @@ func (h *Handler) UpdateWorkUserProfile(c *fiber.Ctx) error {
 	logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Info", Method: c.Method(),
 		Url: c.OriginalURL(), Status: fiber.StatusOK})
 	logEvent.Msg("success")
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": fmt.Sprintf("university with id=%v updated successfully", workUser.Id)})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": fmt.Sprintf("users profile with id=%v updated successfully", workUser.Id)})
 }
 
 // ResponseCandidate
@@ -172,7 +172,7 @@ func (h *Handler) ResponseCandidate(c *fiber.Ctx) error {
 
 // GetCandidateResponses
 // @Tags work
-// @Summary      Response
+// @Summary      Получение всех отликов студента
 // @Accept       json
 // @Produce      json
 // @Param id path string true "candidate id"
@@ -203,7 +203,7 @@ func (h *Handler) GetCandidateResponses(c *fiber.Ctx) error {
 
 // GetHRResponses
 // @Tags work
-// @Summary      Response
+// @Summary      Получение всех откликов hr`а
 // @Accept       json
 // @Produce      json
 // @Param id path string true "candidate id"
@@ -234,10 +234,9 @@ func (h *Handler) GetHRResponses(c *fiber.Ctx) error {
 
 // GetAllWorkUserId
 // @Tags work
-// @Summary      Response
+// @Summary      Получение всех студентов
 // @Accept       json
 // @Produce      json
-// @Param id path string true "candidate id"
 // @Success 200 {object} []entities.FullWorkUser
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse

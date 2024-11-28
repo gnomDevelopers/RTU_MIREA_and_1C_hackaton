@@ -138,14 +138,14 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/department/university/:university", h.GetByUniversityDepartments)
 	authGroup.Post("/department", h.CreateDepartment)
 
-	f.Get("/work/exists/id/:id", h.ExistsWorkUser)
-	f.Get("/work/profile/id/:id", h.GetByIdWorkUserProfile)
-	f.Get("/work/response/candidate/id/:id", h.GetCandidateResponses)
-	f.Get("/work/response/hr/:id", h.GetHRResponses)
-	f.Get("/work/work_user/all", h.GetAllWorkUserId)
-	f.Post("/work/login/hr", h.LoginHR)
-	f.Post("/work/response", h.ResponseCandidate)
-	f.Put("/work/profile", h.UpdateWorkUserProfile)
+	authGroup.Get("/work/exists/id/:id", h.ExistsWorkUser)
+	authGroup.Get("/work/profile/id/:id", h.GetByIdWorkUserProfile)
+	authGroup.Get("/work/response/candidate/id/:id", h.GetCandidateResponses)
+	authGroup.Get("/work/response/hr/:id", h.GetHRResponses)
+	authGroup.Get("/work/work_user/all", h.GetAllWorkUserId)
+	authGroup.Post("/work/login/hr", h.LoginHR)
+	authGroup.Post("/work/response", h.ResponseCandidate)
+	authGroup.Put("/work/profile", h.UpdateWorkUserProfile)
 
 	return f
 }
