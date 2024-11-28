@@ -58,10 +58,5 @@ export default {
       return 'Понедельник';
     }
   },
-  data(){
-    return {
-      uniqueID: 1,
-    }
-  },
 };
 </script>

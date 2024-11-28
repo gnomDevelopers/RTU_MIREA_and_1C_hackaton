@@ -30,6 +30,8 @@
 <script lang="ts">
 import { type Day, MONTH_NAMES } from '@/helpers/constants';
 
+const today = new Date();
+
 export default{
   emits:['selectDay'],
   props:{
@@ -44,7 +46,7 @@ export default{
       currentMonthIndex: this.month,
       currentYear: 2024,
 
-      selectedDay: {year: 2024, month: 10, day: 25} as Day,
+      selectedDay: {year: today.getFullYear(), month: today.getMonth(), day: today.getDate()} as Day,
     }
   },
   computed:{

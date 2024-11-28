@@ -51,7 +51,6 @@
             :searchList="getScheduleTargetList" 
             :itemComponent="getListItemComponent"
           />
-            <!-- class="h-80" -->
         </Transition>
         
         <div class="flex flex-col items-center gap-y-2">
@@ -137,13 +136,14 @@ export default {
     }
   },
   async mounted(){
+    //загружаем все группы с расписанием
     await this.scheduleStore.loadScheduleGroups();
-    console.log('user groupName: ', this.userInfoStore.group_name);
-    console.log('scheduleGroups: ', this.scheduleStore.scheduleGroups);
-    console.log('includes: ', this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name));
+    //если группа пользователя есть в списке групп с расписанием
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
-      this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
-
+      // загружаем расписание группы студента
+      await this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
+      // загружаем сегодняшнее расписание
+      this.scheduleStore.selectScheduleDay(this.scheduleStore.selectedDate);
     }
     
   },
@@ -160,14 +160,7 @@ export default {
       this.scheduleStore.scheduleTarget = target;
     },
     selectDay(day: Day){
-      this.scheduleStore.selectedDate = `${day.day}.${day.month+1}.${day.year}`;
-      this.scheduleStore.scheduleTableDay = [];
-      for(let item of this.scheduleStore.scheduleData){
-        if(item.date === `${day.day}.${day.month+1}.${day.year}`){
-          this.scheduleStore.scheduleTableDay = item.timeTable;
-          break;
-        }
-      }
+      this.scheduleStore.selectScheduleDay(this.scheduleStore.getCorrectDate(day.day, day.month+1, day.year));
     }
   },
 };

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
+import { type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
 import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
-import { transformSchedule } from "@/helpers/scheduleParser";
+import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
 
 export const useScheduleStore = defineStore('schedule', {
@@ -39,7 +39,7 @@ export const useScheduleStore = defineStore('schedule', {
         this.scheduleGroups = [];
       }
     },
-    loadScheduleTableByGroupName(groupName: string){
+    async loadScheduleTableByGroupName(groupName: string){
       API_Schedule_Get_GroupName(groupName)
       .then((response: any) => {
         this.scheduleData = [];
@@ -64,7 +64,8 @@ export const useScheduleStore = defineStore('schedule', {
         }
 
         this.scheduleData = transformSchedule(res);
-
+        console.log('scheduleData: ', this.scheduleData);
+        this.scheduleData = extendTimetable(this.scheduleData);
         console.log('scheduleData: ', this.scheduleData);
       })
       .catch(error => {
@@ -78,13 +79,30 @@ export const useScheduleStore = defineStore('schedule', {
     loadScheduleTableByClassName(className: string){
 
     },
+    selectScheduleDay(day: string){
+      this.selectedDate = day;
+      this.scheduleTableDay = [];
+      for(let item of this.scheduleData){
+        if(item.date === day){
+          this.scheduleTableDay = item.timeTable;
+          break;
+        }
+      }
+    },
     getCurrentDate() {
       const today = new Date();
       const day = String(today.getDate()).padStart(2, '0');
-      const month = String(today.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-      const year = String(today.getFullYear() % 100).padStart(2, '0'); //2-digit year
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = String(today.getFullYear()).padStart(2, '0');
     
       return `${day}.${month}.${year}`;
+    },
+    getCorrectDate(day: number, month: number, year: number) {
+      const Day = String(day).padStart(2, '0');
+      const Month = String(month).padStart(2, '0');
+      const Year = String(year).padStart(2, '0');
+    
+      return `${Day}.${Month}.${Year}`;
     }
   }
 });
