@@ -143,6 +143,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid name")
 	}
 
+	h.logger.Debug().Msg("call h.services.GroupService.GetGroupMembers")
 	groupMember, err := h.services.GroupService.GetGroupMembers(c.Context(), decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -151,6 +152,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	h.logger.Debug().Msg("call h.services.ClassService.GetByNameAndGroupWithoutLk")
 	classes, err := h.services.ClassService.GetByNameAndGroupWithoutLk(c.Context(), decodedName, decodedGroup)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
@@ -165,6 +167,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 		}
 
 		for _, member := range *groupMember {
+			h.logger.Debug().Msg("call h.services.GradeService.GetByUserIdAndClassId")
 			grade, _ := h.services.GradeService.GetByUserIdAndClassId(c.Context(), member.ID, (*classes)[i].Id)
 			if grade != nil {
 				(*classes)[i].Grades = append((*classes)[i].Grades, *grade)
@@ -178,6 +181,7 @@ func (h *Handler) GetGradesBySubject(c *fiber.Ctx) error {
 
 	for _, member := range *groupMember {
 		var averageUsersScore entities.UsersScore
+		h.logger.Debug().Msg("call h.services.ScoreService.Get")
 		score, _ := h.services.ScoreService.Get(c.Context(), &entities.Score{UserId: member.ID, SubjectName: decodedName})
 		if score == nil {
 			continue
