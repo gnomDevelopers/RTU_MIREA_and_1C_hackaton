@@ -14,6 +14,13 @@ export default{
     StatusWindow,
     Header,
   },
+  computed:{
+    ...mapStores(useUserInfoStore),
+  },
+  async mounted(){
+    await this.userInfoStore.Authenticate();
+  },
+  },
   computed: {
     ...mapStores(useUserInfoStore),
   },
@@ -22,6 +29,7 @@ export default{
   },
 };
 </script>
+
 <style v-global>
 
 .list-enter-active,

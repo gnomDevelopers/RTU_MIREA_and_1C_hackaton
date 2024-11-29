@@ -3,8 +3,8 @@
 //contants
 
 //api
-export const API = 'http://localhost:8080';
-// export const API = 'https://gnomedeployer.ru/api';
+//export const API = 'http://localhost:8080';
+export const API = 'https://gnomedeployer.ru/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
 
