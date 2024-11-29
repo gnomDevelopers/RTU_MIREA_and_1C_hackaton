@@ -2,7 +2,7 @@ import type { IDataItem, IGradeClassItem, IGroupMemberItem, IUsersScoreItem, IRe
 
 // дополняет пробелы в расписании
 export function transformData(data: IDataItem): IDataItem {
-  const { grade_class, group_member } = data;
+  const { grade_class, group_member, users_score } = data;
   const numMembers = group_member.length;
 
   // Create a map of existing grades for quick access.
@@ -30,11 +30,24 @@ export function transformData(data: IDataItem): IDataItem {
     newGradeClass.push({ ...gradeClass, grades: newGrades });
   });
 
+  const newScoresClass: IUsersScoreItem[] = [];
+  for(let groupMember of group_member){
+    const newScore = { average_score: 0, sum_score: 0, user_id: 0 };
+    for(let item of users_score){
+      if(item.user_id === groupMember.id){
+        newScore.average_score = item.average_score;
+        newScore.sum_score = item.sum_score;
+        newScore.user_id = item.user_id;
+        break;
+      }
+    }
+    newScoresClass.push(newScore);
+  }
 
   return {
     grade_class: newGradeClass,
     group_member: group_member,
-    users_score: data.users_score,
+    users_score: newScoresClass,
   };
 }
 
