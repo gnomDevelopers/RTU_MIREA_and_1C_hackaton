@@ -202,11 +202,11 @@ export default{
     },
     // сортирует по GPA
     sortByGPA(){
-      // this.performancePageStore.groupGrades = this.universityStore.sortByGpa(this.performancePageStore.groupGrades);
+      this.performancePageStore.groupGrades = this.performancePageStore.sortByGpa(this.performancePageStore.groupGrades);
     },
     // сортирует по ФИО студента
     sortByName(){
-      // this.performancePageStore.groupGrades = this.universityStore.sortByName(this.performancePageStore.groupGrades);
+      this.performancePageStore.groupGrades = this.performancePageStore.sortByName(this.performancePageStore.groupGrades);
     },
     // подгружает дисциплины выбранной группы
     loadSelectedGroupDiscipline(groupName: string){
