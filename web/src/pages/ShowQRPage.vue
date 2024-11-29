@@ -26,12 +26,15 @@ export default {
     }, 5000);
 
     this.handleWindowSize();
-    window.addEventListener('resize', this.handleWindowSize());
+    window.addEventListener('resize', this.handleWindowSize);
   },
   methods: {
     handleWindowSize(){
       this.qrSize = Math.min(window.innerWidth, window.innerHeight);
     }
+  },
+  unmounted(){
+    window.removeEventListener('resize', this.handleWindowSize);
   }
 };
 </script>
