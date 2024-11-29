@@ -14,7 +14,15 @@ export default {
   data() {
     return {
       value: 'Test qr code',
+      index: 1,
     }
+  },
+  mounted(){
+
+    setInterval(() => {
+      this.index++;
+      this.value = `token=${this.index}`;
+    }, 5000);
   },
 };
 </script>

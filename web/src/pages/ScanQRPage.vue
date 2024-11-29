@@ -8,21 +8,22 @@
 </template>
 <script lang="ts">
 import { QrcodeStream } from 'vue-qrcode-reader';
+
 export default {
   components: {
     QrcodeStream,
   },
   data(){
     return {
-      decoded: undefined as any,
+      decoded: null as null | string,
       status: 'waiting...',
     }
   },
   methods: {
-    onDecode(decodedString: string){
-      // this.decoded = JSON.parse(decodedString);
-      this.decoded = decodedString;
-      this.status = 'decoded';
+    async onDecode(decodedString: any){
+      this.decoded = decodedString[0].rawValue;
+      console.log(typeof decodedString);
+      console.log('decodedString: ', decodedString);
     },
   }
 };
