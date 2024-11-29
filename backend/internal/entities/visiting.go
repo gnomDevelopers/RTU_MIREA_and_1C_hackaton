@@ -15,13 +15,8 @@ type Visiting struct {
 }
 
 type VisitingInfo struct {
-	ID         int    `json:"id"`
-	ClassID    int    `json:"class_id"`
-	UserID     int    `json:"user_id"`
-	FirstName  string `json:"first_name"`
-	LastName   string `json:"last_name"`
-	FatherName string `json:"father_name"`
-	Type       string `json:"type"`
+	UserID int    `json:"user_id"`
+	Type   string `json:"type"`
 }
 
 type CreateVisitingRequest struct {

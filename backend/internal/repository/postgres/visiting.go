@@ -27,7 +27,7 @@ func (r *VisitingRepository) Exist(ctx context.Context, visiting *entities.Visit
 
 func (r *VisitingRepository) Create(ctx context.Context, visiting *entities.Visiting) (int, error) {
 	if check, _ := r.Exist(ctx, visiting); check == true {
-		return 0, errors.New("grade already exists")
+		return 0, errors.New("visiting already exists")
 	}
 
 	var id int
@@ -62,12 +62,27 @@ func (r *VisitingRepository) Update(ctx context.Context, visiting *entities.Visi
 	return nil
 }
 
-//func GetGroupVisiting(ctx context.Context, classID, groupID int) (*[]entities.Visiting, error) {
-//	query := `
-//		SELECT u.id AS user_id, u.last_name, u.first_name,u.father_name,v.type AS visit_status
-//		FROM visiting v
-//		JOIN users u ON v.user_id = u.id
-//		WHERE v.class_id = $1;
-//	`
-//
-//}
+func (r *VisitingRepository) GetGroupVisiting(ctx context.Context, classID int) (*[]entities.VisitingInfo, error) {
+	query := `
+		SELECT u.id AS user_id, v.type AS visit_status
+		FROM visiting v
+		JOIN users u ON v.user_id = u.id
+		WHERE v.class_id = $1;
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, classID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var visitings []entities.VisitingInfo
+	for rows.Next() {
+		var visiting entities.VisitingInfo
+		if err := rows.Scan(&visiting.UserID, &visiting.Type); err != nil {
+			return nil, err
+		}
+		visitings = append(visitings, visiting)
+	}
+	return &visitings, nil
+}
