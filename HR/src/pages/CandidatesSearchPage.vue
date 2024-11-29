@@ -10,7 +10,7 @@
                 <p class="font-bold md:text-2xl uus:text-xl">{{item.last_name + " " + item.first_name + " " + item.father_name}}</p>
                 <p class="md:text-xl uus:text-base">{{item.speciality}}</p>
                 <div class="flex flex-col">
-                  <button class="sml-btn mb-2 mt-2">Посмотреть</button>
+                  <button class="sml-btn mb-2 mt-2"@click="$router.push({name: 'CandidatesProfilePage'})">Посмотреть</button> <!-- ЛОГИКА ПЕРЕБРОСА НА ПРОФИЛЬ ЧЕЛИКА КОТОРОГО НАЖАЛИ -->
                 </div>
               </div>
             </div>

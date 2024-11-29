@@ -42,6 +42,12 @@ export const router = createRouter({
       component: () => import('../pages/CandidatesResponsesPage.vue'),
       meta: {requiresAuth: false},
     },
+    {
+      path: '/candidatesprofile',
+      name: 'CandidatesProfilePage',
+      component: () => import('../pages/CandidatesProfilePage.vue'),
+      meta: {requiresAuth: false},
+    },
 
   ],
 });
