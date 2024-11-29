@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center scrollable px-4 lg:px-0">
     <div class="flex flex-col w-full lg:w-10/12 items-center gap-y-4 mb-4">
-      <qrcode-vue :size="800" :value="value"></qrcode-vue>
+      <qrcode-vue :size="qrSize" :value="value"></qrcode-vue>
     </div>
   </div>
 </template>
