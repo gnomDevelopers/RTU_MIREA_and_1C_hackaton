@@ -56,7 +56,3 @@ func (s *VisitingService) CheckIn(c context.Context, visiting *entities.Visiting
 	}
 	return nil
 }
-
-//func GetAllClassParticipants(c context.Context, classID int) ([]*entities.ClassParticipant, error) {
-//
-//}

@@ -433,3 +433,30 @@ func (r *ClassRepository) Delete(ctx context.Context, id int) error {
 
 	return nil
 }
+
+func (r *ClassRepository) GetAllParticipants(ctx context.Context, classID int) (*[]entities.ClassParticipant, error) {
+	query := `
+		SELECT u.id, u.first_name, u.last_name, u.father_name, g.name AS group_name
+		FROM users u 
+		JOIN class c ON u.group_id = ANY(c.group_names)
+		JOIN "group" g ON u.group_id = g.id
+		WHERE c.id = $1 
+		ORDER BY g.name, u.last_name, u.first_name, u.father_name;
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, classID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var participants []entities.ClassParticipant
+	for rows.Next() {
+		var participant entities.ClassParticipant
+		if err := rows.Scan(&participant.ID, &participant.FirstName, &participant.LastName, &participant.FatherName, &participant.Group); err != nil {
+			return nil, err
+		}
+		participants = append(participants, participant)
+	}
+	return &participants, nil
+}

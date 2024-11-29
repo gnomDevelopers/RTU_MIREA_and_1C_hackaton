@@ -251,3 +251,14 @@ func (s *ClassService) find(rows [][]string, university string) error {
 
 	return nil
 }
+
+func (s *ClassService) GetAllClassParticipants(c context.Context, classID int) (*[]entities.ClassParticipant, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	res, err := s.repository.GetAllParticipants(ctx, classID)
+	if err != nil {
+		return nil, err
+	}
+	return res, err
+}

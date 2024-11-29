@@ -68,6 +68,7 @@ type ClassRepository interface {
 	SearchNamesWithGroup(context.Context, string) ([]string, error)
 	Update(context.Context, *entities.Class) error
 	Delete(context.Context, int) error
+	GetAllParticipants(context.Context, int) (*[]entities.ClassParticipant, error)
 }
 
 type GroupRepository interface {
