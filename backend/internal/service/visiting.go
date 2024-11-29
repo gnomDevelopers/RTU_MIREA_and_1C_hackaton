@@ -47,19 +47,23 @@ func (s *VisitingService) Add(c context.Context, visitings []entities.Visiting) 
 	return nil
 }
 
-//func (s *VisitingService) Get(c context.Context, classID int) (*[]entities.VisitingInfo, error) {
-//	ctx, cancel := context.WithTimeout(c, s.timeout)
-//	defer cancel()
-//
-//
-//}
-
-func (s *VisitingService) GetByUserIdAndClassId(c context.Context, userID, classID int) (*entities.Visiting, error) {
+func (s *VisitingService) Get(c context.Context, classID int) (*[]entities.VisitingInfo, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	visiting, err := s.repository.GetByUserIdAndClassId(ctx, userID, classID)
-	return visiting, err
+	ok, err := s.repository.ClassExist(ctx, classID)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, nil
+	}
+
+	res, err := s.repository.GetGroupVisiting(ctx, classID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (s *VisitingService) CheckIn(c context.Context, visiting *entities.CheckInRequest) error {
@@ -77,15 +81,4 @@ func (s *VisitingService) CheckIn(c context.Context, visiting *entities.CheckInR
 		return err
 	}
 	return nil
-}
-
-func (s *VisitingService) GetClassVisiting(c context.Context, classID int) (*[]entities.VisitingInfo, error) {
-	ctx, cancel := context.WithTimeout(c, s.timeout)
-	defer cancel()
-
-	visits, err := s.repository.GetGroupVisiting(ctx, classID)
-	if err != nil {
-		return nil, err
-	}
-	return visits, nil
 }

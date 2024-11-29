@@ -75,6 +75,15 @@ definitions:
       work_user_id:
         type: integer
     type: object
+  entities.CheckInRequest:
+    properties:
+      class_id:
+        type: integer
+      id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
   entities.Class:
     properties:
       auditory:
@@ -660,6 +669,17 @@ definitions:
         type: number
       sum_score:
         type: integer
+      user_id:
+        type: integer
+    type: object
+  entities.Visiting:
+    properties:
+      class_id:
+        type: integer
+      id:
+        type: integer
+      type:
+        type: string
       user_id:
         type: integer
     type: object
@@ -1641,6 +1661,76 @@ paths:
       summary: Get class by id
       tags:
       - class
+  /auth/class/visiting:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: List of visiting records
+        in: body
+        name: data
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/entities.Visiting'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Add visiting records for a class
+      tags:
+      - visiting
+  /auth/class/visiting/check-in:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Check-in data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.CheckInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: status ok
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: status bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: status internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Record a check-in for a student
+      tags:
+      - visiting
   /auth/department:
     post:
       consumes:

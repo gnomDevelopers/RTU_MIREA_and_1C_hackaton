@@ -226,7 +226,7 @@ func (h *Handler) GetAllClassParticipants(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid class ID"})
 	}
 
-	res, err := h.services.ClassService.GetAllClassParticipants(c.Context(), id)
+	res, err := h.services.VisitingService.Get(c.Context(), id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
