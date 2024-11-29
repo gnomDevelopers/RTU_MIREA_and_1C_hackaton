@@ -117,10 +117,49 @@ export interface ISubject {
   name: string,
 }
 
-export interface IGroupScores {
-  user: IUserGet,
-  scores: number[],
-  avg: number,
+export interface IGradeClassItem {
+  date: string;
+  grades: { class_id: number; id: number; user_id: number; value: number }[];
+  id: number;
+  name: string;
+  type: string;
+}
+
+export interface IGroupMemberItem {
+  father_name: string;
+  first_name: string;
+  group: string;
+  id: number;
+  last_name: string;
+}
+
+export interface IUsersScoreItem {
+  average_score: number;
+  sum_score: number;
+  user_id: number;
+}
+
+export interface IDataItem {
+  grade_class: IGradeClassItem[];
+  group_member: IGroupMemberItem[];
+  users_score: IUsersScoreItem[];
+}
+
+export interface IReaorganizedGroupScore {
+  first_name: string,
+  last_name: string,
+  father_name: string,
+  id: number,
+  grades: {
+    date: string,
+    class_id: number,
+    id: number,
+    user_id: number,
+    value: number,
+  }[],
+  average_score: number,
+  sum_score: number,
+  user_id: number,
   gpa: number,
 }
 

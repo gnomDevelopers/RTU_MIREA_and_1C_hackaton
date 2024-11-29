@@ -35,9 +35,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in getGroupGrades" :key="item.user.id">
+            <tr v-for="(item, index) in getGroupGrades" :key="item.id">
               <td class="font-semibold h-9">{{ index + 1 }}</td>
-              <td class="max-w-96 h-9 overflow-hidden text-nowrap text-left">{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.father_name }}</td>
+              <td class="max-w-96 h-9 overflow-hidden text-nowrap text-left">{{ item.last_name }} {{ item.first_name }} {{ item.father_name }}</td>
             </tr>
           </tbody>
         </table>
@@ -46,12 +46,12 @@
           <table class="w-auto no-x-border table-decorate">
             <thead>
               <tr>
-                <th v-for="(i, index) in getGroupGrades[0]?.scores" class="w-16 min-w-10 h-9">02.09</th>
+                <th v-for="item in getGroupGrades[0].grades" class="w-16 min-w-10 h-9">{{ item.date.slice(5) }}</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in getGroupGrades">
-                <td v-for="score in item.scores" class="w-16 min-w-10 h-9">{{ (score === 0 ? '' : score) }}</td>
+                <td v-for="score in item.grades" class="w-16 min-w-10 h-9">{{ (score.value === 0 ? '' : score) }}</td>
               </tr>
             </tbody>
           </table>
@@ -70,8 +70,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in getGroupGrades">
-              <td class="font-semibold h-9">{{ item.avg.toFixed(2) }}</td>
+            <tr v-for="item in getGroupGrades">
+              <td class="font-semibold h-9">{{ item.average_score.toFixed(2) }}</td>
               <td class="font-semibold h-9">{{ item.gpa.toFixed(2) }}</td>
             </tr>
           </tbody>
@@ -85,7 +85,7 @@
             <tr>
               <th class="w-10">№</th>
               <th @click="sortByName" class="max-w-96 overflow-hidden text-nowrap cursor-pointer">ФИО</th>
-              <th v-for="(i, index) in getGroupGrades[0].scores">02.09</th>
+              <th v-for="item in getGroupGrades[0].grades">{{ item.date.slice(5) }}</th>
               <th>Ср.балл</th>
               <th>GPA</th>
               <th class=" bg-transparent border-none border-transparent cursor-pointer">
@@ -98,9 +98,9 @@
           <tbody>
             <tr v-for="(item, index) in getGroupGrades">
               <td class="font-semibold">{{ index + 1 }}</td>
-              <td>{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.father_name }}</td>
-              <td v-for="score in item.scores">{{ (score !== 0 ? score : '') }}</td>
-              <td class="font-semibold">{{ item.avg.toFixed(2) }}</td>
+              <td>{{ item.last_name }} {{ item.first_name }} {{ item.father_name }}</td>
+              <td v-for="score in item.grades">{{ (score.value !== 0 ? score.value : '') }}</td>
+              <td class="font-semibold">{{ item.average_score.toFixed(2) }}</td>
               <td class="font-semibold">{{ item.gpa.toFixed(2) }}</td>
             </tr>
           </tbody>
@@ -116,7 +116,7 @@ import { useUserInfoStore } from '@/stores/userInfoStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { usePerformancePageStore } from '@/stores/performancePageStore';
 import { useScheduleStore } from '@/stores/scheduleStore';
-import { type ISearchList, type IItemList, type IUserGet, type IGroupScores } from '@/helpers/constants';
+import { type ISearchList, type IItemList, type IUserGet, type IReaorganizedGroupScore } from '@/helpers/constants';
 
 import SearchList from '@/entities/searchList.vue';
 import IconPerformance from '@/shared/iconPerformance.vue';
@@ -152,11 +152,6 @@ export default{
       }
       console.log('groupsList: ', arr);
       return arr;
-    },
-
-    // возвращает студентов в группе
-    getGroupMembers(){
-      return this.universityStore.groupMembersList;
     },
 
     getGroupGrades(){
@@ -201,11 +196,11 @@ export default{
     },
     // сортирует по GPA
     sortByGPA(){
-      this.performancePageStore.groupGrades = this.universityStore.sortByGpa(this.performancePageStore.groupGrades);
+      // this.performancePageStore.groupGrades = this.universityStore.sortByGpa(this.performancePageStore.groupGrades);
     },
     // сортирует по ФИО студента
     sortByName(){
-      this.performancePageStore.groupGrades = this.universityStore.sortByName(this.performancePageStore.groupGrades);
+      // this.performancePageStore.groupGrades = this.universityStore.sortByName(this.performancePageStore.groupGrades);
     },
     // подгружает дисциплины выбранной группы
     loadSelectedGroupDiscipline(groupName: string){
