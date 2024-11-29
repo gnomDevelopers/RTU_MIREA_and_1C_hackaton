@@ -35,7 +35,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in getGroupMembersScores" :key="item.user.id">
+            <tr v-for="(item, index) in getGroupGrades" :key="item.user.id">
               <td class="font-semibold h-9">{{ index + 1 }}</td>
               <td class="max-w-96 h-9 overflow-hidden text-nowrap text-left">{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.father_name }}</td>
             </tr>
@@ -46,11 +46,11 @@
           <table class="w-auto no-x-border table-decorate">
             <thead>
               <tr>
-                <th v-for="(i, index) in getGroupMembersScores[0]?.scores" class="w-16 min-w-10 h-9">02.09</th>
+                <th v-for="(i, index) in getGroupGrades[0]?.scores" class="w-16 min-w-10 h-9">02.09</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in getGroupMembersScores">
+              <tr v-for="item in getGroupGrades">
                 <td v-for="score in item.scores" class="w-16 min-w-10 h-9">{{ (score === 0 ? '' : score) }}</td>
               </tr>
             </tbody>
@@ -70,7 +70,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in getGroupMembersScores">
+            <tr v-for="(item, index) in getGroupGrades">
               <td class="font-semibold h-9">{{ item.avg.toFixed(2) }}</td>
               <td class="font-semibold h-9">{{ item.gpa.toFixed(2) }}</td>
             </tr>
@@ -85,7 +85,7 @@
             <tr>
               <th class="w-10">№</th>
               <th @click="sortByName" class="max-w-96 overflow-hidden text-nowrap cursor-pointer">ФИО</th>
-              <th v-for="(i, index) in getGroupMembersScores[0].scores">02.09</th>
+              <th v-for="(i, index) in getGroupGrades[0].scores">02.09</th>
               <th>Ср.балл</th>
               <th>GPA</th>
               <th class=" bg-transparent border-none border-transparent cursor-pointer">
@@ -96,7 +96,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in getGroupMembersScores">
+            <tr v-for="(item, index) in getGroupGrades">
               <td class="font-semibold">{{ index + 1 }}</td>
               <td>{{ item.user.last_name }} {{ item.user.first_name }} {{ item.user.father_name }}</td>
               <td v-for="score in item.scores">{{ (score !== 0 ? score : '') }}</td>
@@ -138,12 +138,12 @@ export default{
       tableType: 0 as number, // 0 - таблица для больших экранов (>=756px), 1 - таблица для маленьких экранов (<756px)
       searchFilter: '' as string,
       disciplineList: [] as string[],
-      // API_Disciplines_Group_Get
     }
   },
   computed:{
     ...mapStores(useUserInfoStore, useUniversityStore, usePerformancePageStore, useScheduleStore),
 
+    // возвращает список групп, доступных для поиска
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.scheduleStore.scheduleGroups.length === 0) return arr;
@@ -154,58 +154,99 @@ export default{
       return arr;
     },
 
+    // возвращает студентов в группе
     getGroupMembers(){
       return this.universityStore.groupMembersList;
     },
 
-    getGroupMembersScores(){
-      return this.performancePageStore.groupMembersScores;
+    getGroupGrades(){
+      return this.performancePageStore.groupGrades;
     },
 
+    // возвращает компонент для отрисовки группы
     getListItemComponent(){
       return PerformanceSearchListItem;
     },
+    // возвращает выбранную группу
     getSelectedGroup(){
       return this.performancePageStore.selectedGroup;
     },
+    // проверяет, выбрана ли группа
     isSelectedGroup(){
       return this.performancePageStore.selectedGroup !== null;
     },
+    // проверяет, выбрана ли дисциплина
     isSelectedDiscipline(){
       return this.performancePageStore.selectedDiscipline !== null;
     },
   },
-  mounted() {
+  async mounted() {
+    //загружаем все группы с расписанием
+    await this.scheduleStore.loadScheduleGroups();
+
+    //устанавливаем тип таблицы расписания
     this.setTableType();
     window.addEventListener('resize', this.setTableType);
 
-    this.performancePageStore.selectedGroup = this.userInfoStore.group_name; // автовыбор
+    //превыбираем группу пользователя если у него она есть
+    if(this.userInfoStore.group_name !== '') {
+      this.performancePageStore.selectedGroup = this.userInfoStore.group_name;
 
-    this.disciplineList = [];
-    API_Disciplines_Group_Get()
-    .then((response: any) => {
-      for(let discipline of response.data){
-        this.disciplineList.push(discipline.name);
-      }
-    })
-    .catch(error => {
-      // nothing
-    })
+      //загружаем список дисциплин группы
+      this.loadSelectedGroupDiscipline();
+    }
   },
   methods:{
+    // устанавливает размер группы
     setTableType(){
       if(window.innerWidth < 756) this.tableType = 1;
       else this.tableType = 0;
     },
+    // сортирует по GPA
     sortByGPA(){
-      this.performancePageStore.groupMembersScores = this.universityStore.sortByGpa(this.performancePageStore.groupMembersScores);
+      this.performancePageStore.groupGrades = this.universityStore.sortByGpa(this.performancePageStore.groupGrades);
     },
+    // сортирует по ФИО студента
     sortByName(){
-      this.performancePageStore.groupMembersScores = this.universityStore.sortByName(this.performancePageStore.groupMembersScores);
-    }
+      this.performancePageStore.groupGrades = this.universityStore.sortByName(this.performancePageStore.groupGrades);
+    },
+    // подгружает дисциплины выбранной группы
+    loadSelectedGroupDiscipline(){
+      this.disciplineList = [];
+      API_Disciplines_Group_Get()
+      .then((response: any) => {
+        for(let discipline of response.data){
+          this.disciplineList.push(discipline.name);
+        }
+      })
+      .catch(error => {
+        // nothing
+      });
+    },
+
+    
   },
   unmounted() {
     window.removeEventListener('resize', this.setTableType);
   },
+  watch: {
+    // при смнене дисциплины подгрузить успеваемость
+    'performancePageStore.selectedDiscipline':{
+      async handler(val){
+        if(val !== null){
+          await this.performancePageStore.loadGroupGrades();
+        }
+      }
+    },
+    // при смене группы подгрузить ее дисциплины
+    'performancePageStore.selectedGroup':{
+      handler(val){
+        if(val !== null){
+          this.loadSelectedGroupDiscipline();
+        }
+      }
+    },
+
+  }
 };
 </script>

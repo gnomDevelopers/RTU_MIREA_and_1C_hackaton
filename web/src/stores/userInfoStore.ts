@@ -71,18 +71,20 @@ export const useUserInfoStore = defineStore('userInfo', {
     },
     async onAuthorized(response: any){
       const universityStore = useUniversityStore();
-      this.authorized = true;
-      this.userID = response.data.id;
       
       if(!CHECK_COOKIE_EXIST('acceptCookie') || GET_COOKIE('acceptCookie') === 'true'){
         document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
         document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=strict`;
       }
       
-      if(this.authorized){
-        await this.loadUserData(); // загрузка данных о пользователе
-        await universityStore.loadUniversityInfo(); // загрузка данных об институте
-      }
+      // задаем id пользователя
+      this.userID = response.data.id;
+      // загружаем данные о пользователе
+      await this.loadUserData(); 
+      // загружаем данные об институте
+      await universityStore.loadUniversityInfo();
+      // устанавливаем авторизацию, чтобы роутер перекинул на страницы 
+      this.authorized = true;
     },
   }
 });
