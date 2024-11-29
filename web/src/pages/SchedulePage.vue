@@ -138,9 +138,15 @@ export default {
   async mounted(){
     //загружаем все группы с расписанием
     await this.scheduleStore.loadScheduleGroups();
+    //загружаем всех преподов с расписанием
+    await this.scheduleStore.loadScheduleTeachers();
+    //загружаем все факультативы с расписанием
+    await this.scheduleStore.loadScheduleFacultatives();
+
     //устанавливаем текущую дату
     const today = new Date();
     this.scheduleStore.selectedDate = GET_CORRECT_DATE(today.getDate(), today.getMonth() + 1, today.getFullYear());
+
     //если группа пользователя есть в списке групп с расписанием
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
       // загружаем расписание группы студента
@@ -170,6 +176,13 @@ export default {
     'scheduleStore.selectedSheduleTarget': {
       handler(val){
         console.log('selected: ', val);
+        switch(this.scheduleStore.scheduleTarget){
+          case 0: this.scheduleStore.loadScheduleTableByGroupName(val); break;
+          case 1: this.scheduleStore.loadScheduleTableByTeacherName(val); break;
+          case 2: this.scheduleStore.loadScheduleTableByClassName(val); break;
+        }
+        // загружаем текущее расписание
+        this.scheduleStore.selectScheduleDay(this.scheduleStore.selectedDate);
       }
     }
   }
