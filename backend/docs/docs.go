@@ -1512,7 +1512,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "class"
+                    "visiting"
                 ],
                 "summary": "Get all participants of a specific class",
                 "parameters": [
@@ -1550,59 +1550,6 @@ const docTemplate = `{
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/class/{id}/visiting": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "visiting"
-                ],
-                "summary": "Get visiting information for a specific class",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Class ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.VisitingInfo"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
                         }
                     }
                 }
@@ -5257,17 +5204,6 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "type": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "entities.VisitingInfo": {
-            "type": "object",
-            "properties": {
                 "type": {
                     "type": "string"
                 },
