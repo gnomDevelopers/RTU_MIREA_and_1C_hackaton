@@ -16,6 +16,25 @@ export const useUserInfoStore = defineStore('userInfo', {
       department_id: null as TMaybeNumber, // id 
       //role: -1 as number,
       role: 1 as number,
+
+      // "additional_experience": "string",
+      // "cv_path": "string",
+      // "father_name": "string",
+      // "first_name": "string",
+      // "gpa": 0,
+      // "id": 0,
+      // "last_name": "string",
+      // "phone_number": "string",
+      // "skills": [
+      //   "string"
+      // ],
+      // "speciality": "string",
+      // "telegram": "string",
+      // "university": "string",
+      // "useful_links": [
+      //   "string"
+      // ],
+      // "work_experience": "string"
     }
   },
   actions: {

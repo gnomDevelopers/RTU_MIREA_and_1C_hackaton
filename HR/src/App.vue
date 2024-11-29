@@ -13,7 +13,13 @@ export default{
   components: {
     StatusWindow,
     Header,
-  }
+  },
+  computed: {
+    ...mapStores(useUserInfoStore),
+  },
+  async mounted() {
+    await this.userInfoStore.Authenticate();
+  },
 };
 </script>
 <style v-global>

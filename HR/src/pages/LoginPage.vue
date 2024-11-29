@@ -233,10 +233,11 @@ export default {
     }
   },
   computed:{
-    CandidatesSearchPage() {
-      return CandidatesSearchPage
-    },
     ...mapStores(useStatusWindowStore, useUserInfoStore),
+
+    CandidatesSearchPage() {
+      return CandidatesSearchPage;
+    },
     getFilesList(){
       return this.filesList;
     }
@@ -250,19 +251,24 @@ export default {
     sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+        
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
+        
         API_Login(data)
-            .then(response => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          .then(async (response:any) => {
+            await this.userInfoStore.onAuthorized(response);
 
-              this.currentStep++;
-            })
-            .catch(error => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
-              else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
-            });
+            this.statusWindowStore.deteleStatusWindow(stID);
+            this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+
+            this.currentStep++;
+          })
+          .catch(error => {
+            this.statusWindowStore.deteleStatusWindow(stID);
+
+            if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+            else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+          });
         return;
       }
 
@@ -280,17 +286,20 @@ export default {
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
         API_LoginHR(data)
-            .then(response => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          .then(async (response:any) => {
+            await this.userInfoStore.onAuthorized(response);
 
-              this.$router.push({name:'CandidatesSearchPage'})
-            })
-            .catch(error => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
-              else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
-            });
+            this.statusWindowStore.deteleStatusWindow(stID);
+            this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+
+            this.$router.push({name:'CandidatesSearchPage'});
+          })
+          .catch(error => {
+            this.statusWindowStore.deteleStatusWindow(stID);
+            
+            if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+            else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+          });
         return;
       }
 
