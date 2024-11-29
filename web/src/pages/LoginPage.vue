@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-y-6 w-11/12 mb:w-96  py-5 px-7 rounded-lg login-shadow bg-slate-50 text-gray-900">
       <div class="logo">VUZ+</div>
       <div class="flex flex-col gap-y-5">
-        <loginInput type="text" text="Логин" @input-change="checkLogin"/>
+        <loginInput type="text" text="Почта" @input-change="checkLogin"/>
         <loginInput type="password" text="Пароль" @input-change="checkPassword"/>
         <div class=" text-sm text-sky-500 w-full text-right cursor-pointer">Забыли пароль?</div>
       </div>

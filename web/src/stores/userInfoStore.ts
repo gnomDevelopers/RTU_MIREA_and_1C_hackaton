@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { API_Authenticate, API_UserInfo } from "@/api/api";
-import { type TMaybeNumber, type TMaybeBoolean, type TMaybeString, ROLES_NAME, ROLES, GET_ROLEID_BY_ROLENAME } from "@/helpers/constants";
+import { type TMaybeNumber, type TMaybeBoolean, type TMaybeString, ROLES_NAME, ROLES, GET_ROLEID_BY_ROLENAME, CHECK_COOKIE_EXIST, GET_COOKIE } from "@/helpers/constants";
 import { useUniversityStore } from "./universityStore";
 
 // const universityStore = useUniversityStore();
@@ -24,6 +24,8 @@ export const useUserInfoStore = defineStore('userInfo', {
       isPasswordChanged: true, // сменен ли пароль
 
       group_name: '',
+
+      
     }
   },
   actions: {
@@ -72,8 +74,10 @@ export const useUserInfoStore = defineStore('userInfo', {
       this.authorized = true;
       this.userID = response.data.id;
       
-      document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
-      document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=strict`;
+      if(!CHECK_COOKIE_EXIST('acceptCookie') || GET_COOKIE('acceptCookie') === 'true'){
+        document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=strict`;
+        document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=strict`;
+      }
       
       if(this.authorized){
         await this.loadUserData(); // загрузка данных о пользователе

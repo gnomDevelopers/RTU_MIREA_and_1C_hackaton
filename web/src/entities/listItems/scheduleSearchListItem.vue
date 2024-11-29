@@ -20,7 +20,7 @@ export default {
     ...mapStores(useScheduleStore),
 
     isSelected(){
-      return this.scheduleStore.selectedSheduleGroup === this.data.id;
+      return this.scheduleStore.selectedSheduleTarget === this.data.id;
     }
   },
   methods: {
@@ -28,7 +28,8 @@ export default {
       return `${this.data.surname === undefined ? '' : this.data.surname} ${this.data.name} ${this.data.thirdname === undefined ? '' : this.data.thirdname}`;
     },
     selectThis(){
-      this.scheduleStore.selectedSheduleGroup = this.data.id;
+      this.scheduleStore.selectedSheduleTarget = this.data.id;
+      
     }
   }
 };

@@ -59,7 +59,7 @@
 
       </div>
       <div class="flex flex-col gap-y-4 items-center lg:w-1/2">
-        <ScheduleClassList v-if="scheduleStore.scheduleType === 0 || (scheduleStore.scheduleType === 1 && scheduleStore.selectedSheduleGroup !== null)" :canAddFaculties="scheduleStore.scheduleType === 0"/>
+        <ScheduleClassList v-if="scheduleStore.scheduleType === 0 || (scheduleStore.scheduleType === 1 && scheduleStore.selectedSheduleTarget !== null)" :canAddFaculties="scheduleStore.scheduleType === 0"/>
       </div>
     </div>
   </div>
@@ -141,14 +141,11 @@ export default {
     //устанавливаем текущую дату
     const today = new Date();
     this.scheduleStore.selectedDate = GET_CORRECT_DATE(today.getDate(), today.getMonth() + 1, today.getFullYear());
-    console.log('сегодня: ', this.scheduleStore.selectedDate);
     //если группа пользователя есть в списке групп с расписанием
     if(this.scheduleStore.scheduleGroups.includes(this.userInfoStore.group_name)){
       // загружаем расписание группы студента
-      console.log('загружаем расписание группы')
       await this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
       // загружаем сегодняшнее расписание
-      console.log('выбираем сегодняшнее расписание');
       this.scheduleStore.selectScheduleDay(this.scheduleStore.selectedDate);
     }
     
@@ -156,18 +153,25 @@ export default {
   methods:{
     selectScheduleType(type: number){
       if(type === 0) {
-        this.scheduleStore.selectedSheduleGroup = null;
+        this.scheduleStore.selectedSheduleTarget = null;
         this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
       }
       this.scheduleStore.scheduleType = type;
     },
     selectScheduleTarget(target: number){
-      this.scheduleStore.selectedSheduleGroup = null;
+      this.scheduleStore.selectedSheduleTarget = null;
       this.scheduleStore.scheduleTarget = target;
     },
     selectDay(day: Day){
       this.scheduleStore.selectScheduleDay(GET_CORRECT_DATE(day.day, day.month+1, day.year));
     }
   },
+  watch: {
+    'scheduleStore.selectedSheduleTarget': {
+      handler(val){
+        console.log('selected: ', val);
+      }
+    }
+  }
 };
 </script>

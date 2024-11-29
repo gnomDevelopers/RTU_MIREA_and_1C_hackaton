@@ -1,5 +1,6 @@
 <template>
   <StatusWindow />
+  <AcceptCookie />
   <Header />
   <RouterView />
 </template>
@@ -11,11 +12,13 @@ import { useUniversityStore } from "./stores/universityStore";
 
 import StatusWindow from "./entities/statusWindow.vue";
 import Header from "./entities/header.vue";
+import AcceptCookie from "./widgets/acceptCookie.vue";
 
 export default {
   components: {
     StatusWindow,
     Header,
+    AcceptCookie,
   },
   computed:{
     ...mapStores(useUserInfoStore, useUniversityStore),
