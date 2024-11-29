@@ -15,14 +15,23 @@ export default {
     return {
       value: 'Test qr code',
       index: 1,
+      qrSize: 100,
     }
   },
   mounted(){
 
     setInterval(() => {
       this.index++;
-      this.value = `token=${this.index}`;
+      this.value = `token=AUFHIUAsufH; ${this.index}`;
     }, 5000);
+
+    this.handleWindowSize();
+    window.addEventListener('resize', this.handleWindowSize());
   },
+  methods: {
+    handleWindowSize(){
+      this.qrSize = Math.min(window.innerWidth, window.innerHeight);
+    }
+  }
 };
 </script>
