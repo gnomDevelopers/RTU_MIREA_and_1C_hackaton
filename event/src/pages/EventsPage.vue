@@ -1,47 +1,59 @@
 <template>
-  <div class="scrollable flex h-screen uus:flex-col md:flex-row">
-    <div class="flex flex-col justify-center md:w-1/2 uus:w-full h-auto md:m-10 uus:mt-5">
-      <div class="flex flex-col justify-center">
-        <p class="flex text-3xl m-8 justify-center">Личный кабинет</p>
-        <div class="flex justify-center">
-          <img class="w-48 h-48"  src="../assets/icons/icon-profile.svg">
-        </div>
-        <p class="flex justify-center text-2xl mt-4">Постников Даниил Сергеевич</p>
-        <p class="flex justify-center text-lg mt-4 text-gray-400">postnikov_d_s@vuzplus.ru</p>
-        <p class="flex justify-center text-xl mt-4">ID участника: 7</p>
-      </div>
+  <div class="scrollable flex flex-col justify-center h-auto">
+    <div class=" m-8 flex justify-center w-full h-auto text-3xl">
+    Календарь мероприятий
+    </div> 
+    <!--прогресс бар по месяцам -->
+    <div class="b-someclass">
+      <div class="b-someclass-inner">
+        <input type="radio" name="check" id="check-1" @change="showContainer = 'container1'">
+        <label class="text-xl" for="check-1"><br><br>Июль</label>    
+        
+        <input type="radio" name="check" id="check-2" @change="showContainer = 'container2'">
+        <label class="text-xl" for="check-2"><br><br>Август</label>
+        
+        <input type="radio" name="check" id="check-3" @change="showContainer = 'container3'">
+        <label class="text-xl" for="check-3"><br><br>Сентябрь</label>
+      
+        <input type="radio" name="check" id="check-4" @change="showContainer = 'container4'">
+        <label class="text-xl" for="check-4"><br><br>Октябрь</label>
+        
+        <input type="radio" name="check" id="check-5" @change="showContainer = 'container5'" checked> 
+        <label class="text-xl" for="check-5"><br><br>Ноябрь</label>
+        
+        <input type="radio" name="check" id="check-6" @change="showContainer = 'container6'">
+        <label class="text-xl" for="check-6"><br><br>Декабрь</label>
+    
+        <div class="b-someclass-line"></div>
+      </div>     
     </div>
-    <div class="md:w-1/2 uus:w-full h-auto md:m-10 uus:mt-5">
-      <div class="w-full h-auto border-4 rounded-xl border-ev-color">
-        <div class="md:mt-4 md:ml-10 md:mr-10 md:mb-4 uus:mt-1 uus:ml-3 uus:mr-3 uus:mb-1">
-          <p style="font-weight: bold" class="md:text-2xl uus:text-xl">Специальность</p>
-          <div >
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">Backend-разработчик</p>
-          </div>
-          <p style="font-weight: bold" class="md:text-2xl uus:text-xl">Ключевые навыки</p>
-          <div >
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">Backend-разработка на Go, проектирование REST API, PostgreSQL</p>
-          </div>
-          <p style="font-weight: bold; " class="md:text-2xl uus:text-xl">Опыт работы</p>
-          <div>
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">В течение полугода проходил стажировку по специальности “Backend-разработка на Go” в крупной компании и занимался проектированием REST API</p>
-          </div>
-          <p style="font-weight: bold; " class="md:text-2xl uus:text-xl">Дополнительный опыт</p>
-          <div>
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">Участвовал в хакатоне “РТУ МИРЭА и 1С” и создавал решение кейса ”Система управления образовательным процессом в вузе” в роли Backend-разработчика. Наша команда заняла 1 место.</p>
-          </div>
-          <p style="font-weight: bold; " class="md:text-2xl uus:text-xl">Контакты</p>
-          <div>
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">+7(915)-921-00-00</p>
-          </div>
-          <p style="font-weight: bold; " class="md:text-2xl uus:text-xl">Полезные ссылки</p>
-          <div>
-            <p class="break-words md:text-2xl uus:text-xl" style="margin-bottom: 10px">https://github.com/gnomDeployers</p>
+    <div v-if="showContainer==='container5'" class="flex flex-row w-2/5 h-auto " style="margin:50px">
+      <div class="border-4 rounded-xl border-ev-color">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
+          <div class="flex flex-col">
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <div class="flex flex-col">
+              <button class="sml-btn mb-2 mt-2">Принять</button>
+              <button class="sml-btn">Отказаться</button>
+            </div>
           </div>
         </div>
       </div>
-
-
+      <div class="border-4 rounded-xl border-ev-color">
+        <div class="flex flex-row">
+          <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-company.svg">
+          <div class="flex flex-col">
+            <p class="font-bold md:text-2xl uus:text-xl">1C</p>
+            <p class="md:text-xl uus:text-base">Младший разработчик</p>
+            <div class="flex flex-col">
+              <button class="sml-btn mb-2 mt-2">Принять</button>
+              <button class="sml-btn">Отказаться</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -51,6 +63,11 @@
 import { useUserFormStore } from '@/stores/userFormStore';
 
 export default {
+  data() {
+    return {
+      showContainer: 'container5', 
+    };
+  },
   setup() {
     const userFormStore = useUserFormStore();
     return {
@@ -75,3 +92,90 @@ export default {
   }
 };
 </script>
+<style scoped>
+* {
+  padding: 0;
+  margin: 0;
+}
+.b-someclass {
+  text-align: center;
+}
+.b-someclass-inner {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+}
+.b-someclass-inner:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: calc(100% - 30px);
+  height: 6px;
+  background: #C9C2F4;
+  margin-top: -3px;
+  z-index: 2;
+}
+.b-someclass-inner input {
+  display: none;
+}
+.b-someclass-inner input + label {
+  display: inline-block;
+  vertical-align: top;
+  margin: 35px;
+  width: 50px;
+  height: 50px;
+  background: #C9C2F4;
+  border-radius: 50%;
+  position: relative;
+  z-index: 9;
+}
+.b-someclass-inner input + label:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50%;
+  width: 50%;
+  margin: -25% 0 0 -25%;
+  border-radius: 50%;
+  background: #52026A;
+  transform: scale(0);
+  transition: .25s;
+  transition-delay: .2s;
+}
+.b-someclass-inner input:checked + label:after {
+  background: #52026A;
+  transform: scale(1);
+}
+.b-someclass-line {
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  left: 15px;
+  width: 0;
+  height: 6px;
+  background: #52026A;
+  transition: .35s;
+  z-index: 2;
+  pointer-events: none;
+}
+.b-someclass-inner input:checked + label ~ .b-someclass-line {
+  left: 50px;
+}
+.b-someclass-inner #check-2:checked + label ~ .b-someclass-line {
+  width: calc(100% / 6);
+}
+.b-someclass-inner #check-3:checked + label ~ .b-someclass-line {
+  width: calc(100% / 6 * 2);
+}
+.b-someclass-inner #check-4:checked + label ~ .b-someclass-line {
+  width: calc(100% / 6 * 3);
+}
+.b-someclass-inner #check-5:checked + label ~ .b-someclass-line {
+  width: calc(100% / 6 * 4);
+}
+.b-someclass-inner #check-6:checked + label ~ .b-someclass-line {
+  width: calc(100% / 6 * 5);
+}
+</style>
