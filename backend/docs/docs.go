@@ -2456,7 +2456,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/schedule/group_subjects": {
+        "/auth/schedule/group_subjects/{group}": {
             "get": {
                 "security": [
                     {

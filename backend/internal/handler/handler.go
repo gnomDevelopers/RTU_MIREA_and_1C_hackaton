@@ -71,7 +71,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/schedule/group/:group", h.GetScheduleByGroup)
 	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
 	authGroup.Get("/schedule/optionals/:optionals", h.GetScheduleOptionals)
-	authGroup.Get("/schedule/group_subjects", h.GetGroupSubject)
+	authGroup.Get("/schedule/group_subjects/:group", h.GetGroupSubject)
 
 	authGroup.Delete("/achievement/:id", h.DeleteAchievement)
 	authGroup.Post("/achievement", h.CreateAchievement)
