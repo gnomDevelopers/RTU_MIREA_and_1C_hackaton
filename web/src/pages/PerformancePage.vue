@@ -138,12 +138,12 @@ export default{
       tableType: 0 as number, // 0 - таблица для больших экранов (>=756px), 1 - таблица для маленьких экранов (<756px)
       searchFilter: '' as string,
       disciplineList: [] as string[],
-      // API_Disciplines_Group_Get
     }
   },
   computed:{
     ...mapStores(useUserInfoStore, useUniversityStore, usePerformancePageStore, useScheduleStore),
 
+    // возвращает список групп, доступных для поиска
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
       if(this.scheduleStore.scheduleGroups.length === 0) return arr;
@@ -154,6 +154,7 @@ export default{
       return arr;
     },
 
+    // возвращает студентов в группе
     getGroupMembers(){
       return this.universityStore.groupMembersList;
     },
@@ -162,44 +163,59 @@ export default{
       return this.performancePageStore.groupMembersScores;
     },
 
+    // возвращает компонент для отрисовки группы
     getListItemComponent(){
       return PerformanceSearchListItem;
     },
+    // возвращает выбранную группу
     getSelectedGroup(){
       return this.performancePageStore.selectedGroup;
     },
+    // проверяет, выбрана ли группа
     isSelectedGroup(){
       return this.performancePageStore.selectedGroup !== null;
     },
+    // проверяет, выбрана ли дисциплина
     isSelectedDiscipline(){
       return this.performancePageStore.selectedDiscipline !== null;
     },
   },
-  mounted() {
+  async mounted() {
+    //загружаем все группы с расписанием
+    await this.scheduleStore.loadScheduleGroups();
+
+    //устанавливаем тип таблицы расписания
     this.setTableType();
     window.addEventListener('resize', this.setTableType);
 
-    this.performancePageStore.selectedGroup = this.userInfoStore.group_name; // автовыбор
+    //превыбираем группу пользователя если у него она есть
+    if(this.userInfoStore.group_name !== '') {
+      this.performancePageStore.selectedGroup = this.userInfoStore.group_name;
 
-    this.disciplineList = [];
-    API_Disciplines_Group_Get()
-    .then((response: any) => {
-      for(let discipline of response.data){
-        this.disciplineList.push(discipline.name);
-      }
-    })
-    .catch(error => {
-      // nothing
-    })
+      //загружаем список дисциплин группы
+      this.disciplineList = [];
+      API_Disciplines_Group_Get()
+      .then((response: any) => {
+        for(let discipline of response.data){
+          this.disciplineList.push(discipline.name);
+        }
+      })
+      .catch(error => {
+        // nothing
+      });
+    }
   },
   methods:{
+    // устанавливает размер группы
     setTableType(){
       if(window.innerWidth < 756) this.tableType = 1;
       else this.tableType = 0;
     },
+    // сортирует по GPA
     sortByGPA(){
       this.performancePageStore.groupMembersScores = this.universityStore.sortByGpa(this.performancePageStore.groupMembersScores);
     },
+    // сортирует по ФИО студента
     sortByName(){
       this.performancePageStore.groupMembersScores = this.universityStore.sortByName(this.performancePageStore.groupMembersScores);
     }
@@ -207,5 +223,13 @@ export default{
   unmounted() {
     window.removeEventListener('resize', this.setTableType);
   },
+  watch: {
+    'performancePageStore.selectedDiscipline':{
+      handler(val){
+        console.log('selectedGroup: ', this.performancePageStore.selectedGroup);
+        console.log('selectedDiscipline: ', val);
+      }
+    }
+  }
 };
 </script>

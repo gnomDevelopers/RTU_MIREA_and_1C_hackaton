@@ -149,3 +149,29 @@ func (r *UserRepository) UpdateRole(ctx context.Context, userID int, newRole str
 	}
 	return nil
 }
+
+func (r *UserRepository) GetAllTeachers(ctx context.Context, university string) (*[]entities.User, error) {
+	var users []entities.User
+
+	query := "SELECT password, id, email, last_name, first_name, father_name, university_id, role, faculty_id, department_id, educational_direction FROM users JOIN university ON users.university_id = university.id WHERE role = $1 AND university.name = $2"
+	rows, err := r.db.QueryContext(ctx, query, "Преподаватель")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		user := entities.User{}
+		err := rows.Scan(&user.Password, &user.ID, &user.Email, &user.LastName, &user.FirstName, &user.FatherName, &user.UniversityID, &user.Role, &user.FacultyID, &user.DepartmentID, &user.EducationalDirection)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return &users, nil
+}

@@ -58,3 +58,11 @@ func (s *AcademicDisciplineService) Delete(c context.Context, id int) error {
 	err := s.repository.Delete(ctx, id)
 	return err
 }
+
+func (s *AcademicDisciplineService) GetDisciplinesByGroupName(c context.Context, groupName string) (*[]entities.AcademicDiscipline, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	academicDiscipline, err := s.repository.GetDisciplinesByGroupName(ctx, groupName)
+	return academicDiscipline, err
+}
