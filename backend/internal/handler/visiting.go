@@ -8,15 +8,16 @@ import (
 
 // CheckIn
 // @Tags visiting
-// @Summary      Record a check-in for a student
-// @Accept       json
-// @Produce      json
+// @Summary Record a check-in for a student
+// @Accept json
+// @Produce json
 // @Param data body entities.CheckInRequest true "Check-in data"
 // @Success 200 {object} map[string]interface{} "status ok"
 // @Failure 400 {object} map[string]interface{} "status bad request"
 // @Failure 500 {object} map[string]interface{} "status internal server error"
-// @Router       auth/class/visiting/check-in [post]
+// @Router /auth/class/visiting/check-in [post]
 // @Security ApiKeyAuth
+
 func (h *Handler) CheckIn(c *fiber.Ctx) error {
 	var req entities.CheckInRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -37,8 +38,8 @@ func (h *Handler) CheckIn(c *fiber.Ctx) error {
 // @Produce      json
 // @Param id path int true "Class ID"
 // @Success 200 {object} []entities.VisitingInfo
-// @Failure 400 {object} fiber.Map{"error": string}
-// @Failure 500 {object} fiber.Map{"error": string}
+// @Failure 400 {object} map[string]interface{} "error"
+// @Failure 500 {object} map[string]interface{} "error"
 // @Router       /auth/class/{id}/visiting [get]
 // @Security ApiKeyAuth
 func (h *Handler) GetClassVisiting(c *fiber.Ctx) error {
