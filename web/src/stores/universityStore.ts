@@ -5,7 +5,6 @@ import {
   type IUserGet, 
   type IGroup, 
   type IItemList,
-  type IGroupScores,
   ROLES_NAME,
   GET_ROLEID_BY_ROLENAME,
   type IUniversity,
@@ -31,7 +30,6 @@ export const useUniversityStore = defineStore('university', {
       groupsList: [] as IGroup[],
       facultativesList: [] as IGroup[],
       groupMembersList: [] as IUserGet[],
-      // groupMembersScores: [] as IGroupScores[],
 
       facultiesList: [] as IItemList[],
       deparmentsList: [] as IItemList[],
@@ -196,24 +194,6 @@ export const useUniversityStore = defineStore('university', {
     },
 
     //вынести в константы!
-    sortByName(people: IGroupScores[]): IGroupScores[] {
-      return [...people].sort((a, b) => {
-        const surnameComparison = a.user.last_name.localeCompare(b.user.last_name);
-        if (surnameComparison !== 0) {
-          return surnameComparison;
-        }
-
-        const nameComparison = a.user.first_name.localeCompare(b.user.first_name);
-        if (nameComparison !== 0) {
-          return nameComparison;
-        }
-
-        return a.user.father_name.localeCompare(b.user.father_name);
-      });
-    },
-    sortByGpa(students: IGroupScores[]): IGroupScores[] {
-      return [...students].sort((a, b) => b.gpa - a.gpa);
-    },
     sortPeople(people: IUserGet[]): IUserGet[] {
       return [...people].sort((a, b) => {
         const surnameComparison = a.last_name.localeCompare(b.last_name);

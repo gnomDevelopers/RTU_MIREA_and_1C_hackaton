@@ -28,6 +28,24 @@ export const usePerformancePageStore = defineStore('performancePage', {
       }catch(error){
         this.groupGrades = [];
       }
-    }
+    },
+    // sortByName(people: IGroupScores[]): IGroupScores[] {
+    //   return [...people].sort((a, b) => {
+    //     const surnameComparison = a.user.last_name.localeCompare(b.user.last_name);
+    //     if (surnameComparison !== 0) {
+    //       return surnameComparison;
+    //     }
+
+    //     const nameComparison = a.user.first_name.localeCompare(b.user.first_name);
+    //     if (nameComparison !== 0) {
+    //       return nameComparison;
+    //     }
+
+    //     return a.user.father_name.localeCompare(b.user.father_name);
+    //   });
+    // },
+    // sortByGpa(students: IGroupScores[]): IGroupScores[] {
+    //   return [...students].sort((a, b) => b.gpa - a.gpa);
+    // },
   }
 });
