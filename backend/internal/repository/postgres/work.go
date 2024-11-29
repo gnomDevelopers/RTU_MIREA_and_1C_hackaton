@@ -3,7 +3,9 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/lib/pq"
+	"github.com/rs/zerolog/log"
 	"server/internal/entities"
 )
 
@@ -56,6 +58,8 @@ func (r *WorkRepository) CreateHR(ctx context.Context, hr *entities.HR) error {
 			return err
 		}
 
+	} else {
+		log.Info().Msg(fmt.Sprintf("hr %v already exists", hr))
 	}
 	return nil
 }
@@ -154,27 +158,40 @@ func (r *WorkRepository) GetWorkUserResponses(ctx context.Context, workUserId in
 	return &responses, nil
 }
 
-func (r *WorkRepository) GetHRResponses(ctx context.Context, hrId int) (*[]entities.Response, error) {
-	var responses []entities.Response
-	query := `SELECT id, hr_id, work_user_id FROM response WHERE hr_id = $1`
+func (r *WorkRepository) GetHRResponses(ctx context.Context, hrId int) (*[]entities.CandidateResponse, error) {
+	var responses []entities.CandidateResponse
+	query := `
+        SELECT r.id, r.hr_id, u.id, u.last_name, u.first_name, u.father_name, w.speciality 
+        FROM response AS r
+        JOIN work_user AS w ON r.work_user_id = w.id
+        JOIN users AS u ON w.id = u.id
+        WHERE r.hr_id = $1
+    `
 	rows, err := r.db.QueryContext(ctx, query, hrId)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close() // Закрываем rows после использования
 
 	for rows.Next() {
-		var response entities.Response
-		err = rows.Scan(&response.Id, &response.HRId, &response.WorkUserId)
+		var response entities.CandidateResponse
+
+		err = rows.Scan(&response.Id, &response.HRId, &response.WorkUserId, &response.LastName, &response.FirstName, &response.FatherName, &response.Speciality)
 		if err != nil {
 			return nil, err
 		}
+
 		responses = append(responses, response)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return &responses, nil
 }
 
-func (r *WorkRepository) GetAllWorkUserId(ctx context.Context) (*[]entities.FullWorkUser, error) {
+func (r *WorkRepository) GetAllWorkUser(ctx context.Context) (*[]entities.FullWorkUser, error) {
 	var fullWorkUsers []entities.FullWorkUser
 	query := `SELECT work_user.id, speciality, work_experience, additional_experience, useful_links, phone_number, telegram, skills, last_name, first_name, father_name, university.name, gpa.value FROM work_user JOIN users ON work_user.id = users.id JOIN university ON users.university_id = university.id JOIN gpa ON users.id = gpa.user_id;`
 	rows, err := r.db.QueryContext(ctx, query)

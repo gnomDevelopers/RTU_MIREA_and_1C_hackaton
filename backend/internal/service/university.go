@@ -34,7 +34,8 @@ func (u *UniversityService) Create(c context.Context, request *entities.CreateUn
 	}
 
 	university := &entities.CreateUniversityRequest{
-		Name: request.Name,
+		Name:    request.Name,
+		Postfix: request.Postfix,
 	}
 
 	id, err := u.repository.Create(ctx, university)

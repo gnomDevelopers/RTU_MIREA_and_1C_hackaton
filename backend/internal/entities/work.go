@@ -34,6 +34,26 @@ type Response struct {
 	WorkUserId int `json:"work_user_id"`
 }
 
+type HRResponse struct {
+	Id         int    `json:"id"`
+	HRId       int    `json:"hr_id"`
+	Company    string `json:"company"`
+	LastName   string `json:"last_name"`
+	FirstName  string `json:"first_name"`
+	FatherName string `json:"father_name"`
+	WorkUserId int    `json:"work_user_id"`
+}
+
+type CandidateResponse struct {
+	Id         int    `json:"id"`
+	HRId       int    `json:"hr_id"`
+	WorkUserId int    `json:"work_user_id"`
+	Speciality string `json:"speciality"`
+	LastName   string `json:"last_name"`
+	FirstName  string `json:"first_name"`
+	FatherName string `json:"father_name"`
+}
+
 type CreateResponse struct {
 	HRId       int `json:"hr_id"`
 	WorkUserId int `json:"work_user_id"`

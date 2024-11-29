@@ -160,15 +160,17 @@
               <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-6">
                 Назад
               </button>
-              <button v-if="currentStep == 3 && !formData.agreed" @click="emptyCheck" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn-badd w-full text-slate-100 ">
-                Завершить заполнение
-              </button>
-              <button v-if="currentStep == 3 && formData.agreed" @click="completeForm" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100">
-                Завершить заполнение
+              <button 
+                v-if="currentStep == 3 && formData.agreed" 
+                @click="completeForm" 
+                class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100" 
+                :class="{'btn-badd' : !formData.agreed}">
+                
+                  Завершить заполнение
               </button>
             </div>
           </div>
-          <!--            Форма для HR-->
+          <!--Форма для HR-->
           <div v-if="userType === 'hr'" class="w-full h-full">
             <div class="flex flex-row items-stretch justify-center gap-2">
               <p class="auth-description">Войдите с помощью аккаунта hh.ru</p>
@@ -237,10 +239,11 @@ export default {
     }
   },
   computed:{
+    ...mapStores(useStatusWindowStore, useUserInfoStore, useUserFormStore),
+
     CandidatesSearchPage() {
-      return CandidatesSearchPage
+      return CandidatesSearchPage;
     },
-    ...mapStores(useStatusWindowStore, useUserInfoStore),
     getFilesList(){
       return this.filesList;
     },
@@ -250,26 +253,27 @@ export default {
   },
 
   methods: {
-    emptyCheck(){
-      this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Необходимо принять согласие об обработке!');
-      return;
-    },
     sendLogin(){
       if(this.login.value !== '' && this.password.value !== ''){
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
+        
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
+        
         API_Login(data)
-            .then(response => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          .then(async (response:any) => {
+            await this.userInfoStore.onAuthorized(response);
 
-              this.currentStep++;
-            })
-            .catch(error => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
-              else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
-            });
+            this.statusWindowStore.deteleStatusWindow(stID);
+            this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+
+            this.currentStep++;
+          })
+          .catch(error => {
+            this.statusWindowStore.deteleStatusWindow(stID);
+
+            if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+            else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+          });
         return;
       }
 
@@ -287,17 +291,20 @@ export default {
         const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
         const data:IAPI_Login_Request = { email: this.login.value, password: this.password.value };
         API_LoginHR(data)
-            .then(response => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+          .then(async (response:any) => {
+            await this.userInfoStore.onAuthorized(response);
 
-              this.currentStep++;
-            })
-            .catch(error => {
-              this.statusWindowStore.deteleStatusWindow(stID);
-              if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
-              else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
-            });
+            this.statusWindowStore.deteleStatusWindow(stID);
+            this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
+
+            this.$router.push({name:'CandidatesSearchPage'});
+          })
+          .catch(error => {
+            this.statusWindowStore.deteleStatusWindow(stID);
+
+            if(error.status === 500 || error.status === 400) this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Неверный логин или пароль!');
+            else this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Что-то пошло не так при авторизации!');
+          });
         return;
       }
 
@@ -357,8 +364,15 @@ export default {
       this.filesList = this.filesList.filter((file) => file !== fileDelete);
     },
     completeForm() {
-      const userFormStore = useUserFormStore();
-      userFormStore.setFormData(this.formData);
+      if(!this.formData.agreed){
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, 'Необходимо принять согласие об обработке!');
+        return;
+      }
+
+      this.userFormStore.setFormData(this.formData);
+
+      //API...
+
       this.$router.push({name: 'ProfilePage'});
     },
     nextPage() {

@@ -33,3 +33,9 @@ type CreateVisitingRequest struct {
 type CreateVisitingResponse struct {
 	ID int `json:"id"`
 }
+
+type CheckInRequest struct {
+	ID      int `json:"id"`
+	ClassID int `json:"class_id"`
+	UserID  int `json:"user_id"`
+}

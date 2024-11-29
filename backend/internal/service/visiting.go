@@ -45,3 +45,14 @@ func (s *VisitingService) Update(c context.Context, visiting *entities.Visiting)
 	}
 	return nil
 }
+
+func (s *VisitingService) CheckIn(c context.Context, visiting *entities.Visiting) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	err := s.repository.Update(ctx, visiting)
+	if err != nil {
+		return err
+	}
+	return nil
+}

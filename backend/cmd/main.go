@@ -36,6 +36,10 @@ func main() {
 	if err != nil {
 		log.Fatal().Msg(err.Error())
 	}
+	err = services.WorkService.CreateHR(context.Background())
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
 	handlers := handler.NewHandler(services, log, conf)
 
 	app := handlers.Router()

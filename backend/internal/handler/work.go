@@ -176,7 +176,7 @@ func (h *Handler) ResponseCandidate(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param id path string true "candidate id"
-// @Success 200 {object} entities.CreateUniversityResponse
+// @Success 200 {object} entities.Response
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -206,8 +206,8 @@ func (h *Handler) GetCandidateResponses(c *fiber.Ctx) error {
 // @Summary      Получение всех откликов hr`а
 // @Accept       json
 // @Produce      json
-// @Param id path string true "candidate id"
-// @Success 200 {object} entities.CreateUniversityResponse
+// @Param id path string true "hr id"
+// @Success 200 {object} []entities.CandidateResponse
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
@@ -232,7 +232,7 @@ func (h *Handler) GetHRResponses(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(university)
 }
 
-// GetAllWorkUserId
+// GetAllWorkUser
 // @Tags work
 // @Summary      Получение всех студентов
 // @Accept       json
@@ -243,9 +243,9 @@ func (h *Handler) GetHRResponses(c *fiber.Ctx) error {
 // @Failure 500 {object} entities.ErrorResponse
 // @Router       /auth/work/work_user/all [get]
 // @Security ApiKeyAuth
-func (h *Handler) GetAllWorkUserId(c *fiber.Ctx) error {
+func (h *Handler) GetAllWorkUser(c *fiber.Ctx) error {
 	h.logger.Debug().Msg("call h.services.WorkService.GetHRResponses")
-	workUsers, err := h.services.WorkService.GetAllWorkUserId(c.Context())
+	workUsers, err := h.services.WorkService.GetAllWorkUser(c.Context())
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

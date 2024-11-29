@@ -2,6 +2,8 @@ import axios from "axios";
 import { 
   API, DEVMODE, GET_COOKIE,
   type IAPI_Login_Request,
+  type WorkResponse,
+  type WorkUser,
 } from '../helpers/constants';
 
 
@@ -42,7 +44,7 @@ export function API_Login(data: IAPI_Login_Request){
 //вход в аккаунт ХР
 export function API_LoginHR(data: IAPI_Login_Request){
   return new Promise((resolve, reject) => {
-    axios.post(`${API}/login/hr`, data)
+    axios.post(`${API}/work/login/hr`, data)
         .then(response => {
           if(DEVMODE) console.log('Login post success: ', response);
           resolve(response);
@@ -88,4 +90,40 @@ export function API_UserInfo(userID: number){
   });
 };
 
+//получение всех студентов зареганных в платформе
+export function API_AllWorkUsers(): Promise<WorkUser[]> {
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/work/work_user/all`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if (DEVMODE) console.log('All work users get success: ', response);
+      resolve(response.data as WorkUser[]);
+    })
+    .catch(error => {
+      if (DEVMODE) console.log('All work users get error: ', error);
+      reject(error);
+    });
+  });
+}
 
+//получение всех откликов HR`а
+export function API_HRResponses(id: number): Promise<WorkResponse[]> {
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/work/response/hr/${id}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if (DEVMODE) console.log('All work users get success: ', response);
+      resolve(response.data as WorkResponse[]);
+    })
+    .catch(error => {
+      if (DEVMODE) console.log('All work users get error: ', error);
+      reject(error);
+    });
+  });
+}

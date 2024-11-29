@@ -70,8 +70,21 @@ type GroupMember struct {
 	LastName   string `json:"last_name"`
 	FirstName  string `json:"first_name"`
 	FatherName string `json:"father_name"`
+	Group      string `json:"group"`
 }
 
 type UpdateRoleRequest struct {
 	NewRole string `json:"new_role"`
+}
+
+type ClassParticipant struct {
+	ID         int    `json:"id"`
+	LastName   string `json:"last_name"`
+	FirstName  string `json:"first_name"`
+	FatherName string `json:"father_name"`
+	Group
+}
+
+type GetClassParticipantsRequest struct {
+	ClassID int `json:"class_id"`
 }
