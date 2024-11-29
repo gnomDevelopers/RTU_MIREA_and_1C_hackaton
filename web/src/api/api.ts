@@ -763,3 +763,22 @@ export function API_Grades_Group_Discipline_Get(groupName: string, disciplineNam
   });
 };
 
+//получение gpa студента
+export function API_GPA_Get(userID: number){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/gpa/id/${userID}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('GPA get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('GPA get error: ', error);
+      reject(error);
+    })
+  });
+};
+

@@ -46,7 +46,7 @@
           <table class="w-auto no-x-border table-decorate">
             <thead>
               <tr>
-                <th v-for="item in getGroupGrades[0].grades" class="min-w-10 h-9 text-nowrap max-w-none">{{ item.date.slice(0, 5) }}</th>
+                <th v-for="item in getGroupGrades[0].grades" class="min-w-10 h-9 text-nowrap max-w-none">{{ getCorrectDate(item.date) }}</th>
               </tr>
             </thead>
             <tbody>
@@ -85,7 +85,7 @@
             <tr>
               <th class="w-10">№</th>
               <th @click="sortByName" class="max-w-96 overflow-hidden text-nowrap cursor-pointer">ФИО</th>
-              <th v-for="item in getGroupGrades[0].grades" class=" text-nowrap max-w-none">{{ item.date.slice(0, 5) }}</th>
+              <th v-for="item in getGroupGrades[0].grades" class=" text-nowrap max-w-none">{{ getCorrectDate(item.date) }}</th>
               <th>Ср.балл</th>
               <th>GPA</th>
               <th class=" bg-transparent border-none border-transparent cursor-pointer">
@@ -218,8 +218,10 @@ export default{
         // nothing
       });
     },
-
-    
+    getCorrectDate(oldDate: string){
+      const [month, day, year] = oldDate.split('-');
+      return `${day}.${month}`;
+    },
   },
   unmounted() {
     window.removeEventListener('resize', this.setTableType);
