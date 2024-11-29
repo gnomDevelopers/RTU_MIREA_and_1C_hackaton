@@ -3,8 +3,8 @@
 //contants
 
 //api
-//export const API = 'http://localhost:8080';
-export const API = 'https://gnomedeployer.ru/api';
+export const API = 'http://localhost:8080';
+//export const API = 'https://gnomedeployer.ru/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
 
@@ -84,6 +84,13 @@ export interface WorkUser {
   work_experience: string;
 }
 
+//
+export interface WorkResponse{
+  id: number,
+  hr_id: number,
+  work_user_id: number,
+};
+
 //api interfaces
 
 export interface IAPI_Login_Request{
@@ -97,7 +104,10 @@ export function GET_COOKIE(cookieName: string): string{
   const allCookie = document.cookie.split(';');
   for(let cookie of allCookie){
     let [key, value] = cookie.split('=');
-    if(key === cookieName) return value;
+    key = key.trim();
+    if(key === cookieName)  {
+      return value;
+    }
   }
   return '';
 }

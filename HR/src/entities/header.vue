@@ -20,11 +20,15 @@
     <!--  это для норм размера и вкладки для ХРов-->
     <div v-if="isBigScreen && isCandidatesSearchPage" class="flex flex-row justify-center items-center gap-4 mt-2">
       <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-hr-color rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesSearchPage'})">Поиск кандидатов</button>
-      <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesResponsesPage'})">Отклики кандидатов</button>
+      <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesResponsesPage'})">Откликнутые кандидаты</button>
     </div>
     <div v-if="isBigScreen && isCandidatesResponsesPage" class="flex flex-row justify-center items-center gap-4 mt-2">
       <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesSearchPage'})">Поиск кандидатов</button>
-      <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-hr-color rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesResponsesPage'})">Отклики кандидатов</button>
+      <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-hr-color rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesResponsesPage'})">Откликнутые кандидаты</button>
+    </div>
+    <div v-if="isBigScreen && isCandidatesProfilePage" class="flex flex-row justify-center items-center gap-4 mt-2">
+      <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesSearchPage'})">Поиск кандидатов</button>
+      <button class="box-shadow flex justify-center items-center px-3 mb:px-4 text-xl mb:text-2xl uus:text-base text-color border-2 border-b-gray-600 rounded-lg cursor-pointer transition-bg hover:bg-red-100 active:bg-red-300" @click="$router.push({name: 'CandidatesResponsesPage'})">Откликнутые кандидаты</button>
     </div>
 
     <div class="flex flex-row gap-x-2 justify-center items-center md:mr-16">
@@ -95,6 +99,9 @@ export default {
     },
     isCandidatesResponsesPage(){
       return this.$route.fullPath === '/candidatesresponses';
+    },
+    isCandidatesProfilePage(){
+      return this.$route.fullPath === '/candidatesprofile';
     }
   },
   methods: {

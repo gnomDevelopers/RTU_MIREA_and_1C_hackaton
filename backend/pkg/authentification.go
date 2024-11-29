@@ -22,6 +22,7 @@ func WithJWTAuth(c *fiber.Ctx, signingKey string) error {
 	}
 
 	tokenString := strings.Split(header, " ")
+
 	if len(tokenString) != 2 {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid auth header"})
 	}
