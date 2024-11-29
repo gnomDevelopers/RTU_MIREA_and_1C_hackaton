@@ -1,37 +1,40 @@
 import type { IDataItem, IGradeClassItem, IGroupMemberItem, IUsersScoreItem, IReaorganizedGroupScore } from "./constants";
 
 // дополняет пробелы в расписании
-export function transformData(data: IDataItem): IDataItem {
-  const { grade_class, group_member, users_score } = data;
+export function ensureGradeCount(data: IDataItem): IDataItem {
+  const { grade_class, group_member } = data;
+  const numMembers = group_member.length;
+
+  // Create a map of existing grades for quick access.
+  const existingGrades: { [userId: number]: { class_id: number; id: number; user_id: number; value: number }[] } = {};
+  grade_class.forEach(gc => {
+    gc.grades.forEach(grade => {
+      existingGrades[grade.user_id] = existingGrades[grade.user_id] || [];
+      existingGrades[grade.user_id].push(grade);
+    });
+  });
+
+  // Create a new grade_class array with all grades filled in.
   const newGradeClass: IGradeClassItem[] = [];
-  const newUsersScore: IUsersScoreItem[] = [];
-
-  // Create a map for faster lookup of grades by user ID
-  const gradesByUser: { [userId: number]: { class_id: number; id: number; user_id: number; value: number }[] } = {};
-  grade_class.forEach(item => {
-    item.grades.forEach(grade => {
-      gradesByUser[grade.user_id] = gradesByUser[grade.user_id] || [];
-      gradesByUser[grade.user_id].push(grade);
-    });
+  grade_class.forEach(gradeClass => {
+    const newGrades: { class_id: number; id: number; user_id: number; value: number }[] = [];
+    //Add existing grades for this gradeClass
+    gradeClass.grades.forEach(grade => newGrades.push(grade));
+    //Fill in missing grades with default values.
+    for (let i = 0; i < numMembers; i++) {
+      const userId = group_member[i].id;
+      if (!newGrades.find(g => g.user_id === userId)) {
+        newGrades.push({ class_id: 0, id: 0, user_id: userId, value: 0 });
+      }
+    }
+    newGradeClass.push({ ...gradeClass, grades: newGrades });
   });
 
-  //Iterate over group_members and generate grades and users_score
-  group_member.forEach(member => {
-    const grades = gradesByUser[member.id] || [{ class_id: 0, id: 0, user_id: member.id, value: 0 }]; 
-    newGradeClass.push({
-      ...grade_class[0],
-      grades: grades,
-    });
-
-    // Add user score (or create default if missing)
-    const existingScore = users_score.find(score => score.user_id === member.id);
-    newUsersScore.push(existingScore || { average_score: 0, sum_score: 0, user_id: member.id });
-  });
 
   return {
     grade_class: newGradeClass,
     group_member: group_member,
-    users_score: newUsersScore,
+    users_score: data.users_score,
   };
 }
 
