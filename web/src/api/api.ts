@@ -13,7 +13,8 @@ import {
   type IAPI_University_Create, 
   type IAPI_University_Update, 
   type IUser,
-  type IUserCreate
+  type IUserCreate,
+  type IAPI_Class_Visit_QR
 } from '../helpers/constants';
 
 
@@ -313,6 +314,44 @@ export function API_University_Groups_Schedule_Get(){
   });
 };
 
+//получение преподов из расписания вуза
+export function API_University_Teachers_Schedule_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/teacher`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Teachers for schedule get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Teachers for schedule get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение факультативов из расписания вуза
+export function API_University_Facultatives_Schedule_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/search/name`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Facultatives for schedule get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Facultatives for schedule get error: ', error);
+      reject(error);
+    })
+  });
+};
+
 //получение всех групп вуза
 export function API_University_Groups_Get(universityName: string){
   return new Promise((resolve, reject) => {
@@ -430,7 +469,11 @@ export function API_Schedule_Get_GroupName(groupName: string){
 //получение расписания по имени преподавателя
 export function API_Schedule_Get_TeacherName(teacherName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/schedule/teacher/${teacherName}`)
+    axios.get(`${API}/auth/schedule/teacher/${teacherName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Schedule get by teacherName success: ', response);
       resolve(response);
@@ -445,7 +488,11 @@ export function API_Schedule_Get_TeacherName(teacherName: string){
 //получение расписания по названию предмета
 export function API_Schedule_Get_ClassName(className: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/schedule/name/${className}`)
+    axios.get(`${API}/auth/schedule/optionals/${className}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
     .then(response => {
       if(DEVMODE) console.log('Schedule get by className success: ', response);
       resolve(response);
@@ -654,6 +701,25 @@ export function API_Faculties_Get(universityName: string){
     })
     .catch(error => {
       if(DEVMODE) console.log('Faculties get error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//отмечание на паре через qr код 
+export function API_Class_Visit_QR(data: IAPI_Class_Visit_QR){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/auth/class/visiting/check-in`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Class attendance by qr success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Class attendance by qr error: ', error);
       reject(error);
     })
   });
