@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full items-center scrollable">
-    <div class="flex flex-col gap-y-4 lg:flex-row xl:w-10/12 pt-4 px-2 us:px-0">
+    <div class="flex flex-col gap-y-4 lg:flex-row w-full xl:w-10/12 pt-4 px-2 us:px-0">
 
       <div class="flex flex-col w-full lg:w-1/2 items-center gap-y-4">
         <p class="text-4xl font-medium text-center">Просмотр расписания</p>
@@ -89,10 +89,10 @@ export default {
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
       console.log('universityStore.groupsList: ', this.universityStore.groupsList);
-      if(this.universityStore.groupsList.length === 0) return arr;
+      if(this.scheduleStore.scheduleGroups.length === 0) return arr;
       console.log('grouplist before for');
-      for(let item of <IGroup[]>this.universityStore.groupsList){
-        arr.push({id: item.id, search_field: `${item.name}`, data: item});
+      for(let item of this.scheduleStore.scheduleGroups){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
       console.log('groupsList: ', arr);
       return arr;
@@ -101,10 +101,10 @@ export default {
     teachersSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
       console.log('universityStore.teachersList: ', this.universityStore.teachersList);
-      if(this.universityStore.teachersList.length === 0) return arr;
+      if(this.scheduleStore.scheduleTeachers.length === 0) return arr;
       console.log('teachersList before for');
-      for(let item of <IUserGet[]>this.universityStore.teachersList){
-        arr.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
+      for(let item of this.scheduleStore.scheduleTeachers){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
       console.log('teachersList: ', arr);
       return arr;
@@ -113,10 +113,10 @@ export default {
     facultativesList():ISearchList[]{
       const arr:ISearchList[] = [];
       console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
-      if(this.universityStore.facultativesList.length === 0) return arr;
+      if(this.scheduleStore.scheduleFacultatives.length === 0) return arr;
       console.log('facultativesList before for');
-      for(let item of <IGroup[]>this.universityStore.facultativesList){
-        arr.push({id: item.id, search_field: `${item.name}`, data: item});
+      for(let item of this.scheduleStore.scheduleFacultatives){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
       console.log('facultativesList: ', arr);
       return arr;

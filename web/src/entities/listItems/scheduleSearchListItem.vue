@@ -3,7 +3,7 @@
     @click="selectThis"
     class="p-2 text-lg bg-color-light rounded-xl cursor-pointer transition-colors border border-solid border-transparent hover:border-blue-900"
     :class="{'selected-list-item': isSelected}">
-    {{ getName() }}
+    {{ data.name }}
   </div>
 </template>
 <script lang="ts">
@@ -20,16 +20,12 @@ export default {
     ...mapStores(useScheduleStore),
 
     isSelected(){
-      return this.scheduleStore.selectedSheduleTarget === this.data.id;
+      return this.scheduleStore.selectedSheduleTarget === this.data.name;
     }
   },
   methods: {
-    getName() {
-      return `${this.data.surname === undefined ? '' : this.data.surname} ${this.data.name} ${this.data.thirdname === undefined ? '' : this.data.thirdname}`;
-    },
     selectThis(){
-      this.scheduleStore.selectedSheduleTarget = this.data.id;
-      
+      this.scheduleStore.selectedSheduleTarget = this.data.name;
     }
   }
 };
