@@ -51,7 +51,10 @@
             </thead>
             <tbody>
               <tr v-for="item in getGroupGrades">
-                <td v-for="score in item.grades" class="w-16 min-w-10 h-9">{{ (score.value === 0 ? '' : score) }}</td>
+                <td v-for="score in item.grades" class="w-16 min-w-10 h-9">
+                  {{ (score.value === 0 ? '' : score) }}
+                  <!-- <input @change="addGrade(score.class_id)" class="min-w-5 w-full " type="number" min="0"/> -->
+                </td>
               </tr>
             </tbody>
           </table>
@@ -222,6 +225,10 @@ export default{
       const [month, day, year] = oldDate.split('-');
       return `${day}.${month}`;
     },
+
+    // addGrade(classID: number, mark: number){
+    //   console.log('classID: ', classID, 'mark: ', mark);
+    // }
   },
   unmounted() {
     window.removeEventListener('resize', this.setTableType);
