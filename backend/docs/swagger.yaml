@@ -2250,7 +2250,7 @@ paths:
       summary: Get schedule
       tags:
       - schedule
-  /auth/schedule/group_subjects:
+  /auth/schedule/group_subjects/{group}:
     get:
       consumes:
       - application/json
