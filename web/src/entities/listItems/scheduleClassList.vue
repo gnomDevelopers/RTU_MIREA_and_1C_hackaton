@@ -58,7 +58,8 @@ export default {
     },
 
     getWeekNumber(){
-      return GET_WEEK_DIFFERENCE( GET_DATE_FROM_STRING(this.scheduleStore.startDate), GET_DATE_FROM_STRING(this.scheduleStore.selectedDate));
+      const diff = GET_WEEK_DIFFERENCE( GET_DATE_FROM_STRING(this.scheduleStore.startDate), GET_DATE_FROM_STRING(this.scheduleStore.selectedDate));
+      return (diff < 1 || diff > 16) ? '' : diff;
     }
   },
 };

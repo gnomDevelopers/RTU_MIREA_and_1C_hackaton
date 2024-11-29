@@ -84,11 +84,15 @@ export interface WorkUser {
   work_experience: string;
 }
 
-//
-export interface WorkResponse{
-  id: number,
-  hr_id: number,
-  work_user_id: number,
+// candidate response interface
+export interface CandidateResponse {
+  id: number;
+  hr_id: number;
+  work_user_id: number;
+  speciality: string;
+  last_name: string;
+  first_name: string;
+  father_name: string;
 };
 
 //api interfaces

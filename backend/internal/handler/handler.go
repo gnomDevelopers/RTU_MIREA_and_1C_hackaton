@@ -71,7 +71,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/schedule/group/:group", h.GetScheduleByGroup)
 	authGroup.Get("/schedule/teacher/:teacher", h.GetScheduleByTeacher)
 	authGroup.Get("/schedule/optionals/:optionals", h.GetScheduleOptionals)
-	authGroup.Get("/schedule/group_subjects", h.GetGroupSubject)
+	authGroup.Get("/schedule/group_subjects/:group", h.GetGroupSubject)
 
 	authGroup.Delete("/achievement/:id", h.DeleteAchievement)
 	authGroup.Post("/achievement", h.CreateAchievement)
@@ -132,6 +132,8 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Put("/class", h.UpdateClass)
 	authGroup.Delete("/class/:id", h.DeleteClass)
 	authGroup.Get("/class/:id/participants", h.GetAllClassParticipants)
+	authGroup.Post("/class/visiting", h.AddClassVisiting)
+	authGroup.Post("/class/visiting/check-in", h.CheckIn)
 
 	authGroup.Get("/gpa/id/:id", h.GetGpaByUserId)
 	authGroup.Put("/gpa", h.UpdateGpa)

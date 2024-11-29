@@ -348,24 +348,17 @@ func (h *Handler) ScheduleSearchName(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse
 // @Failure 401 {object} entities.ErrorResponse
 // @Failure 500 {object} entities.ErrorResponse
-// @Router       /auth/schedule/group_subjects [get]
+// @Router       /auth/schedule/group_subjects/{group} [get]
 // @Security ApiKeyAuth
 func (h *Handler) GetGroupSubject(c *fiber.Ctx) error {
-	userId, ok := c.Locals("id").(int)
-	if !ok {
-		return c.SendStatus(fiber.StatusForbidden)
-	}
-	h.logger.Debug().Msg("call h.services.GroupService.GetByUserID")
-	group, err := h.services.GroupService.GetByUserID(c.Context(), userId)
+	groupName := c.Params("group")
+	decodedGroupName, err := url.QueryUnescape(groupName)
 	if err != nil {
-		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
-			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})
-		logEvent.Msg(err.Error())
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid teacher name")
 	}
 
 	h.logger.Debug().Msg("call h.services.ClassService.SearchGroups")
-	names, err := h.services.ClassService.SearchNamesWithGroup(c.Context(), group.Name)
+	names, err := h.services.ClassService.SearchNamesWithGroup(c.Context(), decodedGroupName)
 	if err != nil {
 		logEvent := log.CreateLog(h.logger, log.LogsField{Level: "Error", Method: c.Method(),
 			Url: c.OriginalURL(), Status: fiber.StatusInternalServerError})

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { WEEK_DAYS, type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
-import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName, API_University_Groups_Schedule_Get, API_University_Teachers_Schedule_Get } from "@/api/api";
+import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName, API_University_Facultatives_Schedule_Get, API_University_Groups_Schedule_Get, API_University_Teachers_Schedule_Get } from "@/api/api";
 import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
 
@@ -55,7 +55,7 @@ export const useScheduleStore = defineStore('schedule', {
     },
     async loadScheduleFacultatives(){
       try{
-        const response: any = await API_University_Teachers_Schedule_Get();
+        const response: any = await API_University_Facultatives_Schedule_Get();
         this.scheduleFacultatives = [];
         for(let facultative of response.data){
           this.scheduleFacultatives.push(facultative.name);

@@ -62,10 +62,9 @@ type Achievement interface {
 }
 
 type Visiting interface {
-	Create(context.Context, *entities.Visiting) (int, error)
-	GetByUserIdAndClassId(c context.Context, userID, classID int) (*entities.Visiting, error)
-	Update(context.Context, *entities.Visiting) error
-	GetClassVisiting(context.Context, int) (*[]entities.VisitingInfo, error)
+	Get(c context.Context, classID int) (*[]entities.VisitingInfo, error)
+	CheckIn(c context.Context, visiting *entities.CheckInRequest) error
+	Add(c context.Context, visitings []entities.Visiting) error
 }
 
 type Service struct {

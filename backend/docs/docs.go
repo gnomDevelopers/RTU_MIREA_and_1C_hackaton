@@ -1335,6 +1335,115 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/class/visiting": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "visiting"
+                ],
+                "summary": "Add visiting records for a class",
+                "parameters": [
+                    {
+                        "description": "List of visiting records",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.Visiting"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/class/visiting/check-in": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "visiting"
+                ],
+                "summary": "Record a check-in for a student",
+                "parameters": [
+                    {
+                        "description": "Check-in data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.CheckInRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status ok",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "status bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "status internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/auth/class/{id}": {
             "delete": {
                 "security": [
@@ -1403,7 +1512,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "class"
+                    "visiting"
                 ],
                 "summary": "Get all participants of a specific class",
                 "parameters": [
@@ -1441,59 +1550,6 @@ const docTemplate = `{
                         "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/entities.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/class/{id}/visiting": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "visiting"
-                ],
-                "summary": "Get visiting information for a specific class",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Class ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/entities.VisitingInfo"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
                         }
                     }
                 }
@@ -2456,7 +2512,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/schedule/group_subjects": {
+        "/auth/schedule/group_subjects/{group}": {
             "get": {
                 "security": [
                     {
@@ -4214,6 +4270,20 @@ const docTemplate = `{
                 }
             }
         },
+        "entities.CheckInRequest": {
+            "type": "object",
+            "properties": {
+                "class_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "entities.Class": {
             "type": "object",
             "properties": {
@@ -5125,9 +5195,15 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.VisitingInfo": {
+        "entities.Visiting": {
             "type": "object",
             "properties": {
+                "class_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
                 "type": {
                     "type": "string"
                 },

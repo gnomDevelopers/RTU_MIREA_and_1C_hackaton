@@ -3,7 +3,7 @@
     <div class="scrollable md:w-4/6 h-auto border-r-2 border-gray-200">
       <div class="w-11/12 h-auto m-10 flex flex-col justify-center">
         <div class="grid grid-cols-1 gap-4 mt-6">
-          <div v-for="item in workUsers" class="border-4 border-hr-color rounded-xl p-6">
+          <div v-for="item in filteredWorkUsers" class="border-4 border-hr-color rounded-xl p-6">
             <div class="flex flex-row">
               <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-profile.svg">
               <div class="flex flex-col">
@@ -44,7 +44,7 @@
         <div class="mb-4">
           <label for="gpa" class="block text-gray-700 text-lg font-bold mb-2">GPA:</label>
           <input
-              type="text"
+              type="number"
               id="gpa"
               v-model="filterData.gpa"
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -53,9 +53,8 @@
         </div>
       </div>
       <div class="flex justify-center w-full p-2">
-        <button class=" cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn text-slate-100"> Применить фильтры </button>
+        <button @click="filter" class=" cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn text-slate-100"> Применить фильтры </button>
       </div>
-
     </div>
   </div>
 </template>
@@ -70,10 +69,11 @@ export default {
   data() {
     return {
       workUsers: [] as WorkUser[],
+      filteredWorkUsers: [] as WorkUser [],
       filterData: {
         speciality: "",
         skills: "",
-        gpa: "",
+        gpa: 0,
       } // Массив для хранения студентов
     }
   },
@@ -85,9 +85,19 @@ export default {
       try {
         const response = await API_AllWorkUsers(); // Вызов API
         this.workUsers = response; // Сохранение данных студентов в состоянии компонента
+        this.filteredWorkUsers = this.workUsers;
       } catch (error) {
         console.error('Ошибка при получении студентов:', error);
       }
+    },
+    filter() {
+      this.filteredWorkUsers = this.workUsers.filter(user => {
+        const matchesSpeciality = this.filterData.speciality != "" ? user.speciality.toLowerCase() === this.filterData.speciality.toLowerCase() : true;
+        //const matchesSkills = user.skills.toLowerCase().includes(this.filterData.skills.toLowerCase());
+        const matchesGPA = this.filterData.gpa ? user.gpa >= this.filterData.gpa : true;
+
+        return matchesSpeciality && matchesGPA;
+      });
     }
   }
 }

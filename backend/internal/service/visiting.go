@@ -15,27 +15,58 @@ type VisitingService struct {
 func NewVisitingService(repository repository.VisitingRepository) *VisitingService {
 	return &VisitingService{
 		repository: repository,
-		timeout:    time.Duration(10) * time.Second,
+		timeout:    time.Duration(30) * time.Second,
 	}
 }
 
-func (s *VisitingService) Create(c context.Context, visiting *entities.Visiting) (int, error) {
+func (s *VisitingService) Add(c context.Context, visitings []entities.Visiting) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	id, err := s.repository.Create(ctx, visiting)
-	return id, err
+	v := visitings[0]
+
+	ok, err := s.repository.ClassExist(ctx, v.ClassID)
+	if err != nil {
+		return err
+	}
+	if ok {
+		for _, visiting := range visitings {
+			err := s.repository.Update(ctx, &visiting)
+			if err != nil {
+				continue
+			}
+		}
+	} else {
+		for _, visiting := range visitings {
+			_, err := s.repository.Create(ctx, &visiting)
+			if err != nil {
+				continue
+			}
+		}
+	}
+	return nil
 }
 
-func (s *VisitingService) GetByUserIdAndClassId(c context.Context, userID, classID int) (*entities.Visiting, error) {
+func (s *VisitingService) Get(c context.Context, classID int) (*[]entities.VisitingInfo, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	visiting, err := s.repository.GetByUserIdAndClassId(ctx, userID, classID)
-	return visiting, err
+	ok, err := s.repository.ClassExist(ctx, classID)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, nil
+	}
+
+	res, err := s.repository.GetGroupVisiting(ctx, classID)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
-func (s *VisitingService) Update(c context.Context, visiting *entities.CheckInRequest) error {
+func (s *VisitingService) CheckIn(c context.Context, visiting *entities.CheckInRequest) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -50,26 +81,4 @@ func (s *VisitingService) Update(c context.Context, visiting *entities.CheckInRe
 		return err
 	}
 	return nil
-}
-
-func (s *VisitingService) CheckIn(c context.Context, visiting *entities.Visiting) error {
-	ctx, cancel := context.WithTimeout(c, s.timeout)
-	defer cancel()
-
-	err := s.repository.Update(ctx, visiting)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s *VisitingService) GetClassVisiting(c context.Context, classID int) (*[]entities.VisitingInfo, error) {
-	ctx, cancel := context.WithTimeout(c, s.timeout)
-	defer cancel()
-
-	visits, err := s.repository.GetGroupVisiting(ctx, classID)
-	if err != nil {
-		return nil, err
-	}
-	return visits, nil
 }

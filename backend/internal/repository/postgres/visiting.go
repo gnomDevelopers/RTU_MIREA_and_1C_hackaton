@@ -15,6 +15,16 @@ func NewVisitingRepository(db *sql.DB) *VisitingRepository {
 	return &VisitingRepository{db: db}
 }
 
+func (r *VisitingRepository) ClassExist(ctx context.Context, classID int) (bool, error) {
+	var exists int
+	query := `SELECT 1 FROM visiting WHERE class_id=$1`
+	err := r.db.QueryRowContext(ctx, query, classID).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+	return exists > 0, nil
+}
+
 func (r *VisitingRepository) Exist(ctx context.Context, visiting *entities.Visiting) (bool, error) {
 	var exists int
 	query := `SELECT 1 FROM visiting WHERE user_id = $1 AND class_id=$2`
@@ -40,6 +50,20 @@ func (r *VisitingRepository) Create(ctx context.Context, visiting *entities.Visi
 	return id, nil
 }
 
+func (r *VisitingRepository) Update(ctx context.Context, visiting *entities.Visiting) error {
+	//if check, _ := r.Exist(ctx, visiting); check == true {
+	//	return 0, errors.New("visiting already exists")
+	//}
+
+	query := `UPDATE visiting set type = $1 where user_id = $2 AND class_id = $3`
+
+	_, err := r.db.ExecContext(ctx, query, visiting.Type, visiting.UserID, visiting.ClassID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *VisitingRepository) GetByUserIdAndClassId(ctx context.Context, userID, classID int) (*entities.Visiting, error) {
 	var visiting entities.Visiting
 
@@ -49,17 +73,6 @@ func (r *VisitingRepository) GetByUserIdAndClassId(ctx context.Context, userID, 
 		return nil, err
 	}
 	return &visiting, nil
-}
-
-func (r *VisitingRepository) Update(ctx context.Context, visiting *entities.Visiting) error {
-	query := `
-		UPDATE VISITING SET type = $1 WHERE user_id = $2 AND class_id = $3
-	`
-	_, err := r.db.ExecContext(ctx, query, visiting.Type, visiting.UserID, visiting.ClassID)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func (r *VisitingRepository) GetGroupVisiting(ctx context.Context, classID int) (*[]entities.VisitingInfo, error) {
