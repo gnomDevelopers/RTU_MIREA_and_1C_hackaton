@@ -88,9 +88,7 @@ export default {
 
     groupsSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('universityStore.groupsList: ', this.universityStore.groupsList);
       if(this.scheduleStore.scheduleGroups.length === 0) return arr;
-      console.log('grouplist before for');
       for(let item of this.scheduleStore.scheduleGroups){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
@@ -100,9 +98,7 @@ export default {
 
     teachersSearchList():ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('universityStore.teachersList: ', this.universityStore.teachersList);
       if(this.scheduleStore.scheduleTeachers.length === 0) return arr;
-      console.log('teachersList before for');
       for(let item of this.scheduleStore.scheduleTeachers){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
@@ -112,9 +108,7 @@ export default {
 
     facultativesList():ISearchList[]{
       const arr:ISearchList[] = [];
-      console.log('universityStore.facultativesList: ', this.universityStore.facultativesList);
       if(this.scheduleStore.scheduleFacultatives.length === 0) return arr;
-      console.log('facultativesList before for');
       for(let item of this.scheduleStore.scheduleFacultatives){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
@@ -175,7 +169,6 @@ export default {
   watch: {
     'scheduleStore.selectedSheduleTarget': {
       handler(val){
-        console.log('selected: ', val);
         switch(this.scheduleStore.scheduleTarget){
           case 0: this.scheduleStore.loadScheduleTableByGroupName(val); break;
           case 1: this.scheduleStore.loadScheduleTableByTeacherName(val); break;
