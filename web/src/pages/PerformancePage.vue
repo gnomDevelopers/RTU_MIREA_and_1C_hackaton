@@ -232,10 +232,9 @@ export default{
   watch: {
     // при смнене дисциплины подгрузить успеваемость
     'performancePageStore.selectedDiscipline':{
-      handler(val){
+      async handler(val){
         if(val !== null){
-          console.log('selectedGroup: ', this.performancePageStore.selectedGroup);
-          console.log('selectedDiscipline: ', val);
+          await this.performancePageStore.loadGroupGrades();
         }
       }
     },
