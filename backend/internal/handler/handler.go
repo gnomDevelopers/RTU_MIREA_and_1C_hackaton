@@ -143,7 +143,7 @@ func (h *Handler) Router() *fiber.App {
 	authGroup.Get("/work/profile/id/:id", h.GetByIdWorkUserProfile)
 	authGroup.Get("/work/response/candidate/id/:id", h.GetCandidateResponses)
 	authGroup.Get("/work/response/hr/:id", h.GetHRResponses)
-	authGroup.Get("/work/work_user/all", h.GetAllWorkUserId)
+	authGroup.Get("/work/work_user/all", h.GetAllWorkUser)
 	authGroup.Post("/work/login/hr", h.LoginHR)
 	authGroup.Post("/work/response", h.ResponseCandidate)
 	authGroup.Put("/work/profile", h.UpdateWorkUserProfile)

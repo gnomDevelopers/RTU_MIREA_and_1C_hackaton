@@ -165,7 +165,7 @@ func (s *WorkService) GetWorkUserResponses(c context.Context, workUserId int) (*
 	return responses, err
 }
 
-func (s *WorkService) GetHRResponses(c context.Context, hrId int) (*[]entities.Response, error) {
+func (s *WorkService) GetHRResponses(c context.Context, hrId int) (*[]entities.CandidateResponse, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -173,10 +173,10 @@ func (s *WorkService) GetHRResponses(c context.Context, hrId int) (*[]entities.R
 	return responses, err
 }
 
-func (s *WorkService) GetAllWorkUserId(c context.Context) (*[]entities.FullWorkUser, error) {
+func (s *WorkService) GetAllWorkUser(c context.Context) (*[]entities.FullWorkUser, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	fullWorkUsers, err := s.repository.GetAllWorkUserId(ctx)
+	fullWorkUsers, err := s.repository.GetAllWorkUser(ctx)
 	return fullWorkUsers, err
 }

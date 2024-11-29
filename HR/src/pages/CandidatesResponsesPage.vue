@@ -65,5 +65,35 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+
+<script lang="ts">
+import axios from 'axios';
+import { API_HRResponses } from '@/api/api';
+import type { WorkResponse } from '@/helpers/constants';
+import { mapStores } from 'pinia';
+import { useUserInfoStore } from '@/stores/userInfoStore';
+
+export default {
+
+  data() {
+    return {
+      workResponses: [] as WorkResponse[]
+    }
+  },
+  computed: {...mapStores(useUserInfoStore)},
+  mounted() {
+    this.fetchStudents(); // Вызов функции для получения студентов при монтировании компонента
+  },
+  methods: {
+    async fetchStudents() {
+      try {
+        const response = await API_HRResponses(this.userInfoStore.userID!); // Вызов API
+        this.workResponses = response; // Сохранение данных студентов в состоянии компонента
+      } catch (error) {
+        console.error('Ошибка при получении студентов:', error);
+      }
+    }
+  }
+}
+
 </script>

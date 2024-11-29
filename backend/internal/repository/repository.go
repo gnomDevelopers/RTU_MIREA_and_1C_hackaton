@@ -155,8 +155,8 @@ type WorkRepository interface {
 	UpdateCVPath(context.Context, *entities.UpdateCV) error
 	CreateResponse(context.Context, *entities.Response) error
 	GetWorkUserResponses(context.Context, int) (*[]entities.Response, error)
-	GetHRResponses(context.Context, int) (*[]entities.Response, error)
-	GetAllWorkUserId(context.Context) (*[]entities.FullWorkUser, error)
+	GetHRResponses(context.Context, int) (*[]entities.CandidateResponse, error)
+	GetAllWorkUser(context.Context) (*[]entities.FullWorkUser, error)
 }
 
 type AchievementRepository interface {

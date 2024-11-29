@@ -2,6 +2,7 @@ import axios from "axios";
 import { 
   API, DEVMODE, GET_COOKIE,
   type IAPI_Login_Request,
+  type WorkResponse,
   type WorkUser,
 } from '../helpers/constants';
 
@@ -99,7 +100,26 @@ export function API_AllWorkUsers(): Promise<WorkUser[]> {
     })
     .then(response => {
       if (DEVMODE) console.log('All work users get success: ', response);
-      resolve(response.data as WorkUser[]); // Приведение типа
+      resolve(response.data as WorkUser[]);
+    })
+    .catch(error => {
+      if (DEVMODE) console.log('All work users get error: ', error);
+      reject(error);
+    });
+  });
+}
+
+//получение всех откликов HR`а
+export function API_HRResponses(id: number): Promise<WorkResponse[]> {
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/work/response/hr/${id}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if (DEVMODE) console.log('All work users get success: ', response);
+      resolve(response.data as WorkResponse[]);
     })
     .catch(error => {
       if (DEVMODE) console.log('All work users get error: ', error);

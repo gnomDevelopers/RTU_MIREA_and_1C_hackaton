@@ -3,60 +3,12 @@
     <div class="scrollable md:w-4/6 h-auto border-r-2 border-gray-200">
       <div class="w-11/12 h-auto m-10 flex flex-col justify-center">
         <div class="grid grid-cols-1 gap-4 mt-6">
-          <div class="border-4 border-hr-color rounded-xl p-6">
+          <div v-for="item in workUsers" class="border-4 border-hr-color rounded-xl p-6">
             <div class="flex flex-row">
               <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-profile.svg">
               <div class="flex flex-col">
-                <p class="font-bold md:text-2xl uus:text-xl">Студентов Студент</p>
-                <p class="md:text-xl uus:text-base">Младший разработчик</p>
-                <div class="flex flex-col">
-                  <button class="sml-btn mb-2 mt-2">Посмотреть</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="border-4 border-hr-color rounded-xl p-6">
-            <div class="flex flex-row">
-              <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-profile.svg">
-              <div class="flex flex-col">
-                <p class="font-bold md:text-2xl uus:text-xl">Студентов Студент</p>
-                <p class="md:text-xl uus:text-base">Младший разработчик</p>
-                <div class="flex flex-col">
-                  <button class="sml-btn mb-2 mt-2">Посмотреть</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="border-4 border-hr-color rounded-xl p-6">
-            <div class="flex flex-row">
-              <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-profile.svg">
-              <div class="flex flex-col">
-                <p class="font-bold md:text-2xl uus:text-xl">Студентов Студент</p>
-                <p class="md:text-xl uus:text-base">Младший разработчик</p>
-                <div class="flex flex-col">
-                  <button class="sml-btn mb-2 mt-2">Посмотреть</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="border-4 border-hr-color rounded-xl p-6">
-            <div class="flex flex-row">
-              <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-profile.svg">
-              <div class="flex flex-col">
-                <p class="font-bold md:text-2xl uus:text-xl">Студентов Студент</p>
-                <p class="md:text-xl uus:text-base">Младший разработчик</p>
-                <div class="flex flex-col">
-                  <button class="sml-btn mb-2 mt-2">Посмотреть</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="border-4 border-hr-color rounded-xl p-6">
-            <div class="flex flex-row">
-              <img class="md:max-w-28 md:max-h-28 uus:max-w-24 uus:max-h-24 mr-4" src="../assets/icons/icon-profile.svg">
-              <div class="flex flex-col">
-                <p class="font-bold md:text-2xl uus:text-xl">Студентов Студент</p>
-                <p class="md:text-xl uus:text-base">Младший разработчик</p>
+                <p class="font-bold md:text-2xl uus:text-xl">{{item.last_name + " " + item.first_name + " " + item.father_name}}</p>
+                <p class="md:text-xl uus:text-base">{{item.speciality}}</p>
                 <div class="flex flex-col">
                   <button class="sml-btn mb-2 mt-2">Посмотреть</button>
                 </div>

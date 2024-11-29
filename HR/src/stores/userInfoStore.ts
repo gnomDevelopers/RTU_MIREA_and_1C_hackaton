@@ -6,6 +6,7 @@ import { type TMaybeNumber, type TMaybeBoolean } from "@/helpers/constants";
 export const useUserInfoStore = defineStore('userInfo', {
   state() {
     return{
+      userID: null as TMaybeNumber,
       authorized: null as TMaybeBoolean, // проверка авторизованности
       first_name: '', // имя
       last_name: '', // фамилия
@@ -50,9 +51,7 @@ export const useUserInfoStore = defineStore('userInfo', {
     },
     async onAuthorized(response: any){
       this.authorized = true;
-
-      console.log('Access Token:', response.data.access_token);
-      console.log('Refresh Token:', response.data.refresh_token);
+      this.userID = response.data.id;
       
       document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=lax`;
       document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=lax`;

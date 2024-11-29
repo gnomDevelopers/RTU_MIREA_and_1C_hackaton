@@ -5,7 +5,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/api",
+    "basePath": "/",
     "paths": {
         "/achievement/{id}": {
             "delete": {
