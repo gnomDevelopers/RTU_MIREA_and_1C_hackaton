@@ -15,16 +15,21 @@ type VisitingService struct {
 func NewVisitingService(repository repository.VisitingRepository) *VisitingService {
 	return &VisitingService{
 		repository: repository,
-		timeout:    time.Duration(10) * time.Second,
+		timeout:    time.Duration(30) * time.Second,
 	}
 }
 
-func (s *VisitingService) Create(c context.Context, visiting *entities.Visiting) (int, error) {
+func (s *VisitingService) Create(c context.Context, visitings *[]entities.Visiting) (int, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	id, err := s.repository.Create(ctx, visiting)
-	return id, err
+	for _, visiting := range *visitings {
+		_, err := s.repository.Create(ctx, &visiting)
+		if err != nil {
+			continue
+		}
+	}
+	return len(*visitings), nil
 }
 
 func (s *VisitingService) GetByUserIdAndClassId(c context.Context, userID, classID int) (*entities.Visiting, error) {
