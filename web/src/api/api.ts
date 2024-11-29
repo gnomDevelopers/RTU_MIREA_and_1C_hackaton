@@ -14,7 +14,8 @@ import {
   type IAPI_University_Update, 
   type IUser,
   type IUserCreate,
-  type IAPI_Class_Visit_QR
+  type IAPI_Class_Visit_QR,
+  type IUserCreateWithStringRole
 } from '../helpers/constants';
 
 
@@ -258,7 +259,7 @@ export function API_Campus_Get_University(universityName: string){
 /////// university users ///////
 
 //создание пользователей для вуза
-export function API_University_Users_Create(data: IUserCreate[]){
+export function API_University_Users_Create(data: IUserCreateWithStringRole[]){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/auth/user`, data, {
       headers: {
