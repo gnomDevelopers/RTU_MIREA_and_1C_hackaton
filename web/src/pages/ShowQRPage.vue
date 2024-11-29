@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center scrollable px-4 lg:px-0">
-    <div class="flex flex-col w-full lg:w-10/12 items-center gap-y-4 mb-4">
+    <div class="flex flex-col w-full lg:w-10/12 items-center gap-y-4 mb-4" id="qrContainer">
       <qrcode-vue :size="qrSize" :value="value"></qrcode-vue>
     </div>
   </div>
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     handleWindowSize(){
-      this.qrSize = Math.min(window.innerWidth, window.innerHeight);
+      this.qrSize = Math.min(document.getElementById('qrContainer').offsetHeight,  document.getElementById('qrContainer').offsetWidth) - 20;
     }
   },
   unmounted(){
