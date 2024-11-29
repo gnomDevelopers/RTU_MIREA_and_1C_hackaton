@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center w-full mb:w-auto gap-y-4 bg-color-light rounded-xl p-4">
+  <div class="flex flex-col items-center min-w-full mb:min-w-[500px] gap-y-4 bg-color-light rounded-xl p-4">
     <div class="flex flex-col gap-y-1 w-full items-stretch">
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">{{ getCurrentDate }}, {{ getCurrentWeekDay }}</div>
       <div class="text-center cursor-default text-xl bg-white rounded-lg py-1">{{ getWeekNumber }} неделя</div>
@@ -15,7 +15,7 @@
       </div>
       
     </div>
-    <div v-else class="flex flex-col justify-center items-center w-full mb:w-[500px] h-auto mb:h-[350px]">
+    <div v-else class="flex flex-col justify-center items-center w-full h-auto mb:h-[350px]">
       <div class="flex flex-row gap-x-1 items-center">
         <img class="w-8 h-8" src="../../assets/icons/icon-fire.svg"/>
         <p class="text-xl">В этот день нет пар!</p>
@@ -58,7 +58,8 @@ export default {
     },
 
     getWeekNumber(){
-      return GET_WEEK_DIFFERENCE( GET_DATE_FROM_STRING(this.scheduleStore.startDate), GET_DATE_FROM_STRING(this.scheduleStore.selectedDate));
+      const diff = GET_WEEK_DIFFERENCE( GET_DATE_FROM_STRING(this.scheduleStore.startDate), GET_DATE_FROM_STRING(this.scheduleStore.selectedDate));
+      return (diff < 1 || diff > 16) ? '' : diff;
     }
   },
 };

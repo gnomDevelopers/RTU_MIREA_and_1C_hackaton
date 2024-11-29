@@ -1,6 +1,6 @@
 <template>
   <div class="scrollable md:p-14 uus:p-5">
-    <p class="md:text-3xl uus:text-xl">Входящие предложения</p>
+    <p class="md:text-3xl uus:text-xl">Кандидаты, которым уже был выслан отклик</p>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
       <div v-for="item in candidateResponses" class="border-4 border-hr-color rounded-xl p-6">
         <div class="flex flex-row">

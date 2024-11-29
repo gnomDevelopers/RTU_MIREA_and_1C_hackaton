@@ -172,6 +172,7 @@ type VisitingRepository interface {
 	Create(ctx context.Context, visiting *entities.Visiting) (int, error)
 	GetByUserIdAndClassId(ctx context.Context, userID, classID int) (*entities.Visiting, error)
 	Update(ctx context.Context, visiting *entities.Visiting) error
+	GetGroupVisiting(context.Context, int) (*[]entities.VisitingInfo, error)
 }
 
 type Repository struct {

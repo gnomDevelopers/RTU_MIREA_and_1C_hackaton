@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full h-full bg-color-ultralight scrollable">
-    <div class="flex flex-col justify-evenly items-center gap-y-8 pt-8 md:gap-y-0 md:flex-row md:items-stretch md:pt-16">
+    <div class="flex flex-col justify-evenly items-center gap-y-8 pt-4 md:gap-y-0 md:flex-row md:items-stretch md:pt-16">
       <div class="flex flex-col gap-y-4 md:gap-y-16 items-stretch">
         <p class="text-center text-3xl">Личный Кабинет</p>
         <div class="flex flex-col items-center">
@@ -16,7 +16,7 @@
       </div>
       <div class="flex flex-col gap-y-4 md:gap-y-16 pb-10">
         <p class="text-center text-3xl">Личная информация</p>
-        <div class="flex justify-center items-center p-10 aspect-square rounded-xl bg-color-light profile-shadow">
+        <div class="flex justify-center items-center p-4 aspect-square rounded-xl bg-color-light profile-shadow">
           <div class="p-5 rounded-lg aspect-square lg:w-[400px] bg-white header-shadow">
             <ul class="list-disc markers profile-list">
               <li>Вуз: <span>{{ getUniversity }}</span></li>
@@ -27,6 +27,17 @@
               <li>Направление: <span>{{ getEducationalDirection }}</span></li>
             </ul>
           </div>
+        </div>
+        <div class="flex flex-col justify-center">
+          <p class="text-lg shadow flex flex-row items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border" @click="$refs.downloadLinkAgr.click()">
+            <img class="w-8 h-11" src="../assets/icons/icon-download-file.svg"/>Согласие на обработку персональных данных
+          </p>
+          <a class="hidden" ref="downloadLinkAgr" :href="getDownloadLinkAgr" download></a>
+
+          <p class="text-lg shadow flex flex-row items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border" @click="$refs.downloadLinkPol.click()">
+            <img class="w-8 h-11" src="../assets/icons/icon-download-file.svg"/>Политика обработки персональных данных
+          </p>
+          <a class="hidden" ref="downloadLinkPol" :href="getDownloadLinkPol" download></a>
         </div>
       </div>
     </div>
@@ -42,7 +53,7 @@ export default{
     ...mapStores(useUserInfoStore, useUniversityStore),
 
     getUniversity(){
-      return this.userInfoStore.university;
+      return this.userInfoStore.university === 'null' ? '-' : this.userInfoStore.university;
     },
     getRoleName(){
       if(this.userInfoStore.role === null) return 'none';
@@ -74,6 +85,12 @@ export default{
     getEducationalDirection(){
       if(this.userInfoStore.educationalDirection === 'null') return '-';
       return this.userInfoStore.educationalDirection;
+    },
+    getDownloadLinkAgr() {
+      return new URL('../assets/agreements/Agreement.pdf', import.meta.url).href;
+    },
+    getDownloadLinkPol() {
+      return new URL('../assets/agreements/Policy_VUZ+.pdf', import.meta.url).href;
     },
 
   },

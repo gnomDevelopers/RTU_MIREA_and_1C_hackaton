@@ -114,7 +114,6 @@ export interface IGroup {
 }
 
 export interface ISubject {
-  id: number,
   name: string,
 }
 
@@ -207,6 +206,11 @@ export interface IAPI_University_Update extends IAPI_University_Create{
   id: number,
 };
 
+export interface IAPI_Class_Visit_QR{
+  id: number,
+  classID: number,
+}
+
 //rules
 
 export const ROLES = [0, 1, 2, 3, 4, 5, 6];
@@ -245,11 +249,19 @@ export const INFO_FIELDS_ROLE = [
 
 // functions
 
+export function CHECK_COOKIE_EXIST(cookieName: string): boolean{
+  const allCookie = document.cookie.split(';');
+  for(let cookie of allCookie){
+    if(cookie.split('=')[0].trim() === cookieName) return true;
+  }
+  return false;
+}
+
 export function GET_COOKIE(cookieName: string): string{
   const allCookie = document.cookie.split(';');
   for(let cookie of allCookie){
     let [key, value] = cookie.split('=');
-    if(key === cookieName) return value;
+    if(key.trim() === cookieName) return value;
   }
   return '';
 }

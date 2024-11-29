@@ -6,7 +6,7 @@
         <IconPerformance class="w-20 us:w-36 h-20 us:h-36"/>
       </PageTitle>
 
-      <!-- <div>
+      <div>
         <SearchList 
           title="" 
           placeholder="Введите название группы"
@@ -17,17 +17,12 @@
           Выбранная группа: 
           <span class="underline cursor-pointer">{{ getSelectedGroup }}</span>
         </p>
-      </div> -->
+      </div>
 
       <div v-if="isSelectedGroup" class="flex flex-col p-4 rounded-lg gap-y-4 bg-color-light">
         <p class="text-center text-xl p-1 rounded-lg cursor-default bg-white">Выберите дисциплину</p>
         <div class="flex flex-col gap-y-1">
-          <SubjectItem :data="{id: 1, name: 'Дискретная математика (часть 2/2) [I.24-25]'}"/>
-          <SubjectItem :data="{id: 2, name: 'Иностранный язык (часть 3/4) [I.24-25]'}"/>
-          <SubjectItem :data="{id: 3, name: 'Математический анализ ФД_(часть 3/3) [I.24-25]'}"/>
-          <SubjectItem :data="{id: 4, name: 'Программирование корпоративных систем (часть 1/4) [I.24-25]'}"/>
-          <SubjectItem :data="{id: 5, name: 'Создание программного обеспечения (часть 1/2) [I.24-25]'}"/>
-          <SubjectItem :data="{id: 6, name: 'Технологии индустриального программирования (часть 3/3) [I.24-25]'}"/>
+          <SubjectItem v-for="(item, index) of disciplineList" :data="{name: item}" :index="index + 1"/>
         </div>
       </div>
 
@@ -51,7 +46,7 @@
           <table class="w-auto no-x-border table-decorate">
             <thead>
               <tr>
-                <th v-for="(i, index) in getGroupMembersScores[0]?.scores" class="w-16 min-w-10 h-9">{{ dates[index] }}</th>
+                <th v-for="(i, index) in getGroupMembersScores[0]?.scores" class="w-16 min-w-10 h-9">02.09</th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +85,7 @@
             <tr>
               <th class="w-10">№</th>
               <th @click="sortByName" class="max-w-96 overflow-hidden text-nowrap cursor-pointer">ФИО</th>
-              <th v-for="(i, index) in getGroupMembersScores[0].scores">{{ dates[index] }}</th>
+              <th v-for="(i, index) in getGroupMembersScores[0].scores">02.09</th>
               <th>Ср.балл</th>
               <th>GPA</th>
               <th class=" bg-transparent border-none border-transparent cursor-pointer">
@@ -120,6 +115,7 @@ import { mapStores } from 'pinia';
 import { useUserInfoStore } from '@/stores/userInfoStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { usePerformancePageStore } from '@/stores/performancePageStore';
+import { useScheduleStore } from '@/stores/scheduleStore';
 import { type ISearchList, type IItemList, type IUserGet, type IGroupScores } from '@/helpers/constants';
 
 import SearchList from '@/entities/searchList.vue';
@@ -127,6 +123,7 @@ import IconPerformance from '@/shared/iconPerformance.vue';
 import SubjectItem from '@/shared/subjectItem.vue';
 import PerformanceSearchListItem from '@/entities/listItems/performanceSearchListItem.vue';
 import PageTitle from '@/shared/pageTitle.vue';
+import { API_Disciplines_Group_Get } from '@/api/api';
 
 export default{
   components:{
@@ -140,31 +137,21 @@ export default{
     return{
       tableType: 0 as number, // 0 - таблица для больших экранов (>=756px), 1 - таблица для маленьких экранов (<756px)
       searchFilter: '' as string,
-      groupsSearchList: [] as ISearchList[],
-
-      dates: ['04.09','11.09','18.09','25.09','02.10','09.10','16.10','23.10','30.10','06.11','13.11','20.11','27.11','04.12','11.12','18.12'],
+      disciplineList: [] as string[],
+      // API_Disciplines_Group_Get
     }
   },
   computed:{
-    ...mapStores(useUserInfoStore, useUniversityStore, usePerformancePageStore),
+    ...mapStores(useUserInfoStore, useUniversityStore, usePerformancePageStore, useScheduleStore),
 
-    getListItemComponent(){
-      return PerformanceSearchListItem;
-    },
-
-    isSelectedGroup(){
-      return this.performancePageStore.selectedGroupID !== null;
-    },
-    isSelectedDiscipline(){
-      return this.performancePageStore.selectedDiscipline !== null;
-    },
-
-    getSelectedGroup(){
-      if(this.performancePageStore.selectedGroupID === null) return '';
-      for(let group of this.universityStore.groupsList){
-        if(group.id === this.performancePageStore.selectedGroupID) return group.name;
+    groupsSearchList():ISearchList[]{
+      const arr:ISearchList[] = [];
+      if(this.scheduleStore.scheduleGroups.length === 0) return arr;
+      for(let item of this.scheduleStore.scheduleGroups){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
-      return '';
+      console.log('groupsList: ', arr);
+      return arr;
     },
 
     getGroupMembers(){
@@ -172,14 +159,38 @@ export default{
     },
 
     getGroupMembersScores(){
-      return this.universityStore.groupMembersScores;
-    }
+      return this.performancePageStore.groupMembersScores;
+    },
+
+    getListItemComponent(){
+      return PerformanceSearchListItem;
+    },
+    getSelectedGroup(){
+      return this.performancePageStore.selectedGroup;
+    },
+    isSelectedGroup(){
+      return this.performancePageStore.selectedGroup !== null;
+    },
+    isSelectedDiscipline(){
+      return this.performancePageStore.selectedDiscipline !== null;
+    },
   },
   mounted() {
     this.setTableType();
     window.addEventListener('resize', this.setTableType);
 
-    this.performancePageStore.selectedGroupID = 1; // автовыбор
+    this.performancePageStore.selectedGroup = this.userInfoStore.group_name; // автовыбор
+
+    this.disciplineList = [];
+    API_Disciplines_Group_Get()
+    .then((response: any) => {
+      for(let discipline of response.data){
+        this.disciplineList.push(discipline.name);
+      }
+    })
+    .catch(error => {
+      // nothing
+    })
   },
   methods:{
     setTableType(){
@@ -187,26 +198,14 @@ export default{
       else this.tableType = 0;
     },
     sortByGPA(){
-      this.universityStore.groupMembersScores = this.universityStore.sortByGpa(this.universityStore.groupMembersScores);
+      this.performancePageStore.groupMembersScores = this.universityStore.sortByGpa(this.performancePageStore.groupMembersScores);
     },
     sortByName(){
-      this.universityStore.groupMembersScores = this.universityStore.sortByName(this.universityStore.groupMembersScores);
+      this.performancePageStore.groupMembersScores = this.universityStore.sortByName(this.performancePageStore.groupMembersScores);
     }
   },
   unmounted() {
     window.removeEventListener('resize', this.setTableType);
   },
-  watch: {
-    'universityStore.groupsList' : {
-      handler(val: IUserGet[]){
-        this.groupsSearchList = [];
-        for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  }
 };
 </script>

@@ -10,15 +10,28 @@
         <SertificateItem title="Naimix Hackathon" :place="18">
           <img class="w-full aspect-video" src="../assets/images/naimix.png"/>
         </SertificateItem>
+
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
+
+import { mapStores } from 'pinia';
+import { useUserInfoStore } from '@/stores/userInfoStore';
 import SertificateItem from '@/shared/sertificateItem.vue';
+
 export default {
   components:{
     SertificateItem,
-  }
+  },
+  data(){
+    return {
+      
+    }
+  },
+  async mounted() {
+    
+  },
 };
 </script>

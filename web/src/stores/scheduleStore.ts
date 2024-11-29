@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { WEEK_DAYS, type Day, type IScheduleItem, type ITimeTable, type TMaybeNumber } from "@/helpers/constants";
-import { API_Schedule_Get_GroupName, API_University_Groups_Schedule_Get } from "@/api/api";
+import { API_Schedule_Get_ClassName, API_Schedule_Get_GroupName, API_Schedule_Get_TeacherName, API_University_Facultatives_Schedule_Get, API_University_Groups_Schedule_Get, API_University_Teachers_Schedule_Get } from "@/api/api";
 import { extendTimetable, transformSchedule } from "@/helpers/scheduleParser";
 
 
@@ -15,34 +15,96 @@ export const useScheduleStore = defineStore('schedule', {
       scheduleTableDay: [] as IScheduleItem[], // таблица расписания
 
       //for schedule page
-      selectedSheduleGroup: null as TMaybeNumber,
+      selectedSheduleTarget: null as TMaybeNumber,
       //for attendance page
       selectedClass: null as TMaybeNumber,
 
       scheduleData: [] as ITimeTable[], // расписание на весь семестр
 
       scheduleGroups: [] as string[], // группы для расписания
+      scheduleTeachers: [] as string[], // преподаваатели для расписания
+      scheduleFacultatives: [] as string[], // факультативы для расписания
 
       selectedDate: '',
       startDate: '02.09.2024',
     }
   },
   actions: {
+    // подгружают списки доступных из расписания групп / учителей / факультативов
     async loadScheduleGroups(){
       try{
-        const groups: any = await API_University_Groups_Schedule_Get();
+        const response: any = await API_University_Groups_Schedule_Get();
         this.scheduleGroups = [];
-        for(let group of groups.data){
+        for(let group of response.data){
           this.scheduleGroups.push(group.group);
         }
       } catch(error) {
         this.scheduleGroups = [];
       }
     },
+    async loadScheduleTeachers(){
+      try{
+        const response: any = await API_University_Teachers_Schedule_Get();
+        this.scheduleTeachers = [];
+        for(let teacher of response.data){
+          this.scheduleTeachers.push(teacher.teacher);
+        }
+      }catch(error){
+        this.scheduleTeachers = [];
+      }
+    },
+    async loadScheduleFacultatives(){
+      try{
+        const response: any = await API_University_Facultatives_Schedule_Get();
+        this.scheduleFacultatives = [];
+        for(let facultative of response.data){
+          this.scheduleFacultatives.push(facultative.name);
+        }
+      }catch(error){
+        this.scheduleFacultatives = [];
+      }
+    },
+
+    // подгружают расписание и конвертируют в scheduleData
     async loadScheduleTableByGroupName(groupName: string){
       try{
         const response:any = await API_Schedule_Get_GroupName(groupName);
+        this.convertResponseToScheduleData(response);
+      }catch(error){
         this.scheduleData = [];
+      }
+    },
+    async loadScheduleTableByTeacherName(teacherName: string){
+      try{
+        const response:any = await API_Schedule_Get_TeacherName(teacherName);
+        this.convertResponseToScheduleData(response);
+      }catch(error){
+        this.scheduleData = [];
+      }
+    },
+    async loadScheduleTableByClassName(className: string){
+      try{
+        const response:any = await API_Schedule_Get_ClassName(className);
+        this.convertResponseToScheduleData(response);
+      }catch(error){
+        this.scheduleData = [];
+      }
+    },
+
+
+    selectScheduleDay(day: string){
+      this.selectedDate = day;
+      this.scheduleTableDay = [];
+      for(let item of this.scheduleData){
+        if(item.date === day){
+          this.scheduleTableDay = item.timeTable;
+          break;
+        }
+      }
+    },
+
+    convertResponseToScheduleData(response: any){
+      this.scheduleData = [];
         const res: IScheduleItem[] = [];
 
         for(let item of response.data){
@@ -66,25 +128,6 @@ export const useScheduleStore = defineStore('schedule', {
         this.scheduleData = extendTimetable(transformSchedule(res));
         
         console.log('scheduleData: ', this.scheduleData);
-      }catch(error){
-        this.scheduleData = [];
-      }
-    },
-    loadScheduleTableByTeacherName(teacherName: string){
-
-    },
-    loadScheduleTableByClassName(className: string){
-
-    },
-    selectScheduleDay(day: string){
-      this.selectedDate = day;
-      this.scheduleTableDay = [];
-      for(let item of this.scheduleData){
-        if(item.date === day){
-          this.scheduleTableDay = item.timeTable;
-          break;
-        }
-      }
-    },
+    }
   }
 });
