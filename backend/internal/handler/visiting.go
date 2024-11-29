@@ -24,10 +24,10 @@ func (h *Handler) CheckIn(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	err := h.services.VisitingService.Update(c.Context(), &req)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
+	//err := h.services.VisitingService.Update(c.Context(), &req)
+	//if err != nil {
+	//	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	//}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok"})
 }
 

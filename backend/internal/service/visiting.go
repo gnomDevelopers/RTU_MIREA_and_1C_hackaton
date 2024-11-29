@@ -19,18 +19,40 @@ func NewVisitingService(repository repository.VisitingRepository) *VisitingServi
 	}
 }
 
-func (s *VisitingService) Create(c context.Context, visitings *[]entities.Visiting) (int, error) {
+func (s *VisitingService) Add(c context.Context, visitings []entities.Visiting) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
-	for _, visiting := range *visitings {
-		_, err := s.repository.Create(ctx, &visiting)
-		if err != nil {
-			continue
+	v := visitings[0]
+
+	ok, err := s.repository.ClassExist(ctx, v.ClassID)
+	if err != nil {
+		return err
+	}
+	if ok {
+		for _, visiting := range visitings {
+			err := s.repository.Update(ctx, &visiting)
+			if err != nil {
+				continue
+			}
+		}
+	} else {
+		for _, visiting := range visitings {
+			_, err := s.repository.Create(ctx, &visiting)
+			if err != nil {
+				continue
+			}
 		}
 	}
-	return len(*visitings), nil
+	return nil
 }
+
+//func (s *VisitingService) Get(c context.Context, classID int) (*[]entities.VisitingInfo, error) {
+//	ctx, cancel := context.WithTimeout(c, s.timeout)
+//	defer cancel()
+//
+//
+//}
 
 func (s *VisitingService) GetByUserIdAndClassId(c context.Context, userID, classID int) (*entities.Visiting, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
@@ -40,7 +62,7 @@ func (s *VisitingService) GetByUserIdAndClassId(c context.Context, userID, class
 	return visiting, err
 }
 
-func (s *VisitingService) Update(c context.Context, visiting *entities.CheckInRequest) error {
+func (s *VisitingService) CheckIn(c context.Context, visiting *entities.CheckInRequest) error {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -51,17 +73,6 @@ func (s *VisitingService) Update(c context.Context, visiting *entities.CheckInRe
 		Type:    "+",
 	}
 	err := s.repository.Update(ctx, req)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (s *VisitingService) CheckIn(c context.Context, visiting *entities.Visiting) error {
-	ctx, cancel := context.WithTimeout(c, s.timeout)
-	defer cancel()
-
-	err := s.repository.Update(ctx, visiting)
 	if err != nil {
 		return err
 	}
