@@ -3,7 +3,9 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/lib/pq"
+	"github.com/rs/zerolog/log"
 	"server/internal/entities"
 )
 
@@ -56,6 +58,8 @@ func (r *WorkRepository) CreateHR(ctx context.Context, hr *entities.HR) error {
 			return err
 		}
 
+	} else {
+		log.Info().Msg(fmt.Sprintf("hr %v already exists", hr))
 	}
 	return nil
 }
