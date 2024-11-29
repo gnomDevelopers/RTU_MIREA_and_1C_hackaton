@@ -3,6 +3,7 @@
 //contants
 
 //api
+//export const API = 'http://localhost:8080';
 export const API = 'https://gnomedeployer.ru/api';
 export const DEVMODE = true;
 export const StatusWindowTime = 3000;
@@ -63,6 +64,24 @@ export interface IUser{
   faculty_id: number,
   department_id: number,
   educational_direction: string,
+}
+
+// work user interfaces
+export interface WorkUser {
+  additional_experience: string;
+  cv_path: string;
+  father_name: string;
+  first_name: string;
+  gpa: number;
+  id: number;
+  last_name: string;
+  phone_number: string;
+  skills: string[];
+  speciality: string;
+  telegram: string;
+  university: string;
+  useful_links: string[];
+  work_experience: string;
 }
 
 //api interfaces

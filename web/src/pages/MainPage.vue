@@ -4,9 +4,9 @@
       <div class="text-4xl text-center us:text-left">Здравствуйте, {{ userInfoStore.first_name }} {{ userInfoStore.father_name }}!</div>
       <div class="flex flex-col gap-y-4 pb-4">
 
-        <!-- <MainTableItem @clicked="$router.push({name: 'QRCodeShowPage'})" title="Страница с QR кодом" text="тест">
+        <MainTableItem @clicked="$router.push({name: 'QRCodeShowPage'})" title="Страница с QR кодом" text="тест">
           <IconAccounts/>
-        </MainTableItem> -->
+        </MainTableItem>
 
         <MainTableItem @clicked="$router.push({name: 'QRCodeScanPage'})" title="Отмечание с помощью QR кода" text="Отметьтесь на паре при помощи qr кода">
           <IconAccounts/>

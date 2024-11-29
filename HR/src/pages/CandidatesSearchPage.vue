@@ -109,15 +109,32 @@
 </template>
 
 <script lang="ts">
+import axios from 'axios';
+import { API_AllWorkUsers } from '@/api/api';
+import type { WorkUser } from '@/helpers/constants';
 
 export default {
 
   data() {
-    return{
+    return {
+      workUsers: [] as WorkUser[],
       filterData: {
         speciality: "",
         skills: "",
         gpa: "",
+      } // Массив для хранения студентов
+    }
+  },
+  mounted() {
+    this.fetchStudents(); // Вызов функции для получения студентов при монтировании компонента
+  },
+  methods: {
+    async fetchStudents() {
+      try {
+        const response = await API_AllWorkUsers(); // Вызов API
+        this.workUsers = response; // Сохранение данных студентов в состоянии компонента
+      } catch (error) {
+        console.error('Ошибка при получении студентов:', error);
       }
     }
   }

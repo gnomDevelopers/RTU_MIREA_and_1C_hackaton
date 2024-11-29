@@ -107,7 +107,7 @@ func (r *GroupRepository) GetGroupMembers(ctx context.Context, group string) (*[
 	var members []entities.GroupMember
 	for rows.Next() {
 		var member entities.GroupMember
-		if err := rows.Scan(&member.ID, &member.LastName, &member.FirstName, &member.FatherName); err != nil {
+		if err := rows.Scan(&member.ID, &member.LastName, &member.FirstName, &member.FatherName, &member.Group); err != nil {
 			return nil, err
 		}
 		members = append(members, member)
