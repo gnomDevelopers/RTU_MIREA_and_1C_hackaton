@@ -29,6 +29,7 @@ export const usePerformancePageStore = defineStore('performancePage', {
         this.groupGrades = reorganizeGroupScores( transformedData );
         this.isGroupGradesEmpty = true;
         console.log('reorganized data: ', this.groupGrades);
+        this.isGroupGradesEmpty = false;
         //запросить gpa
       }catch(error){
         this.groupGrades = [{
@@ -48,7 +49,7 @@ export const usePerformancePageStore = defineStore('performancePage', {
           user_id: 0,
           gpa: 0,
         }];
-        this.isGroupGradesEmpty = false;
+        this.isGroupGradesEmpty = true;
       }
     },
     // sortByName(people: IGroupScores[]): IGroupScores[] {
