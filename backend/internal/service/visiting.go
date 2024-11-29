@@ -9,14 +9,12 @@ import (
 
 type VisitingService struct {
 	repository repository.VisitingRepository
-	userRepo   repository.UserRepository
 	timeout    time.Duration
 }
 
-func NewVisitingService(repository repository.VisitingRepository, userRepo repository.UserRepository) *VisitingService {
+func NewVisitingService(repository repository.VisitingRepository) *VisitingService {
 	return &VisitingService{
 		repository: repository,
-		userRepo:   userRepo,
 		timeout:    time.Duration(10) * time.Second,
 	}
 }
