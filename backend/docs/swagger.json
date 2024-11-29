@@ -1381,6 +1381,63 @@
                 }
             }
         },
+        "/auth/class/{id}/participants": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "class"
+                ],
+                "summary": "Get all participants of a specific class",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Class ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of participants",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ClassParticipant"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid class ID",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/department": {
             "post": {
                 "security": [
@@ -4114,6 +4171,26 @@
                 }
             }
         },
+        "entities.ClassParticipant": {
+            "type": "object",
+            "properties": {
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "entities.CreateAcademicDisciplineRequest": {
             "type": "object",
             "properties": {
@@ -4667,6 +4744,9 @@
                     "type": "string"
                 },
                 "first_name": {
+                    "type": "string"
+                },
+                "group": {
                     "type": "string"
                 },
                 "id": {

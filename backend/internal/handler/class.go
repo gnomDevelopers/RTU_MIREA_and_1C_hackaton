@@ -213,7 +213,7 @@ func (h *Handler) DeleteClass(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param id path int true "Class ID"
-// @Success 200 {array} entities.ParticipantResponse "List of participants"
+// @Success 200 {array} entities.ClassParticipant "List of participants"
 // @Failure 400 {object} entities.ErrorResponse "Invalid class ID"
 // @Failure 401 {object} entities.ErrorResponse "Unauthorized"
 // @Failure 500 {object} entities.ErrorResponse "Internal server error"
