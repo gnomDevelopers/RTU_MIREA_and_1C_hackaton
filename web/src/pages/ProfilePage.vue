@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-full h-full bg-color-ultralight scrollable">
-    <div class="flex flex-col justify-evenly items-center gap-y-8 pt-8 md:gap-y-0 md:flex-row md:items-stretch md:pt-16">
+    <div class="flex flex-col justify-evenly items-center gap-y-8 pt-4 md:gap-y-0 md:flex-row md:items-stretch md:pt-16">
       <div class="flex flex-col gap-y-4 md:gap-y-16 items-stretch">
         <p class="text-center text-3xl">Личный Кабинет</p>
         <div class="flex flex-col items-center">
@@ -16,7 +16,7 @@
       </div>
       <div class="flex flex-col gap-y-4 md:gap-y-16 pb-10">
         <p class="text-center text-3xl">Личная информация</p>
-        <div class="flex justify-center items-center p-10 aspect-square rounded-xl bg-color-light profile-shadow">
+        <div class="flex justify-center items-center p-4 aspect-square rounded-xl bg-color-light profile-shadow">
           <div class="p-5 rounded-lg aspect-square lg:w-[400px] bg-white header-shadow">
             <ul class="list-disc markers profile-list">
               <li>Вуз: <span>{{ getUniversity }}</span></li>
