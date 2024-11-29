@@ -108,6 +108,19 @@ export interface IUserCreate extends IUser{
   password: string,
 }
 
+export interface IUserCreateWithStringRole{
+  password: string,
+  department_id: number,
+  educational_direction: string,
+  faculty_id: number,
+  father_name: string,
+  first_name: string,
+  group_id: number,
+  last_name: string,
+  role: string,
+  university_id: number,
+}
+
 export interface IGroup {
   id: number,
   name: string,

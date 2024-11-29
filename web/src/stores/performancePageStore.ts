@@ -31,18 +31,17 @@ export const usePerformancePageStore = defineStore('performancePage', {
 
         console.log('reorganized data: ', this.groupGrades);
         for(let i = 0; i < this.groupGrades.length; i++){
-          API_GPA_Get(this.groupGrades[i].id)
-          .then((response: any) => {
+          try{
+            const response: any = await API_GPA_Get(this.groupGrades[i].id);
             this.groupGrades[i].gpa = Number(response.data.value);
             if(isNaN(this.groupGrades[i].gpa)) this.groupGrades[i].gpa = 0;
-          })
-          .catch(error => {
+          }catch(error){
             this.groupGrades[i].gpa = 0;
-          })
+          }
         }
         console.log('after get gpa: ', this.groupGrades);
 
-        
+
         this.isGroupGradesEmpty = false;
         //запросить gpa
 
@@ -67,23 +66,23 @@ export const usePerformancePageStore = defineStore('performancePage', {
         this.isGroupGradesEmpty = true;
       }
     },
-    // sortByName(people: IGroupScores[]): IGroupScores[] {
-    //   return [...people].sort((a, b) => {
-    //     const surnameComparison = a.user.last_name.localeCompare(b.user.last_name);
-    //     if (surnameComparison !== 0) {
-    //       return surnameComparison;
-    //     }
+    sortByName(people: IReaorganizedGroupScore[]): IReaorganizedGroupScore[] {
+      return [...people].sort((a, b) => {
+        const surnameComparison = a.last_name.localeCompare(b.last_name);
+        if (surnameComparison !== 0) {
+          return surnameComparison;
+        }
 
-    //     const nameComparison = a.user.first_name.localeCompare(b.user.first_name);
-    //     if (nameComparison !== 0) {
-    //       return nameComparison;
-    //     }
+        const nameComparison = a.first_name.localeCompare(b.first_name);
+        if (nameComparison !== 0) {
+          return nameComparison;
+        }
 
-    //     return a.user.father_name.localeCompare(b.user.father_name);
-    //   });
-    // },
-    // sortByGpa(students: IGroupScores[]): IGroupScores[] {
-    //   return [...students].sort((a, b) => b.gpa - a.gpa);
-    // },
+        return a.father_name.localeCompare(b.father_name);
+      });
+    },
+    sortByGpa(students: IReaorganizedGroupScore[]): IReaorganizedGroupScore[] {
+      return [...students].sort((a, b) => b.gpa - a.gpa);
+    },
   }
 });

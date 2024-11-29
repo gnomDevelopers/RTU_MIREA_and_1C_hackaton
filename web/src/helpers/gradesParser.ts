@@ -24,7 +24,7 @@ export function transformData(data: IDataItem): IDataItem {
     for (let i = 0; i < numMembers; i++) {
       const userId = group_member[i].id;
       if (!newGrades.find(g => g.user_id === userId)) {
-        newGrades.push({ class_id: 0, id: 0, user_id: userId, value: 0 });
+        newGrades.push({ class_id: gradeClass.id, id: 0, user_id: userId, value: 0 });
       }
     }
     newGradeClass.push({ ...gradeClass, grades: newGrades });
