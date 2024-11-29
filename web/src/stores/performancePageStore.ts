@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import{ type IGroupAttendance, type IDataItem, type TMaybeNumber, type TMaybeString, type IReaorganizedGroupScore } from "@/helpers/constants";
-import { API_Grades_Group_Discipline_Get } from "@/api/api";
+import { API_GPA_Get, API_Grades_Group_Discipline_Get } from "@/api/api";
 import { reorganizeGroupScores, transformData } from "@/helpers/gradesParser";
 
 export const usePerformancePageStore = defineStore('performancePage', {
@@ -26,11 +26,26 @@ export const usePerformancePageStore = defineStore('performancePage', {
         });
 
         console.log('added empty grades: ', transformedData);
+
         this.groupGrades = reorganizeGroupScores( transformedData );
-        this.isGroupGradesEmpty = true;
+
         console.log('reorganized data: ', this.groupGrades);
+        for(let i = 0; i < this.groupGrades.length; i++){
+          API_GPA_Get(this.groupGrades[i].id)
+          .then((response: any) => {
+            this.groupGrades[i].gpa = Number(response.data.value);
+            if(isNaN(this.groupGrades[i].gpa)) this.groupGrades[i].gpa = 0;
+          })
+          .catch(error => {
+            this.groupGrades[i].gpa = 0;
+          })
+        }
+        console.log('after get gpa: ', this.groupGrades);
+
+        
         this.isGroupGradesEmpty = false;
         //запросить gpa
+
       }catch(error){
         this.groupGrades = [{
           first_name: '',
