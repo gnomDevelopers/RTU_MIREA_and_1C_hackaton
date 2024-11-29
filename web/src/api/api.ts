@@ -724,3 +724,23 @@ export function API_Class_Visit_QR(data: IAPI_Class_Visit_QR){
     })
   });
 };
+
+//получение всех дисциплин группы
+export function API_Disciplines_Group_Get(){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/schedule/group_subjects`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Disciplines get by groupName success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Disciplines get by groupName error: ', error);
+      reject(error);
+    })
+  });
+};
+

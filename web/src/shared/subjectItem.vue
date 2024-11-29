@@ -4,7 +4,7 @@
     class="flex flex-row items-stretch min-h-14 cursor-pointer border-2 border-solid rounded-xl overflow-hidden transition-colors border-transparent hover:border-blue-900"
     :class="{'selected-list-item' : isSelected}">
     <div class="flex flex-col justify-center items-center w-10  bg-color-bold">
-      <p class="text-xl text-color-light">{{ data.id }}</p>
+      <p class="text-xl text-color-light">{{ index }}</p>
     </div>
     <div class="flex flex-col flex-grow justify-center px-2 bg-white ">
       <p class="text-lg">{{ data.name }}</p>
@@ -22,18 +22,22 @@ export default{
     data: {
       type: Object as PropType<ISubject>,
       required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
     }
   },
   computed: {
     ...mapStores(usePerformancePageStore),
 
     isSelected(){
-      return this.performancePageStore.selectedDiscipline === this.data.id;
+      return this.performancePageStore.selectedDiscipline === this.data.name;
     }
   },
   methods: {
     selectDiscipline(){
-      this.performancePageStore.selectedDiscipline = this.data.id;
+      this.performancePageStore.selectedDiscipline = this.data.name;
     }
   }
 };

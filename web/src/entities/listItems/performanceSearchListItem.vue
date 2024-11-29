@@ -11,13 +11,11 @@
 <script lang="ts">
 import { mapStores } from 'pinia';
 import { usePerformancePageStore } from '@/stores/performancePageStore';
-import { type PropType } from 'vue';
-import { type IItemList } from '@/helpers/constants';
 
 export default{
   props:{
     data:{
-      type: Object as PropType<IItemList>,
+      type: Object, // {name: ...}
       required: true,
     }
   },
@@ -25,12 +23,12 @@ export default{
     ...mapStores(usePerformancePageStore),
 
     isSelected(){
-      return this.performancePageStore.selectedGroupID === this.data.id;
+      return this.performancePageStore.selectedGroup === this.data.name;
     }
   },
   methods: {
     selectGroup(){
-      this.performancePageStore.selectedGroupID = this.data.id;
+      this.performancePageStore.selectedGroup = this.data.name;
       this.performancePageStore.selectedDiscipline = null;
     }
   }

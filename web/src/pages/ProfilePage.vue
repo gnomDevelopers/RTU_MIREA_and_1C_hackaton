@@ -53,7 +53,7 @@ export default{
     ...mapStores(useUserInfoStore, useUniversityStore),
 
     getUniversity(){
-      return this.userInfoStore.university;
+      return this.userInfoStore.university === 'null' ? '-' : this.userInfoStore.university;
     },
     getRoleName(){
       if(this.userInfoStore.role === null) return 'none';
