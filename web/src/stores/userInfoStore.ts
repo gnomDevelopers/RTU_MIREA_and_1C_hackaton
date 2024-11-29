@@ -30,7 +30,7 @@ export const useUserInfoStore = defineStore('userInfo', {
     async Authenticate(){
       try{
         const response = await API_Authenticate();
-        this.onAuthorized(response);
+        await this.onAuthorized(response);
 
       }catch (error){
         this.authorized = false;
