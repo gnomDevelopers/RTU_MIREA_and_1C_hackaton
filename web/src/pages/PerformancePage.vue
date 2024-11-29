@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div v-if="tableType === 0 && isSelectedDiscipline" class="flex flex-row self-stretch items-start flex-wrap-0">
+      <div v-if="getGroupGrades !== [] && tableType === 0 && isSelectedDiscipline" class="flex flex-row self-stretch items-start flex-wrap-0">
         <table class="flex-shrink-0 cursor-default table-decorate">
           <thead>
             <tr>
@@ -79,7 +79,7 @@
       </div>
 
       <!--Мобильная версия таблицы-->
-      <div v-if="tableType === 1 && isSelectedDiscipline" class="flex flex-row items-start flex-wrap-0 self-stretch overflow-x-scroll scrollable-table ">
+      <div v-if="getGroupGrades !== [] && tableType === 1 && isSelectedDiscipline" class="flex flex-row items-start flex-wrap-0 self-stretch overflow-x-scroll scrollable-table ">
         <table class="cursor-default table-decorate">
           <thead>
             <tr>
