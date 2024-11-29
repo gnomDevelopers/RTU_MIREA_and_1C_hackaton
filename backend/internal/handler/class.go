@@ -208,7 +208,7 @@ func (h *Handler) DeleteClass(c *fiber.Ctx) error {
 }
 
 // GetAllClassParticipants
-// @Tags class
+// @Tags visiting
 // @Summary      Get all participants of a specific class
 // @Accept       json
 // @Produce      json
