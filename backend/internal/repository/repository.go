@@ -13,6 +13,7 @@ type UserRepository interface {
 	CreateUser(context.Context, *entities.User) (*entities.User, error)
 	GetInfoById(context.Context, int) (*entities.UserInfo, error)
 	UpdateRole(context.Context, int, string) error
+	GetAllTeachers(context.Context, string) (*[]entities.User, error)
 }
 
 //type UserDataRepository interface {
@@ -135,6 +136,7 @@ type AcademicDisciplineRepository interface {
 	GetByEducationalDirectionAndName(context.Context, string, string) (*entities.AcademicDiscipline, error)
 	Update(context.Context, *entities.AcademicDiscipline) error
 	Delete(context.Context, int) error
+	GetDisciplinesByGroupName(context.Context, string) (*[]entities.AcademicDiscipline, error)
 }
 
 type GpaRepository interface {

@@ -3656,7 +3656,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityResponse"
+                            "$ref": "#/definitions/entities.Response"
                         }
                     },
                     "400": {
@@ -3700,7 +3700,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "candidate id",
+                        "description": "hr id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -3710,7 +3710,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.CreateUniversityResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.CandidateResponse"
+                            }
                         }
                     },
                     "400": {
@@ -4129,6 +4132,32 @@ const docTemplate = `{
                 },
                 "university": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.CandidateResponse": {
+            "type": "object",
+            "properties": {
+                "father_name": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "hr_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "speciality": {
+                    "type": "string"
+                },
+                "work_user_id": {
+                    "type": "integer"
                 }
             }
         },
@@ -4795,6 +4824,20 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.Response": {
+            "type": "object",
+            "properties": {
+                "hr_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "work_user_id": {
+                    "type": "integer"
                 }
             }
         },

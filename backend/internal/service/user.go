@@ -245,3 +245,14 @@ func (s *UserService) UpdateRole(c context.Context, userID int, newRole string) 
 	}
 	return nil
 }
+
+func (s *UserService) GetAllTeachers(c context.Context, university string) (*[]entities.User, error) {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	users, err := s.repository.GetAllTeachers(ctx, university)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
