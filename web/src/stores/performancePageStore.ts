@@ -10,6 +10,7 @@ export const usePerformancePageStore = defineStore('performancePage', {
       selectedDiscipline: null as TMaybeString,
 
       groupGrades: [] as IReaorganizedGroupScore[],
+      isGroupGradesEmpty: true,
     }
   },
   actions: {
@@ -18,15 +19,32 @@ export const usePerformancePageStore = defineStore('performancePage', {
         if(this.selectedGroup === null || this.selectedDiscipline === null) return;
         const response: any = API_Grades_Group_Discipline_Get(this.selectedGroup, this.selectedDiscipline);
 
-        this.groupGrades = [];
 
         const transformedData: IDataItem = transformData(response.data);
         console.log('added empty grades: ', transformedData);
         this.groupGrades = reorganizeGroupScores( transformedData );
+        this.isGroupGradesEmpty = true;
         console.log('reorganized data: ', this.groupGrades);
         //запросить gpa
       }catch(error){
-        this.groupGrades = [];
+        this.groupGrades = [{
+          first_name: '',
+          last_name: '',
+          father_name: '',
+          id: 0,
+          grades: [{
+              date: '',
+              class_id: 0,
+              id: 0,
+              user_id: 0,
+              value: 0,
+          }],
+          average_score: 0,
+          sum_score: 0,
+          user_id: 0,
+          gpa: 0,
+        }];
+        this.isGroupGradesEmpty = false;
       }
     },
     // sortByName(people: IGroupScores[]): IGroupScores[] {
