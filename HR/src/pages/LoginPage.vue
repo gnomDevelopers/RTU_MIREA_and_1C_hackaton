@@ -284,7 +284,7 @@ export default {
               this.statusWindowStore.deteleStatusWindow(stID);
               this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Авторизация успешна!');
 
-              this.currentStep++;
+              this.$router.push({name:'CandidatesSearchPage'})
             })
             .catch(error => {
               this.statusWindowStore.deteleStatusWindow(stID);

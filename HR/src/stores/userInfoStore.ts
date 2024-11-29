@@ -22,11 +22,21 @@ export const useUserInfoStore = defineStore('userInfo', {
     async Authenticate(){
       try{
         const response:any = await API_Authenticate();
+        await this.onAuthorized(response);
         if(response.data.authorized !== undefined) this.authorized = response.data.authorized;
         else this.authorized = false;
       }catch (error){
         this.authorized = false;
       }
+    },
+    async onAuthorized(response: any){
+      this.authorized = true;
+
+      console.log('Access Token:', response.data.access_token);
+      console.log('Refresh Token:', response.data.refresh_token);
+      
+      document.cookie = `access_token=${response.data.access_token}; max-age=${60 * 60 * 2}; secure; samesite=lax`;
+      document.cookie = `refresh_token=${response.data.refresh_token}; max-age=${60 * 60 * 6}; secure; samesite=lax`;
     }
   }
 });
