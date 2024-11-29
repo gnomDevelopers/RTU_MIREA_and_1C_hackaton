@@ -2,7 +2,7 @@ import axios from "axios";
 import { 
   API, DEVMODE, GET_COOKIE,
   type IAPI_Login_Request,
-  type WorkResponse,
+  type CandidateResponse,
   type WorkUser,
 } from '../helpers/constants';
 
@@ -110,7 +110,7 @@ export function API_AllWorkUsers(): Promise<WorkUser[]> {
 }
 
 //получение всех откликов HR`а
-export function API_HRResponses(id: number): Promise<WorkResponse[]> {
+export function API_HRResponses(id: number): Promise<CandidateResponse[]> {
   return new Promise((resolve, reject) => {
     axios.get(`${API}/auth/work/response/hr/${id}`, {
       headers: {
@@ -119,7 +119,7 @@ export function API_HRResponses(id: number): Promise<WorkResponse[]> {
     })
     .then(response => {
       if (DEVMODE) console.log('All work users get success: ', response);
-      resolve(response.data as WorkResponse[]);
+      resolve(response.data as CandidateResponse[]);
     })
     .catch(error => {
       if (DEVMODE) console.log('All work users get error: ', error);

@@ -119,3 +119,39 @@ func (r *AcademicDisciplineRepository) Delete(ctx context.Context, id int) error
 
 	return nil
 }
+
+func (r *AcademicDisciplineRepository) GetDisciplinesByGroupName(ctx context.Context, groupName string) (*[]entities.AcademicDiscipline, error) {
+	var disciplines []entities.AcademicDiscipline
+
+	query := `
+		SELECT ad.*
+		FROM academic_discipline ad
+		WHERE ad.educational_direction = (
+			SELECT u.educational_direction
+			FROM "group" g
+			JOIN users u ON g.id = u.group_id
+			WHERE g.name = $1
+			LIMIT 1
+		);
+	`
+	rows, err := r.db.QueryContext(ctx, query, groupName)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		discipline := entities.AcademicDiscipline{}
+		err := rows.Scan(&discipline.Id, &discipline.Name, &discipline.EducationalDirection, &discipline.Semester, &discipline.LectureHours, &discipline.PracticeHours, &discipline.LabHours, &discipline.IndividualHours, &discipline.TypeOfAssessment)
+		if err != nil {
+			return nil, err
+		}
+		disciplines = append(disciplines, discipline)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return &disciplines, nil
+}
