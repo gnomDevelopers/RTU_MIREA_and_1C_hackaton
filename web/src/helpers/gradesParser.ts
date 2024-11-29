@@ -1,7 +1,7 @@
 import type { IDataItem, IGradeClassItem, IGroupMemberItem, IUsersScoreItem, IReaorganizedGroupScore } from "./constants";
 
 // дополняет пробелы в расписании
-export function ensureGradeCount(data: IDataItem): IDataItem {
+export function transformData(data: IDataItem): IDataItem {
   const { grade_class, group_member } = data;
   const numMembers = group_member.length;
 
