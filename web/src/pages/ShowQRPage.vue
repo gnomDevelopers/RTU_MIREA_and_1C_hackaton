@@ -16,6 +16,8 @@ export default {
       value: 'Test qr code',
       index: 1,
       qrSize: 100,
+
+      container: null as null | HTMLElement,
     }
   },
   mounted(){
@@ -25,12 +27,15 @@ export default {
       this.value = `token=AUFHIUAsufH; ${this.index}`;
     }, 5000);
 
+    this.container = document.getElementById('qrContainer');
     this.handleWindowSize();
     window.addEventListener('resize', this.handleWindowSize);
   },
   methods: {
     handleWindowSize(){
-      this.qrSize = Math.min(document.getElementById('qrContainer').offsetHeight,  document.getElementById('qrContainer').offsetWidth) - 20;
+      const height = this.container ? this.container.offsetHeight : 300;
+      const widht = this.container ? this.container.offsetWidth : 300;
+      this.qrSize = Math.min(height, widht) - 20;
     }
   },
   unmounted(){
