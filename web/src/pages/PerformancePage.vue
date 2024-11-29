@@ -191,9 +191,6 @@ export default{
     //превыбираем группу пользователя если у него она есть
     if(this.userInfoStore.group_name !== '') {
       this.performancePageStore.selectedGroup = this.userInfoStore.group_name;
-
-      //загружаем список дисциплин группы
-      this.loadSelectedGroupDiscipline();
     }
   },
   methods:{
@@ -211,9 +208,9 @@ export default{
       this.performancePageStore.groupGrades = this.universityStore.sortByName(this.performancePageStore.groupGrades);
     },
     // подгружает дисциплины выбранной группы
-    loadSelectedGroupDiscipline(){
+    loadSelectedGroupDiscipline(groupName: string){
       this.disciplineList = [];
-      API_Disciplines_Group_Get()
+      API_Disciplines_Group_Get(groupName)
       .then((response: any) => {
         for(let discipline of response.data){
           this.disciplineList.push(discipline.name);
@@ -234,6 +231,7 @@ export default{
     'performancePageStore.selectedDiscipline':{
       async handler(val){
         if(val !== null){
+          console.log('load discipline');
           await this.performancePageStore.loadGroupGrades();
         }
       }
@@ -242,8 +240,10 @@ export default{
     'performancePageStore.selectedGroup':{
       handler(val){
         if(val !== null){
-          this.loadSelectedGroupDiscipline();
+          this.loadSelectedGroupDiscipline(val);
+          return;
         }
+        this.disciplineList = [];
       }
     },
 

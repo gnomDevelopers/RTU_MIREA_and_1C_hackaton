@@ -725,10 +725,10 @@ export function API_Class_Visit_QR(data: IAPI_Class_Visit_QR){
   });
 };
 
-//получение всех дисциплин группы
-export function API_Disciplines_Group_Get(){
+//получение всех дисциплин группы по названию
+export function API_Disciplines_Group_Get(groupName: string){
   return new Promise((resolve, reject) => {
-    axios.get(`${API}/auth/schedule/group_subjects`, {
+    axios.get(`${API}/auth/schedule/group_subjects/${groupName}`, {
       headers: {
         Authorization: 'Bearer ' + GET_COOKIE('access_token'),
       }
