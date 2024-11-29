@@ -32,7 +32,7 @@ export function transformData(data: IDataItem): IDataItem {
 
   const newScoresClass: IUsersScoreItem[] = [];
   for(let groupMember of group_member){
-    const newScore = { average_score: 0, sum_score: 0, user_id: 0 };
+    const newScore = { average_score: 0, sum_score: 0, user_id: groupMember.id };
     for(let item of users_score){
       if(item.user_id === groupMember.id){
         newScore.average_score = item.average_score;
