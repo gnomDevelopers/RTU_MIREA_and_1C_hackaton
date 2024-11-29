@@ -64,7 +64,17 @@
           Открыть профиль
         </button>
       </div>
+      <div class="flex flex-col justify-center">
+        <p class="text-lg shadow flex flex-row items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border" @click="$refs.downloadLinkAgr.click()">
+          <img class="w-8 h-11" src="../assets/icons/icon-download-file.svg"/>Согласие на обработку персональных данных
+        </p>
+        <a class="hidden" ref="downloadLinkAgr" :href="getDownloadLinkAgr" download></a>
 
+        <p class="text-lg shadow flex flex-row items-center gap-1 py-2 px-4 rounded-lg cursor-pointer header-shadow border" @click="$refs.downloadLinkPol.click()">
+          <img class="w-8 h-11" src="../assets/icons/icon-download-file.svg"/>Политика обработки персональных данных
+        </p>
+        <a class="hidden" ref="downloadLinkPol" :href="getDownloadLinkPol" download></a>
+      </div>
     </div>
   </div>
 
@@ -86,6 +96,12 @@ export default {
         return URL.createObjectURL(this.formData.filesList[0]);
       }
       return '';
+    },
+    getDownloadLinkAgr() {
+      return new URL('../assets/agreements/Agreement.pdf', import.meta.url).href;
+    },
+    getDownloadLinkPol() {
+      return new URL('../assets/agreements/Policy_WorkVUZ+.pdf', import.meta.url).href;
     },
   },
   methods: {

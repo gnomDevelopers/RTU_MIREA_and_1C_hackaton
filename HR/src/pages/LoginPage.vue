@@ -142,7 +142,11 @@
                       class="mr-2"
                       style="accent-color: #8F0101; transform:scale(1.5);opacity:0.9; cursor:pointer;"
                   />
-                  <label for="agreement" class="text-gray-700 text-lg font-bold">Согласен на обработку персональных данных</label>
+                  <div
+                      class="flex flex-row items-center gap-x-1 py-2 px-4 rounded-lg cursor-pointer header-shadow bg-white">
+                    <label for="agreement" class="text-gray-700 text-lg font-bold">Согласен на <a style="color:#8F0101; text-decoration: underline" ref="downloadLink" :href="getDownloadLink" download>обработку персональных данных</a> </label>
+                  </div>
+
                 </div>
               </form>
             </div>
@@ -239,7 +243,10 @@ export default {
     ...mapStores(useStatusWindowStore, useUserInfoStore),
     getFilesList(){
       return this.filesList;
-    }
+    },
+    getDownloadLink(){
+      return new URL('../assets/agreements/Policy_WorkVUZ+.pdf', import.meta.url).href;
+    },
   },
 
   methods: {
@@ -356,7 +363,8 @@ export default {
     },
     nextPage() {
       this.$router.push({name: 'CandidatesSearchPage'});
-    }
+    },
+
 
   },
 };
