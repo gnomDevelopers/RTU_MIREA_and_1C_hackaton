@@ -9,12 +9,14 @@ import (
 
 type VisitingService struct {
 	repository repository.VisitingRepository
+	userRepo   repository.UserRepository
 	timeout    time.Duration
 }
 
-func NewVisitingService(repository repository.VisitingRepository) *VisitingService {
+func NewVisitingService(repository repository.VisitingRepository, userRepo repository.UserRepository) *VisitingService {
 	return &VisitingService{
 		repository: repository,
+		userRepo:   userRepo,
 		timeout:    time.Duration(10) * time.Second,
 	}
 }
@@ -45,3 +47,18 @@ func (s *VisitingService) Update(c context.Context, visiting *entities.Visiting)
 	}
 	return nil
 }
+
+func (s *VisitingService) CheckIn(c context.Context, visiting *entities.Visiting) error {
+	ctx, cancel := context.WithTimeout(c, s.timeout)
+	defer cancel()
+
+	err := s.repository.Update(ctx, visiting)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//func GetAllClassParticipants(c context.Context, classID int) ([]*entities.ClassParticipant, error) {
+//
+//}

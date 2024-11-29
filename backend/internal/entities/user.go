@@ -75,3 +75,10 @@ type GroupMember struct {
 type UpdateRoleRequest struct {
 	NewRole string `json:"new_role"`
 }
+
+type ClassParticipant struct {
+	ID         int    `json:"id"`
+	LastName   string `json:"last_name"`
+	FirstName  string `json:"first_name"`
+	FatherName string `json:"father_name"`
+}
