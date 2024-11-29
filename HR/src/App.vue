@@ -20,13 +20,6 @@ export default{
   async mounted(){
     await this.userInfoStore.Authenticate();
   },
-  },
-  computed: {
-    ...mapStores(useUserInfoStore),
-  },
-  async mounted() {
-    await this.userInfoStore.Authenticate();
-  },
 };
 </script>
 
