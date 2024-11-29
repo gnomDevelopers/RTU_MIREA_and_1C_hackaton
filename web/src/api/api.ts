@@ -744,3 +744,22 @@ export function API_Disciplines_Group_Get(){
   });
 };
 
+//получение всех оценок группы по названию дисциплины
+export function API_Grades_Group_Discipline_Get(groupName: string, disciplineName: string){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/grade/${groupName}/${disciplineName}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Grade get for groupName by disciplineName success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Grade get for groupName by disciplineName error: ', error);
+      reject(error);
+    })
+  });
+};
+
