@@ -19,7 +19,12 @@ export const usePerformancePageStore = defineStore('performancePage', {
         if(this.selectedGroup === null || this.selectedDiscipline === null) return;
         const response: any = await API_Grades_Group_Discipline_Get(this.selectedGroup, this.selectedDiscipline);
 
-        const transformedData: IDataItem = transformData(response.data);
+        const transformedData: IDataItem = transformData({ 
+          grade_class: response.data.grade_class, 
+          group_member: response.data.group_member, 
+          users_score: response.data.users_score ? response.data.users_score : [],
+        });
+
         console.log('added empty grades: ', transformedData);
         this.groupGrades = reorganizeGroupScores( transformedData );
         this.isGroupGradesEmpty = true;

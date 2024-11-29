@@ -4,6 +4,7 @@ import type { IDataItem, IGradeClassItem, IGroupMemberItem, IUsersScoreItem, IRe
 export function transformData(data: IDataItem): IDataItem {
   const { grade_class, group_member, users_score } = data;
   const newGradeClass: IGradeClassItem[] = [];
+  const newUsersScore: IUsersScoreItem[] = [];
 
   // Create a map for faster lookup of grades by user ID
   const gradesByUser: { [userId: number]: { class_id: number; id: number; user_id: number; value: number }[] } = {};
@@ -14,20 +15,23 @@ export function transformData(data: IDataItem): IDataItem {
     });
   });
 
-  //Iterate over group_members and generate grades
+  //Iterate over group_members and generate grades and users_score
   group_member.forEach(member => {
-    const grades = gradesByUser[member.id] || [{ class_id: 0, id: 0, user_id: member.id, value: 0 }]; //default if no grade exists
+    const grades = gradesByUser[member.id] || [{ class_id: 0, id: 0, user_id: member.id, value: 0 }]; 
     newGradeClass.push({
-      ...grade_class[0],  //Copy the first grade_class for simplicity, update if needed
+      ...grade_class[0],
       grades: grades,
     });
-  });
 
+    // Add user score (or create default if missing)
+    const existingScore = users_score.find(score => score.user_id === member.id);
+    newUsersScore.push(existingScore || { average_score: 0, sum_score: 0, user_id: member.id });
+  });
 
   return {
     grade_class: newGradeClass,
     group_member: group_member,
-    users_score: users_score,
+    users_score: newUsersScore,
   };
 }
 
