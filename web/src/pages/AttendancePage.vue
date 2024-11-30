@@ -73,8 +73,8 @@ export default {
 
     groupsSearchList(): ISearchList[] {
       const arr:ISearchList[] = [];
-      if(this.attendancePageStore.attendanceGroups.length === 0) return arr;
-      for(let item of this.attendancePageStore.attendanceGroups){
+      if(this.scheduleStore.scheduleGroups.length === 0) return arr;
+      for(let item of this.scheduleStore.scheduleGroups){
         arr.push({id: this.universityStore.tmpuserID++, search_field: item, data: {name: item}});
       }
       return arr;
@@ -93,11 +93,24 @@ export default {
       return this.attendancePageStore.attendanceGroupMembers;
     },
   },
-  mounted() {
+  async mounted() {
     //загружаем доступные для посещения группы
-    this.attendancePageStore.loadScheduleGroups();
+    await this.scheduleStore.loadScheduleGroups();
+
+    //устанавливаем текущую дату
+    const today = new Date();
+    this.scheduleStore.selectedDate = GET_CORRECT_DATE(today.getDate(), today.getMonth() + 1, today.getFullYear());
+
     //если у пользователя есть группа, выбираем ее по дефолту
-    if(this.userInfoStore.group_name) this.attendancePageStore.selectedGroup = this.userInfoStore.group_name;
+    if(this.userInfoStore.group_name) {
+      this.attendancePageStore.selectedGroup = this.userInfoStore.group_name;
+
+      // загружаем расписание группы студента
+      await this.scheduleStore.loadScheduleTableByGroupName(this.userInfoStore.group_name);
+
+      // загружаем сегодняшнее расписание
+      this.scheduleStore.selectScheduleDay(this.scheduleStore.selectedDate);
+    }
 
   },
   methods: {
@@ -109,7 +122,7 @@ export default {
       // }, 300);
     },
     handleSelectDay(day: Day){
-      this.attendancePageStore.selectedDate = GET_CORRECT_DATE(day.day, day.month, day.year);
+      this.scheduleStore.selectedDate = GET_CORRECT_DATE(day.day, day.month, day.year);
     }
   },
 };
