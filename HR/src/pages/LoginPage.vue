@@ -154,7 +154,7 @@
 
 <!--            Кнопка продолжения (далее на первом шаге надо убрать, когда можно будет авторизацию проверять)-->
             <div class=" left-0 w-full px-4">
-              <button v-if="currentStep < 3" @click="nextStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
+              <button v-if="currentStep < 3 && currentStep > 1" @click="nextStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
                 Продолжить
               </button>
               <button v-if="currentStep == 3" @click="previousStep" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 mb-6">
@@ -184,9 +184,6 @@
             </div>
 
             <submitButton value="Войти" class="btn" @click="sendLoginHR"/>
-            <button @click="nextPage" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-xl font-semibold btn w-full text-slate-100 ">
-              Продолжить
-            </button>
           </div>
         </div>
       </div>
