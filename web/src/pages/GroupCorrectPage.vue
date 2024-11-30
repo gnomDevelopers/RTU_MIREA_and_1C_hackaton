@@ -71,7 +71,7 @@ export default{
 
     getGroupMembers(){
       const arr:IUserGet[] = [];
-      for(let student of this.universityStore.groupMembersList){
+      for(let student of this.universityStore.studentsList){
         if(student.group_id === this.groupCorrectPageStore.selectedGroupID){
           arr.push(student);
         }

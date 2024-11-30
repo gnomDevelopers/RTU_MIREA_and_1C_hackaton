@@ -80,15 +80,8 @@
         <div v-if="usersList.length !== 0" @click="sendUsersList" class="px-2 h-10 rounded-lg cursor-pointer btn">
           <p class="text-white text-xl">Отправить</p>
         </div>
-        <JsonExcel 
-          :data="usersJsonData"
-          :fields="usersJsonFields"
-          type="xlsx"
-          worksheet="My Worksheet"
-          name="Данные_пользователей.xlsx"
-          >
-            Скачать данные
-        </JsonExcel>
+        
+    <!--<ExcelDownload /> -->
       </div>
     </div>
 
@@ -168,12 +161,12 @@ import {
   type IUserCreateWithStringRole,
 } from '../helpers/constants';
 import { API_University_Users_Create } from '@/api/api';
-import JsonExcel from "vue-json-excel3";
+// import type { ExcelDownloadProps } from '@/entities/excelDownload'; 
+// import ExcelDownload from '@/entities/excelDownload.vue';
+
+// const ExcelDownloadComponent = ExcelDownload as any;
 
 export default {
-  components: {
-    JsonExcel,
-  },
   data(){
     return{
       RolesName: ROLES_NAME,
@@ -358,7 +351,7 @@ export default {
         if(item.id === groupID) return item.name;
       }
       return '';
-    }
+    },
   }
 }; 
 </script>
