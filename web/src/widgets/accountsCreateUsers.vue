@@ -80,6 +80,15 @@
         <div v-if="usersList.length !== 0" @click="sendUsersList" class="px-2 h-10 rounded-lg cursor-pointer btn">
           <p class="text-white text-xl">Отправить</p>
         </div>
+        <JsonExcel 
+          :data="usersJsonData"
+          :fields="usersJsonFields"
+          type="xlsx"
+          worksheet="My Worksheet"
+          name="Данные_пользователей.xlsx"
+          >
+            Скачать данные
+        </JsonExcel>
       </div>
     </div>
 
@@ -159,8 +168,12 @@ import {
   type IUserCreateWithStringRole,
 } from '../helpers/constants';
 import { API_University_Users_Create } from '@/api/api';
+import JsonExcel from "vue-json-excel3";
 
 export default {
+  components: {
+    JsonExcel,
+  },
   data(){
     return{
       RolesName: ROLES_NAME,
@@ -176,6 +189,15 @@ export default {
       userEducationalDirections: '',
       userGroup: -1,
       usersList: [] as IUserCreate[],
+
+      usersJsonData: [] as { last_name: string; first_name: string; father_name: string; email: string; password: string; }[],
+      usersJsonFields: {
+        "last_name": "Фамилия",
+        "first_name": "Имя",
+        "father_name": "Отчество",
+        "email": "Email",
+        "password": "Пароль для входа",
+      },
     }
   },
   computed: {
@@ -286,6 +308,18 @@ export default {
           }
         }
 
+        this.usersJsonData = [];
+        for(let item of response.data){
+          const userData: { last_name: string; first_name: string; father_name: string; email: string; password: string; } = {
+            last_name: item.last_name,
+            first_name: item.first_name,
+            father_name: item.father_name,
+            email: item.email,
+            password: item.password,
+          }
+          this.usersJsonData.push(userData);
+        }
+        console.log('usersJsonData: ', this.usersJsonData);
         //очистка буфера пользователей
         this.usersList = [];
 
