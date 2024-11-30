@@ -372,6 +372,25 @@ export function API_University_Groups_Get(universityName: string){
   });
 };
 
+//смена роли пользователю
+export function API_User_Role_Update(userID: number, newRole: string){
+  return new Promise((resolve, reject) => {
+    axios.put(`${API}/user/${userID}/promote`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('UserRole update success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('UserRole update error: ', error);
+      reject(error);
+    })
+  });
+};
+
 /////// classes ///////
 
 //создание занятия

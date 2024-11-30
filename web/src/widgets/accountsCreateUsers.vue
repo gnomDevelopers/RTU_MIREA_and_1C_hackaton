@@ -81,7 +81,7 @@
           <p class="text-white text-xl">Отправить</p>
         </div>
         
-    <!--<ExcelDownload /> -->
+        <ExcelDownload v-if="usersJsonData.length !== 0" :data="usersJsonData" />
       </div>
     </div>
 
@@ -161,12 +161,12 @@ import {
   type IUserCreateWithStringRole,
 } from '../helpers/constants';
 import { API_University_Users_Create } from '@/api/api';
-// import type { ExcelDownloadProps } from '@/entities/excelDownload'; 
-// import ExcelDownload from '@/entities/excelDownload.vue';
-
-// const ExcelDownloadComponent = ExcelDownload as any;
+import ExcelDownload from '@/entities/excelDownload.vue';
 
 export default {
+  components: {
+    ExcelDownload,
+  },
   data(){
     return{
       RolesName: ROLES_NAME,
@@ -184,13 +184,6 @@ export default {
       usersList: [] as IUserCreate[],
 
       usersJsonData: [] as { last_name: string; first_name: string; father_name: string; email: string; password: string; }[],
-      usersJsonFields: {
-        "last_name": "Фамилия",
-        "first_name": "Имя",
-        "father_name": "Отчество",
-        "email": "Email",
-        "password": "Пароль для входа",
-      },
     }
   },
   computed: {
@@ -289,6 +282,19 @@ export default {
 
       API_University_Users_Create(body)
       .then((response: any) => {
+
+        this.usersJsonData = [];
+        for(let item of response.data){
+          const tmp: { last_name: string; first_name: string; father_name: string; email: string; password: string; } = { 
+            last_name: item.last_name, 
+            first_name: item.first_name, 
+            father_name: item.father_name, 
+            email: item.email, 
+            password: item.password, 
+          };
+          this.usersJsonData.push(tmp);
+        }
+        console.log('for excel data: ', this.usersJsonData);
 
         //распределяем пользователей по соответствующим спискам
         for(let item of this.usersList){

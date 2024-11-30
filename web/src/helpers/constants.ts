@@ -121,6 +121,14 @@ export interface IUserCreateWithStringRole{
   university_id: number,
 }
 
+export interface IExcelData{
+  last_name: string,
+  first_name: string,
+  father_name: string,
+  email: string,
+  password: string
+}
+
 export interface IGroup {
   id: number,
   name: string,

@@ -32,6 +32,7 @@ import { useUniversityStore } from '@/stores/universityStore';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
 import { ROLES_NAME, type IUserGet, StatusCodes } from '@/helpers/constants';
 import type { PropType } from 'vue';
+import { API_User_Role_Update } from '@/api/api';
 export default{
   props:{
     data:{
@@ -66,28 +67,35 @@ export default{
     updateUser(){
       if(this.userRole === this.data.role) return;
 
-      //удаляем из прошлого списка
-      const list = this.getUserList(this.data.role);
-      for(let i = 0; i < list.length; i++){
-        if(list[i].id === this.data.id){
-          list.splice(i, 1);
-          break;
+      API_User_Role_Update(this.data.id, ROLES_NAME[this.userRole])
+      .then((response: any) => {
+        //удаляем из прошлого списка
+        const list = this.getUserList(this.data.role);
+        for(let i = 0; i < list.length; i++){
+          if(list[i].id === this.data.id){
+            list.splice(i, 1);
+            break;
+          }
         }
-      }
-      //добавляем в новый список
-      this.getUserList(this.userRole).push(<IUserGet>{
-        id: this.data.id,
-        first_name: this.data.first_name,
-        last_name: this.data.last_name,
-        father_name: this.data.father_name,
-        role: this.userRole,
-        faculty_id: this.data.faculty_id,
-        department_id: this.data.department_id,
-        educational_direction: this.data.educational_direction,
-        group_id: this.data.group_id,
-        university_id: 1,
-      });
-      this.statusWindowStore.showStatusWindow(StatusCodes.success, `Должность изменена!`);
+        //добавляем в новый список
+        this.getUserList(this.userRole).push(<IUserGet>{
+          id: this.data.id,
+          first_name: this.data.first_name,
+          last_name: this.data.last_name,
+          father_name: this.data.father_name,
+          role: this.userRole,
+          faculty_id: this.data.faculty_id,
+          department_id: this.data.department_id,
+          educational_direction: this.data.educational_direction,
+          group_id: this.data.group_id,
+          university_id: 1,
+        });
+        this.statusWindowStore.showStatusWindow(StatusCodes.success, `Должность изменена!`);
+      })
+      .catch(error => {
+        this.statusWindowStore.showStatusWindow(StatusCodes.error, `Что-то пошло не так при изменении должности!`);
+        this.userRole = this.data.role;
+      })
     },
     deleteUser(){
       const list = this.getUserList(this.data.role);
