@@ -802,3 +802,80 @@ export function API_GPA_Get(userID: number){
   });
 };
 
+/////// visiting ///////
+
+//получение студентов на паре
+export function API_Users_Attendance_Class_Get(classID: number){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/class/${classID}/participants`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Users get by classID success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Users get by classID error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение посещений студентов на паре
+export function API_Users_Attendance_Class_Visiting(classID: number){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/class/${classID}/visiting`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Get visitings by classID success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Get visitings by classID error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение посещений студентов на паре
+export function API_Set_Attendance(data: {class_id: number, id: number, type: string, user_id: number}[]){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/auth/class/visiting`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Set attendance by classID success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Set attendance by classID error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//заверение посещений студентов на паре
+export function API_Set_Attendance_CheckIn(data: {class_id: number, id: number, user_id: number}[]){
+  return new Promise((resolve, reject) => {
+    axios.post(`${API}/auth/class/visiting/check-in`, data, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('Set attendance check-in by classID success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('Set attendance check-in by classID error: ', error);
+      reject(error);
+    })
+  });
+};

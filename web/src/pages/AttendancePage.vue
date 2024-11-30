@@ -15,11 +15,11 @@
             :item-component="getListItemComponent"
             class="h-48"
           />
+
+          <CalendarTable v-if="isGroupSelected" :month="10" @selectDay="handleSelectDay" />
           
           <ScheduleClassList v-if="isGroupSelected" :canAddFaculties="false"/>
           
-          <CalendarTable v-if="isGroupSelected && isClassSelected" :month="10" @selectDay="handleSelectDay" />
-
         </div>
 
         <div class="flex flex-col flex-shrink-0 gap-y-4 items-center">
