@@ -121,11 +121,11 @@ definitions:
         type: string
       first_name:
         type: string
+      group:
+        type: string
       id:
         type: integer
       last_name:
-        type: string
-      name:
         type: string
     type: object
   entities.CreateAcademicDisciplineRequest:
@@ -1550,6 +1550,42 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get all participants of a specific class
+      tags:
+      - visiting
+  /auth/class/{id}/visiting:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Class ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of participants
+          schema:
+            items:
+              $ref: '#/definitions/entities.ClassParticipant'
+            type: array
+        "400":
+          description: Invalid class ID
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all visiting of a specific class
       tags:
       - visiting
   /auth/class/auditory/{name}:

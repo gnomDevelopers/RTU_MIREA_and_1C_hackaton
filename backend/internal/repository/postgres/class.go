@@ -437,10 +437,10 @@ func (r *ClassRepository) Delete(ctx context.Context, id int) error {
 func (r *ClassRepository) GetAllParticipants(ctx context.Context, classID int) (*[]entities.ClassParticipant, error) {
 	query := `
 		SELECT u.id, u.first_name, u.last_name, u.father_name, g.name AS group_name
-		FROM users u 
-		JOIN class c ON u.group_id = ANY(c.group_names)
-		JOIN "group" g ON u.group_id = g.id
-		WHERE c.id = $1 
+		FROM class c
+		JOIN "group" g ON g.name = ANY(c.group_names)
+		JOIN users u ON u.group_id = g.id
+		WHERE c.id = $1
 		ORDER BY g.name, u.last_name, u.first_name, u.father_name;
 	`
 

@@ -156,6 +156,7 @@ import {
   StatusCodes, 
   type IUser,
   type IUserCreate,
+  type IUserCreateWithStringRole,
 } from '../helpers/constants';
 import { API_University_Users_Create } from '@/api/api';
 
@@ -254,7 +255,24 @@ export default {
     sendUsersList(){
       if(this.usersList.length === 0) return;
       const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Отправляем данные на сервер...', -1);
-      API_University_Users_Create(this.usersList)
+
+      const body: IUserCreateWithStringRole[] = [];
+      for(let item of this.usersList){
+        body.push({
+          password: item.password,
+          department_id: item.department_id,
+          educational_direction: item.educational_direction,
+          faculty_id: item.faculty_id,
+          father_name: item.father_name,
+          first_name: item.first_name,
+          group_id: item.group_id,
+          last_name: item.last_name,
+          role: ROLES_NAME[item.role],
+          university_id: item.university_id,
+        });
+      }
+
+      API_University_Users_Create(body)
       .then((response: any) => {
 
         //распределяем пользователей по соответствующим спискам

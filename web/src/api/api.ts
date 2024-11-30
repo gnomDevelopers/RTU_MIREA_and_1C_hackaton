@@ -14,7 +14,8 @@ import {
   type IAPI_University_Update, 
   type IUser,
   type IUserCreate,
-  type IAPI_Class_Visit_QR
+  type IAPI_Class_Visit_QR,
+  type IUserCreateWithStringRole
 } from '../helpers/constants';
 
 
@@ -258,7 +259,7 @@ export function API_Campus_Get_University(universityName: string){
 /////// university users ///////
 
 //создание пользователей для вуза
-export function API_University_Users_Create(data: IUserCreate[]){
+export function API_University_Users_Create(data: IUserCreateWithStringRole[]){
   return new Promise((resolve, reject) => {
     axios.post(`${API}/auth/user`, data, {
       headers: {
@@ -758,6 +759,25 @@ export function API_Grades_Group_Discipline_Get(groupName: string, disciplineNam
     })
     .catch(error => {
       if(DEVMODE) console.log('Grade get for groupName by disciplineName error: ', error);
+      reject(error);
+    })
+  });
+};
+
+//получение gpa студента
+export function API_GPA_Get(userID: number){
+  return new Promise((resolve, reject) => {
+    axios.get(`${API}/auth/gpa/id/${userID}`, {
+      headers: {
+        Authorization: 'Bearer ' + GET_COOKIE('access_token'),
+      }
+    })
+    .then(response => {
+      if(DEVMODE) console.log('GPA get success: ', response);
+      resolve(response);
+    })
+    .catch(error => {
+      if(DEVMODE) console.log('GPA get error: ', error);
       reject(error);
     })
   });

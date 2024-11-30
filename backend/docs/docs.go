@@ -1555,6 +1555,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/class/{id}/visiting": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "visiting"
+                ],
+                "summary": "Get all visiting of a specific class",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Class ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of participants",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/entities.ClassParticipant"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid class ID",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/entities.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/department": {
             "post": {
                 "security": [
@@ -4340,13 +4397,13 @@ const docTemplate = `{
                 "first_name": {
                     "type": "string"
                 },
+                "group": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "last_name": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string"
                 }
             }

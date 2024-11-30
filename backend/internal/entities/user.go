@@ -82,7 +82,7 @@ type ClassParticipant struct {
 	LastName   string `json:"last_name"`
 	FirstName  string `json:"first_name"`
 	FatherName string `json:"father_name"`
-	Group
+	Group      string `json:"group"`
 }
 
 type GetClassParticipantsRequest struct {

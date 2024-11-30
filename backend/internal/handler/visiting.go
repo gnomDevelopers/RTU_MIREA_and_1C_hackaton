@@ -30,9 +30,9 @@ func (h *Handler) CheckIn(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "ok"})
 }
 
-// GetAllClassParticipants
+// GetAllClassVisiting
 // @Tags visiting
-// @Summary      Get all participants of a specific class
+// @Summary      Get all visiting of a specific class
 // @Accept       json
 // @Produce      json
 // @Param id path int true "Class ID"
@@ -40,9 +40,9 @@ func (h *Handler) CheckIn(c *fiber.Ctx) error {
 // @Failure 400 {object} entities.ErrorResponse "Invalid class ID"
 // @Failure 401 {object} entities.ErrorResponse "Unauthorized"
 // @Failure 500 {object} entities.ErrorResponse "Internal server error"
-// @Router /auth/class/{id}/participants [get]
+// @Router /auth/class/{id}/visiting [get]
 // @Security ApiKeyAuth
-func (h *Handler) GetAllClassParticipants(c *fiber.Ctx) error {
+func (h *Handler) GetAllClassVisiting(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
