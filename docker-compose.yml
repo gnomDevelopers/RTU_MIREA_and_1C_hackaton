@@ -23,10 +23,14 @@ services:
       retries: 5
       start_period: 30s
     depends_on:
-      - postgres
-      - redis
-      - promtail
-      - loki
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      promtail:
+        condition: service_started
+      loki:
+        condition: service_started
     networks:
       - hackaton_app
 
@@ -55,6 +59,21 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:10521:3800"
+    depends_on:
+      - backend
+    networks:
+      - hackaton_app
+
+  frontend_event:
+    container_name: frontend_event
+    build:
+      context: ./event
+      dockerfile: Dockerfile
+    volumes:
+      - ./.data/log/event:/var/log/app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:10522:3800"
     depends_on:
       - backend
     networks:
