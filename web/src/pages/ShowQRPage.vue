@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-center scrollable px-4 lg:px-0">
-    <div class="flex flex-col flex-grow w-full h-full lg:w-10/12 items-center gap-y-4 mb-4" id="qrContainer">
+  <div class="flex flex-col items-center h-full px-4 lg:px-0">
+    <div class="flex flex-col w-full h-full lg:w-10/12 items-center gap-y-4 mb-4" id="qrContainer">
       <qrcode-vue :size="qrSize" :value="value"></qrcode-vue>
     </div>
   </div>
