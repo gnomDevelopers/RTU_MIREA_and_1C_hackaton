@@ -288,8 +288,8 @@
 
           <p class="text-xl">Выберите команду для участия</p><br>
           <div class="flex justify-center w-full">
-            <button v-if="!isChosen" @click="chooseTeam" class="cursor-pointer transition-colors py-2 px-5 text-xl rounded-md h-12 border-2 border-ev-color btn w-full" style="background-color: #C9C2F4"><img class="items-start" src="../assets/icons/icon-team.svg" style="padding-right: 20px">Здесь могла быть ваша реклама</button>
-            <button v-if="isChosen" @click="cancelChoice"  class="cursor-pointer transition-colors py-2 px-5 text-xl rounded-md h-12 border-4 border-ev-color btn w-full" style="background-color: #C9C2F4"><img class="items-start" src="../assets/icons/icon-team.svg" style="padding-right: 20px" >Выбрана команда: Здесь могла быть ваша реклама</button>
+            <button v-if="!isChosen" @click="chooseTeam" class="cursor-pointer transition-colors py-2 px-5 text-xl rounded-md h-12 border-2 border-ev-color btn w-full" style="background-color: #F3F0FF"><img class="items-start" src="../assets/icons/icon-team.svg" style="padding-right: 20px">Здесь могла быть ваша реклама</button>
+            <button v-if="isChosen" @click="cancelChoice"  class="cursor-pointer transition-colors py-2 px-5 text-xl rounded-md h-12 border-4 border-ev-color btn w-full" style="background-color: #F3F0FF"><img class="items-start" src="../assets/icons/icon-team.svg" style="padding-right: 20px" >Выбрана команда: Здесь могла быть ваша реклама</button>
           </div><br><br>
           <div class="flex justify-center w-3/5">
             <button v-if="!isChosen" class="cursor-pointer transition-colors py-2 px-5 text-lg rounded-md h-12 font-semibold btn w-full " style="background-color: #D9D9D9">Зарегистрироваться</button><br><br>
