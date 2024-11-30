@@ -8,17 +8,17 @@
 
       <div class="flex flex-col lg:flex-row justify-between flex-nowrap w-full gap-4">
         <div class="flex flex-col gap-y-4 items-center">
-          <!-- <SearchList 
+          <SearchList 
             title="" 
             placeholder="Выберите группу" 
             :search-list="groupsSearchList" 
             :item-component="getListItemComponent"
-            class="h-80"
-          /> -->
+            class="h-48"
+          />
           
           <ScheduleClassList v-if="isGroupSelected" :canAddFaculties="false"/>
           
-          <CalendarTable v-if="isGroupSelected && isClassSelected" :month="10" />
+          <CalendarTable v-if="isGroupSelected && isClassSelected" :month="10" @selectDay="handleSelectDay" />
 
         </div>
 
@@ -32,9 +32,9 @@
                 :data="item.user"
               />
             </div>
-            <!-- <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
+            <div @click="saveAttendance" class="py-1 px-6 rounded-xl cursor-pointer bg-color-bold">
               <p class="text-2xl text-white">Заверить</p>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -47,7 +47,8 @@ import { useScheduleStore } from '@/stores/scheduleStore';
 import { useUniversityStore } from '@/stores/universityStore';
 import { useAttendacePageStore } from '@/stores/attendacePageStore';
 import { useStatusWindowStore } from '@/stores/statusWindowStore';
-import { type ISearchList, type IItemList, type IUserGet, type IGroupAttendance, StatusCodes } from '@/helpers/constants';
+import { useUserInfoStore } from '@/stores/userInfoStore';
+import { type ISearchList, type IItemList, type IUserGet, type IGroupAttendance, StatusCodes, type Day, GET_CORRECT_DATE } from '@/helpers/constants';
 
 import AttendanceSearchListItem from '@/entities/listItems/attendanceSearchListItem.vue';
 import CalendarTable from '@/entities/calendarTable.vue';
@@ -67,62 +68,49 @@ export default {
     ScheduleClassList,
     AttendanceUsersListItem,
   },
-  data(){
-    return {
-      groupsSearchList: [] as ISearchList[],
-      // studentsAttendanceList: [] as ISearchList[],
-    }
-  },
   computed:{
-    ...mapStores(useScheduleStore, useUniversityStore, useAttendacePageStore, useStatusWindowStore),
+    ...mapStores(useScheduleStore, useUniversityStore, useAttendacePageStore, useStatusWindowStore, useUserInfoStore),
+
+    groupsSearchList(): ISearchList[] {
+      const arr:ISearchList[] = [];
+      if(this.attendancePageStore.attendanceGroups.length === 0) return arr;
+      for(let item of this.attendancePageStore.attendanceGroups){
+        arr.push({id: this.universityStore.tmpuserID++, search_field: item, data: {name: item}});
+      }
+      return arr;
+    },
 
     getListItemComponent(){
       return AttendanceSearchListItem;
     },
-
     isGroupSelected(){
-      return this.attendancePageStore.selectedGroupID !== null;
+      return this.attendancePageStore.selectedGroup !== null;
     },
-
     isClassSelected(){
       return this.scheduleStore.selectedClass !== null;
     },
-
     getAttendaceList(){
       return this.attendancePageStore.attendanceGroupMembers;
     },
   },
   mounted() {
-    this.scheduleStore.loadScheduleTableByGroupName('ЭФБО-01-23');
+    //загружаем доступные для посещения группы
+    this.attendancePageStore.loadScheduleGroups();
+    //если у пользователя есть группа, выбираем ее по дефолту
+    if(this.userInfoStore.group_name) this.attendancePageStore.selectedGroup = this.userInfoStore.group_name;
 
-    this.attendancePageStore.selectedGroupID = 1; // автовыбор
-
-    this.attendancePageStore.attendanceGroupMembers = [];
-    for(let item of this.universityStore.groupMembersList){
-      const data: IGroupAttendance = {user: item, attendace: Math.ceil(Math.random()*3)-1}; // 1
-      this.attendancePageStore.attendanceGroupMembers.push(data);
-    }
   },
   methods: {
     saveAttendance(){
-      const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Сохраняем посещения...', -1);
-      setTimeout(() => {
-        this.statusWindowStore.deteleStatusWindow(stID);
-        this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Посещения сохранены!');
-      }, 300);
+      // const stID = this.statusWindowStore.showStatusWindow(StatusCodes.loading, 'Сохраняем посещения...', -1);
+      // setTimeout(() => {
+      //   this.statusWindowStore.deteleStatusWindow(stID);
+      //   this.statusWindowStore.showStatusWindow(StatusCodes.success, 'Посещения сохранены!');
+      // }, 300);
+    },
+    handleSelectDay(day: Day){
+      this.attendancePageStore.selectedDate = GET_CORRECT_DATE(day.day, day.month, day.year);
     }
   },
-  watch: {
-    'universityStore.groupsList' : {
-      handler(val: IUserGet[]){
-        this.groupsSearchList = [];
-        for(let item of val){
-          this.groupsSearchList.push({id: item.id, search_field: `${item.last_name} ${item.first_name} ${item.father_name}`, data: item});
-        }
-      },
-      immediate: true,
-      deep: true,
-    },
-  }
 };
 </script>

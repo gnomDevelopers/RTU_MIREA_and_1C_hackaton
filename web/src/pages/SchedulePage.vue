@@ -92,7 +92,6 @@ export default {
       for(let item of this.scheduleStore.scheduleGroups){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
-      console.log('groupsList: ', arr);
       return arr;
     },
 
@@ -102,7 +101,6 @@ export default {
       for(let item of this.scheduleStore.scheduleTeachers){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
-      console.log('teachersList: ', arr);
       return arr;
     },
 
@@ -112,7 +110,6 @@ export default {
       for(let item of this.scheduleStore.scheduleFacultatives){
         arr.push({id: this.universityStore.tmpuserID++, search_field: `${item}`, data: {name: item}});
       }
-      console.log('facultativesList: ', arr);
       return arr;
     },
 

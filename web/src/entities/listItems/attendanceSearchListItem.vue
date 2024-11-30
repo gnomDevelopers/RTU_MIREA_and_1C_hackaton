@@ -10,13 +10,11 @@
 import { mapStores } from 'pinia';
 import { useAttendacePageStore } from '@/stores/attendacePageStore';
 import { useScheduleStore } from '@/stores/scheduleStore';
-import { type IItemList } from '@/helpers/constants';
-import { type PropType } from 'vue';
 
 export default {
   props:{
     data: {
-      type: Object as PropType<IItemList>,
+      type: Object,
       required: true,
     }
   },
@@ -24,12 +22,12 @@ export default {
     ...mapStores(useAttendacePageStore, useScheduleStore),
 
     isSelected(){
-      return this.attendancePageStore.selectedGroupID === this.data.id;
+      return this.attendancePageStore.selectedGroup === this.data.name;
     }
   },
   methods: {
     selectGroup(){
-      this.attendancePageStore.selectedGroupID = this.data.id;
+      this.attendancePageStore.selectedGroup = this.data.name;
       this.scheduleStore.selectedClass = null;
     }
   }

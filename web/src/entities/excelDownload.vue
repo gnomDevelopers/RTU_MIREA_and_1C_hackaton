@@ -1,6 +1,6 @@
 <template>
   <div 
-    class=" btn text-white cursor-pointer"
+    class=" py-2 px-4 rounded-xl btn text-white cursor-pointer"
     @click="downloadExcel"
     >
       Скачать данные
